@@ -152,9 +152,11 @@ describe('FluentSchema', () => {
           .prop('permissions')
       )
       .required()
+      .prop('age')
+      .asNumber()
       .valueOf()
 
-    // console.log(JSON.stringify(schema))
+    //console.log(JSON.stringify(schema))
     expect(schema).toEqual({
       definitions: {
         address: {
@@ -194,6 +196,10 @@ describe('FluentSchema', () => {
         },
         address: {
           $ref: '#definitions/address',
+        },
+        age: {
+          $id: '#properties/age',
+          type: 'number',
         },
         role: {
           type: 'object',

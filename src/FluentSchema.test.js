@@ -124,6 +124,36 @@ describe('FluentSchema', () => {
       ).toEqual('object')
     })
   })
+
+  describe('anyOf', () => {
+    it('sets two alternative', () => {
+      expect(
+        FluentSchema()
+          .prop('gender')
+          .anyOf(
+            FluentSchema()
+              .prop('male')
+              .prop('female')
+          )
+          .valueOf()
+      ).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        definitions: {},
+        properties: {
+          gender: {
+            $id: '#properties/gender',
+            anyOf: [
+              { $id: '#properties/male', type: 'string' },
+              { $id: '#properties/female', type: 'string' },
+            ],
+          },
+        },
+        required: [],
+        type: 'object',
+      })
+    })
+  })
+
   it('works', () => {
     // TODO LS https://json-schema.org/latest/json-schema-core.html#idExamples
     const schema = FluentSchema()

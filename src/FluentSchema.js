@@ -59,10 +59,16 @@ const FluentSchema = (
   },
   definition: (name, props = {}) =>
     FluentSchema({ ...schema }).prop(name, props, true),
+
+  //TODO LS move 'def' in the props
   prop: (name, props = {}, def = false) => {
     const target = def ? 'definitions' : 'properties'
+    const attributes =
+      typeof props.title === 'function' ? props.valueOf() : props
     const {
-      type = 'string',
+      type = attributes.anyOf || attributes.anyOf || attributes.anyOf
+        ? undefined
+        : 'string',
       // TODO LS $id should be prefixed with the parent
       $id = `#${target}/${name}`,
       $ref,
@@ -71,7 +77,10 @@ const FluentSchema = (
       defaults,
       properties,
       required,
-    } = typeof props.title === 'function' ? props.valueOf() : props
+      anyOf,
+      allOf,
+      oneOf,
+    } = attributes
 
     return FluentSchema({
       ...schema,
@@ -87,10 +96,27 @@ const FluentSchema = (
               $id ? { $id } : undefined,
               description ? { description } : undefined,
               properties ? { properties } : undefined,
-              required ? { required } : undefined
+              required ? { required } : undefined,
+              anyOf ? { anyOf } : undefined,
+              oneOf ? { oneOf } : undefined,
+              allOf ? { allOf } : undefined
             ),
       ],
     })
+  },
+
+  anyOf: attributes => {
+    const currentProp = last(schema.properties)
+    const { name, type, ...props } = currentProp
+    const properties = attributes.valueOf().properties
+    const values = Object.entries(properties).reduce((memo, [key, value]) => {
+      return [...memo, value]
+    }, [])
+    const attr = {
+      ...props,
+      anyOf: values,
+    }
+    return FluentSchema({ ...schema }).prop(name, attr)
   },
 
   required: () => {

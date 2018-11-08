@@ -129,23 +129,55 @@ describe('FluentSchema', () => {
     it('sets two alternative', () => {
       expect(
         FluentSchema()
-          .prop('gender')
+          .prop('prop')
           .anyOf(
             FluentSchema()
-              .prop('male')
-              .prop('female')
+              .prop('boolean').asBoolean()
+              .prop('string')
           )
           .valueOf()
       ).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         definitions: {},
         properties: {
-          gender: {
-            $id: '#properties/gender',
+          prop: {
+            $id: '#properties/prop',
             anyOf: [
-              { $id: '#properties/male', type: 'string' },
-              { $id: '#properties/female', type: 'string' },
+              { $id: '#properties/boolean', type: 'boolean' },
+              { $id: '#properties/string', type: 'string' },
             ],
+          },
+        },
+        required: [],
+        type: 'object',
+      })
+    })
+  })
+
+  describe('not', () => {
+    it('add prop not', () => {
+      expect(
+        FluentSchema()
+          .prop('prop')
+          .not()
+          .anyOf(
+            FluentSchema()
+              .prop('boolean').asBoolean()
+              .prop('number').asNumber()
+          )
+          .valueOf()
+      ).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        definitions: {},
+        properties: {
+          prop: {
+            $id: '#properties/prop',
+            not: {
+              anyOf: [
+                { $id: '#properties/boolean', type: 'boolean' },
+                { $id: '#properties/number', type: 'number' },
+              ],
+            },
           },
         },
         required: [],

@@ -159,6 +159,18 @@ const FluentSchema = (
     return FluentSchema({ ...schema, type })
   },
 
+  if: () => {
+    throw new Error(`'if' isn't implemented yet`)
+  },
+
+  then: () => {
+    throw new Error(`'then' isn't implemented yet`)
+  },
+
+  else: () => {
+    throw new Error(`'else' isn't implemented yet`)
+  },
+
   valueOf: () => {
     const { properties, definitions, ...rest } = schema
     return {

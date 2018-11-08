@@ -132,7 +132,8 @@ describe('FluentSchema', () => {
           .prop('prop')
           .anyOf(
             FluentSchema()
-              .prop('boolean').asBoolean()
+              .prop('boolean')
+              .asBoolean()
               .prop('string')
           )
           .valueOf()
@@ -162,8 +163,10 @@ describe('FluentSchema', () => {
           .not()
           .anyOf(
             FluentSchema()
-              .prop('boolean').asBoolean()
-              .prop('number').asNumber()
+              .prop('boolean')
+              .asBoolean()
+              .prop('number')
+              .asNumber()
           )
           .valueOf()
       ).toEqual({
@@ -180,6 +183,36 @@ describe('FluentSchema', () => {
             },
           },
         },
+        required: [],
+        type: 'object',
+      })
+    })
+  })
+
+  describe('if', () => {
+    it('simple', () => {
+      expect(
+        FluentSchema()
+          .prop('prop')
+          .prop('extraProp')
+          .if({ properties: { prop: { maxLength: 5 } } })
+          .then(
+            FluentSchema()
+              .prop('extraProp')
+              .required()
+          )
+          .valueOf()
+      ).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        definitions: {},
+        properties: {
+          prop: {
+            $id: '#properties/prop',
+          },
+        },
+        if: { properties: { power: { minimum: 9000 } } },
+        then: { required: ['disbelief'] },
+        // else: { required: ['confidence'] },
         required: [],
         type: 'object',
       })

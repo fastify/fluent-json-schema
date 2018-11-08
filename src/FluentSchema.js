@@ -1,3 +1,11 @@
+const initialState = {
+  $schema: 'http://json-schema.org/draft-07/schema#',
+  type: 'object',
+  definitions: [],
+  properties: [],
+  required: [],
+}
+
 const last = arr => {
   const [prop] = [...arr].reverse()
   return prop
@@ -13,13 +21,7 @@ const flat = array =>
   }, {})
 
 const FluentSchema = (
-  schema = {
-    $schema: 'http://json-schema.org/draft-07/schema#',
-    type: 'object',
-    definitions: [],
-    properties: [],
-    required: [],
-  }
+  schema = initialState
 ) => ({
   id: $id => {
     const currentProp = last(schema.properties)
@@ -57,6 +59,18 @@ const FluentSchema = (
     // TODO LS not sure if a schema can have a $ref
     return FluentSchema({ ...schema, $ref })
   },
+
+  not: () => {
+    const [currentProp, ...properties] = [...schema.properties].reverse()
+    if (!currentProp) throw new Error(`invalid 'not' target`)
+    const { name, type, ...props } = currentProp
+    const attrs = {
+      ...props,
+      not: {}
+    }
+    return FluentSchema({ ...schema, properties }).prop(name, attrs)
+  },
+
   definition: (name, props = {}) =>
     FluentSchema({ ...schema }).prop(name, props, true),
 
@@ -66,7 +80,7 @@ const FluentSchema = (
     const attributes =
       typeof props.title === 'function' ? props.valueOf() : props
     const {
-      type = attributes.anyOf || attributes.anyOf || attributes.anyOf
+      type = attributes.anyOf || attributes.anyOf || attributes.anyOf || attributes.not
         ? undefined
         : 'string',
       // TODO LS $id should be prefixed with the parent
@@ -80,6 +94,7 @@ const FluentSchema = (
       anyOf,
       allOf,
       oneOf,
+      not,
     } = attributes
 
     return FluentSchema({
@@ -90,7 +105,8 @@ const FluentSchema = (
           ? { name, $ref }
           : Object.assign(
               {},
-              { name, type },
+              { name },
+              type ? {type} : undefined,
               defaults ? { default: defaults } : undefined,
               title ? { title } : undefined,
               $id ? { $id } : undefined,
@@ -99,7 +115,8 @@ const FluentSchema = (
               required ? { required } : undefined,
               anyOf ? { anyOf } : undefined,
               oneOf ? { oneOf } : undefined,
-              allOf ? { allOf } : undefined
+              allOf ? { allOf } : undefined,
+              not ? { not } : undefined
             ),
       ],
     })
@@ -107,14 +124,14 @@ const FluentSchema = (
 
   anyOf: attributes => {
     const currentProp = last(schema.properties)
-    const { name, type, ...props } = currentProp
+    const { name, not, type, ...props } = currentProp
     const properties = attributes.valueOf().properties
     const values = Object.entries(properties).reduce((memo, [key, value]) => {
       return [...memo, value]
     }, [])
     const attr = {
       ...props,
-      anyOf: values,
+      ...(not ? {not: {anyOf: values}} : {anyOf: values}),
     }
     return FluentSchema({ ...schema }).prop(name, attr)
   },
@@ -127,6 +144,7 @@ const FluentSchema = (
     })
   },
   asNumber: () => FluentSchema({ ...schema }).as('number'),
+  asBoolean: () => FluentSchema({ ...schema }).as('boolean'),
   asObject: () => FluentSchema({ ...schema }).as('object'),
 
   as: type => {

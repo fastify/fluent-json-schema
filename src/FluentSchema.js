@@ -1,4 +1,5 @@
 'use strict'
+const { flat, hasCombiningKeywords, isFluentSchema, last } = require('./utils')
 
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -7,25 +8,6 @@ const initialState = {
   properties: [],
   required: [],
 }
-
-const isFluentSchema = obj => typeof obj.title === 'function'
-
-const hasCombiningKeywords = attributes =>
-  attributes.anyOf || attributes.anyOf || attributes.anyOf || attributes.not
-
-const last = arr => {
-  const [prop] = [...arr].reverse()
-  return prop
-}
-
-const flat = array =>
-  array.reduce((memo, prop) => {
-    const { name, ...rest } = prop
-    return {
-      ...memo,
-      [name]: rest,
-    }
-  }, {})
 
 const setMeta = (schema, prop) => {
   const [key, value] = prop

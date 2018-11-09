@@ -13,65 +13,6 @@ describe('FluentSchema', () => {
     })
   })
 
-  describe('metadata', () => {
-    it('id', () => {
-      const value = 'id'
-      expect(
-        FluentSchema()
-          .id(value)
-          .valueOf().$id
-      ).toEqual(value)
-    })
-
-    it('title', () => {
-      const value = 'title'
-      expect(
-        FluentSchema()
-          .title(value)
-          .valueOf().title
-      ).toEqual(value)
-    })
-
-    it('description', () => {
-      const value = 'description'
-      expect(
-        FluentSchema()
-          .description(value)
-          .valueOf().description
-      ).toEqual(value)
-    })
-
-    describe('examples', () => {
-      it('valid', () => {
-        const value = ['example']
-        expect(
-          FluentSchema()
-            .examples(value)
-            .valueOf().examples
-        ).toEqual(value)
-      })
-
-      it('invalid', () => {
-        const value = 'examples'
-        expect(
-          () =>
-            FluentSchema()
-              .examples(value)
-              .valueOf().examples
-        ).toThrow("Invalid examples. Must be an array e.g. ['1', 'one', 'foo']")
-      })
-    })
-
-    it('ref', () => {
-      const value = 'description'
-      expect(
-        FluentSchema()
-          .description(value)
-          .valueOf().description
-      ).toEqual(value)
-    })
-  })
-
   describe('prop', () => {
     it('sets a prop with type string', () => {
       expect(
@@ -143,6 +84,65 @@ describe('FluentSchema', () => {
           required: [],
         },
       })
+    })
+  })
+
+  describe('metadata:', () => {
+    it('id', () => {
+      const value = 'id'
+      expect(
+        FluentSchema()
+          .id(value)
+          .valueOf().$id
+      ).toEqual(value)
+    })
+
+    it('title', () => {
+      const value = 'title'
+      expect(
+        FluentSchema()
+          .title(value)
+          .valueOf().title
+      ).toEqual(value)
+    })
+
+    it('description', () => {
+      const value = 'description'
+      expect(
+        FluentSchema()
+          .description(value)
+          .valueOf().description
+      ).toEqual(value)
+    })
+
+    describe('examples', () => {
+      it('valid', () => {
+        const value = ['example']
+        expect(
+          FluentSchema()
+            .examples(value)
+            .valueOf().examples
+        ).toEqual(value)
+      })
+
+      it('invalid', () => {
+        const value = 'examples'
+        expect(
+          () =>
+            FluentSchema()
+              .examples(value)
+              .valueOf().examples
+        ).toThrow("Invalid examples. Must be an array e.g. ['1', 'one', 'foo']")
+      })
+    })
+
+    it('ref', () => {
+      const value = 'description'
+      expect(
+        FluentSchema()
+          .description(value)
+          .valueOf().description
+      ).toEqual(value)
     })
   })
 
@@ -281,66 +281,68 @@ describe('FluentSchema', () => {
     })
   })
 
-  describe('anyOf', () => {
-    it('sets two alternative', () => {
-      expect(
-        FluentSchema()
-          .prop('prop')
-          .anyOf(
-            FluentSchema()
-              .prop('boolean')
-              .asBoolean()
-              .prop('string')
-          )
-          .valueOf()
-      ).toEqual({
-        $schema: 'http://json-schema.org/draft-07/schema#',
-        definitions: {},
-        properties: {
-          prop: {
-            $id: '#properties/prop',
-            anyOf: [
-              { $id: '#properties/boolean', type: 'boolean' },
-              { $id: '#properties/string', type: 'string' },
-            ],
-          },
-        },
-        required: [],
-        type: 'object',
-      })
-    })
-  })
-
-  describe('not', () => {
-    it('add prop not', () => {
-      expect(
-        FluentSchema()
-          .prop('prop')
-          .not()
-          .anyOf(
-            FluentSchema()
-              .prop('boolean')
-              .asBoolean()
-              .prop('number')
-              .asNumber()
-          )
-          .valueOf()
-      ).toEqual({
-        $schema: 'http://json-schema.org/draft-07/schema#',
-        definitions: {},
-        properties: {
-          prop: {
-            $id: '#properties/prop',
-            not: {
+  describe('combining keywords:', () => {
+    describe('anyOf', () => {
+      it('sets two alternative', () => {
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .anyOf(
+              FluentSchema()
+                .prop('boolean')
+                .asBoolean()
+                .prop('string')
+            )
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          definitions: {},
+          properties: {
+            prop: {
+              $id: '#properties/prop',
               anyOf: [
                 { $id: '#properties/boolean', type: 'boolean' },
-                { $id: '#properties/number', type: 'number' },
+                { $id: '#properties/string', type: 'string' },
               ],
             },
           },
-        },
-        required: [],
-        type: 'object',
+          required: [],
+          type: 'object',
+        })
+      })
+    })
+
+    describe('not', () => {
+      it('add prop not', () => {
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .not()
+            .anyOf(
+              FluentSchema()
+                .prop('boolean')
+                .asBoolean()
+                .prop('number')
+                .asNumber()
+            )
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          definitions: {},
+          properties: {
+            prop: {
+              $id: '#properties/prop',
+              not: {
+                anyOf: [
+                  { $id: '#properties/boolean', type: 'boolean' },
+                  { $id: '#properties/number', type: 'number' },
+                ],
+              },
+            },
+          },
+          required: [],
+          type: 'object',
+        })
       })
     })
   })

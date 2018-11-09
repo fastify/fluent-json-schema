@@ -8,6 +8,11 @@ const initialState = {
   required: [],
 }
 
+const isFluentSchema = obj => typeof obj.title === 'function'
+
+const hasCombiningKeywords = attributes =>
+  attributes.anyOf || attributes.anyOf || attributes.anyOf || attributes.not
+
 const last = arr => {
   const [prop] = [...arr].reverse()
   return prop
@@ -64,20 +69,13 @@ const FluentSchema = (schema = initialState) => ({
   },
 
   definition: (name, props = {}) =>
-    FluentSchema({ ...schema }).prop(name, props, true),
+    FluentSchema({ ...schema }).prop(name, { ...props, def: true }),
 
-  //TODO LS move 'def' in the props
-  prop: (name, props = {}, def = false) => {
-    const target = def ? 'definitions' : 'properties'
-    const attributes =
-      typeof props.title === 'function' ? props.valueOf() : props
+  prop: (name, props = {}) => {
+    const target = props.def ? 'definitions' : 'properties'
+    const attributes = isFluentSchema(props) ? props.valueOf() : props
     const {
-      type = attributes.anyOf ||
-      attributes.anyOf ||
-      attributes.anyOf ||
-      attributes.not
-        ? undefined
-        : 'string',
+      type = hasCombiningKeywords(attributes) ? undefined : 'string',
       // TODO LS $id should be prefixed with the parent
       $id = `#${target}/${name}`,
       $ref,

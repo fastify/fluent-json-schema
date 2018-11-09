@@ -2,7 +2,7 @@ const { FluentSchema } = require('./FluentSchema')
 const Ajv = require('ajv')
 
 describe('FluentSchema', () => {
-  it('compile', () => {
+  it('compiles', () => {
     const ajv = new Ajv()
     const schema = FluentSchema().valueOf()
     const validate = ajv.compile(schema)

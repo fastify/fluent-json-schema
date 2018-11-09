@@ -146,9 +146,14 @@ const FluentSchema = (schema = initialState) => ({
       required: [...schema.required, currentProp.name],
     })
   },
+
+  asString: () => FluentSchema({ ...schema }).as('string'),
   asNumber: () => FluentSchema({ ...schema }).as('number'),
   asBoolean: () => FluentSchema({ ...schema }).as('boolean'),
+  asInteger: () => FluentSchema({ ...schema }).as('integer'),
+  asArray: () => FluentSchema({ ...schema }).as('array'),
   asObject: () => FluentSchema({ ...schema }).as('object'),
+  asNull: () => FluentSchema({ ...schema }).as('null'),
 
   as: type => {
     const currentProp = last(schema.properties)

@@ -22,34 +22,37 @@ const flat = array =>
     }
   }, {})
 
+const setMeta = (schema, prop) => {
+  const [key, value] = prop
+  const currentProp = last(schema.properties)
+  if (currentProp) {
+    const { name, ...props } = currentProp
+    return FluentSchema({ ...schema }).prop(name, { ...props, [key]: value })
+  }
+  return FluentSchema({ ...schema, [key]: value })
+}
+
 const FluentSchema = (schema = initialState) => ({
   id: $id => {
-    const currentProp = last(schema.properties)
-    if (currentProp) {
-      const { name, ...props } = currentProp
-      return FluentSchema({ ...schema }).prop(name, { ...props, $id })
-    }
-    return FluentSchema({ ...schema, $id })
+    return setMeta(schema, ['$id', $id])
   },
+
   title: title => {
-    const currentProp = last(schema.properties)
-    if (currentProp) {
-      const { name, ...props } = currentProp
-      return FluentSchema({ ...schema }).prop(name, { ...props, title })
-    }
-    return FluentSchema({ ...schema, title })
+    return setMeta(schema, ['title', title])
   },
+
   description: description => {
-    const currentProp = last(schema.properties)
-    if (currentProp) {
-      const { name, ...props } = currentProp
-      return FluentSchema({ ...schema }).prop(name, {
-        ...props,
-        description,
-      })
-    }
-    return FluentSchema({ ...schema, description })
+    return setMeta(schema, ['description', description])
   },
+
+  examples: examples => {
+    if (!Array.isArray(examples))
+      throw new Error(
+        "Invalid examples. Must be an array e.g. ['1', 'one', 'foo']"
+      )
+    return setMeta(schema, ['examples', examples])
+  },
+
   ref: $ref => {
     const currentProp = last(schema.properties)
     if (currentProp) {
@@ -58,17 +61,6 @@ const FluentSchema = (schema = initialState) => ({
     }
     // TODO LS not sure if a schema can have a $ref
     return FluentSchema({ ...schema, $ref })
-  },
-
-  not: () => {
-    const [currentProp, ...properties] = [...schema.properties].reverse()
-    if (!currentProp) throw new Error(`invalid 'not' target`)
-    const { name, type, ...props } = currentProp
-    const attrs = {
-      ...props,
-      not: {},
-    }
-    return FluentSchema({ ...schema, properties }).prop(name, attrs)
   },
 
   definition: (name, props = {}) =>
@@ -125,6 +117,17 @@ const FluentSchema = (schema = initialState) => ({
     })
   },
 
+  not: () => {
+    const [currentProp, ...properties] = [...schema.properties].reverse()
+    if (!currentProp) throw new Error(`invalid 'not' target`)
+    const { name, type, ...props } = currentProp
+    const attrs = {
+      ...props,
+      not: {},
+    }
+    return FluentSchema({ ...schema, properties }).prop(name, attrs)
+  },
+
   anyOf: attributes => {
     const currentProp = last(schema.properties)
     const { name, not, type, ...props } = currentProp
@@ -148,11 +151,17 @@ const FluentSchema = (schema = initialState) => ({
   },
 
   asString: () => FluentSchema({ ...schema }).as('string'),
+
   asNumber: () => FluentSchema({ ...schema }).as('number'),
+
   asBoolean: () => FluentSchema({ ...schema }).as('boolean'),
+
   asInteger: () => FluentSchema({ ...schema }).as('integer'),
+
   asArray: () => FluentSchema({ ...schema }).as('array'),
+
   asObject: () => FluentSchema({ ...schema }).as('object'),
+
   asNull: () => FluentSchema({ ...schema }).as('null'),
 
   as: type => {

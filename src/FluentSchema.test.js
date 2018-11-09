@@ -190,7 +190,7 @@ describe('FluentSchema', () => {
   })
 
   describe('if', () => {
-    it('simple', () => {
+    it.skip('simple', () => {
       expect(
         FluentSchema()
           .prop('prop')

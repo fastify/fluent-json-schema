@@ -1,3 +1,5 @@
+'use strict'
+
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'object',
@@ -20,9 +22,7 @@ const flat = array =>
     }
   }, {})
 
-const FluentSchema = (
-  schema = initialState
-) => ({
+const FluentSchema = (schema = initialState) => ({
   id: $id => {
     const currentProp = last(schema.properties)
     if (currentProp) {
@@ -66,7 +66,7 @@ const FluentSchema = (
     const { name, type, ...props } = currentProp
     const attrs = {
       ...props,
-      not: {}
+      not: {},
     }
     return FluentSchema({ ...schema, properties }).prop(name, attrs)
   },
@@ -80,7 +80,10 @@ const FluentSchema = (
     const attributes =
       typeof props.title === 'function' ? props.valueOf() : props
     const {
-      type = attributes.anyOf || attributes.anyOf || attributes.anyOf || attributes.not
+      type = attributes.anyOf ||
+      attributes.anyOf ||
+      attributes.anyOf ||
+      attributes.not
         ? undefined
         : 'string',
       // TODO LS $id should be prefixed with the parent
@@ -106,7 +109,7 @@ const FluentSchema = (
           : Object.assign(
               {},
               { name },
-              type ? {type} : undefined,
+              type ? { type } : undefined,
               defaults ? { default: defaults } : undefined,
               title ? { title } : undefined,
               $id ? { $id } : undefined,
@@ -131,7 +134,7 @@ const FluentSchema = (
     }, [])
     const attr = {
       ...props,
-      ...(not ? {not: {anyOf: values}} : {anyOf: values}),
+      ...(not ? { not: { anyOf: values } } : { anyOf: values }),
     }
     return FluentSchema({ ...schema }).prop(name, attr)
   },

@@ -87,41 +87,138 @@ describe('FluentSchema', () => {
     })
   })
 
-  describe('asNumber', () => {
-    it('returns a type to the root schema', () => {
-      expect(
-        FluentSchema()
-          .asNumber()
-          .valueOf().type
-      ).toEqual('number')
+  describe('types:', () => {
+    describe('asString', () => {
+      it('returns a type to the root schema', () => {
+        expect(
+          FluentSchema()
+            .asString()
+            .valueOf().type
+        ).toEqual('string')
+      })
+
+      it('returns a type to the root schema', () => {
+        expect(
+          FluentSchema()
+            .prop('value')
+            .asString()
+            .valueOf().properties.value.type
+        ).toEqual('string')
+      })
     })
 
-    it('returns a type to the root schema', () => {
-      expect(
-        FluentSchema()
-          .prop('value')
-          .asNumber()
-          .valueOf().properties.value.type
-      ).toEqual('number')
-    })
-  })
+    describe('asNumber', () => {
+      it('returns a type to the root schema', () => {
+        expect(
+          FluentSchema()
+            .asNumber()
+            .valueOf().type
+        ).toEqual('number')
+      })
 
-  describe('asObject', () => {
-    it('sets a type object to the root', () => {
-      expect(
-        FluentSchema()
-          .asObject()
-          .valueOf().type
-      ).toEqual('object')
+      it('returns a type to the root schema', () => {
+        expect(
+          FluentSchema()
+            .prop('value')
+            .asNumber()
+            .valueOf().properties.value.type
+        ).toEqual('number')
+      })
     })
 
-    it('sets a type object to the prop', () => {
-      expect(
-        FluentSchema()
-          .prop('value')
-          .asObject()
-          .valueOf().properties.value.type
-      ).toEqual('object')
+    describe('asInteger', () => {
+      it('returns a type to the root schema', () => {
+        expect(
+          FluentSchema()
+            .asInteger()
+            .valueOf().type
+        ).toEqual('integer')
+      })
+
+      it('returns a type to the root schema', () => {
+        expect(
+          FluentSchema()
+            .prop('value')
+            .asInteger()
+            .valueOf().properties.value.type
+        ).toEqual('integer')
+      })
+    })
+
+    describe('asBoolean', () => {
+      it('returns a type to the root schema', () => {
+        expect(
+          FluentSchema()
+            .asBoolean()
+            .valueOf().type
+        ).toEqual('boolean')
+      })
+
+      it('returns a type to the root schema', () => {
+        expect(
+          FluentSchema()
+            .prop('value')
+            .asBoolean()
+            .valueOf().properties.value.type
+        ).toEqual('boolean')
+      })
+    })
+
+    describe('asArray', () => {
+      it('returns a type from the root', () => {
+        expect(
+          FluentSchema()
+            .asArray()
+            .valueOf().type
+        ).toEqual('array')
+      })
+
+      it('returns a type from the prop', () => {
+        expect(
+          FluentSchema()
+            .prop('value')
+            .asArray()
+            .valueOf().properties.value.type
+        ).toEqual('array')
+      })
+    })
+
+    describe('asObject', () => {
+      it('sets a type object to the root', () => {
+        expect(
+          FluentSchema()
+            .asObject()
+            .valueOf().type
+        ).toEqual('object')
+      })
+
+      it('sets a type object to the prop', () => {
+        expect(
+          FluentSchema()
+            .prop('value')
+            .asObject()
+            .valueOf().properties.value.type
+        ).toEqual('object')
+      })
+    })
+
+    describe('asNull', () => {
+      it('sets a type object from the root', () => {
+        expect(
+          FluentSchema()
+            .asNull()
+            .valueOf().type
+        ).toEqual('null')
+      })
+
+      it('sets a type object from the prop', () => {
+        expect(
+          FluentSchema()
+            .prop('value')
+            .asNull()
+            .valueOf().properties.value.type
+        ).toEqual('null')
+      })
     })
   })
 

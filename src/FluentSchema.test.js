@@ -13,6 +13,65 @@ describe('FluentSchema', () => {
     })
   })
 
+  describe('metadata', () => {
+    it('id', () => {
+      const value = 'id'
+      expect(
+        FluentSchema()
+          .id(value)
+          .valueOf().$id
+      ).toEqual(value)
+    })
+
+    it('title', () => {
+      const value = 'title'
+      expect(
+        FluentSchema()
+          .title(value)
+          .valueOf().title
+      ).toEqual(value)
+    })
+
+    it('description', () => {
+      const value = 'description'
+      expect(
+        FluentSchema()
+          .description(value)
+          .valueOf().description
+      ).toEqual(value)
+    })
+
+    describe('examples', () => {
+      it('valid', () => {
+        const value = ['example']
+        expect(
+          FluentSchema()
+            .examples(value)
+            .valueOf().examples
+        ).toEqual(value)
+      })
+
+      it('invalid', () => {
+        const value = 'examples'
+        expect(
+          () =>
+            FluentSchema()
+              .examples(value)
+              .valueOf().examples
+        ).toThrow("Invalid examples. Must be an array e.g. ['1', 'one', 'foo']")
+      })
+    })
+
+    it('ref', () => {
+      const value = 'description'
+      expect(
+        FluentSchema()
+          .description(value)
+          .valueOf().description
+      ).toEqual(value)
+    })
+  })
+
   describe('prop', () => {
     it('sets a prop with type string', () => {
       expect(

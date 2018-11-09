@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "test": "jest src/**.test.js --watch",
+    "test": "jest src/**.test.js",
+    "test:watch": "jest src/**.test.js --watch",
     "format": "prettier --write ./src/**/*.js"
   },
   "devDependencies": {

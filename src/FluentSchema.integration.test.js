@@ -85,6 +85,52 @@ describe('FluentSchema', () => {
     })
   })
 
+  describe.only('ifThenElse', () => {
+    const ajv = new Ajv()
+
+    const VALUES = ['ONE', 'TWO']
+    const schema = FluentSchema()
+      .prop('prop')
+      .ifThenElse(
+        FluentSchema()
+          .prop('prop')
+          .enum(VALUES[0]),
+        FluentSchema()
+          .prop('extraProp')
+          .required(),
+        FluentSchema()
+          .prop('elseProp')
+          .required()
+      )
+      .valueOf()
+    console.log(JSON.stringify(schema))
+    const validate = ajv.compile(schema)
+
+    it('valid', () => {
+      const valid = validate({
+        prop: '12345',
+        extraProp: 'foo',
+      })
+      expect(valid).toBeTruthy()
+    })
+
+    it('invalid', () => {
+      const valid = validate({
+        prop: '123456',
+      })
+      expect(validate.errors).toEqual([
+        {
+          dataPath: '',
+          keyword: 'required',
+          message: "should have required property 'extraProp'",
+          params: { missingProperty: 'extraProp' },
+          schemaPath: '#/then/required',
+        },
+      ])
+      expect(valid).not.toBeTruthy()
+    })
+  })
+
   describe('complex', () => {
     const ajv = new Ajv()
     const schema = FluentSchema()

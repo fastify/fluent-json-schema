@@ -147,6 +147,31 @@ describe('FluentSchema', () => {
   })
 
   describe('types:', () => {
+    describe('any', () => {
+      describe('enum', () => {
+        it('sets values', () => {
+          const prop = 'prop'
+          expect(
+            FluentSchema()
+              .prop(prop)
+              .enum(['ONE', 'TWO'])
+              .valueOf()
+          ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            definitions: {},
+            properties: {
+              prop: {
+                $id: '#properties/prop',
+                type: 'string',
+                enum: ['ONE', 'TWO'],
+              },
+            },
+            required: [],
+            type: 'object',
+          })
+        })
+      })
+    })
     describe('string', () => {
       it('returns a type to the root schema', () => {
         expect(

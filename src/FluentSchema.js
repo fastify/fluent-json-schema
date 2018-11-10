@@ -223,6 +223,12 @@ const FluentSchema = (schema = initialState) => ({
       )
     return setMeta(schema, ['format', format, 'string'])
   },
+  // TODO LS accept regex as well
+  pattern: pattern => {
+    if (!typeof pattern === 'string')
+      throw new Error(`'pattern' must be a string`)
+    return setMeta(schema, ['pattern', pattern, 'string'])
+  },
 
   asNumber: () => FluentSchema({ ...schema }).as('number'),
 

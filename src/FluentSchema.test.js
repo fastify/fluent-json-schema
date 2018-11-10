@@ -339,6 +339,61 @@ describe('FluentSchema', () => {
             )
           })
         })
+        describe('pattern', () => {
+          it('as a string', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .pattern('.*')
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'string',
+                  pattern: '.*',
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it.skip('as a regex', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .pattern(/.*/g)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'string',
+                  pattern: '.*',
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .pattern('.*')
+            ).toThrow("'prop' as 'number' doesn't accept 'pattern' option")
+          })
+        })
       })
     })
     describe('number', () => {

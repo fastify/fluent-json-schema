@@ -195,6 +195,29 @@ describe('FluentSchema', () => {
           })
         })
       })
+      describe('const', () => {
+        it('sets const', () => {
+          const prop = 'prop'
+          expect(
+            FluentSchema()
+              .prop(prop)
+              .const('ONE')
+              .valueOf()
+          ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            definitions: {},
+            properties: {
+              prop: {
+                $id: '#properties/prop',
+                type: 'string',
+                const: 'ONE',
+              },
+            },
+            required: [],
+            type: 'object',
+          })
+        })
+      })
     })
     describe('string', () => {
       it('returns a type to the root schema', () => {

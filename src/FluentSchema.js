@@ -1,5 +1,11 @@
 'use strict'
-const { flat, hasCombiningKeywords, isFluentSchema, last } = require('./utils')
+const {
+  flat,
+  omit,
+  hasCombiningKeywords,
+  isFluentSchema,
+  last,
+} = require('./utils')
 
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -187,20 +193,67 @@ const FluentSchema = (schema = initialState) => ({
     return setMeta(schema, ['type', type])
   },
 
-  if: () => {
-    throw new Error(`'if' isn't implemented yet`)
+  ifThen: (ifClause, thenClause) => {
+    if (!isFluentSchema(ifClause))
+      throw new Error("'ifClause' must be a FluentSchema")
+    if (!isFluentSchema(thenClause))
+      throw new Error("'thenClause' must be a FluentSchema")
+
+    const ifClauseSchema = omit(ifClause.valueOf(), [
+      '$schema',
+      'definitions',
+      'type',
+    ])
+    const thenClauseSchema = omit(thenClause.valueOf(), [
+      '$schema',
+      'definitions',
+      'type',
+    ])
+
+    return FluentSchema({
+      ...schema,
+      if: ifClauseSchema,
+      then: thenClauseSchema,
+    })
   },
 
-  then: () => {
-    throw new Error(`'then' isn't implemented yet`)
-  },
+  ifThenElse: (ifClause, thenClause, elseClause) => {
+    if (!isFluentSchema(ifClause))
+      throw new Error("'ifClause' must be a FluentSchema")
+    if (!isFluentSchema(thenClause))
+      throw new Error("'thenClause' must be a FluentSchema")
+    if (!isFluentSchema(elseClause))
+      throw new Error(
+        "'elseClause' must be a FluentSchema or a false boolean value"
+      )
 
-  else: () => {
-    throw new Error(`'else' isn't implemented yet`)
+    const ifClauseSchema = omit(ifClause.valueOf(), [
+      '$schema',
+      'definitions',
+      'type',
+    ])
+    const thenClauseSchema = omit(thenClause.valueOf(), [
+      '$schema',
+      'definitions',
+      'type',
+    ])
+    // const ifThenSchema = FluentSchema({...schema}).ifThen(ifClause, thenClause).valueOf()
+    const elseClauseSchema = omit(elseClause.valueOf(), [
+      '$schema',
+      'definitions',
+      'type',
+    ])
+    return FluentSchema({
+      ...schema,
+      if: ifClauseSchema,
+      then: thenClauseSchema,
+      else: elseClauseSchema,
+    })
   },
 
   valueOf: () => {
     const { properties, definitions, ...rest } = schema
+    // TODO LS cosmetic would be nice to put if/then/else clause at final props
     return {
       definitions: flat(definitions),
       ...rest,

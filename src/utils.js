@@ -8,6 +8,15 @@ const last = arr => {
   return prop
 }
 
+const omit = (obj, props) =>
+  Object.entries(obj).reduce((memo, [key, value]) => {
+    if (props.includes(key)) return memo
+    return {
+      ...memo,
+      [key]: value,
+    }
+  }, {})
+
 const flat = array =>
   array.reduce((memo, prop) => {
     const { name, ...rest } = prop
@@ -22,4 +31,5 @@ module.exports = {
   hasCombiningKeywords,
   last,
   flat,
+  omit,
 }

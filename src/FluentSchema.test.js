@@ -461,14 +461,16 @@ describe('FluentSchema', () => {
     })
   })
 
-  describe('if', () => {
-    it.skip('simple', () => {
+  describe('ifThen', () => {
+    it('simple', () => {
       expect(
         FluentSchema()
           .prop('prop')
-          .prop('extraProp')
-          .if({ properties: { prop: { maxLength: 5 } } })
-          .then(
+          .maxLength(5)
+          .ifThen(
+            FluentSchema()
+              .prop('prop')
+              .maxLength(5),
             FluentSchema()
               .prop('extraProp')
               .required()
@@ -480,11 +482,91 @@ describe('FluentSchema', () => {
         properties: {
           prop: {
             $id: '#properties/prop',
+            type: 'string',
+            maxLength: 5,
           },
         },
-        if: { properties: { power: { minimum: 9000 } } },
-        then: { required: ['disbelief'] },
-        // else: { required: ['confidence'] },
+        if: {
+          properties: {
+            prop: {
+              $id: '#properties/prop',
+              type: 'string',
+              maxLength: 5,
+            },
+          },
+          required: [],
+        },
+        then: {
+          properties: {
+            extraProp: {
+              $id: '#properties/extraProp',
+              type: 'string',
+            },
+          },
+          required: ['extraProp'],
+        },
+        required: [],
+        type: 'object',
+      })
+    })
+  })
+
+  describe('ifThenElse', () => {
+    it('simple', () => {
+      expect(
+        FluentSchema()
+          .prop('prop')
+          .maxLength(5)
+          .ifThenElse(
+            FluentSchema()
+              .prop('prop')
+              .maxLength(5),
+            FluentSchema()
+              .prop('extraProp')
+              .required(),
+            FluentSchema()
+              .prop('elseProp')
+              .required()
+          )
+          .valueOf()
+      ).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        definitions: {},
+        properties: {
+          prop: {
+            $id: '#properties/prop',
+            type: 'string',
+            maxLength: 5,
+          },
+        },
+        if: {
+          properties: {
+            prop: {
+              $id: '#properties/prop',
+              type: 'string',
+              maxLength: 5,
+            },
+          },
+          required: [],
+        },
+        then: {
+          properties: {
+            extraProp: {
+              $id: '#properties/extraProp',
+              type: 'string',
+            },
+          },
+          required: ['extraProp'],
+        },
+        else: {
+          properties: {
+            elseProp: {
+              $id: '#properties/elseProp',
+              type: 'string',
+            },
+          },
+          required: ['elseProp'],
+        },
         required: [],
         type: 'object',
       })

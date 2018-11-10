@@ -1,4 +1,4 @@
-const { FluentSchema } = require('./FluentSchema')
+const { FluentSchema, FORMATS } = require('./FluentSchema')
 
 describe('FluentSchema', () => {
   describe('defaults', () => {
@@ -302,6 +302,41 @@ describe('FluentSchema', () => {
                 .asString()
                 .maxLength('5')
             ).toThrow("'maxLength' must be an Integer")
+          })
+        })
+        describe('format', () => {
+          it('valid', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .format(FORMATS.DATE)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'string',
+                  format: FORMATS.DATE,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .format('invalid')
+            ).toThrow(
+              "'format' must be one of relative-json-pointer, json-pointer, uuid, regex, ipv6, ipv4, hostname, email, url, uri-template, uri-reference, uri, time, date"
+            )
           })
         })
       })

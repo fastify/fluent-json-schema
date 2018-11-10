@@ -26,10 +26,43 @@ const flat = array =>
     }
   }, {})
 
+const RELATIVE_JSON_POINTER = 'relative-json-pointer'
+const JSON_POINTER = 'json-pointer'
+const UUID = 'uuid'
+const REGEX = 'regex'
+const IPV6 = 'ipv6'
+const IPV4 = 'ipv4'
+const HOSTNAME = 'hostname'
+const EMAIL = 'email'
+const URL = 'url'
+const URI_TEMPLATE = 'uri-template'
+const URI_REFERENCE = 'uri-reference'
+const URI = 'uri'
+const TIME = 'time'
+const DATE = 'date'
+
+const FORMATS = {
+  RELATIVE_JSON_POINTER,
+  JSON_POINTER,
+  UUID,
+  REGEX,
+  IPV6,
+  IPV4,
+  HOSTNAME,
+  EMAIL,
+  URL,
+  URI_TEMPLATE,
+  URI_REFERENCE,
+  URI,
+  TIME,
+  DATE,
+}
+
 module.exports = {
   isFluentSchema,
   hasCombiningKeywords,
   last,
   flat,
   omit,
+  FORMATS,
 }

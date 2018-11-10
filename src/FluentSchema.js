@@ -5,6 +5,7 @@ const {
   hasCombiningKeywords,
   isFluentSchema,
   last,
+  FORMATS,
 } = require('./utils')
 
 const initialState = {
@@ -215,6 +216,14 @@ const FluentSchema = (schema = initialState) => ({
     return setMeta(schema, ['maxLength', max, 'string'])
   },
 
+  format: format => {
+    if (!Object.values(FORMATS).includes(format))
+      throw new Error(
+        `'format' must be one of ${Object.values(FORMATS).join(', ')}`
+      )
+    return setMeta(schema, ['format', format, 'string'])
+  },
+
   asNumber: () => FluentSchema({ ...schema }).as('number'),
 
   minimum: min => {
@@ -329,4 +338,5 @@ const FluentSchema = (schema = initialState) => ({
 
 module.exports = {
   FluentSchema,
+  FORMATS,
 }

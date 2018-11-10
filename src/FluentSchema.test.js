@@ -132,7 +132,7 @@ describe('FluentSchema', () => {
             FluentSchema()
               .examples(value)
               .valueOf().examples
-        ).toThrow("Invalid examples. Must be an array e.g. ['1', 'one', 'foo']")
+        ).toThrow("'examples' must be an array e.g. ['1', 'one', 'foo']")
       })
     })
 
@@ -147,7 +147,7 @@ describe('FluentSchema', () => {
   })
 
   describe('types:', () => {
-    describe('asString', () => {
+    describe('string', () => {
       it('returns a type to the root schema', () => {
         expect(
           FluentSchema()
@@ -163,6 +163,75 @@ describe('FluentSchema', () => {
             .asString()
             .valueOf().properties.value.type
         ).toEqual('string')
+      })
+
+      describe('length', () => {
+        describe('minLength', () => {
+          it('valid', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .minLength(5)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'string',
+                  minLength: 5,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .minLength('5')
+            ).toThrow("'minLength' must be an Integer")
+          })
+        })
+        describe('maxLength', () => {
+          it('valid', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .maxLength(10)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'string',
+                  maxLength: 10,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .maxLength('5')
+            ).toThrow("'maxLength' must be an Integer")
+          })
+        })
       })
     })
 
@@ -182,6 +251,51 @@ describe('FluentSchema', () => {
             .asNumber()
             .valueOf().properties.value.type
         ).toEqual('number')
+      })
+
+      describe('Numeric types', () => {
+        describe('minimum', () => {
+          it('valid', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .minimum(5)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'number',
+                  minimum: 5,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid value', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .minimum('5')
+            ).toThrow("'minimum' must be an Integer")
+          })
+          it('invalid option', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .minimum(5)
+            ).toThrow("'prop' as 'number' doesn't accept 'minimum'")
+          })
+        })
       })
     })
 

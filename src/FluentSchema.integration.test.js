@@ -95,7 +95,7 @@ describe('FluentSchema', () => {
         FluentSchema()
           .prop('prop')
           // TODO LS workaround otherwise we have dup IDs
-          .id('#properties/if/prop')
+          // .id('#properties/if/prop')
           .enum([VALUES[0]]),
         FluentSchema()
           .prop('extraProp')

@@ -27,6 +27,7 @@ const setMeta = (schema, prop) => {
   return FluentSchema({ ...schema, [key]: value })
 }
 
+// TODO LS looking for a better name
 const patchIdsWithParentId = (schema, parentId) => {
   return {
     ...schema,
@@ -127,7 +128,9 @@ const FluentSchema = (schema = initialState) => ({
               type ? { type } : undefined,
               defaults ? { default: defaults } : undefined,
               title ? { title } : undefined,
-              $id ? { $id } : undefined,
+              $id
+                ? { $id: isFluentSchema(props) ? attributes.$id || $id : $id }
+                : undefined,
               description ? { description } : undefined,
               properties ? { properties } : undefined,
               required ? { required } : undefined,
@@ -250,8 +253,8 @@ const FluentSchema = (schema = initialState) => ({
 
     return FluentSchema({
       ...schema,
-      if: ifClauseSchema,
-      then: thenClauseSchema,
+      if: patchIdsWithParentId(ifClauseSchema, '#if'),
+      then: patchIdsWithParentId(thenClauseSchema, '#then'),
     })
   },
 
@@ -264,7 +267,6 @@ const FluentSchema = (schema = initialState) => ({
       throw new Error(
         "'elseClause' must be a FluentSchema or a false boolean value"
       )
-
     const ifClauseSchema = omit(ifClause.valueOf(), [
       '$schema',
       'definitions',
@@ -283,9 +285,9 @@ const FluentSchema = (schema = initialState) => ({
 
     return FluentSchema({
       ...schema,
-      if: ifClauseSchema,
-      then: thenClauseSchema,
-      else: elseClauseSchema,
+      if: patchIdsWithParentId(ifClauseSchema, '#if'),
+      then: patchIdsWithParentId(thenClauseSchema, '#then'),
+      else: patchIdsWithParentId(elseClauseSchema, '#else'),
     })
   },
 

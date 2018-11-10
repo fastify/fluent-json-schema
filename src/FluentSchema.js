@@ -10,10 +10,12 @@ const initialState = {
 }
 
 const setMeta = (schema, prop) => {
-  const [key, value] = prop
+  const [key, value, type = 'string'] = prop
   const currentProp = last(schema.properties)
   if (currentProp) {
     const { name, ...props } = currentProp
+    if (type !== currentProp.type)
+      throw new Error(`'${name}' as '${type}' doesn't accept '${key}' option`)
     return FluentSchema({ ...schema }).prop(name, { ...props, [key]: value })
   }
   return FluentSchema({ ...schema, [key]: value })
@@ -34,9 +36,7 @@ const FluentSchema = (schema = initialState) => ({
 
   examples: examples => {
     if (!Array.isArray(examples))
-      throw new Error(
-        "Invalid examples. Must be an array e.g. ['1', 'one', 'foo']"
-      )
+      throw new Error("'examples' must be an array e.g. ['1', 'one', 'foo']")
     return setMeta(schema, ['examples', examples])
   },
 
@@ -70,6 +70,17 @@ const FluentSchema = (schema = initialState) => ({
       allOf,
       oneOf,
       not,
+      // string
+      minLength,
+      maxLength,
+      pattern,
+      format,
+      // number
+      minimum,
+      maximum,
+      multipleOf,
+      exclusiveMaximum,
+      exclusiveMinimum,
     } = attributes
 
     return FluentSchema({
@@ -81,6 +92,7 @@ const FluentSchema = (schema = initialState) => ({
           : Object.assign(
               {},
               { name },
+              // TODO LS that's quite verbose :)
               type ? { type } : undefined,
               defaults ? { default: defaults } : undefined,
               title ? { title } : undefined,
@@ -91,7 +103,17 @@ const FluentSchema = (schema = initialState) => ({
               anyOf ? { anyOf } : undefined,
               oneOf ? { oneOf } : undefined,
               allOf ? { allOf } : undefined,
-              not ? { not } : undefined
+              not ? { not } : undefined,
+              // string
+              minLength ? { minLength } : undefined,
+              maxLength ? { maxLength } : undefined,
+              pattern ? { pattern } : undefined,
+              format ? { format } : undefined,
+              minimum ? { minimum } : undefined,
+              maximum ? { maximum } : undefined,
+              multipleOf ? { multipleOf } : undefined,
+              exclusiveMaximum ? { exclusiveMaximum } : undefined,
+              exclusiveMinimum ? { exclusiveMinimum } : undefined
             ),
       ],
     })
@@ -99,7 +121,7 @@ const FluentSchema = (schema = initialState) => ({
 
   not: () => {
     const [currentProp, ...properties] = [...schema.properties].reverse()
-    if (!currentProp) throw new Error(`invalid 'not' target`)
+    if (!currentProp) throw new Error(`'not' can be applied only to a prop`)
     const { name, type, ...props } = currentProp
     const attrs = {
       ...props,
@@ -132,7 +154,24 @@ const FluentSchema = (schema = initialState) => ({
 
   asString: () => FluentSchema({ ...schema }).as('string'),
 
+  minLength: min => {
+    if (!Number.isInteger(min))
+      throw new Error("'minLength' must be an Integer")
+    return setMeta(schema, ['minLength', min, 'string'])
+  },
+
+  maxLength: max => {
+    if (!Number.isInteger(max))
+      throw new Error("'maxLength' must be an Integer")
+    return setMeta(schema, ['maxLength', max, 'string'])
+  },
+
   asNumber: () => FluentSchema({ ...schema }).as('number'),
+
+  minimum: min => {
+    if (!Number.isInteger(min)) throw new Error("'minimum' must be an Integer")
+    return setMeta(schema, ['minimum', min, 'number'])
+  },
 
   asBoolean: () => FluentSchema({ ...schema }).as('boolean'),
 
@@ -145,15 +184,7 @@ const FluentSchema = (schema = initialState) => ({
   asNull: () => FluentSchema({ ...schema }).as('null'),
 
   as: type => {
-    const currentProp = last(schema.properties)
-    if (currentProp) {
-      const { name, ...props } = currentProp
-      return FluentSchema({ ...schema }).prop(name, {
-        ...props,
-        type,
-      })
-    }
-    return FluentSchema({ ...schema, type })
+    return setMeta(schema, ['type', type])
   },
 
   if: () => {

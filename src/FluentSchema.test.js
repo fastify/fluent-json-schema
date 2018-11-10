@@ -27,7 +27,7 @@ describe('FluentSchema', () => {
       })
     })
 
-    it.only('sets a prop with a nested object', () => {
+    it('sets a prop with a nested object', () => {
       expect(
         FluentSchema()
           .prop('foo', FluentSchema().prop('bar'))
@@ -73,11 +73,11 @@ describe('FluentSchema', () => {
           type: 'object',
           properties: {
             foo: {
-              $id: '#properties/foo',
+              $id: '#definitions/foo/properties/foo',
               type: 'string',
             },
             bar: {
-              $id: '#properties/bar',
+              $id: '#definitions/foo/properties/bar',
               type: 'string',
             },
           },
@@ -88,13 +88,28 @@ describe('FluentSchema', () => {
   })
 
   describe('metadata:', () => {
-    it('id', () => {
-      const value = 'id'
-      expect(
-        FluentSchema()
-          .id(value)
-          .valueOf().$id
-      ).toEqual(value)
+    describe('id', () => {
+      it('simple', () => {
+        const value = 'id'
+        expect(
+          FluentSchema()
+            .id(value)
+            .valueOf().$id
+        ).toEqual(value)
+      })
+      it('with props', () => {
+        const id = 'customId'
+        expect(
+          FluentSchema()
+            .prop(
+              'foo',
+              FluentSchema()
+                .id(id)
+                .prop('bar')
+            )
+            .valueOf().properties.foo.$id
+        ).toEqual(id)
+      })
     })
 
     it('title', () => {
@@ -514,7 +529,7 @@ describe('FluentSchema', () => {
         if: {
           properties: {
             prop: {
-              $id: '#properties/prop',
+              $id: '#if/properties/prop',
               type: 'string',
               maxLength: 5,
             },
@@ -524,7 +539,7 @@ describe('FluentSchema', () => {
         then: {
           properties: {
             extraProp: {
-              $id: '#properties/extraProp',
+              $id: '#then/properties/extraProp',
               type: 'string',
             },
           },
@@ -567,7 +582,7 @@ describe('FluentSchema', () => {
         if: {
           properties: {
             prop: {
-              $id: '#properties/prop',
+              $id: '#if/properties/prop',
               type: 'string',
               maxLength: 5,
             },
@@ -577,7 +592,7 @@ describe('FluentSchema', () => {
         then: {
           properties: {
             extraProp: {
-              $id: '#properties/extraProp',
+              $id: '#then/properties/extraProp',
               type: 'string',
             },
           },
@@ -586,7 +601,7 @@ describe('FluentSchema', () => {
         else: {
           properties: {
             elseProp: {
-              $id: '#properties/elseProp',
+              $id: '#else/properties/elseProp',
               type: 'string',
             },
           },
@@ -630,7 +645,6 @@ describe('FluentSchema', () => {
       .asNumber()
       .valueOf()
 
-    //console.log(JSON.stringify(schema))
     expect(schema).toEqual({
       definitions: {
         address: {
@@ -639,15 +653,15 @@ describe('FluentSchema', () => {
           properties: {
             country: {
               type: 'string',
-              $id: '#properties/country',
+              $id: '#definitions/address/properties/country',
             },
             city: {
               type: 'string',
-              $id: '#properties/city',
+              $id: '#definitions/address/properties/city',
             },
             zipcode: {
               type: 'string',
-              $id: '#properties/zipcode',
+              $id: '#definitions/address/properties/zipcode',
             },
           },
           required: [],
@@ -681,11 +695,11 @@ describe('FluentSchema', () => {
           properties: {
             name: {
               type: 'string',
-              $id: '#properties/name',
+              $id: '#properties/role/properties/name',
             },
             permissions: {
               type: 'string',
-              $id: '#properties/permissions',
+              $id: '#properties/role/properties/permissions',
             },
           },
           required: [],

@@ -27,6 +27,24 @@ const setMeta = (schema, prop) => {
   return FluentSchema({ ...schema, [key]: value })
 }
 
+const patchIdsWithParentId = (schema, parentId) => {
+  return {
+    ...schema,
+    properties: Object.entries(schema.properties).reduce(
+      (memo, [key, prop]) => {
+        return {
+          ...memo,
+          [key]: {
+            ...prop,
+            $id: `${parentId}/${prop.$id.replace('#', '')}`, // e.g. #properties/foo/properties/bar
+          },
+        }
+      },
+      {}
+    ),
+  }
+}
+
 const FluentSchema = (schema = initialState) => ({
   id: $id => {
     return setMeta(schema, ['$id', $id])
@@ -61,13 +79,17 @@ const FluentSchema = (schema = initialState) => ({
 
   prop: (name, props = {}) => {
     const target = props.def ? 'definitions' : 'properties'
-    const attributes = isFluentSchema(props) ? props.valueOf() : props
+    const $id = `#${target}/${name}`
+    const attributes = isFluentSchema(props)
+      ? patchIdsWithParentId(props.valueOf(), $id)
+      : props
+
     const {
       type = hasCombiningKeywords(attributes) ? undefined : 'string',
       // TODO LS $id should be prefixed with the parent.
       // Resolving this fix the if issue as well
       // Do we need an id for each prop? https://www.jsonschema.net/ foster for this approach however ifClause is generating a duplicated if
-      $id = `#${target}/${name}`,
+      //$id = `#${target}/${name}`,
       $ref,
       title,
       description,

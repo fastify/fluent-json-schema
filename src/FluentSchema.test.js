@@ -27,14 +27,14 @@ describe('FluentSchema', () => {
       })
     })
 
-    it('sets a prop with a nested object', () => {
+    it.only('sets a prop with a nested object', () => {
       expect(
         FluentSchema()
           .prop('foo', FluentSchema().prop('bar'))
           .valueOf().properties.foo.properties
       ).toEqual({
         bar: {
-          $id: '#properties/bar',
+          $id: '#properties/foo/properties/bar',
           type: 'string',
         },
       })

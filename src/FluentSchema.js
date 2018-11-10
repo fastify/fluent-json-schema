@@ -20,7 +20,7 @@ const setMeta = (schema, prop) => {
   const currentProp = last(schema.properties)
   if (currentProp) {
     const { name, ...props } = currentProp
-    if (type !== currentProp.type)
+    if (type !== currentProp.type && type !== 'any')
       throw new Error(`'${name}' as '${type}' doesn't accept '${key}' option`)
     return FluentSchema({ ...schema }).prop(name, { ...props, [key]: value })
   }
@@ -64,7 +64,8 @@ const FluentSchema = (schema = initialState) => ({
     const attributes = isFluentSchema(props) ? props.valueOf() : props
     const {
       type = hasCombiningKeywords(attributes) ? undefined : 'string',
-      // TODO LS $id should be prefixed with the parent
+      // TODO LS $id should be prefixed with the parent.
+      // Do we need an id for each prop? https://www.jsonschema.net/ foster for this approach however ifClause is generating a duplicated if
       $id = `#${target}/${name}`,
       $ref,
       title,
@@ -72,6 +73,7 @@ const FluentSchema = (schema = initialState) => ({
       defaults,
       properties,
       required,
+      // compound
       anyOf,
       allOf,
       oneOf,
@@ -106,6 +108,9 @@ const FluentSchema = (schema = initialState) => ({
               description ? { description } : undefined,
               properties ? { properties } : undefined,
               required ? { required } : undefined,
+              attributes.const ? { const: attributes.const } : undefined,
+              attributes.enum ? { enum: attributes.enum } : undefined,
+              // compounds
               anyOf ? { anyOf } : undefined,
               oneOf ? { oneOf } : undefined,
               allOf ? { allOf } : undefined,
@@ -123,6 +128,16 @@ const FluentSchema = (schema = initialState) => ({
             ),
       ],
     })
+  },
+
+  enum: values => {
+    if (!Array.isArray(values))
+      throw new Error("'enum' must be an array e.g. ['1', 'one', 'foo']")
+    return setMeta(schema, ['enum', values, 'any'])
+  },
+
+  const: value => {
+    return setMeta(schema, ['const', value, 'any'])
   },
 
   not: () => {

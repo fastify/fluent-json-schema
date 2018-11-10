@@ -21,7 +21,9 @@ const setMeta = (schema, prop) => {
   if (currentProp) {
     const { name, ...props } = currentProp
     if (type !== currentProp.type && type !== 'any')
-      throw new Error(`'${name}' as '${type}' doesn't accept '${key}' option`)
+      throw new Error(
+        `'${name}' as '${currentProp.type}' doesn't accept '${key}' option`
+      )
     return FluentSchema({ ...schema }).prop(name, { ...props, [key]: value })
   }
   return FluentSchema({ ...schema, [key]: value })
@@ -218,6 +220,10 @@ const FluentSchema = (schema = initialState) => ({
   minimum: min => {
     if (!Number.isInteger(min)) throw new Error("'minimum' must be an Integer")
     return setMeta(schema, ['minimum', min, 'number'])
+  },
+  maximum: max => {
+    if (!Number.isInteger(max)) throw new Error("'maximum' must be an Integer")
+    return setMeta(schema, ['maximum', max, 'number'])
   },
 
   asBoolean: () => FluentSchema({ ...schema }).as('boolean'),

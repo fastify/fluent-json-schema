@@ -306,8 +306,7 @@ describe('FluentSchema', () => {
         })
       })
     })
-
-    describe('asNumber', () => {
+    describe('number', () => {
       it('returns a type to the root schema', () => {
         expect(
           FluentSchema()
@@ -365,13 +364,54 @@ describe('FluentSchema', () => {
                 .prop(prop)
                 .asString()
                 .minimum(5)
-            ).toThrow("'prop' as 'number' doesn't accept 'minimum'")
+            ).toThrow("'prop' as 'string' doesn't accept 'minimum' option")
+          })
+        })
+        describe('maximum', () => {
+          it('valid', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .maximum(5)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'number',
+                  maximum: 5,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid value', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .maximum('5')
+            ).toThrow("'maximum' must be an Integer")
+          })
+          it('invalid option', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .maximum(5)
+            ).toThrow("'prop' as 'string' doesn't accept 'maximum' option")
           })
         })
       })
     })
-
-    describe('asInteger', () => {
+    describe('integer', () => {
       it('returns a type to the root schema', () => {
         expect(
           FluentSchema()
@@ -389,8 +429,7 @@ describe('FluentSchema', () => {
         ).toEqual('integer')
       })
     })
-
-    describe('asBoolean', () => {
+    describe('boolean', () => {
       it('returns a type to the root schema', () => {
         expect(
           FluentSchema()
@@ -408,8 +447,7 @@ describe('FluentSchema', () => {
         ).toEqual('boolean')
       })
     })
-
-    describe('asArray', () => {
+    describe('array', () => {
       it('returns a type from the root', () => {
         expect(
           FluentSchema()
@@ -427,8 +465,7 @@ describe('FluentSchema', () => {
         ).toEqual('array')
       })
     })
-
-    describe('asObject', () => {
+    describe('object', () => {
       it('sets a type object to the root', () => {
         expect(
           FluentSchema()
@@ -446,8 +483,7 @@ describe('FluentSchema', () => {
         ).toEqual('object')
       })
     })
-
-    describe('asNull', () => {
+    describe('null', () => {
       it('sets a type object from the root', () => {
         expect(
           FluentSchema()

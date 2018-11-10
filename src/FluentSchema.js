@@ -65,6 +65,7 @@ const FluentSchema = (schema = initialState) => ({
     const {
       type = hasCombiningKeywords(attributes) ? undefined : 'string',
       // TODO LS $id should be prefixed with the parent.
+      // Resolving this fix the if issue as well
       // Do we need an id for each prop? https://www.jsonschema.net/ foster for this approach however ifClause is generating a duplicated if
       $id = `#${target}/${name}`,
       $ref,
@@ -252,12 +253,12 @@ const FluentSchema = (schema = initialState) => ({
       'definitions',
       'type',
     ])
-    // const ifThenSchema = FluentSchema({...schema}).ifThen(ifClause, thenClause).valueOf()
     const elseClauseSchema = omit(elseClause.valueOf(), [
       '$schema',
       'definitions',
       'type',
     ])
+
     return FluentSchema({
       ...schema,
       if: ifClauseSchema,

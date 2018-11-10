@@ -85,7 +85,7 @@ describe('FluentSchema', () => {
     })
   })
 
-  describe.only('ifThenElse', () => {
+  describe('ifThenElse', () => {
     const ajv = new Ajv()
 
     const VALUES = ['ONE', 'TWO']
@@ -94,7 +94,9 @@ describe('FluentSchema', () => {
       .ifThenElse(
         FluentSchema()
           .prop('prop')
-          .enum(VALUES[0]),
+          // TODO LS workaround otherwise we have dup IDs
+          .id('#properties/if/prop')
+          .enum([VALUES[0]]),
         FluentSchema()
           .prop('extraProp')
           .required(),
@@ -103,18 +105,18 @@ describe('FluentSchema', () => {
           .required()
       )
       .valueOf()
-    console.log(JSON.stringify(schema))
+
     const validate = ajv.compile(schema)
 
-    it('valid', () => {
+    it('then', () => {
       const valid = validate({
-        prop: '12345',
+        prop: 'ONE',
         extraProp: 'foo',
       })
       expect(valid).toBeTruthy()
     })
 
-    it('invalid', () => {
+    it('else', () => {
       const valid = validate({
         prop: '123456',
       })
@@ -122,9 +124,9 @@ describe('FluentSchema', () => {
         {
           dataPath: '',
           keyword: 'required',
-          message: "should have required property 'extraProp'",
-          params: { missingProperty: 'extraProp' },
-          schemaPath: '#/then/required',
+          message: "should have required property 'elseProp'",
+          params: { missingProperty: 'elseProp' },
+          schemaPath: '#/else/required',
         },
       ])
       expect(valid).not.toBeTruthy()

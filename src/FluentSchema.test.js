@@ -409,6 +409,136 @@ describe('FluentSchema', () => {
             ).toThrow("'prop' as 'string' doesn't accept 'maximum' option")
           })
         })
+        describe('multipleOf', () => {
+          it('valid', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .multipleOf(5)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'number',
+                  multipleOf: 5,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid value', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .multipleOf('5')
+            ).toThrow("'multipleOf' must be an Integer")
+          })
+          it('invalid option', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .multipleOf(5)
+            ).toThrow("'prop' as 'string' doesn't accept 'multipleOf' option")
+          })
+        })
+        describe('exclusiveMinimum', () => {
+          it('valid', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .exclusiveMinimum(5)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'number',
+                  exclusiveMinimum: 5,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid value', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .exclusiveMinimum('5')
+            ).toThrow("'exclusiveMinimum' must be an Integer")
+          })
+          it('invalid option', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .exclusiveMinimum(5)
+            ).toThrow(
+              "'prop' as 'string' doesn't accept 'exclusiveMinimum' option"
+            )
+          })
+        })
+        describe('exclusiveMaximum', () => {
+          it('valid', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .exclusiveMaximum(5)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'number',
+                  exclusiveMaximum: 5,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid value', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .exclusiveMaximum('5')
+            ).toThrow("'exclusiveMaximum' must be an Integer")
+          })
+          it('invalid option', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .exclusiveMaximum(5)
+            ).toThrow(
+              "'prop' as 'string' doesn't accept 'exclusiveMaximum' option"
+            )
+          })
+        })
       })
     })
     describe('integer', () => {

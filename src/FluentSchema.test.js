@@ -54,6 +54,15 @@ describe('FluentSchema', () => {
           .valueOf().properties
       ).toEqual({ prop: { $ref: '#definition/foo' } })
     })
+
+    it('sets a prop with a type', () => {
+      expect(
+        FluentSchema()
+          .prop('prop')
+          .asNumber()
+          .valueOf().properties
+      ).toEqual({ prop: { $id: '#properties/prop', type: 'number' } })
+    })
   })
 
   describe('definition', () => {

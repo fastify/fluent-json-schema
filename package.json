@@ -28,8 +28,8 @@
     ]
   },
   "scripts": {
-    "test": "jest src/**.test.js",
-    "test:watch": "jest src/**.test.js --watch",
+    "test": "jest src/**.test.js --verbose",
+    "test:watch": "jest src/**.test.js --verbose --watch",
     "format": "prettier --write ./src/**/*.js",
     "coverage": "jest src/**.test.js --coverage"
   },

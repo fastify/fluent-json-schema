@@ -118,7 +118,7 @@ const FluentSchema = (schema = initialState) => ({
     return FluentSchema({
       ...schema,
       [target]: [
-        ...schema[target],
+        ...schema[target].filter(p => p.$id !== $id),
         $ref
           ? { name, $ref }
           : Object.assign(

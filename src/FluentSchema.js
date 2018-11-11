@@ -17,8 +17,8 @@ const initialState = {
   required: [],
 }
 
-const setMeta = (schema, prop) => {
-  const [key, value, type = 'string'] = prop
+const setAttribute = (schema, attribute) => {
+  const [key, value, type = 'string'] = attribute
   const currentProp = last(schema.properties)
   if (currentProp) {
     const { name, ...props } = currentProp
@@ -33,21 +33,21 @@ const setMeta = (schema, prop) => {
 
 const FluentSchema = (schema = initialState) => ({
   id: $id => {
-    return setMeta(schema, ['$id', $id])
+    return setAttribute(schema, ['$id', $id])
   },
 
   title: title => {
-    return setMeta(schema, ['title', title])
+    return setAttribute(schema, ['title', title])
   },
 
   description: description => {
-    return setMeta(schema, ['description', description])
+    return setAttribute(schema, ['description', description])
   },
 
   examples: examples => {
     if (!Array.isArray(examples))
       throw new Error("'examples' must be an array e.g. ['1', 'one', 'foo']")
-    return setMeta(schema, ['examples', examples])
+    return setAttribute(schema, ['examples', examples])
   },
 
   ref: $ref => {
@@ -98,6 +98,13 @@ const FluentSchema = (schema = initialState) => ({
       multipleOf,
       exclusiveMaximum,
       exclusiveMinimum,
+      // array
+      items,
+      contains,
+      uniqueItems,
+      minItems,
+      maxItems,
+      additionalItems,
     } = attributes
 
     return FluentSchema({
@@ -131,11 +138,19 @@ const FluentSchema = (schema = initialState) => ({
               maxLength ? { maxLength } : undefined,
               pattern ? { pattern } : undefined,
               format ? { format } : undefined,
+              // number
               minimum ? { minimum } : undefined,
               maximum ? { maximum } : undefined,
               multipleOf ? { multipleOf } : undefined,
               exclusiveMaximum ? { exclusiveMaximum } : undefined,
-              exclusiveMinimum ? { exclusiveMinimum } : undefined
+              exclusiveMinimum ? { exclusiveMinimum } : undefined,
+              // array
+              items ? { items } : undefined,
+              contains ? { contains } : undefined,
+              uniqueItems ? { uniqueItems } : undefined,
+              minItems ? { minItems } : undefined,
+              maxItems ? { maxItems } : undefined,
+              additionalItems ? { additionalItems } : undefined
             ),
       ],
     })
@@ -144,15 +159,15 @@ const FluentSchema = (schema = initialState) => ({
   enum: values => {
     if (!Array.isArray(values))
       throw new Error("'enum' must be an array e.g. ['1', 'one', 'foo']")
-    return setMeta(schema, ['enum', values, 'any'])
+    return setAttribute(schema, ['enum', values, 'any'])
   },
 
   const: value => {
-    return setMeta(schema, ['const', value, 'any'])
+    return setAttribute(schema, ['const', value, 'any'])
   },
 
   default: defaults => {
-    return setMeta(schema, ['defaults', defaults, 'any'])
+    return setAttribute(schema, ['defaults', defaults, 'any'])
   },
 
   not: () => {
@@ -193,13 +208,13 @@ const FluentSchema = (schema = initialState) => ({
   minLength: min => {
     if (!Number.isInteger(min))
       throw new Error("'minLength' must be an Integer")
-    return setMeta(schema, ['minLength', min, 'string'])
+    return setAttribute(schema, ['minLength', min, 'string'])
   },
 
   maxLength: max => {
     if (!Number.isInteger(max))
       throw new Error("'maxLength' must be an Integer")
-    return setMeta(schema, ['maxLength', max, 'string'])
+    return setAttribute(schema, ['maxLength', max, 'string'])
   },
 
   format: format => {
@@ -207,43 +222,43 @@ const FluentSchema = (schema = initialState) => ({
       throw new Error(
         `'format' must be one of ${Object.values(FORMATS).join(', ')}`
       )
-    return setMeta(schema, ['format', format, 'string'])
+    return setAttribute(schema, ['format', format, 'string'])
   },
   // TODO LS accept regex as well
   pattern: pattern => {
     if (!typeof pattern === 'string')
       throw new Error(`'pattern' must be a string`)
-    return setMeta(schema, ['pattern', pattern, 'string'])
+    return setAttribute(schema, ['pattern', pattern, 'string'])
   },
 
   asNumber: () => FluentSchema({ ...schema }).as('number'),
 
   minimum: min => {
     if (!Number.isInteger(min)) throw new Error("'minimum' must be an Integer")
-    return setMeta(schema, ['minimum', min, 'number'])
+    return setAttribute(schema, ['minimum', min, 'number'])
   },
 
   exclusiveMinimum: max => {
     if (!Number.isInteger(max))
       throw new Error("'exclusiveMinimum' must be an Integer")
-    return setMeta(schema, ['exclusiveMinimum', max, 'number'])
+    return setAttribute(schema, ['exclusiveMinimum', max, 'number'])
   },
 
   maximum: max => {
     if (!Number.isInteger(max)) throw new Error("'maximum' must be an Integer")
-    return setMeta(schema, ['maximum', max, 'number'])
+    return setAttribute(schema, ['maximum', max, 'number'])
   },
 
   exclusiveMaximum: max => {
     if (!Number.isInteger(max))
       throw new Error("'exclusiveMaximum' must be an Integer")
-    return setMeta(schema, ['exclusiveMaximum', max, 'number'])
+    return setAttribute(schema, ['exclusiveMaximum', max, 'number'])
   },
 
   multipleOf: multiple => {
     if (!Number.isInteger(multiple))
       throw new Error("'multipleOf' must be an Integer")
-    return setMeta(schema, ['multipleOf', multiple, 'number'])
+    return setAttribute(schema, ['multipleOf', multiple, 'number'])
   },
 
   asBoolean: () => FluentSchema({ ...schema }).as('boolean'),
@@ -252,12 +267,36 @@ const FluentSchema = (schema = initialState) => ({
 
   asArray: () => FluentSchema({ ...schema }).as('array'),
 
+  items: value => {
+    if (Array.isArray(value)) {
+      const values = value.map(v => {
+        const {
+          $schema,
+          definitions,
+          properties,
+          required,
+          ...rest
+        } = v.valueOf()
+        return rest
+      })
+      return setAttribute(schema, ['items', values, 'array'])
+    }
+    const {
+      $schema,
+      definitions,
+      properties,
+      required,
+      ...rest
+    } = value.valueOf()
+    return setAttribute(schema, ['items', { ...rest }, 'array'])
+  },
+
   asObject: () => FluentSchema({ ...schema }).as('object'),
 
   asNull: () => FluentSchema({ ...schema }).as('null'),
 
   as: type => {
-    return setMeta(schema, ['type', type])
+    return setAttribute(schema, ['type', type])
   },
 
   ifThen: (ifClause, thenClause) => {

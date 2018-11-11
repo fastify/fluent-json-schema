@@ -249,7 +249,7 @@ describe('FluentSchema', () => {
         ).toEqual('string')
       })
 
-      describe('length', () => {
+      describe('keywords:', () => {
         describe('minLength', () => {
           it('valid', () => {
             const prop = 'prop'
@@ -426,7 +426,7 @@ describe('FluentSchema', () => {
         ).toEqual('number')
       })
 
-      describe('Numeric types', () => {
+      describe('keywords:', () => {
         describe('minimum', () => {
           it('valid', () => {
             const prop = 'prop'
@@ -695,6 +695,53 @@ describe('FluentSchema', () => {
             .asArray()
             .valueOf().properties.value.type
         ).toEqual('array')
+      })
+
+      describe('keywords:', () => {
+        describe('items', () => {
+          it.only('asObject', () => {
+            expect(
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items(FluentSchema().asNumber())
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                list: {
+                  $id: '#properties/list',
+                  type: 'array',
+                  items: { type: 'number' },
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it.only('asArray', () => {
+            expect(
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items([FluentSchema().asNumber(), FluentSchema().asString()])
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                list: {
+                  $id: '#properties/list',
+                  type: 'array',
+                  items: [{ type: 'number' }, { type: 'string' }],
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+        })
       })
     })
     describe('object', () => {

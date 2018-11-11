@@ -18,6 +18,18 @@ const omit = (obj, props) =>
     }
   }, {})
 
+const deepOmit = (obj, props) =>
+  Object.entries(obj).reduce((memo, [key, value]) => {
+    if (props.includes(key)) return memo
+    return {
+      ...memo,
+      [key]:
+        typeof value === 'object' && !Array.isArray(value)
+          ? deepOmit(value, props)
+          : value,
+    }
+  }, {})
+
 const flat = array =>
   array.reduce((memo, prop) => {
     const { name, ...rest } = prop
@@ -84,6 +96,7 @@ module.exports = {
   last,
   flat,
   omit,
+  deepOmit,
   patchIdsWithParentId,
   FORMATS,
 }

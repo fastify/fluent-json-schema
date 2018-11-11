@@ -1,3 +1,5 @@
+const basic = require('./schemas/basic')
+const { deepOmit } = require('./utils')
 const { FluentSchema } = require('./FluentSchema')
 const Ajv = require('ajv')
 
@@ -232,6 +234,55 @@ describe('FluentSchema', () => {
         ])
         expect(valid).not.toBeTruthy()
       })
+    })
+  })
+
+  describe('basic.json', () => {
+    it.only('generate', () => {
+      const [step] = basic
+      expect(
+        deepOmit(
+          FluentSchema()
+            .asArray()
+            .title('Product set')
+            .items(
+              FluentSchema()
+                .title('Product')
+                .prop('uuid') // TODO LS bug if we use `id` the property is removed by deepOmit
+                .description('The unique identifier for a product')
+                .asNumber()
+                .required()
+                .prop('name')
+                .required()
+                .prop('price')
+                .asNumber()
+                .exclusiveMinimum(0)
+                .required()
+                .prop('tags')
+                .asArray()
+                .items(FluentSchema().asString())
+                .minItems(1)
+                .uniqueItems(true)
+                .prop(
+                  'dimensions',
+                  FluentSchema()
+                    .prop('length')
+                    .asNumber()
+                    .required()
+                    .prop('width')
+                    .asNumber()
+                    .required()
+                    .prop('height')
+                    .asNumber()
+                    .required()
+                )
+                .prop('warehouseLocation')
+                .description('Coordinates of the warehouse with the product')
+            )
+            .valueOf(),
+          '$id'
+        )
+      ).toEqual(step.schema)
     })
   })
 })

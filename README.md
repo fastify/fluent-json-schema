@@ -287,6 +287,10 @@ Output: **{valid: true}**:
 - [ ] oneOf
 - [x] not
 
+## Acknowledgments
+
+Thank [Matteo Collina](https://twitter.com/matteocollina) for pushing me to implement this utility! 🙏
+
 ## related projects
 
 - JSON Schema [Draft 7](http://json-schema.org/specification-links.html#draft-7)

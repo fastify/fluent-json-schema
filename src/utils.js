@@ -59,11 +59,31 @@ const FORMATS = {
   DATE,
 }
 
+// TODO LS looking for a better name
+const patchIdsWithParentId = (schema, parentId) => {
+  return {
+    ...schema,
+    properties: Object.entries(schema.properties).reduce(
+      (memo, [key, prop]) => {
+        return {
+          ...memo,
+          [key]: {
+            ...prop,
+            $id: `${parentId}/${prop.$id.replace('#', '')}`, // e.g. #properties/foo/properties/bar
+          },
+        }
+      },
+      {}
+    ),
+  }
+}
+
 module.exports = {
   isFluentSchema,
   hasCombiningKeywords,
   last,
   flat,
   omit,
+  patchIdsWithParentId,
   FORMATS,
 }

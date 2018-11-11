@@ -150,7 +150,7 @@ const FluentSchema = (schema = initialState) => ({
               uniqueItems ? { uniqueItems } : undefined,
               minItems ? { minItems } : undefined,
               maxItems ? { maxItems } : undefined,
-              additionalItems ? { additionalItems } : undefined
+              additionalItems !== undefined ? { additionalItems } : undefined
             ),
       ],
     })
@@ -268,6 +268,13 @@ const FluentSchema = (schema = initialState) => ({
   asArray: () => FluentSchema({ ...schema }).as('array'),
 
   items: value => {
+    if (
+      !isFluentSchema(value) &&
+      !(Array.isArray(value) && value.filter(v => isFluentSchema(v)).length > 0)
+    )
+      throw new Error(
+        "'items' must be a FluentSchema or an array of FluentSchema"
+      )
     if (Array.isArray(value)) {
       const values = value.map(v => {
         const {
@@ -289,6 +296,22 @@ const FluentSchema = (schema = initialState) => ({
       ...rest
     } = value.valueOf()
     return setAttribute(schema, ['items', { ...rest }, 'array'])
+  },
+
+  additionalItems: value => {
+    if (typeof value !== 'boolean' && !isFluentSchema(value))
+      throw new Error("'additionalItems' must be a boolean or a FluentSchema")
+    if (value === false) {
+      return setAttribute(schema, ['additionalItems', false, 'array'])
+    }
+    const {
+      $schema,
+      definitions,
+      properties,
+      required,
+      ...rest
+    } = value.valueOf()
+    return setAttribute(schema, ['additionalItems', { ...rest }, 'array'])
   },
 
   asObject: () => FluentSchema({ ...schema }).as('object'),

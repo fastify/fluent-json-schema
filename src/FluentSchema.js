@@ -151,6 +151,10 @@ const FluentSchema = (schema = initialState) => ({
     return setMeta(schema, ['const', value, 'any'])
   },
 
+  default: defaults => {
+    return setMeta(schema, ['defaults', defaults, 'any'])
+  },
+
   not: () => {
     const [currentProp, ...properties] = [...schema.properties].reverse()
     if (!currentProp) throw new Error(`'not' can be applied only to a prop`)
@@ -327,4 +331,5 @@ const FluentSchema = (schema = initialState) => ({
 module.exports = {
   FluentSchema,
   FORMATS,
+  default: FluentSchema,
 }

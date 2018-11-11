@@ -14,7 +14,7 @@ describe('FluentSchema', () => {
   })
 
   describe('prop', () => {
-    it('sets a prop with type string', () => {
+    it('with type string', () => {
       expect(
         FluentSchema()
           .prop('prop')
@@ -27,7 +27,7 @@ describe('FluentSchema', () => {
       })
     })
 
-    it('sets a prop with a nested object', () => {
+    it('with a nested object', () => {
       expect(
         FluentSchema()
           .prop('foo', FluentSchema().prop('bar'))
@@ -40,7 +40,7 @@ describe('FluentSchema', () => {
       })
     })
 
-    it('sets a prop with a $ref', () => {
+    it('with a $ref', () => {
       expect(
         FluentSchema()
           .definition(
@@ -55,13 +55,25 @@ describe('FluentSchema', () => {
       ).toEqual({ prop: { $ref: '#definition/foo' } })
     })
 
-    it('sets a prop with a type', () => {
+    it('with a type', () => {
       expect(
         FluentSchema()
           .prop('prop')
           .asNumber()
           .valueOf().properties
       ).toEqual({ prop: { $id: '#properties/prop', type: 'number' } })
+    })
+
+    it('with a default', () => {
+      expect(
+        FluentSchema()
+          .prop('prop')
+          .asNumber()
+          .default(3)
+          .valueOf().properties
+      ).toEqual({
+        prop: { $id: '#properties/prop', type: 'number', default: 3 },
+      })
     })
   })
 

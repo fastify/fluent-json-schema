@@ -314,6 +314,38 @@ const FluentSchema = (schema = initialState) => ({
     return setAttribute(schema, ['additionalItems', { ...rest }, 'array'])
   },
 
+  contains: value => {
+    if (typeof value !== 'boolean' && !isFluentSchema(value))
+      throw new Error("'contains' must be a boolean or a FluentSchema")
+    if (value === false) {
+      return setAttribute(schema, ['contains', false, 'array'])
+    }
+    const {
+      $schema,
+      definitions,
+      properties,
+      required,
+      ...rest
+    } = value.valueOf()
+    return setAttribute(schema, ['contains', { ...rest }, 'array'])
+  },
+
+  uniqueItems: value => {
+    if (typeof value !== 'boolean')
+      throw new Error("'uniqueItems' must be a boolean")
+    return setAttribute(schema, ['uniqueItems', value, 'array'])
+  },
+
+  minItems: min => {
+    if (!Number.isInteger(min)) throw new Error("'minItems' must be a integer")
+    return setAttribute(schema, ['minItems', min, 'array'])
+  },
+
+  maxItems: max => {
+    if (!Number.isInteger(max)) throw new Error("'maxItems' must be a integer")
+    return setAttribute(schema, ['maxItems', max, 'array'])
+  },
+
   asObject: () => FluentSchema({ ...schema }).as('object'),
 
   asNull: () => FluentSchema({ ...schema }).as('null'),

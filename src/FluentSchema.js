@@ -5,6 +5,7 @@ const {
   hasCombiningKeywords,
   isFluentSchema,
   last,
+  patchIdsWithParentId,
   FORMATS,
 } = require('./utils')
 
@@ -28,25 +29,6 @@ const setMeta = (schema, prop) => {
     return FluentSchema({ ...schema }).prop(name, { ...props, [key]: value })
   }
   return FluentSchema({ ...schema, [key]: value })
-}
-
-// TODO LS looking for a better name
-const patchIdsWithParentId = (schema, parentId) => {
-  return {
-    ...schema,
-    properties: Object.entries(schema.properties).reduce(
-      (memo, [key, prop]) => {
-        return {
-          ...memo,
-          [key]: {
-            ...prop,
-            $id: `${parentId}/${prop.$id.replace('#', '')}`, // e.g. #properties/foo/properties/bar
-          },
-        }
-      },
-      {}
-    ),
-  }
 }
 
 const FluentSchema = (schema = initialState) => ({
@@ -333,7 +315,7 @@ const FluentSchema = (schema = initialState) => ({
 
   valueOf: () => {
     const { properties, definitions, ...rest } = schema
-    // TODO LS cosmetic would be nice to put if/then/else clause at final props
+    // TODO LS cosmetic would be nice to put if/then/else clause as final props
     return {
       definitions: flat(definitions),
       ...rest,

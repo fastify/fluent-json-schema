@@ -256,12 +256,12 @@ Output: **{valid: true}**:
 
 4. Validation Keywords for Arrays
 
-- [ ] items
-- [ ] additionalItems
-- [ ] maxItems
-- [ ] minItems
-- [ ] uniqueItems
-- [ ] contains
+- [x] items
+- [x] additionalItems
+- [x] maxItems
+- [x] minItems
+- [x] uniqueItems
+- [x] contains
 
 5. Validation Keywords for Objects
 

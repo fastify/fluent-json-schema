@@ -1,2 +1,294 @@
 # fluent-schema
-A fluent API to generate JSON schemas
+
+A fluent API to generate JSON schemas (draft-07) for Node.js and browser.
+
+## Install
+
+    npm install fluent-schema --save
+
+or
+
+    yarn add fluent-schema
+
+## Usage
+
+```javascript
+const { FluentSchema, FORMATS } = require('./FluentSchema')
+const schema = FluentSchema()
+  .id('http://foo/user')
+  .title('My First Fluent JSON Schema')
+  .description('A simple user')
+  .prop('email')
+  .asString()
+  .format(FORMATS.EMAIL)
+  .required()
+  .prop('password')
+  .asString()
+  .minLength(8)
+  .required()
+  .prop('role')
+  .enum(['ADMIN', 'USER'])
+  .default('USER')
+  .definition(
+    'address',
+    FluentSchema()
+      .prop('line1')
+      .required()
+      .prop('line2')
+      .prop('country')
+      .required()
+      .prop('city')
+      .required()
+      .prop('zipcoce')
+      .required()
+  )
+  .prop('address')
+  .ref('#definitions/address')
+
+console.log(JSON.stringify(schema.valueOf(), undefined, 2))
+```
+
+Schema generated:
+
+```json
+{
+  "definitions": {
+    "address": {
+      "type": "object",
+      "$id": "#definitions/address",
+      "properties": {
+        "line1": {
+          "type": "string",
+          "$id": "#definitions/address/properties/line1"
+        },
+        "line2": {
+          "type": "string",
+          "$id": "#definitions/address/properties/line2"
+        },
+        "country": {
+          "type": "string",
+          "$id": "#definitions/address/properties/country"
+        },
+        "city": {
+          "type": "string",
+          "$id": "#definitions/address/properties/city"
+        },
+        "zipcoce": {
+          "type": "string",
+          "$id": "#definitions/address/properties/zipcode"
+        }
+      },
+      "required": ["line1", "country", "city", "zipcode"]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["email", "password"],
+  "$id": "http://foo/user",
+  "title": "My First Fluent JSON Schema",
+  "description": "A simple user",
+  "properties": {
+    "email": {
+      "type": "string",
+      "$id": "#properties/email",
+      "format": "email"
+    },
+    "password": {
+      "type": "string",
+      "$id": "#properties/password",
+      "minLength": 8
+    },
+    "role": {
+      "type": "string",
+      "$id": "#properties/role",
+      "enum": ["ADMIN", "USER"],
+      "default": "USER"
+    },
+    "address": {
+      "$ref": "#definitions/address"
+    }
+  }
+}
+```
+
+## Integration
+
+Fluent schema **doesn't** validate a JSON schema. However there are many libraries that can do that for you.
+Below a few examples using [AJV](https://ajv.js.org/)
+
+    npm install ajv --save
+
+or
+
+    yarn add ajv
+
+### Empty model
+
+Snippet
+
+```javascript
+const ajv = new Ajv({ allErrors: true })
+const validate = ajv.compile(userSchema.valueOf())
+let user = {}
+let valid = validate(user)
+console.log({ valid }) //=> {valid: false}
+console.log(validate.errors) //=> {valid: false}
+```
+
+Output: **{valid: false}**:
+
+```
+[
+  {
+    keyword: 'required',
+    dataPath: '',
+    schemaPath: '#/required',
+    params: { missingProperty: 'email' },
+    message: "should have required property 'email'",
+  },
+  {
+    keyword: 'required',
+    dataPath: '',
+    schemaPath: '#/required',
+    params: { missingProperty: 'password' },
+    message: "should have required property 'password'",
+  },
+]
+
+```
+
+### Partially filled model
+
+Snippet
+
+```javascript
+user = { email: 'test', password: 'password' }
+valid = validate(user)
+console.log({ valid }) //=> {valid: false}
+console.log(validate.errors)
+```
+
+Output: **{valid: false}**:
+
+```
+[ { keyword: 'format',
+    dataPath: '.email',
+    schemaPath: '#/properties/email/format',
+    params: { format: 'email' },
+    message: 'should match format "email"' } ]
+
+```
+
+### Filled model wrong format
+
+Snippet
+
+```javascript
+user = { email: 'test@foo.com', password: 'password' }
+valid = validate(user)
+console.log({ valid }) //=> {valid: true}
+console.log(validate.errors) // => null
+```
+
+Output: **{valid: false}**:
+
+```
+[ { keyword: 'required',
+    dataPath: '.address',
+    schemaPath: '#definitions/address/required',
+    params: { missingProperty: 'country' },
+    message: 'should have required property \'country\'' },
+  { keyword: 'required',
+    dataPath: '.address',
+    schemaPath: '#definitions/address/required',
+    params: { missingProperty: 'city' },
+    message: 'should have required property \'city\'' },
+  { keyword: 'required',
+    dataPath: '.address',
+    schemaPath: '#definitions/address/required',
+    params: { missingProperty: 'zipcoce' },
+    message: 'should have required property \'zipcode\'' } ]
+```
+
+### Valid model
+
+Snippet
+
+```javascript
+user = { email: 'test@foo.com', password: 'password' }
+valid = validate(user)
+console.log({ valid }) //=> {valid: false}
+```
+
+Output: **{valid: true}**:
+
+## Validation Keywords Supported
+
+[Reference](https://json-schema.org/latest/json-schema-validation.html):
+
+1. Validation Keywords for Any Instance Type
+
+- [x] types
+  - [x] string
+  - [x] boolean
+  - [x] number
+  - [x] integer
+  - [x] array
+  - [x] object
+  - [x] null
+- [x] enum
+- [x] const
+
+2. Validation Keywords for Numeric Instances (number and integer)
+
+- [x] multipleOf
+- [x] maximum
+- [x] exclusiveMaximum
+- [x] minimum
+- [x] exclusiveMinimum
+
+3. Validation Keywords for Strings
+
+- [x] maxLength
+- [x] minLength
+- [x] pattern
+- [x] format
+
+4. Validation Keywords for Arrays
+
+- [ ] items
+- [ ] additionalItems
+- [ ] maxItems
+- [ ] minItems
+- [ ] uniqueItems
+- [ ] contains
+
+5. Validation Keywords for Objects
+
+- [ ] maxProperties
+- [ ] minProperties
+- [ ] required
+- [ ] properties
+- [ ] patternProperties
+- [ ] additionalProperties
+- [ ] dependencies
+- [ ] propertyNames
+
+6. Keywords for Applying Subschemas Conditionally
+
+- [x] if
+- [x] then
+- [x] else
+
+7. Keywords for Applying Subschemas With Boolean Logic
+
+- [ ] allOf
+- [x] anyOf
+- [ ] oneOf
+- [x] not
+
+## related projects
+
+- JSON Schema [Draft 7](http://json-schema.org/specification-links.html#draft-7)
+- [AJV]() JSON Schema validator
+- [jsonschema.net](https://www.jsonschema.net/) an online JSON Schema visual editor (it doesn't support advance features)

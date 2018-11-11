@@ -117,39 +117,43 @@ const FluentSchema = (schema = initialState) => ({
               {},
               { name },
               // TODO LS that's quite verbose :)
-              type ? { type } : undefined,
-              defaults ? { default: defaults } : undefined,
-              title ? { title } : undefined,
+              type !== undefined ? { type } : undefined,
+              defaults !== undefined ? { default: defaults } : undefined,
+              title !== undefined ? { title } : undefined,
               $id
                 ? { $id: isFluentSchema(props) ? attributes.$id || $id : $id }
                 : undefined,
-              description ? { description } : undefined,
-              properties ? { properties } : undefined,
-              required ? { required } : undefined,
-              attributes.const ? { const: attributes.const } : undefined,
-              attributes.enum ? { enum: attributes.enum } : undefined,
+              description !== undefined ? { description } : undefined,
+              properties !== undefined ? { properties } : undefined,
+              required !== undefined ? { required } : undefined,
+              attributes.const !== undefined
+                ? { const: attributes.const }
+                : undefined,
+              attributes.enum !== undefined
+                ? { enum: attributes.enum }
+                : undefined,
               // compounds
-              anyOf ? { anyOf } : undefined,
-              oneOf ? { oneOf } : undefined,
-              allOf ? { allOf } : undefined,
-              not ? { not } : undefined,
+              anyOf !== undefined ? { anyOf } : undefined,
+              oneOf !== undefined ? { oneOf } : undefined,
+              allOf !== undefined ? { allOf } : undefined,
+              not !== undefined ? { not } : undefined,
               // string
-              minLength ? { minLength } : undefined,
-              maxLength ? { maxLength } : undefined,
-              pattern ? { pattern } : undefined,
-              format ? { format } : undefined,
+              minLength !== undefined ? { minLength } : undefined,
+              maxLength !== undefined ? { maxLength } : undefined,
+              pattern !== undefined ? { pattern } : undefined,
+              format !== undefined ? { format } : undefined,
               // number
-              minimum ? { minimum } : undefined,
-              maximum ? { maximum } : undefined,
-              multipleOf ? { multipleOf } : undefined,
-              exclusiveMaximum ? { exclusiveMaximum } : undefined,
-              exclusiveMinimum ? { exclusiveMinimum } : undefined,
+              minimum !== undefined ? { minimum } : undefined,
+              maximum !== undefined ? { maximum } : undefined,
+              multipleOf !== undefined ? { multipleOf } : undefined,
+              exclusiveMaximum !== undefined ? { exclusiveMaximum } : undefined,
+              exclusiveMinimum !== undefined ? { exclusiveMinimum } : undefined,
               // array
-              items ? { items } : undefined,
-              contains ? { contains } : undefined,
-              uniqueItems ? { uniqueItems } : undefined,
-              minItems ? { minItems } : undefined,
-              maxItems ? { maxItems } : undefined,
+              items !== undefined ? { items } : undefined,
+              contains !== undefined ? { contains } : undefined,
+              uniqueItems !== undefined ? { uniqueItems } : undefined,
+              minItems !== undefined ? { minItems } : undefined,
+              maxItems !== undefined ? { maxItems } : undefined,
               additionalItems !== undefined ? { additionalItems } : undefined
             ),
       ],
@@ -277,24 +281,12 @@ const FluentSchema = (schema = initialState) => ({
       )
     if (Array.isArray(value)) {
       const values = value.map(v => {
-        const {
-          $schema,
-          definitions,
-          properties,
-          required,
-          ...rest
-        } = v.valueOf()
+        const { $schema, ...rest } = v.valueOf()
         return rest
       })
       return setAttribute(schema, ['items', values, 'array'])
     }
-    const {
-      $schema,
-      definitions,
-      properties,
-      required,
-      ...rest
-    } = value.valueOf()
+    const { $schema, ...rest } = value.valueOf()
     return setAttribute(schema, ['items', { ...rest }, 'array'])
   },
 
@@ -304,13 +296,7 @@ const FluentSchema = (schema = initialState) => ({
     if (value === false) {
       return setAttribute(schema, ['additionalItems', false, 'array'])
     }
-    const {
-      $schema,
-      definitions,
-      properties,
-      required,
-      ...rest
-    } = value.valueOf()
+    const { $schema, ...rest } = value.valueOf()
     return setAttribute(schema, ['additionalItems', { ...rest }, 'array'])
   },
 
@@ -330,10 +316,10 @@ const FluentSchema = (schema = initialState) => ({
     return setAttribute(schema, ['contains', { ...rest }, 'array'])
   },
 
-  uniqueItems: value => {
-    if (typeof value !== 'boolean')
+  uniqueItems: boolean => {
+    if (typeof boolean !== 'boolean')
       throw new Error("'uniqueItems' must be a boolean")
-    return setAttribute(schema, ['uniqueItems', value, 'array'])
+    return setAttribute(schema, ['uniqueItems', boolean, 'array'])
   },
 
   minItems: min => {
@@ -412,13 +398,19 @@ const FluentSchema = (schema = initialState) => ({
   },
 
   valueOf: () => {
-    const { properties, definitions, ...rest } = schema
+    const { properties, definitions, required, ...rest } = schema
     // TODO LS cosmetic would be nice to put if/then/else clause as final props
-    return {
-      definitions: flat(definitions),
-      ...rest,
-      properties: flat(properties),
-    }
+    return Object.assign(
+      {},
+      Object.keys(definitions).length > 0
+        ? { definitions: flat(definitions) }
+        : undefined,
+      { ...rest },
+      Object.keys(properties).length > 0
+        ? { properties: flat(properties) }
+        : undefined,
+      required.length > 0 ? { required } : undefined
+    )
   },
 })
 

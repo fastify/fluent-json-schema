@@ -5,9 +5,6 @@ describe('FluentSchema', () => {
     it('is defined', () => {
       expect(FluentSchema().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        definitions: {},
-        properties: {},
-        required: [],
         type: 'object',
       })
     })
@@ -75,6 +72,30 @@ describe('FluentSchema', () => {
         prop: { $id: '#properties/prop', type: 'number', default: 3 },
       })
     })
+
+    it('with a description', () => {
+      expect(
+        FluentSchema()
+          .title('Product')
+          .prop('id')
+          .description('The unique identifier for a product')
+          .asNumber()
+          .required()
+          .valueOf()
+      ).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        properties: {
+          id: {
+            $id: '#properties/id',
+            description: 'The unique identifier for a product',
+            type: 'number',
+          },
+        },
+        required: ['id'],
+        title: 'Product',
+        type: 'object',
+      })
+    })
   })
 
   describe('definition', () => {
@@ -102,7 +123,6 @@ describe('FluentSchema', () => {
               type: 'string',
             },
           },
-          required: [],
         },
       })
     })
@@ -194,7 +214,6 @@ describe('FluentSchema', () => {
               .valueOf()
           ).toEqual({
             $schema: 'http://json-schema.org/draft-07/schema#',
-            definitions: {},
             properties: {
               prop: {
                 $id: '#properties/prop',
@@ -202,7 +221,6 @@ describe('FluentSchema', () => {
                 enum: ['ONE', 'TWO'],
               },
             },
-            required: [],
             type: 'object',
           })
         })
@@ -217,7 +235,6 @@ describe('FluentSchema', () => {
               .valueOf()
           ).toEqual({
             $schema: 'http://json-schema.org/draft-07/schema#',
-            definitions: {},
             properties: {
               prop: {
                 $id: '#properties/prop',
@@ -225,7 +242,6 @@ describe('FluentSchema', () => {
                 const: 'ONE',
               },
             },
-            required: [],
             type: 'object',
           })
         })
@@ -261,7 +277,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 prop: {
                   $id: '#properties/prop',
@@ -269,7 +284,6 @@ describe('FluentSchema', () => {
                   minLength: 5,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -294,7 +308,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 prop: {
                   $id: '#properties/prop',
@@ -302,7 +315,6 @@ describe('FluentSchema', () => {
                   maxLength: 10,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -327,7 +339,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 prop: {
                   $id: '#properties/prop',
@@ -335,7 +346,6 @@ describe('FluentSchema', () => {
                   format: FORMATS.DATE,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -362,7 +372,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 prop: {
                   $id: '#properties/prop',
@@ -370,7 +379,6 @@ describe('FluentSchema', () => {
                   pattern: '.*',
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -384,7 +392,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 prop: {
                   $id: '#properties/prop',
@@ -392,7 +399,6 @@ describe('FluentSchema', () => {
                   pattern: '.*',
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -438,7 +444,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 prop: {
                   $id: '#properties/prop',
@@ -446,7 +451,6 @@ describe('FluentSchema', () => {
                   minimum: 5,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -480,7 +484,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 prop: {
                   $id: '#properties/prop',
@@ -488,7 +491,6 @@ describe('FluentSchema', () => {
                   maximum: 5,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -522,7 +524,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 prop: {
                   $id: '#properties/prop',
@@ -530,7 +531,6 @@ describe('FluentSchema', () => {
                   multipleOf: 5,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -564,7 +564,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 prop: {
                   $id: '#properties/prop',
@@ -572,7 +571,6 @@ describe('FluentSchema', () => {
                   exclusiveMinimum: 5,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -608,7 +606,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 prop: {
                   $id: '#properties/prop',
@@ -616,7 +613,6 @@ describe('FluentSchema', () => {
                   exclusiveMaximum: 5,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -708,7 +704,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 list: {
                   $id: '#properties/list',
@@ -716,7 +711,6 @@ describe('FluentSchema', () => {
                   items: { type: 'number' },
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -729,7 +723,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 list: {
                   $id: '#properties/list',
@@ -737,7 +730,6 @@ describe('FluentSchema', () => {
                   items: [{ type: 'number' }, { type: 'string' }],
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -764,7 +756,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 list: {
                   $id: '#properties/list',
@@ -773,7 +764,6 @@ describe('FluentSchema', () => {
                   additionalItems: { type: 'string' },
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -787,7 +777,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 list: {
                   $id: '#properties/list',
@@ -796,7 +785,6 @@ describe('FluentSchema', () => {
                   additionalItems: false,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -822,7 +810,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 list: {
                   $id: '#properties/list',
@@ -831,7 +818,6 @@ describe('FluentSchema', () => {
                   contains: { type: 'string' },
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -845,7 +831,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 list: {
                   $id: '#properties/list',
@@ -854,7 +839,6 @@ describe('FluentSchema', () => {
                   additionalItems: false,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -880,7 +864,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 list: {
                   $id: '#properties/list',
@@ -889,7 +872,6 @@ describe('FluentSchema', () => {
                   uniqueItems: true,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -908,6 +890,7 @@ describe('FluentSchema', () => {
           it('valid', () => {
             expect(
               FluentSchema()
+                .prop('prop')
                 .prop('list')
                 .asArray()
                 .items([FluentSchema().asNumber(), FluentSchema().asString()])
@@ -915,8 +898,11 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
+                prop: {
+                  $id: '#properties/prop',
+                  type: 'string',
+                },
                 list: {
                   $id: '#properties/list',
                   type: 'array',
@@ -924,7 +910,6 @@ describe('FluentSchema', () => {
                   minItems: 3,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -950,7 +935,6 @@ describe('FluentSchema', () => {
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {},
               properties: {
                 list: {
                   $id: '#properties/list',
@@ -959,7 +943,6 @@ describe('FluentSchema', () => {
                   maxItems: 5,
                 },
               },
-              required: [],
               type: 'object',
             })
           })
@@ -1028,7 +1011,6 @@ describe('FluentSchema', () => {
             .valueOf()
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
-          definitions: {},
           properties: {
             prop: {
               $id: '#properties/prop',
@@ -1038,7 +1020,6 @@ describe('FluentSchema', () => {
               ],
             },
           },
-          required: [],
           type: 'object',
         })
       })
@@ -1060,7 +1041,6 @@ describe('FluentSchema', () => {
             .valueOf()
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
-          definitions: {},
           properties: {
             prop: {
               $id: '#properties/prop',
@@ -1072,7 +1052,6 @@ describe('FluentSchema', () => {
               },
             },
           },
-          required: [],
           type: 'object',
         })
       })
@@ -1096,7 +1075,6 @@ describe('FluentSchema', () => {
           .valueOf()
       ).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        definitions: {},
         properties: {
           prop: {
             $id: '#properties/prop',
@@ -1112,7 +1090,6 @@ describe('FluentSchema', () => {
               maxLength: 5,
             },
           },
-          required: [],
         },
         then: {
           properties: {
@@ -1123,7 +1100,6 @@ describe('FluentSchema', () => {
           },
           required: ['extraProp'],
         },
-        required: [],
         type: 'object',
       })
     })
@@ -1149,7 +1125,6 @@ describe('FluentSchema', () => {
           .valueOf()
       ).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        definitions: {},
         properties: {
           prop: {
             $id: '#properties/prop',
@@ -1165,7 +1140,6 @@ describe('FluentSchema', () => {
               maxLength: 5,
             },
           },
-          required: [],
         },
         then: {
           properties: {
@@ -1185,7 +1159,6 @@ describe('FluentSchema', () => {
           },
           required: ['elseProp'],
         },
-        required: [],
         type: 'object',
       })
     })
@@ -1242,7 +1215,6 @@ describe('FluentSchema', () => {
               $id: '#definitions/address/properties/zipcode',
             },
           },
-          required: [],
         },
       },
       $schema: 'http://json-schema.org/draft-07/schema#',
@@ -1280,7 +1252,6 @@ describe('FluentSchema', () => {
               $id: '#properties/role/properties/permissions',
             },
           },
-          required: [],
         },
       },
     })

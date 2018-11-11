@@ -810,6 +810,169 @@ describe('FluentSchema', () => {
             ).toThrow("'additionalItems' must be a boolean or a FluentSchema")
           })
         })
+
+        describe('contains', () => {
+          it('valid', () => {
+            expect(
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items([FluentSchema().asNumber(), FluentSchema().asString()])
+                .contains(FluentSchema().asString())
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                list: {
+                  $id: '#properties/list',
+                  type: 'array',
+                  items: [{ type: 'number' }, { type: 'string' }],
+                  contains: { type: 'string' },
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('false', () => {
+            expect(
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items([FluentSchema().asNumber(), FluentSchema().asString()])
+                .additionalItems(false)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                list: {
+                  $id: '#properties/list',
+                  type: 'array',
+                  items: [{ type: 'number' }, { type: 'string' }],
+                  additionalItems: false,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid', () => {
+            expect(() =>
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items([FluentSchema().asNumber(), FluentSchema().asString()])
+                .additionalItems('')
+            ).toThrow("'additionalItems' must be a boolean or a FluentSchema")
+          })
+        })
+
+        describe('uniqueItems', () => {
+          it('valid', () => {
+            expect(
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items([FluentSchema().asNumber(), FluentSchema().asString()])
+                .uniqueItems(true)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                list: {
+                  $id: '#properties/list',
+                  type: 'array',
+                  items: [{ type: 'number' }, { type: 'string' }],
+                  uniqueItems: true,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid', () => {
+            expect(() =>
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items([FluentSchema().asNumber(), FluentSchema().asString()])
+                .uniqueItems('')
+            ).toThrow("'uniqueItems' must be a boolean")
+          })
+        })
+
+        describe('minItems', () => {
+          it('valid', () => {
+            expect(
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items([FluentSchema().asNumber(), FluentSchema().asString()])
+                .minItems(3)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                list: {
+                  $id: '#properties/list',
+                  type: 'array',
+                  items: [{ type: 'number' }, { type: 'string' }],
+                  minItems: 3,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid', () => {
+            expect(() =>
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items([FluentSchema().asNumber(), FluentSchema().asString()])
+                .minItems('')
+            ).toThrow("'minItems' must be a integer")
+          })
+        })
+
+        describe('maxItems', () => {
+          it('valid', () => {
+            expect(
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items([FluentSchema().asNumber(), FluentSchema().asString()])
+                .maxItems(5)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {},
+              properties: {
+                list: {
+                  $id: '#properties/list',
+                  type: 'array',
+                  items: [{ type: 'number' }, { type: 'string' }],
+                  maxItems: 5,
+                },
+              },
+              required: [],
+              type: 'object',
+            })
+          })
+          it('invalid', () => {
+            expect(() =>
+              FluentSchema()
+                .prop('list')
+                .asArray()
+                .items([FluentSchema().asNumber(), FluentSchema().asString()])
+                .maxItems('')
+            ).toThrow("'maxItems' must be a integer")
+          })
+        })
       })
     })
     describe('object', () => {

@@ -1,3 +1,4 @@
+'use strict'
 const isFluentSchema = obj => typeof obj.anyOf === 'function'
 
 const hasCombiningKeywords = attributes =>

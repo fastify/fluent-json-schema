@@ -80,8 +80,6 @@ const FluentSchema = (schema = initialState) => ({
       title,
       description,
       defaults,
-      properties,
-      required,
       // compound
       anyOf,
       allOf,
@@ -105,6 +103,15 @@ const FluentSchema = (schema = initialState) => ({
       minItems,
       maxItems,
       additionalItems,
+      // object
+      maxProperties,
+      minProperties,
+      required,
+      properties,
+      patternProperties,
+      additionalProperties,
+      dependencies,
+      propertyNames,
     } = attributes
 
     return FluentSchema({
@@ -124,8 +131,6 @@ const FluentSchema = (schema = initialState) => ({
                 ? { $id: isFluentSchema(props) ? attributes.$id || $id : $id }
                 : undefined,
               description !== undefined ? { description } : undefined,
-              properties !== undefined ? { properties } : undefined,
-              required !== undefined ? { required } : undefined,
               attributes.const !== undefined
                 ? { const: attributes.const }
                 : undefined,
@@ -154,7 +159,20 @@ const FluentSchema = (schema = initialState) => ({
               uniqueItems !== undefined ? { uniqueItems } : undefined,
               minItems !== undefined ? { minItems } : undefined,
               maxItems !== undefined ? { maxItems } : undefined,
-              additionalItems !== undefined ? { additionalItems } : undefined
+              additionalItems !== undefined ? { additionalItems } : undefined,
+              // object
+              maxProperties !== undefined ? { maxProperties } : undefined,
+              minProperties !== undefined ? { minProperties } : undefined,
+              required !== undefined ? { required } : undefined,
+              properties !== undefined ? { properties } : undefined,
+              patternProperties !== undefined
+                ? { patternProperties }
+                : undefined,
+              additionalProperties !== undefined
+                ? { additionalProperties }
+                : undefined,
+              dependencies !== undefined ? { dependencies } : undefined,
+              propertyNames !== undefined ? { propertyNames } : undefined
             ),
       ],
     })
@@ -334,6 +352,70 @@ const FluentSchema = (schema = initialState) => ({
 
   asObject: () => FluentSchema({ ...schema }).as('object'),
 
+  additionalProperties: value => {
+    if (typeof value !== 'boolean' && !isFluentSchema(value))
+      throw new Error(
+        "'additionalProperties' must be a boolean or a FluentSchema"
+      )
+    if (value === false) {
+      return setAttribute(schema, ['additionalProperties', false, 'object'])
+    }
+    const { $schema, ...rest } = value.valueOf()
+    return setAttribute(schema, ['additionalProperties', { ...rest }, 'array'])
+  },
+
+  maxProperties: max => {
+    if (!Number.isInteger(max))
+      throw new Error("'maxProperties' must be a Integer")
+    return setAttribute(schema, ['maxProperties', max, 'object'])
+  },
+
+  minProperties: min => {
+    if (!Number.isInteger(min))
+      throw new Error("'minProperties' must be a Integer")
+    return setAttribute(schema, ['minProperties', min, 'object'])
+  },
+
+  patternProperties: options => {
+    const values = Object.entries(options).reduce((memo, [pattern, schema]) => {
+      if (!isFluentSchema(schema))
+        throw new Error(
+          "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': FluentSchema().asString() }"
+        )
+      return {
+        ...memo,
+        [pattern]: omit(schema.valueOf(), ['$schema']),
+      }
+    }, {})
+    return setAttribute(schema, ['patternProperties', values, 'object'])
+  },
+
+  dependencies: options => {
+    const values = Object.entries(options).reduce((memo, [prop, schema]) => {
+      if (!isFluentSchema(schema) && !Array.isArray(schema))
+        throw new Error(
+          "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': FluentSchema().asString() }"
+        )
+      return {
+        ...memo,
+        [prop]: Array.isArray(schema)
+          ? schema
+          : omit(schema.valueOf(), ['$schema', 'type', 'definitions']),
+      }
+    }, {})
+    return setAttribute(schema, ['dependencies', values, 'object'])
+  },
+
+  propertyNames: obj => {
+    if (!isFluentSchema(obj))
+      throw new Error("'propertyNames' must be a FluentSchema")
+    return setAttribute(schema, [
+      'propertyNames',
+      omit(obj.valueOf(), ['$schema']),
+      'object',
+    ])
+  },
+
   asNull: () => FluentSchema({ ...schema }).as('null'),
 
   as: type => {
@@ -398,10 +480,10 @@ const FluentSchema = (schema = initialState) => ({
   },
 
   valueOf: () => {
-    const { properties, definitions, required, ...rest } = schema
+    const { properties, definitions, required, $schema, ...rest } = schema
     // TODO LS cosmetic would be nice to put if/then/else clause as final props
     return Object.assign(
-      {},
+      { $schema },
       Object.keys(definitions).length > 0
         ? { definitions: flat(definitions) }
         : undefined,

@@ -10,94 +10,6 @@ describe('FluentSchema', () => {
     })
   })
 
-  describe('prop', () => {
-    it('with type string', () => {
-      expect(
-        FluentSchema()
-          .prop('prop')
-          .valueOf().properties
-      ).toEqual({
-        prop: {
-          type: 'string',
-          $id: '#properties/prop',
-        },
-      })
-    })
-
-    it('with a nested object', () => {
-      expect(
-        FluentSchema()
-          .prop('foo', FluentSchema().prop('bar'))
-          .valueOf().properties.foo.properties
-      ).toEqual({
-        bar: {
-          $id: '#properties/foo/properties/bar',
-          type: 'string',
-        },
-      })
-    })
-
-    it('with a $ref', () => {
-      expect(
-        FluentSchema()
-          .definition(
-            'foo',
-            FluentSchema()
-              .prop('foo')
-              .prop('bar')
-          )
-          .prop('prop')
-          .ref('#definition/foo')
-          .valueOf().properties
-      ).toEqual({ prop: { $ref: '#definition/foo' } })
-    })
-
-    it('with a type', () => {
-      expect(
-        FluentSchema()
-          .prop('prop')
-          .asNumber()
-          .valueOf().properties
-      ).toEqual({ prop: { $id: '#properties/prop', type: 'number' } })
-    })
-
-    it('with a default', () => {
-      expect(
-        FluentSchema()
-          .prop('prop')
-          .asNumber()
-          .default(3)
-          .valueOf().properties
-      ).toEqual({
-        prop: { $id: '#properties/prop', type: 'number', default: 3 },
-      })
-    })
-
-    it('with a description', () => {
-      expect(
-        FluentSchema()
-          .title('Product')
-          .prop('id')
-          .description('The unique identifier for a product')
-          .asNumber()
-          .required()
-          .valueOf()
-      ).toEqual({
-        $schema: 'http://json-schema.org/draft-07/schema#',
-        properties: {
-          id: {
-            $id: '#properties/id',
-            description: 'The unique identifier for a product',
-            type: 'number',
-          },
-        },
-        required: ['id'],
-        title: 'Product',
-        type: 'object',
-      })
-    })
-  })
-
   describe('definition', () => {
     it('sets a definition', () => {
       expect(
@@ -974,6 +886,303 @@ describe('FluentSchema', () => {
             .asObject()
             .valueOf().properties.value.type
         ).toEqual('object')
+      })
+
+      describe('keywords:', () => {
+        describe('properties', () => {
+          it('with type string', () => {
+            expect(
+              FluentSchema()
+                .prop('prop')
+                .valueOf().properties
+            ).toEqual({
+              prop: {
+                type: 'string',
+                $id: '#properties/prop',
+              },
+            })
+          })
+
+          it('with a nested object', () => {
+            expect(
+              FluentSchema()
+                .prop('foo', FluentSchema().prop('bar'))
+                .valueOf().properties.foo.properties
+            ).toEqual({
+              bar: {
+                $id: '#properties/foo/properties/bar',
+                type: 'string',
+              },
+            })
+          })
+
+          it('with a $ref', () => {
+            expect(
+              FluentSchema()
+                .definition(
+                  'foo',
+                  FluentSchema()
+                    .prop('foo')
+                    .prop('bar')
+                )
+                .prop('prop')
+                .ref('#definition/foo')
+                .valueOf().properties
+            ).toEqual({ prop: { $ref: '#definition/foo' } })
+          })
+
+          it('with a type', () => {
+            expect(
+              FluentSchema()
+                .prop('prop')
+                .asNumber()
+                .valueOf().properties
+            ).toEqual({ prop: { $id: '#properties/prop', type: 'number' } })
+          })
+
+          it('with a default', () => {
+            expect(
+              FluentSchema()
+                .prop('prop')
+                .asNumber()
+                .default(3)
+                .valueOf().properties
+            ).toEqual({
+              prop: { $id: '#properties/prop', type: 'number', default: 3 },
+            })
+          })
+
+          it('with a description', () => {
+            expect(
+              FluentSchema()
+                .title('Product')
+                .prop('id')
+                .description('The unique identifier for a product')
+                .asNumber()
+                .required()
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              properties: {
+                id: {
+                  $id: '#properties/id',
+                  description: 'The unique identifier for a product',
+                  type: 'number',
+                },
+              },
+              required: ['id'],
+              title: 'Product',
+              type: 'object',
+            })
+          })
+        })
+
+        describe('additionalProperties', () => {
+          it('false', () => {
+            const value = false
+            expect(
+              FluentSchema()
+                .asObject()
+                .additionalProperties(value)
+                .prop('prop')
+                .valueOf().additionalProperties
+            ).toEqual(value)
+          })
+
+          it('object', () => {
+            expect(
+              FluentSchema()
+                .asObject()
+                .additionalProperties(FluentSchema().asString())
+                .prop('prop')
+                .valueOf().additionalProperties
+            ).toEqual({ type: 'string' })
+          })
+
+          it('invalid', () => {
+            const value = 'invalid'
+            expect(() =>
+              expect(
+                FluentSchema()
+                  .prop('prop')
+                  .additionalProperties(value)
+              ).toEqual(value)
+            ).toThrow(
+              "'additionalProperties' must be a boolean or a FluentSchema"
+            )
+          })
+        })
+
+        describe('maxProperties', () => {
+          it('valid', () => {
+            const value = 2
+            expect(
+              FluentSchema()
+                .asObject()
+                .maxProperties(value)
+                .prop('prop')
+                .valueOf().maxProperties
+            ).toEqual(value)
+          })
+
+          it('invalid', () => {
+            const value = 'invalid'
+            expect(() =>
+              expect(
+                FluentSchema()
+                  .prop('prop')
+                  .maxProperties(value)
+              ).toEqual(value)
+            ).toThrow("'maxProperties' must be a Integer")
+          })
+        })
+
+        describe('minProperties', () => {
+          it('valid', () => {
+            const value = 2
+            expect(
+              FluentSchema()
+                .asObject()
+                .minProperties(value)
+                .prop('prop')
+                .valueOf().minProperties
+            ).toEqual(value)
+          })
+
+          it('invalid', () => {
+            const value = 'invalid'
+            expect(() =>
+              expect(
+                FluentSchema()
+                  .prop('prop')
+                  .minProperties(value)
+              ).toEqual(value)
+            ).toThrow("'minProperties' must be a Integer")
+          })
+        })
+
+        describe('patternProperties', () => {
+          it('valid', () => {
+            expect(
+              FluentSchema()
+                .asObject()
+                .patternProperties({
+                  '^fo.*$': FluentSchema().asString(),
+                })
+                .prop('foo')
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              patternProperties: { '^fo.*$': { type: 'string' } },
+              properties: { foo: { $id: '#properties/foo', type: 'string' } },
+              type: 'object',
+            })
+          })
+
+          it('invalid', () => {
+            const value = 'invalid'
+            expect(() =>
+              expect(
+                FluentSchema()
+                  .prop('prop')
+                  .patternProperties(value)
+              ).toEqual(value)
+            ).toThrow(
+              "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': FluentSchema().asString() }"
+            )
+          })
+        })
+
+        describe('dependencies', () => {
+          it('map of array', () => {
+            expect(
+              FluentSchema()
+                .asObject()
+                .dependencies({
+                  foo: ['bar'],
+                })
+                .prop('foo')
+                .prop('bar')
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              dependencies: { foo: ['bar'] },
+              properties: {
+                bar: { $id: '#properties/bar', type: 'string' },
+                foo: { $id: '#properties/foo', type: 'string' },
+              },
+              type: 'object',
+            })
+          })
+
+          it('object', () => {
+            expect(
+              FluentSchema()
+                .asObject()
+                .dependencies({
+                  foo: FluentSchema()
+                    .prop('bar')
+                    .asNumber(),
+                })
+                .prop('foo')
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              dependencies: {
+                foo: {
+                  properties: {
+                    bar: { $id: '#properties/bar', type: 'number' },
+                  },
+                },
+              },
+              properties: { foo: { $id: '#properties/foo', type: 'string' } },
+              type: 'object',
+            })
+          })
+
+          it('invalid', () => {
+            const value = 'invalid'
+            expect(() =>
+              expect(
+                FluentSchema()
+                  .prop('prop')
+                  .patternProperties(value)
+              ).toEqual(value)
+            ).toThrow(
+              "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': FluentSchema().asString() }"
+            )
+          })
+        })
+
+        describe('propertyNames', () => {
+          it('valid', () => {
+            expect(
+              FluentSchema()
+                .asObject()
+                .propertyNames(
+                  FluentSchema()
+                    .asString()
+                    .format(FORMATS.EMAIL)
+                )
+                .prop('foo@bar.com')
+                .valueOf().propertyNames
+            ).toEqual({
+              format: 'email',
+              type: 'string',
+            })
+          })
+
+          it('invalid', () => {
+            const value = 'invalid'
+            expect(() =>
+              expect(
+                FluentSchema()
+                  .prop('prop')
+                  .propertyNames(value)
+              ).toEqual(value)
+            ).toThrow("'propertyNames' must be a FluentSchema")
+          })
+        })
       })
     })
     describe('null', () => {

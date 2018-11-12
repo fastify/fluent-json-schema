@@ -1,3 +1,4 @@
+'use strict'
 const { FluentSchema, FORMATS } = require('./FluentSchema')
 const Ajv = require('ajv')
 

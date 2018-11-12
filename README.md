@@ -296,3 +296,7 @@ Thank [Matteo Collina](https://twitter.com/matteocollina) for pushing me to impl
 - JSON Schema [Draft 7](http://json-schema.org/specification-links.html#draft-7)
 - [AJV]() JSON Schema validator
 - [jsonschema.net](https://www.jsonschema.net/) an online JSON Schema visual editor (it doesn't support advance features)
+
+## Licence
+
+Licensed under [MIT](./LICENSE).

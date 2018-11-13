@@ -3,7 +3,24 @@
   "version": "0.1.0",
   "description": "JSON Schema fluent API",
   "main": "src/FluentSchema.js",
+  "keywords": [
+    "JSON",
+    "schema",
+    "jsonschema",
+    "json schema",
+    "validation",
+    "json schema builder",
+    "json schema validation"
+  ],
   "license": "MIT",
+  "author": "Lorenzo Sicilia <lorenzo.sicilia@gmail.com>",
+  "contributors": [
+    "Matteo Collina <hello@matteocollina.com>"
+  ],
+  "homepage": "https://github.com/fastify/fluent-schema#readme",
+  "bugs": {
+    "url": "https://github.com/fastify/fluent-schema/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/fastify/fluent-schema.git"

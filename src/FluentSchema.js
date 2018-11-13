@@ -284,29 +284,29 @@ const FluentSchema = (schema = initialState) => ({
   asNumber: () => FluentSchema({ ...schema }).as('number'),
 
   minimum: min => {
-    if (!Number.isInteger(min)) throw new Error("'minimum' must be an Integer")
+    if (typeof min !== 'number') throw new Error("'minimum' must be a Number")
     return setAttribute(schema, ['minimum', min, 'number'])
   },
 
   exclusiveMinimum: max => {
-    if (!Number.isInteger(max))
-      throw new Error("'exclusiveMinimum' must be an Integer")
+    if (typeof max !== 'number')
+      throw new Error("'exclusiveMinimum' must be a Number")
     return setAttribute(schema, ['exclusiveMinimum', max, 'number'])
   },
 
   maximum: max => {
-    if (!Number.isInteger(max)) throw new Error("'maximum' must be an Integer")
+    if (typeof max !== 'number') throw new Error("'maximum' must be a Number")
     return setAttribute(schema, ['maximum', max, 'number'])
   },
 
   exclusiveMaximum: max => {
-    if (!Number.isInteger(max))
+    if (typeof max !== 'number')
       throw new Error("'exclusiveMaximum' must be an Integer")
     return setAttribute(schema, ['exclusiveMaximum', max, 'number'])
   },
 
   multipleOf: multiple => {
-    if (!Number.isInteger(multiple))
+    if (typeof multiple !== 'number')
       throw new Error("'multipleOf' must be an Integer")
     return setAttribute(schema, ['multipleOf', multiple, 'number'])
   },

@@ -40,56 +40,102 @@ describe('FluentSchema', () => {
     })
   })
 
-  describe('metadata:', () => {
+  describe('keywords (any):', () => {
+    const value = 'customId'
     describe('id', () => {
-      it('simple', () => {
-        const value = 'id'
+      it('to root', () => {
         expect(
           FluentSchema()
             .id(value)
             .valueOf().$id
         ).toEqual(value)
       })
-      it('with props', () => {
-        const id = 'customId'
+
+      it('nested', () => {
         expect(
           FluentSchema()
             .prop(
               'foo',
               FluentSchema()
-                .id(id)
+                .id(value)
                 .prop('bar')
             )
             .valueOf().properties.foo.$id
-        ).toEqual(id)
+        ).toEqual(value)
+      })
+
+      it('adds to number prop', () => {
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .asNumber()
+            .id(value)
+            .valueOf().properties.prop.$id
+        ).toEqual(value)
       })
     })
 
-    it('title', () => {
+    describe('title', () => {
       const value = 'title'
-      expect(
-        FluentSchema()
-          .title(value)
-          .valueOf().title
-      ).toEqual(value)
+      it('adds to root', () => {
+        expect(
+          FluentSchema()
+            .title(value)
+            .valueOf().title
+        ).toEqual(value)
+      })
+
+      it('adds to number prop', () => {
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .asNumber()
+            .title(value)
+            .valueOf().properties.prop.title
+        ).toEqual(value)
+      })
     })
 
-    it('description', () => {
-      const value = 'description'
-      expect(
-        FluentSchema()
-          .description(value)
-          .valueOf().description
-      ).toEqual(value)
+    describe('description', () => {
+      it('add to root', () => {
+        const value = 'description'
+        expect(
+          FluentSchema()
+            .description(value)
+            .valueOf().description
+        ).toEqual(value)
+      })
+
+      it('add to number prop', () => {
+        const value = 'description'
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .asNumber()
+            .description(value)
+            .valueOf().properties.prop.description
+        ).toEqual(value)
+      })
     })
 
     describe('examples', () => {
-      it('valid', () => {
+      it('adds to root', () => {
         const value = ['example']
         expect(
           FluentSchema()
             .examples(value)
             .valueOf().examples
+        ).toEqual(value)
+      })
+
+      it('add to number prop', () => {
+        const value = [123]
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .asNumber()
+            .examples(value)
+            .valueOf().properties.prop.examples
         ).toEqual(value)
       })
 
@@ -352,7 +398,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asNumber()
-                .minimum(5)
+                .minimum(5.0)
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
@@ -360,7 +406,7 @@ describe('FluentSchema', () => {
                 prop: {
                   $id: '#properties/prop',
                   type: 'number',
-                  minimum: 5,
+                  minimum: 5.0,
                 },
               },
               type: 'object',
@@ -381,7 +427,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asString()
-                .minimum(5)
+                .minimum(5.0)
             ).toThrow("'prop' as 'string' doesn't accept 'minimum' option")
           })
         })
@@ -392,7 +438,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asNumber()
-                .maximum(5)
+                .maximum(5.0)
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
@@ -400,7 +446,7 @@ describe('FluentSchema', () => {
                 prop: {
                   $id: '#properties/prop',
                   type: 'number',
-                  maximum: 5,
+                  maximum: 5.0,
                 },
               },
               type: 'object',
@@ -412,7 +458,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asNumber()
-                .maximum('5')
+                .maximum('5.0')
             ).toThrow("'maximum' must be an Integer")
           })
           it('invalid option', () => {
@@ -421,7 +467,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asString()
-                .maximum(5)
+                .maximum(5.0)
             ).toThrow("'prop' as 'string' doesn't accept 'maximum' option")
           })
         })
@@ -432,7 +478,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asNumber()
-                .multipleOf(5)
+                .multipleOf(5.0)
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
@@ -440,7 +486,7 @@ describe('FluentSchema', () => {
                 prop: {
                   $id: '#properties/prop',
                   type: 'number',
-                  multipleOf: 5,
+                  multipleOf: 5.0,
                 },
               },
               type: 'object',
@@ -452,7 +498,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asNumber()
-                .multipleOf('5')
+                .multipleOf('5.0')
             ).toThrow("'multipleOf' must be an Integer")
           })
           it('invalid option', () => {
@@ -461,7 +507,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asString()
-                .multipleOf(5)
+                .multipleOf(5.0)
             ).toThrow("'prop' as 'string' doesn't accept 'multipleOf' option")
           })
         })
@@ -472,7 +518,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asNumber()
-                .exclusiveMinimum(5)
+                .exclusiveMinimum(5.0)
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
@@ -480,7 +526,7 @@ describe('FluentSchema', () => {
                 prop: {
                   $id: '#properties/prop',
                   type: 'number',
-                  exclusiveMinimum: 5,
+                  exclusiveMinimum: 5.0,
                 },
               },
               type: 'object',
@@ -492,7 +538,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asNumber()
-                .exclusiveMinimum('5')
+                .exclusiveMinimum('5.0')
             ).toThrow("'exclusiveMinimum' must be an Integer")
           })
           it('invalid option', () => {
@@ -501,7 +547,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asString()
-                .exclusiveMinimum(5)
+                .exclusiveMinimum(5.0)
             ).toThrow(
               "'prop' as 'string' doesn't accept 'exclusiveMinimum' option"
             )
@@ -514,7 +560,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asNumber()
-                .exclusiveMaximum(5)
+                .exclusiveMaximum(5.0)
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
@@ -522,7 +568,7 @@ describe('FluentSchema', () => {
                 prop: {
                   $id: '#properties/prop',
                   type: 'number',
-                  exclusiveMaximum: 5,
+                  exclusiveMaximum: 5.0,
                 },
               },
               type: 'object',
@@ -534,7 +580,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asNumber()
-                .exclusiveMaximum('5')
+                .exclusiveMaximum('5.0')
             ).toThrow("'exclusiveMaximum' must be an Integer")
           })
           it('invalid option', () => {
@@ -543,7 +589,7 @@ describe('FluentSchema', () => {
               FluentSchema()
                 .prop(prop)
                 .asString()
-                .exclusiveMaximum(5)
+                .exclusiveMaximum(5.0)
             ).toThrow(
               "'prop' as 'string' doesn't accept 'exclusiveMaximum' option"
             )

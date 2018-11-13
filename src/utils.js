@@ -2,7 +2,7 @@
 const isFluentSchema = obj => typeof obj.anyOf === 'function'
 
 const hasCombiningKeywords = attributes =>
-  attributes.anyOf || attributes.anyOf || attributes.anyOf || attributes.not
+  attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
 
 const last = arr => {
   const [prop] = [...arr].reverse()

@@ -1206,7 +1206,61 @@ describe('FluentSchema', () => {
   })
 
   describe('combining keywords:', () => {
+    describe('allOf', () => {
+      it('sets two alternative', () => {
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .allOf(
+              FluentSchema()
+                .prop('boolean')
+                .asBoolean()
+                .prop('string')
+            )
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            prop: {
+              $id: '#properties/prop',
+              allOf: [
+                { $id: '#properties/boolean', type: 'boolean' },
+                { $id: '#properties/string', type: 'string' },
+              ],
+            },
+          },
+          type: 'object',
+        })
+      })
+    })
     describe('anyOf', () => {
+      it('sets two alternative', () => {
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .anyOf(
+              FluentSchema()
+                .prop('boolean')
+                .asBoolean()
+                .prop('string')
+            )
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            prop: {
+              $id: '#properties/prop',
+              anyOf: [
+                { $id: '#properties/boolean', type: 'boolean' },
+                { $id: '#properties/string', type: 'string' },
+              ],
+            },
+          },
+          type: 'object',
+        })
+      })
+    })
+    describe('oneOf', () => {
       it('sets two alternative', () => {
         expect(
           FluentSchema()

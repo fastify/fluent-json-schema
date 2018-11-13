@@ -33,21 +33,21 @@ const setAttribute = (schema, attribute) => {
 
 const FluentSchema = (schema = initialState) => ({
   id: $id => {
-    return setAttribute(schema, ['$id', $id])
+    return setAttribute(schema, ['$id', $id, 'any'])
   },
 
   title: title => {
-    return setAttribute(schema, ['title', title])
+    return setAttribute(schema, ['title', title, 'any'])
   },
 
   description: description => {
-    return setAttribute(schema, ['description', description])
+    return setAttribute(schema, ['description', description, 'any'])
   },
 
   examples: examples => {
     if (!Array.isArray(examples))
       throw new Error("'examples' must be an array e.g. ['1', 'one', 'foo']")
-    return setAttribute(schema, ['examples', examples])
+    return setAttribute(schema, ['examples', examples, 'any'])
   },
 
   ref: $ref => {
@@ -80,6 +80,7 @@ const FluentSchema = (schema = initialState) => ({
       title,
       description,
       defaults,
+      examples,
       // compound
       anyOf,
       allOf,
@@ -127,9 +128,8 @@ const FluentSchema = (schema = initialState) => ({
               type !== undefined ? { type } : undefined,
               defaults !== undefined ? { default: defaults } : undefined,
               title !== undefined ? { title } : undefined,
-              $id
-                ? { $id: isFluentSchema(props) ? attributes.$id || $id : $id }
-                : undefined,
+              examples !== undefined ? { examples } : undefined,
+              $id ? { $id: attributes.$id || $id } : undefined,
               description !== undefined ? { description } : undefined,
               attributes.const !== undefined
                 ? { const: attributes.const }

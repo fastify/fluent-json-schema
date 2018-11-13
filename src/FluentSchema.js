@@ -217,6 +217,34 @@ const FluentSchema = (schema = initialState) => ({
     return FluentSchema({ ...schema }).prop(name, attr)
   },
 
+  allOf: attributes => {
+    const currentProp = last(schema.properties)
+    const { name, not, type, ...props } = currentProp
+    const properties = attributes.valueOf().properties
+    const values = Object.entries(properties).reduce((memo, [key, value]) => {
+      return [...memo, value]
+    }, [])
+    const attr = {
+      ...props,
+      ...(not ? { not: { allOf: values } } : { allOf: values }),
+    }
+    return FluentSchema({ ...schema }).prop(name, attr)
+  },
+
+  oneOf: attributes => {
+    const currentProp = last(schema.properties)
+    const { name, not, type, ...props } = currentProp
+    const properties = attributes.valueOf().properties
+    const values = Object.entries(properties).reduce((memo, [key, value]) => {
+      return [...memo, value]
+    }, [])
+    const attr = {
+      ...props,
+      ...(not ? { not: { oneOf: values } } : { oneOf: values }),
+    }
+    return FluentSchema({ ...schema }).prop(name, attr)
+  },
+
   required: () => {
     const currentProp = last(schema.properties)
     return FluentSchema({

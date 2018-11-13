@@ -122,7 +122,7 @@ or
 
     yarn add ajv
 
-### Empty model
+### Validate an empty model
 
 Snippet
 
@@ -135,10 +135,11 @@ console.log({ valid }) //=> {valid: false}
 console.log(validate.errors) //=> {valid: false}
 ```
 
-Output: **{valid: false}**:
+Output:
 
 ```
-[
+{valid: false}
+errors: [
   {
     keyword: 'required',
     dataPath: '',
@@ -157,20 +158,22 @@ Output: **{valid: false}**:
 
 ```
 
-### Partially filled model
+### Validate a partially filled model
 
 Snippet
 
 ```javascript
 user = { email: 'test', password: 'password' }
 valid = validate(user)
-console.log({ valid }) //=> {valid: false}
+console.log({ valid })
 console.log(validate.errors)
 ```
 
-Output: **{valid: false}**:
+Output:
 
 ```
+{valid: false}
+errors:
 [ { keyword: 'format',
     dataPath: '.email',
     schemaPath: '#/properties/email/format',
@@ -179,21 +182,22 @@ Output: **{valid: false}**:
 
 ```
 
-### Filled model wrong format
+### Validate a model with a wrong format attribute
 
 Snippet
 
 ```javascript
 user = { email: 'test@foo.com', password: 'password' }
 valid = validate(user)
-console.log({ valid }) //=> {valid: true}
-console.log(validate.errors) // => null
+console.log({ valid })
+console.log('errors:', validate.errors)
 ```
 
-Output: **{valid: false}**:
+Output:
 
 ```
-[ { keyword: 'required',
+{valid: false}
+errors: [ { keyword: 'required',
     dataPath: '.address',
     schemaPath: '#definitions/address/required',
     params: { missingProperty: 'country' },
@@ -217,10 +221,12 @@ Snippet
 ```javascript
 user = { email: 'test@foo.com', password: 'password' }
 valid = validate(user)
-console.log({ valid }) //=> {valid: false}
+console.log({ valid })
 ```
 
-Output: **{valid: true}**:
+Output:
+
+     {valid: true}
 
 ## Validation Keywords Supported
 
@@ -265,14 +271,14 @@ Output: **{valid: true}**:
 
 5. Validation Keywords for Objects
 
-- [ ] maxProperties
-- [ ] minProperties
-- [ ] required
-- [ ] properties
-- [ ] patternProperties
-- [ ] additionalProperties
-- [ ] dependencies
-- [ ] propertyNames
+- [x] maxProperties
+- [x] minProperties
+- [x] required
+- [x] properties
+- [x] patternProperties
+- [x] additionalProperties
+- [x] dependencies
+- [x] propertyNames
 
 6. Keywords for Applying Subschemas Conditionally
 
@@ -282,9 +288,9 @@ Output: **{valid: true}**:
 
 7. Keywords for Applying Subschemas With Boolean Logic
 
-- [ ] allOf
+- [x] allOf
 - [x] anyOf
-- [ ] oneOf
+- [x] oneOf
 - [x] not
 
 ## Acknowledgments
@@ -294,6 +300,7 @@ Thank [Matteo Collina](https://twitter.com/matteocollina) for pushing me to impl
 ## related projects
 
 - JSON Schema [Draft 7](http://json-schema.org/specification-links.html#draft-7)
+- [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/) (despite is referring to draft 6 the guide still good to grasp the main concepts)
 - [AJV]() JSON Schema validator
 - [jsonschema.net](https://www.jsonschema.net/) an online JSON Schema visual editor (it doesn't support advance features)
 

@@ -192,6 +192,18 @@ const FluentSchema = (schema = initialState) => ({
     return setAttribute(schema, ['defaults', defaults, 'any'])
   },
 
+  required: () => {
+    const currentProp = last(schema.properties)
+    if (!currentProp)
+      throw new Error(
+        "'required' has to be chained to a prop: \nExamples: \n- FluentSchema().prop('prop').required() \n- FluentSchema().prop('prop', FluentSchema().asNumber()).required()"
+      )
+    return FluentSchema({
+      ...schema,
+      required: [...schema.required, currentProp.name],
+    })
+  },
+
   not: () => {
     const [currentProp, ...properties] = [...schema.properties].reverse()
     if (!currentProp) throw new Error(`'not' can be applied only to a prop`)
@@ -243,14 +255,6 @@ const FluentSchema = (schema = initialState) => ({
       ...(not ? { not: { oneOf: values } } : { oneOf: values }),
     }
     return FluentSchema({ ...schema }).prop(name, attr)
-  },
-
-  required: () => {
-    const currentProp = last(schema.properties)
-    return FluentSchema({
-      ...schema,
-      required: [...schema.required, currentProp.name],
-    })
   },
 
   asString: () => FluentSchema({ ...schema }).as('string'),

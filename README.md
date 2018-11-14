@@ -13,7 +13,7 @@ or
 ## Usage
 
 ```javascript
-const { FluentSchema, FORMATS } = require('./FluentSchema')
+const { FluentSchema, FORMATS } = require('fluent-schema')
 const schema = FluentSchema()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')

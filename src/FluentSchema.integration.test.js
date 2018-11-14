@@ -3,6 +3,8 @@ const { deepOmit } = require('./utils')
 const { FluentSchema } = require('./FluentSchema')
 const Ajv = require('ajv')
 
+// TODO pick some ideas from here:https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/master/tests/draft7
+
 describe('FluentSchema', () => {
   it('compiles', () => {
     const ajv = new Ajv()

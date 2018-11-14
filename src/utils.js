@@ -73,21 +73,24 @@ const FORMATS = {
 
 // TODO LS looking for a better name
 const patchIdsWithParentId = (schema, parentId) => {
-  return {
-    ...schema,
-    properties: Object.entries(schema.properties).reduce(
-      (memo, [key, prop]) => {
-        return {
-          ...memo,
-          [key]: {
-            ...prop,
-            $id: `${parentId}/${prop.$id.replace('#', '')}`, // e.g. #properties/foo/properties/bar
-          },
-        }
-      },
-      {}
-    ),
-  }
+  const properties = Object.entries(schema.properties || {})
+  return properties.length === 0
+    ? {
+        ...schema,
+        $id: parentId,
+      }
+    : {
+        ...schema,
+        properties: properties.reduce((memo, [key, prop]) => {
+          return {
+            ...memo,
+            [key]: {
+              ...prop,
+              $id: `${parentId}/${prop.$id.replace('#', '')}`, // e.g. #properties/foo/properties/bar
+            },
+          }
+        }, {}),
+      }
 }
 
 module.exports = {

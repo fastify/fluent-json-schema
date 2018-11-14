@@ -18,17 +18,25 @@ const schema = FluentSchema()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
   .description('A simple user')
-  .prop('email')
-  .asString()
-  .format(FORMATS.EMAIL)
-  .required()
-  .prop('password')
-  .asString()
-  .minLength(8)
-  .required()
-  .prop('role')
-  .enum(['ADMIN', 'USER'])
-  .default('USER')
+  .prop(
+    'email',
+    FluentSchema()
+      .asString()
+      .format(FORMATS.EMAIL)
+      .required()
+  )
+  .prop(
+    'password',
+    FluentSchema.asString()
+      .minLength(8)
+      .required()
+  )
+  .prop(
+    'role',
+    FluentSchema()
+      .enum(['ADMIN', 'USER'])
+      .default('USER')
+  )
   .definition(
     'address',
     FluentSchema()
@@ -227,6 +235,14 @@ console.log({ valid })
 Output:
 
      {valid: true}
+
+## Features
+
+- Fluent schema implements JSON Schema draft-07 standards
+- Faster and shorter way to write a JSON Schema via a [fluent API](https://en.wikipedia.org/wiki/Fluent_interface)
+- Runtime errors for invalid options or keywords misuse
+- Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
+- Flexible API to write inline or nested props
 
 ## Validation Keywords Supported
 

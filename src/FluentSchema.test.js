@@ -949,16 +949,37 @@ describe('FluentSchema', () => {
             })
           })
 
-          it('with a nested object', () => {
-            expect(
-              FluentSchema()
-                .prop('foo', FluentSchema().prop('bar'))
-                .valueOf().properties.foo.properties
-            ).toEqual({
-              bar: {
-                $id: '#properties/foo/properties/bar',
-                type: 'string',
-              },
+          describe('nested', () => {
+            it('object', () => {
+              expect(
+                FluentSchema()
+                  .prop('foo', FluentSchema().prop('bar'))
+                  .valueOf().properties.foo.properties
+              ).toEqual({
+                bar: {
+                  $id: '#properties/foo/properties/bar',
+                  type: 'string',
+                },
+              })
+            })
+
+            it('string', () => {
+              expect(
+                FluentSchema()
+                  .prop(
+                    'foo',
+                    FluentSchema()
+                      .asString()
+                      .title('Foo')
+                  )
+                  .valueOf().properties
+              ).toEqual({
+                foo: {
+                  $id: '#properties/foo',
+                  type: 'string',
+                  title: 'Foo',
+                },
+              })
             })
           })
 

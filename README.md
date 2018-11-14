@@ -39,7 +39,7 @@ const schema = FluentSchema()
       .required()
       .prop('city')
       .required()
-      .prop('zipcoce')
+      .prop('zipcode')
       .required()
   )
   .prop('address')
@@ -295,7 +295,7 @@ Output:
 
 ## Acknowledgments
 
-Thank [Matteo Collina](https://twitter.com/matteocollina) for pushing me to implement this utility! 🙏
+Thanks to [Matteo Collina](https://twitter.com/matteocollina) for pushing me to implement this utility! 🙏
 
 ## related projects
 

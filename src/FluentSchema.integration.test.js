@@ -240,7 +240,7 @@ describe('FluentSchema', () => {
   })
 
   describe('basic.json', () => {
-    it.only('generate', () => {
+    it('generate', () => {
       const [step] = basic
       expect(
         deepOmit(

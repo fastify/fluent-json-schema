@@ -2,11 +2,18 @@ const { FluentSchema, FORMATS } = require('./FluentSchema')
 
 describe('FluentSchema', () => {
   describe('defaults', () => {
-    it('is defined', () => {
+    it('defined', () => {
       expect(FluentSchema().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',
       })
+    })
+  })
+
+  it('valueOf', () => {
+    expect(FluentSchema().valueOf()).toEqual({
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      type: 'object',
     })
   })
 
@@ -1377,7 +1384,6 @@ describe('FluentSchema', () => {
         })
       })
     })
-
     describe('not', () => {
       it('add prop not', () => {
         expect(

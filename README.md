@@ -119,6 +119,14 @@ Schema generated:
 }
 ```
 
+## Features
+
+- Fluent schema implements JSON Schema draft-07 standards
+- Faster and shorter way to write a JSON Schema via a [fluent API](https://en.wikipedia.org/wiki/Fluent_interface)
+- Runtime errors for invalid options or keywords misuse
+- Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
+- Flexible API to write inline or nested props
+
 ## Integration
 
 Fluent schema **doesn't** validate a JSON schema. However there are many libraries that can do that for you.
@@ -236,14 +244,6 @@ Output:
 
      {valid: true}
 
-## Features
-
-- Fluent schema implements JSON Schema draft-07 standards
-- Faster and shorter way to write a JSON Schema via a [fluent API](https://en.wikipedia.org/wiki/Fluent_interface)
-- Runtime errors for invalid options or keywords misuse
-- Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
-- Flexible API to write inline or nested props
-
 ## Validation Keywords Supported
 
 [Reference](https://json-schema.org/latest/json-schema-validation.html):
@@ -313,7 +313,7 @@ Output:
 
 Thanks to [Matteo Collina](https://twitter.com/matteocollina) for pushing me to implement this utility! 🙏
 
-## related projects
+## Related projects
 
 - JSON Schema [Draft 7](http://json-schema.org/specification-links.html#draft-7)
 - [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/) (despite is referring to draft 6 the guide still good to grasp the main concepts)

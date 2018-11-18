@@ -17,7 +17,7 @@ const initialState = {
   required: [],
 }
 
-const setAttribute = ({ schema, options }, attribute) => {
+const setAttribute = ({ schema, ...options }, attribute) => {
   const [key, value, type = 'string'] = attribute
   const currentProp = last(schema.properties)
   if (currentProp) {
@@ -26,27 +26,35 @@ const setAttribute = ({ schema, options }, attribute) => {
       throw new Error(
         `'${name}' as '${currentProp.type}' doesn't accept '${key}' option`
       )
-    return FluentSchema({ schema: { ...schema }, options }).prop(name, {
+    return FluentSchema({ schema, ...options }).prop(name, {
       ...props,
       [key]: value,
     })
   }
-  return FluentSchema({ schema: { ...schema, [key]: value }, options })
+  return FluentSchema({ schema: { ...schema, [key]: value }, ...options })
 }
+
+/**
+ * Represents a FluentSchema.
+ * @param {Object} [options] - Options
+ * @param {FluentSchema} [options.schema] - Default schema
+ * @param {boolean} [options.generateIds = false] - generate the id automatically e.g. #properties.foo
+ * @returns {FluentSchema}
+ */
 
 const FluentSchema = (
   { schema = initialState, ...options } = { generateIds: false }
 ) => ({
   id: $id => {
-    return setAttribute({ schema, options }, ['$id', $id, 'any'])
+    return setAttribute({ schema, ...options }, ['$id', $id, 'any'])
   },
 
   title: title => {
-    return setAttribute({ schema, options }, ['title', title, 'any'])
+    return setAttribute({ schema, ...options }, ['title', title, 'any'])
   },
 
   description: description => {
-    return setAttribute({ schema, options }, [
+    return setAttribute({ schema, ...options }, [
       'description',
       description,
       'any',
@@ -56,7 +64,7 @@ const FluentSchema = (
   examples: examples => {
     if (!Array.isArray(examples))
       throw new Error("'examples' must be an array e.g. ['1', 'one', 'foo']")
-    return setAttribute({ schema, options }, ['examples', examples, 'any'])
+    return setAttribute({ schema, ...options }, ['examples', examples, 'any'])
   },
 
   ref: $ref => {
@@ -68,29 +76,27 @@ const FluentSchema = (
       })
     }
     // TODO LS not sure if a schema can have a $ref
-    return FluentSchema({ ...{ schema, options }, $ref })
+    return FluentSchema({ ...{ schema, ...options }, $ref })
   },
 
   definition: (name, props = {}) =>
-    FluentSchema({ schema: { ...schema }, options }).prop(name, {
+    FluentSchema({ schema: { ...schema }, ...options }).prop(name, {
       ...props,
       def: true,
     }),
 
   prop: (name, props = {}) => {
     const target = props.def ? 'definitions' : 'properties'
-    const $id = `#${target}/${name}`
+    props = props.valueOf()
+    const $id =
+      props.$id || (options.generateIds ? `#${target}/${name}` : undefined)
     // console.log('generateIds:', options.generateIds)
-    const attributes = isFluentSchema(props)
-      ? patchIdsWithParentId(props.valueOf(), $id)
+    const attributes = isFluentSchema(props) /*&& options.generateIds*/
+      ? patchIdsWithParentId({ schema: props, parentId: $id, ...options })
       : props
 
     const {
       type = hasCombiningKeywords(attributes) ? undefined : 'string',
-      // TODO LS $id should be prefixed with the parent.
-      // Resolving this fix the if issue as well
-      // Do we need an id for each prop? https://www.jsonschema.net/ foster for this approach however ifClause is generating a duplicated if
-      //$id = `#${target}/${name}`,
       $ref,
       title,
       description,
@@ -134,7 +140,7 @@ const FluentSchema = (
       schema: {
         ...schema,
         [target]: [
-          ...schema[target].filter(p => p.$id !== $id),
+          ...schema[target], //.filter(p => p.$id !== id),
           $ref
             ? { name, $ref }
             : Object.assign(
@@ -145,7 +151,7 @@ const FluentSchema = (
                 defaults !== undefined ? { default: defaults } : undefined,
                 title !== undefined ? { title } : undefined,
                 examples !== undefined ? { examples } : undefined,
-                $id ? { $id: attributes.$id || $id } : undefined,
+                $id !== undefined ? { $id } : undefined,
                 description !== undefined ? { description } : undefined,
                 attributes.const !== undefined
                   ? { const: attributes.const }
@@ -203,15 +209,15 @@ const FluentSchema = (
   enum: values => {
     if (!Array.isArray(values))
       throw new Error("'enum' must be an array e.g. ['1', 'one', 'foo']")
-    return setAttribute({ schema, options }, ['enum', values, 'any'])
+    return setAttribute({ schema, ...options }, ['enum', values, 'any'])
   },
 
   const: value => {
-    return setAttribute({ schema, options }, ['const', value, 'any'])
+    return setAttribute({ schema, ...options }, ['const', value, 'any'])
   },
 
   default: defaults => {
-    return setAttribute({ schema, options }, ['defaults', defaults, 'any'])
+    return setAttribute({ schema, ...options }, ['defaults', defaults, 'any'])
   },
 
   required: () => {
@@ -287,13 +293,13 @@ const FluentSchema = (
   minLength: min => {
     if (!Number.isInteger(min))
       throw new Error("'minLength' must be an Integer")
-    return setAttribute({ schema, options }, ['minLength', min, 'string'])
+    return setAttribute({ schema, ...options }, ['minLength', min, 'string'])
   },
 
   maxLength: max => {
     if (!Number.isInteger(max))
       throw new Error("'maxLength' must be an Integer")
-    return setAttribute({ schema, options }, ['maxLength', max, 'string'])
+    return setAttribute({ schema, ...options }, ['maxLength', max, 'string'])
   },
 
   format: format => {
@@ -301,26 +307,26 @@ const FluentSchema = (
       throw new Error(
         `'format' must be one of ${Object.values(FORMATS).join(', ')}`
       )
-    return setAttribute({ schema, options }, ['format', format, 'string'])
+    return setAttribute({ schema, ...options }, ['format', format, 'string'])
   },
   // TODO LS accept regex as well
   pattern: pattern => {
     if (!typeof pattern === 'string')
       throw new Error(`'pattern' must be a string`)
-    return setAttribute({ schema, options }, ['pattern', pattern, 'string'])
+    return setAttribute({ schema, ...options }, ['pattern', pattern, 'string'])
   },
 
   asNumber: () => FluentSchema({ schema: { ...schema }, options }).as('number'),
 
   minimum: min => {
     if (typeof min !== 'number') throw new Error("'minimum' must be a Number")
-    return setAttribute({ schema, options }, ['minimum', min, 'number'])
+    return setAttribute({ schema, ...options }, ['minimum', min, 'number'])
   },
 
   exclusiveMinimum: max => {
     if (typeof max !== 'number')
       throw new Error("'exclusiveMinimum' must be a Number")
-    return setAttribute({ schema, options }, [
+    return setAttribute({ schema, ...options }, [
       'exclusiveMinimum',
       max,
       'number',
@@ -329,13 +335,13 @@ const FluentSchema = (
 
   maximum: max => {
     if (typeof max !== 'number') throw new Error("'maximum' must be a Number")
-    return setAttribute({ schema, options }, ['maximum', max, 'number'])
+    return setAttribute({ schema, ...options }, ['maximum', max, 'number'])
   },
 
   exclusiveMaximum: max => {
     if (typeof max !== 'number')
       throw new Error("'exclusiveMaximum' must be an Integer")
-    return setAttribute({ schema, options }, [
+    return setAttribute({ schema, ...options }, [
       'exclusiveMaximum',
       max,
       'number',
@@ -345,7 +351,11 @@ const FluentSchema = (
   multipleOf: multiple => {
     if (typeof multiple !== 'number')
       throw new Error("'multipleOf' must be an Integer")
-    return setAttribute({ schema, options }, ['multipleOf', multiple, 'number'])
+    return setAttribute({ schema, ...options }, [
+      'multipleOf',
+      multiple,
+      'number',
+    ])
   },
 
   asBoolean: () =>
@@ -369,24 +379,24 @@ const FluentSchema = (
         const { $schema, ...rest } = v.valueOf()
         return rest
       })
-      return setAttribute({ schema, options }, ['items', values, 'array'])
+      return setAttribute({ schema, ...options }, ['items', values, 'array'])
     }
     const { $schema, ...rest } = value.valueOf()
-    return setAttribute({ schema, options }, ['items', { ...rest }, 'array'])
+    return setAttribute({ schema, ...options }, ['items', { ...rest }, 'array'])
   },
 
   additionalItems: value => {
     if (typeof value !== 'boolean' && !isFluentSchema(value))
       throw new Error("'additionalItems' must be a boolean or a FluentSchema")
     if (value === false) {
-      return setAttribute({ schema, options }, [
+      return setAttribute({ schema, ...options }, [
         'additionalItems',
         false,
         'array',
       ])
     }
     const { $schema, ...rest } = value.valueOf()
-    return setAttribute({ schema, options }, [
+    return setAttribute({ schema, ...options }, [
       'additionalItems',
       { ...rest },
       'array',
@@ -397,7 +407,7 @@ const FluentSchema = (
     if (typeof value !== 'boolean' && !isFluentSchema(value))
       throw new Error("'contains' must be a boolean or a FluentSchema")
     if (value === false) {
-      return setAttribute({ schema, options }, ['contains', false, 'array'])
+      return setAttribute({ schema, ...options }, ['contains', false, 'array'])
     }
     const {
       $schema,
@@ -406,23 +416,31 @@ const FluentSchema = (
       required,
       ...rest
     } = value.valueOf()
-    return setAttribute({ schema, options }, ['contains', { ...rest }, 'array'])
+    return setAttribute({ schema, ...options }, [
+      'contains',
+      { ...rest },
+      'array',
+    ])
   },
 
   uniqueItems: boolean => {
     if (typeof boolean !== 'boolean')
       throw new Error("'uniqueItems' must be a boolean")
-    return setAttribute({ schema, options }, ['uniqueItems', boolean, 'array'])
+    return setAttribute({ schema, ...options }, [
+      'uniqueItems',
+      boolean,
+      'array',
+    ])
   },
 
   minItems: min => {
     if (!Number.isInteger(min)) throw new Error("'minItems' must be a integer")
-    return setAttribute({ schema, options }, ['minItems', min, 'array'])
+    return setAttribute({ schema, ...options }, ['minItems', min, 'array'])
   },
 
   maxItems: max => {
     if (!Number.isInteger(max)) throw new Error("'maxItems' must be a integer")
-    return setAttribute({ schema, options }, ['maxItems', max, 'array'])
+    return setAttribute({ schema, ...options }, ['maxItems', max, 'array'])
   },
 
   asObject: () => FluentSchema({ schema: { ...schema }, options }).as('object'),
@@ -433,14 +451,14 @@ const FluentSchema = (
         "'additionalProperties' must be a boolean or a FluentSchema"
       )
     if (value === false) {
-      return setAttribute({ schema, options }, [
+      return setAttribute({ schema, ...options }, [
         'additionalProperties',
         false,
         'object',
       ])
     }
     const { $schema, ...rest } = value.valueOf()
-    return setAttribute({ schema, options }, [
+    return setAttribute({ schema, ...options }, [
       'additionalProperties',
       { ...rest },
       'array',
@@ -450,13 +468,21 @@ const FluentSchema = (
   maxProperties: max => {
     if (!Number.isInteger(max))
       throw new Error("'maxProperties' must be a Integer")
-    return setAttribute({ schema, options }, ['maxProperties', max, 'object'])
+    return setAttribute({ schema, ...options }, [
+      'maxProperties',
+      max,
+      'object',
+    ])
   },
 
   minProperties: min => {
     if (!Number.isInteger(min))
       throw new Error("'minProperties' must be a Integer")
-    return setAttribute({ schema, options }, ['minProperties', min, 'object'])
+    return setAttribute({ schema, ...options }, [
+      'minProperties',
+      min,
+      'object',
+    ])
   },
 
   patternProperties: options => {
@@ -470,7 +496,7 @@ const FluentSchema = (
         [pattern]: omit(schema.valueOf(), ['$schema']),
       }
     }, {})
-    return setAttribute({ schema, options }, [
+    return setAttribute({ schema, ...options }, [
       'patternProperties',
       values,
       'object',
@@ -490,13 +516,17 @@ const FluentSchema = (
           : omit(schema.valueOf(), ['$schema', 'type', 'definitions']),
       }
     }, {})
-    return setAttribute({ schema, options }, ['dependencies', values, 'object'])
+    return setAttribute({ schema, ...options }, [
+      'dependencies',
+      values,
+      'object',
+    ])
   },
 
   propertyNames: obj => {
     if (!isFluentSchema(obj))
       throw new Error("'propertyNames' must be a FluentSchema")
-    return setAttribute({ schema, options }, [
+    return setAttribute({ schema, ...options }, [
       'propertyNames',
       omit(obj.valueOf(), ['$schema']),
       'object',
@@ -506,7 +536,7 @@ const FluentSchema = (
   asNull: () => FluentSchema({ schema: { ...schema }, options }).as('null'),
 
   as: type => {
-    return setAttribute({ schema, options }, ['type', type])
+    return setAttribute({ schema, ...options }, ['type', type])
   },
 
   ifThen: (ifClause, thenClause) => {
@@ -529,10 +559,18 @@ const FluentSchema = (
     return FluentSchema({
       schema: {
         ...schema,
-        if: patchIdsWithParentId(ifClauseSchema, '#if'),
-        then: patchIdsWithParentId(thenClauseSchema, '#then'),
+        if: patchIdsWithParentId({
+          schema: ifClauseSchema,
+          ...options,
+          parentId: '#if',
+        }),
+        then: patchIdsWithParentId({
+          schema: thenClauseSchema,
+          ...options,
+          parentId: '#then',
+        }),
       },
-      options,
+      ...options,
     })
   },
 
@@ -564,11 +602,23 @@ const FluentSchema = (
     return FluentSchema({
       schema: {
         ...schema,
-        if: patchIdsWithParentId(ifClauseSchema, '#if'),
-        then: patchIdsWithParentId(thenClauseSchema, '#then'),
-        else: patchIdsWithParentId(elseClauseSchema, '#else'),
+        if: patchIdsWithParentId({
+          schema: ifClauseSchema,
+          ...options,
+          parentId: '#if',
+        }),
+        then: patchIdsWithParentId({
+          schema: thenClauseSchema,
+          ...options,
+          parentId: '#then',
+        }),
+        else: patchIdsWithParentId({
+          schema: elseClauseSchema,
+          ...options,
+          parentId: '#else',
+        }),
       },
-      options,
+      ...options,
     })
   },
 

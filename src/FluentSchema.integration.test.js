@@ -146,6 +146,7 @@ describe('FluentSchema', () => {
       .definition(
         'address',
         FluentSchema()
+          .id('#address')
           .prop('country')
           .prop('city')
           .prop('zipcode')
@@ -155,7 +156,7 @@ describe('FluentSchema', () => {
       .prop('password')
       .required()
       .prop('address')
-      .ref('#definitions/address')
+      .ref('#address')
       .required()
       .prop(
         'role',
@@ -231,7 +232,7 @@ describe('FluentSchema', () => {
             keyword: 'type',
             message: 'should be string',
             params: { type: 'string' },
-            schemaPath: '#definitions/address/properties/city/type',
+            schemaPath: '#address/properties/city/type',
           },
         ])
         expect(valid).not.toBeTruthy()

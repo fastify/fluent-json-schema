@@ -72,7 +72,7 @@ const FORMATS = {
 }
 
 // TODO LS looking for a better name
-const patchIdsWithParentId = (schema, parentId) => {
+const patchIdsWithParentId = ({ schema, generateIds, parentId }) => {
   const properties = Object.entries(schema.properties || {})
   return properties.length === 0
     ? {
@@ -81,14 +81,23 @@ const patchIdsWithParentId = (schema, parentId) => {
       }
     : {
         ...schema,
-        properties: properties.reduce((memo, [key, prop]) => {
-          return {
-            ...memo,
-            [key]: {
-              ...prop,
-              $id: `${parentId}/${prop.$id.replace('#', '')}`, // e.g. #properties/foo/properties/bar
-            },
-          }
+        properties: properties.reduce((memo, [key, props]) => {
+          return !props.$id
+            ? {
+                ...memo,
+                [key]: {
+                  ...props,
+                },
+              }
+            : {
+                ...memo,
+                [key]: {
+                  ...props,
+                  $id: generateIds
+                    ? `${parentId}/${props.$id.replace('#', '')}`
+                    : props.$id, // e.g. #properties/foo/properties/bar
+                },
+              }
         }, {}),
       }
 }

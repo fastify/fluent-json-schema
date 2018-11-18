@@ -1,11 +1,150 @@
 const { FluentSchema, FORMATS } = require('./FluentSchema')
 
 describe('FluentSchema', () => {
-  describe('defaults', () => {
-    it('defined', () => {
+  it('defined', () => {
+    expect(FluentSchema).toBeDefined()
+  })
+
+  describe('constructor', () => {
+    it('without params', () => {
       expect(FluentSchema().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',
+      })
+    })
+
+    describe('generatedIds', () => {
+      describe('properties', () => {
+        it('true', () => {
+          expect(
+            FluentSchema({ generateIds: true })
+              .prop('prop')
+              .valueOf()
+          ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: { prop: { $id: '#properties/prop', type: 'string' } },
+            type: 'object',
+          })
+        })
+
+        it('false', () => {
+          expect(
+            FluentSchema()
+              .prop('prop')
+              .valueOf()
+          ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: { prop: { type: 'string' } },
+            type: 'object',
+          })
+        })
+
+        it('nested', () => {
+          const id = 'myId'
+          expect(
+            FluentSchema()
+              .prop(
+                'foo',
+                FluentSchema()
+                  .prop('bar')
+                  .id(id)
+                  .required()
+              )
+              .valueOf()
+          ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              foo: {
+                properties: {
+                  bar: { $id: 'myId', type: 'string' },
+                },
+                required: ['bar'],
+                type: 'object',
+              },
+            },
+            type: 'object',
+          })
+        })
+      })
+
+      describe('definitions', () => {
+        it('true', () => {
+          expect(
+            FluentSchema({ generateIds: true })
+              .definition(
+                'entity',
+                FluentSchema()
+                  .prop('foo')
+                  .prop('bar')
+              )
+              .valueOf()
+          ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            definitions: {
+              entity: {
+                $id: '#definitions/entity',
+                properties: {
+                  bar: { type: 'string' },
+                  foo: { type: 'string' },
+                },
+                type: 'object',
+              },
+            },
+            type: 'object',
+          })
+        })
+
+        it('false', () => {
+          expect(
+            FluentSchema({ generateIds: false })
+              .definition(
+                'entity',
+                FluentSchema()
+                  .id('myCustomId')
+                  .prop('foo')
+              )
+              .valueOf()
+          ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            definitions: {
+              entity: {
+                $id: 'myCustomId',
+                properties: {
+                  foo: { type: 'string' },
+                },
+                type: 'object',
+              },
+            },
+            type: 'object',
+          })
+        })
+
+        it('nested', () => {
+          const id = 'myId'
+          expect(
+            FluentSchema()
+              .prop(
+                'foo',
+                FluentSchema()
+                  .prop('bar')
+                  .id(id)
+                  .required()
+              )
+              .valueOf()
+          ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              foo: {
+                properties: {
+                  bar: { $id: 'myId', type: 'string' },
+                },
+                required: ['bar'],
+                type: 'object',
+              },
+            },
+            type: 'object',
+          })
+        })
       })
     })
   })
@@ -18,7 +157,7 @@ describe('FluentSchema', () => {
   })
 
   describe('definition', () => {
-    it('sets a definition', () => {
+    it('add', () => {
       expect(
         FluentSchema()
           .definition(
@@ -30,15 +169,39 @@ describe('FluentSchema', () => {
           .valueOf().definitions
       ).toEqual({
         foo: {
-          $id: '#definitions/foo',
           type: 'object',
           properties: {
             foo: {
-              $id: '#definitions/foo/properties/foo',
               type: 'string',
             },
             bar: {
-              $id: '#definitions/foo/properties/bar',
+              type: 'string',
+            },
+          },
+        },
+      })
+    })
+
+    it('with id', () => {
+      expect(
+        FluentSchema()
+          .definition(
+            'foo',
+            FluentSchema()
+              .id('myDefId')
+              .prop('foo')
+              .prop('bar')
+          )
+          .valueOf().definitions
+      ).toEqual({
+        foo: {
+          $id: 'myDefId',
+          type: 'object',
+          properties: {
+            foo: {
+              type: 'string',
+            },
+            bar: {
               type: 'string',
             },
           },
@@ -204,7 +367,6 @@ describe('FluentSchema', () => {
             $schema: 'http://json-schema.org/draft-07/schema#',
             properties: {
               prop: {
-                $id: '#properties/prop',
                 type: 'string',
                 enum: ['ONE', 'TWO'],
               },
@@ -225,7 +387,6 @@ describe('FluentSchema', () => {
             $schema: 'http://json-schema.org/draft-07/schema#',
             properties: {
               prop: {
-                $id: '#properties/prop',
                 type: 'string',
                 const: 'ONE',
               },
@@ -267,7 +428,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'string',
                   minLength: 5,
                 },
@@ -298,7 +458,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'string',
                   maxLength: 10,
                 },
@@ -329,7 +488,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'string',
                   format: FORMATS.DATE,
                 },
@@ -362,7 +520,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'string',
                   pattern: '.*',
                 },
@@ -382,7 +539,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'string',
                   pattern: '.*',
                 },
@@ -434,7 +590,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'number',
                   minimum: 5.1,
                 },
@@ -474,7 +629,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'number',
                   maximum: 5.1,
                 },
@@ -514,7 +668,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'number',
                   multipleOf: 5.1,
                 },
@@ -554,7 +707,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'number',
                   exclusiveMinimum: 5.1,
                 },
@@ -596,7 +748,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'number',
                   exclusiveMaximum: 5.1,
                 },
@@ -694,7 +845,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 list: {
-                  $id: '#properties/list',
                   type: 'array',
                   items: { type: 'number' },
                 },
@@ -713,7 +863,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 list: {
-                  $id: '#properties/list',
                   type: 'array',
                   items: [{ type: 'number' }, { type: 'string' }],
                 },
@@ -746,7 +895,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 list: {
-                  $id: '#properties/list',
                   type: 'array',
                   items: [{ type: 'number' }, { type: 'string' }],
                   additionalItems: { type: 'string' },
@@ -767,7 +915,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 list: {
-                  $id: '#properties/list',
                   type: 'array',
                   items: [{ type: 'number' }, { type: 'string' }],
                   additionalItems: false,
@@ -800,7 +947,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 list: {
-                  $id: '#properties/list',
                   type: 'array',
                   items: [{ type: 'number' }, { type: 'string' }],
                   contains: { type: 'string' },
@@ -821,7 +967,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 list: {
-                  $id: '#properties/list',
                   type: 'array',
                   items: [{ type: 'number' }, { type: 'string' }],
                   additionalItems: false,
@@ -854,7 +999,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 list: {
-                  $id: '#properties/list',
                   type: 'array',
                   items: [{ type: 'number' }, { type: 'string' }],
                   uniqueItems: true,
@@ -888,11 +1032,9 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 prop: {
-                  $id: '#properties/prop',
                   type: 'string',
                 },
                 list: {
-                  $id: '#properties/list',
                   type: 'array',
                   items: [{ type: 'number' }, { type: 'string' }],
                   minItems: 3,
@@ -925,7 +1067,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 list: {
-                  $id: '#properties/list',
                   type: 'array',
                   items: [{ type: 'number' }, { type: 'string' }],
                   maxItems: 5,
@@ -974,7 +1115,6 @@ describe('FluentSchema', () => {
             ).toEqual({
               prop: {
                 type: 'string',
-                $id: '#properties/prop',
               },
             })
           })
@@ -987,7 +1127,6 @@ describe('FluentSchema', () => {
                   .valueOf().properties.foo.properties
               ).toEqual({
                 bar: {
-                  $id: '#properties/foo/properties/bar',
                   type: 'string',
                 },
               })
@@ -1005,7 +1144,6 @@ describe('FluentSchema', () => {
                   .valueOf().properties
               ).toEqual({
                 foo: {
-                  $id: '#properties/foo',
                   type: 'string',
                   title: 'Foo',
                 },
@@ -1034,7 +1172,7 @@ describe('FluentSchema', () => {
                 .prop('prop')
                 .asNumber()
                 .valueOf().properties
-            ).toEqual({ prop: { $id: '#properties/prop', type: 'number' } })
+            ).toEqual({ prop: { type: 'number' } })
           })
 
           it('with a default', () => {
@@ -1045,7 +1183,7 @@ describe('FluentSchema', () => {
                 .default(3)
                 .valueOf().properties
             ).toEqual({
-              prop: { $id: '#properties/prop', type: 'number', default: 3 },
+              prop: { type: 'number', default: 3 },
             })
           })
 
@@ -1062,7 +1200,6 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 id: {
-                  $id: '#properties/id',
                   description: 'The unique identifier for a product',
                   type: 'number',
                 },
@@ -1171,7 +1308,7 @@ describe('FluentSchema', () => {
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
               patternProperties: { '^fo.*$': { type: 'string' } },
-              properties: { foo: { $id: '#properties/foo', type: 'string' } },
+              properties: { foo: { type: 'string' } },
               type: 'object',
             })
           })
@@ -1205,8 +1342,8 @@ describe('FluentSchema', () => {
               $schema: 'http://json-schema.org/draft-07/schema#',
               dependencies: { foo: ['bar'] },
               properties: {
-                bar: { $id: '#properties/bar', type: 'string' },
-                foo: { $id: '#properties/foo', type: 'string' },
+                bar: { type: 'string' },
+                foo: { type: 'string' },
               },
               type: 'object',
             })
@@ -1228,11 +1365,11 @@ describe('FluentSchema', () => {
               dependencies: {
                 foo: {
                   properties: {
-                    bar: { $id: '#properties/bar', type: 'number' },
+                    bar: { type: 'number' },
                   },
                 },
               },
-              properties: { foo: { $id: '#properties/foo', type: 'string' } },
+              properties: { foo: { type: 'string' } },
               type: 'object',
             })
           })
@@ -1319,11 +1456,7 @@ describe('FluentSchema', () => {
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             prop: {
-              $id: '#properties/prop',
-              allOf: [
-                { $id: '#properties/boolean', type: 'boolean' },
-                { $id: '#properties/string', type: 'string' },
-              ],
+              allOf: [{ type: 'boolean' }, { type: 'string' }],
             },
           },
           type: 'object',
@@ -1346,11 +1479,7 @@ describe('FluentSchema', () => {
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             prop: {
-              $id: '#properties/prop',
-              anyOf: [
-                { $id: '#properties/boolean', type: 'boolean' },
-                { $id: '#properties/string', type: 'string' },
-              ],
+              anyOf: [{ type: 'boolean' }, { type: 'string' }],
             },
           },
           type: 'object',
@@ -1373,11 +1502,7 @@ describe('FluentSchema', () => {
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             prop: {
-              $id: '#properties/prop',
-              anyOf: [
-                { $id: '#properties/boolean', type: 'boolean' },
-                { $id: '#properties/string', type: 'string' },
-              ],
+              anyOf: [{ type: 'boolean' }, { type: 'string' }],
             },
           },
           type: 'object',
@@ -1402,12 +1527,8 @@ describe('FluentSchema', () => {
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             prop: {
-              $id: '#properties/prop',
               not: {
-                anyOf: [
-                  { $id: '#properties/boolean', type: 'boolean' },
-                  { $id: '#properties/number', type: 'number' },
-                ],
+                anyOf: [{ type: 'boolean' }, { type: 'number' }],
               },
             },
           },
@@ -1436,7 +1557,6 @@ describe('FluentSchema', () => {
         $schema: 'http://json-schema.org/draft-07/schema#',
         properties: {
           prop: {
-            $id: '#properties/prop',
             type: 'string',
             maxLength: 5,
           },
@@ -1444,7 +1564,6 @@ describe('FluentSchema', () => {
         if: {
           properties: {
             prop: {
-              $id: '#if/properties/prop',
               type: 'string',
               maxLength: 5,
             },
@@ -1453,7 +1572,6 @@ describe('FluentSchema', () => {
         then: {
           properties: {
             extraProp: {
-              $id: '#then/properties/extraProp',
               type: 'string',
             },
           },
@@ -1486,7 +1604,6 @@ describe('FluentSchema', () => {
         $schema: 'http://json-schema.org/draft-07/schema#',
         properties: {
           prop: {
-            $id: '#properties/prop',
             type: 'string',
             maxLength: 5,
           },
@@ -1494,7 +1611,6 @@ describe('FluentSchema', () => {
         if: {
           properties: {
             prop: {
-              $id: '#if/properties/prop',
               type: 'string',
               maxLength: 5,
             },
@@ -1503,7 +1619,6 @@ describe('FluentSchema', () => {
         then: {
           properties: {
             extraProp: {
-              $id: '#then/properties/extraProp',
               type: 'string',
             },
           },
@@ -1512,7 +1627,6 @@ describe('FluentSchema', () => {
         else: {
           properties: {
             elseProp: {
-              $id: '#else/properties/elseProp',
               type: 'string',
             },
           },
@@ -1532,6 +1646,7 @@ describe('FluentSchema', () => {
       .definition(
         'address',
         FluentSchema()
+          .id('#address')
           .prop('country')
           .prop('city')
           .prop('zipcode')
@@ -1541,7 +1656,7 @@ describe('FluentSchema', () => {
       .prop('password')
       .required()
       .prop('address')
-      .ref('#definitions/address')
+      .ref('#address')
       .required()
       .prop(
         'role',
@@ -1559,19 +1674,16 @@ describe('FluentSchema', () => {
       definitions: {
         address: {
           type: 'object',
-          $id: '#definitions/address',
+          $id: '#address',
           properties: {
             country: {
               type: 'string',
-              $id: '#definitions/address/properties/country',
             },
             city: {
               type: 'string',
-              $id: '#definitions/address/properties/city',
             },
             zipcode: {
               type: 'string',
-              $id: '#definitions/address/properties/zipcode',
             },
           },
         },
@@ -1585,17 +1697,14 @@ describe('FluentSchema', () => {
       properties: {
         username: {
           type: 'string',
-          $id: '#properties/username',
         },
         password: {
           type: 'string',
-          $id: '#properties/password',
         },
         address: {
-          $ref: '#definitions/address',
+          $ref: '#address',
         },
         age: {
-          $id: '#properties/age',
           type: 'number',
         },
         role: {
@@ -1604,11 +1713,9 @@ describe('FluentSchema', () => {
           properties: {
             name: {
               type: 'string',
-              $id: '#properties/role/properties/name',
             },
             permissions: {
               type: 'string',
-              $id: '#properties/role/properties/permissions',
             },
           },
         },

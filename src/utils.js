@@ -74,32 +74,24 @@ const FORMATS = {
 // TODO LS looking for a better name
 const patchIdsWithParentId = ({ schema, generateIds, parentId }) => {
   const properties = Object.entries(schema.properties || {})
-  return properties.length === 0
-    ? {
-        ...schema,
-        $id: parentId,
+  if (properties.length === 0) return schema
+  return {
+    ...schema,
+    properties: properties.reduce((memo, [key, props]) => {
+      const target = props.def ? 'definitions' : 'properties'
+      const $id = props.$id || (generateIds ? `#${target}/${key}` : undefined)
+      return {
+        ...memo,
+        [key]: {
+          ...props,
+          $id:
+            generateIds && parentId
+              ? `${parentId}/${$id.replace('#', '')}`
+              : $id, // e.g. #properties/foo/properties/bar
+        },
       }
-    : {
-        ...schema,
-        properties: properties.reduce((memo, [key, props]) => {
-          return !props.$id
-            ? {
-                ...memo,
-                [key]: {
-                  ...props,
-                },
-              }
-            : {
-                ...memo,
-                [key]: {
-                  ...props,
-                  $id: generateIds
-                    ? `${parentId}/${props.$id.replace('#', '')}`
-                    : props.$id, // e.g. #properties/foo/properties/bar
-                },
-              }
-        }, {}),
-      }
+    }, {}),
+  }
 }
 
 module.exports = {

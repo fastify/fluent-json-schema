@@ -6,17 +6,26 @@ const userSchema = FluentSchema()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
   .description('A simple user')
-  .prop('email')
-  .asString()
-  .format(FORMATS.EMAIL)
+  .prop(
+    'email',
+    FluentSchema()
+      .asString()
+      .format(FORMATS.EMAIL)
+  )
   .required()
-  .prop('password')
-  .asString()
-  .minLength(8)
+  .prop(
+    'password',
+    FluentSchema()
+      .asString()
+      .minLength(8)
+  )
   .required()
-  .prop('role')
-  .enum(['ADMIN', 'USER'])
-  .default('USER')
+  .prop(
+    'role',
+    FluentSchema()
+      .enum(['ADMIN', 'USER'])
+      .default('USER')
+  )
   .definition(
     'address',
     FluentSchema()

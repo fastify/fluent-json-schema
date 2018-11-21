@@ -13,7 +13,6 @@ or
 ## Usage
 
 ```javascript
-const { FluentSchema, FORMATS } = require('fluent-schema')
 const schema = FluentSchema()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
@@ -23,14 +22,15 @@ const schema = FluentSchema()
     FluentSchema()
       .asString()
       .format(FORMATS.EMAIL)
-      .required()
   )
+  .required()
   .prop(
     'password',
-    FluentSchema.asString()
+    FluentSchema()
+      .asString()
       .minLength(8)
-      .required()
   )
+  .required()
   .prop(
     'role',
     FluentSchema()
@@ -60,10 +60,12 @@ Schema generated:
 
 ```json
 {
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "address": {
       "type": "object",
       "$id": "#definitions/address",
+      "required": ["line1", "country", "city", "zipcode"],
       "properties": {
         "line1": {
           "type": "string",
@@ -81,17 +83,14 @@ Schema generated:
           "type": "string",
           "$id": "#definitions/address/properties/city"
         },
-        "zipcoce": {
+        "zipcode": {
           "type": "string",
           "$id": "#definitions/address/properties/zipcode"
         }
-      },
-      "required": ["line1", "country", "city", "zipcode"]
+      }
     }
   },
-  "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["email", "password"],
   "$id": "http://foo/user",
   "title": "My First Fluent JSON Schema",
   "description": "A simple user",
@@ -107,15 +106,16 @@ Schema generated:
       "minLength": 8
     },
     "role": {
-      "type": "string",
+      "type": "object",
+      "default": "USER",
       "$id": "#properties/role",
-      "enum": ["ADMIN", "USER"],
-      "default": "USER"
+      "enum": ["ADMIN", "USER"]
     },
     "address": {
       "$ref": "#definitions/address"
     }
-  }
+  },
+  "required": ["email", "password"]
 }
 ```
 

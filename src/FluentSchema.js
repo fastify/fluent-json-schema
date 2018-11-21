@@ -45,14 +45,43 @@ const setAttribute = ({ schema, ...options }, attribute) => {
 const FluentSchema = (
   { schema = initialState, ...options } = { generateIds: false }
 ) => ({
-  id: $id => {
-    return setAttribute({ schema, ...options }, ['$id', $id, 'any'])
+  /**
+   * It defines a URI for the schema, and the base URI that other URI references within the schema are resolved against.
+   *
+   * {@link https://json-schema.org/latest/json-schema-core.html#id-keyword|reference}
+   * @param {string} id - an #id
+   * @returns {FluentSchema}
+   */
+
+  id: id => {
+    if (!id)
+      return new Error(
+        `id should not be an empty fragment <#> or an empty string <> (e.g. #myId)`
+      )
+    return setAttribute({ schema, ...options }, ['$id', id, 'any'])
   },
+
+  /**
+   * It can be used to decorate a user interface with information about the data produced by this user interface. A title will preferably be short.
+   *
+   * {@link https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.1|reference}
+   * @param {string} title
+   * @returns {FluentSchema}
+   */
 
   title: title => {
     return setAttribute({ schema, ...options }, ['title', title, 'any'])
   },
 
+  /**
+   * It can be used to decorate a user interface with information about the data
+   * produced by this user interface. A description provides explanation about
+   * the purpose of the instance described by the schema.
+   *
+   * {@link https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.1|reference}
+   * @param {string} description
+   * @returns {FluentSchema}
+   */
   description: description => {
     return setAttribute({ schema, ...options }, [
       'description',
@@ -61,39 +90,65 @@ const FluentSchema = (
     ])
   },
 
+  /**
+   * The value of this keyword MUST be an array.
+   * There are no restrictions placed on the values within the array.
+   *
+   * {@link https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.4|reference}
+   * @param {string} examples
+   * @returns {FluentSchema}
+   */
+
   examples: examples => {
     if (!Array.isArray(examples))
       throw new Error("'examples' must be an array e.g. ['1', 'one', 'foo']")
     return setAttribute({ schema, ...options }, ['examples', examples, 'any'])
   },
 
-  ref: $ref => {
-    const currentProp = last(schema.properties)
-    if (currentProp) {
-      const { name } = currentProp
-      return FluentSchema({ schema: { ...schema }, options }).prop(name, {
-        $ref,
-      })
-    }
-    // TODO LS not sure if a schema can have a $ref
-    return FluentSchema({ ...{ schema, ...options }, $ref })
+  /**
+   * The value must be a valid id e.g. #properties/foo
+   *
+   * @param {string} ref
+   * @returns {FluentSchema}
+   */
+
+  ref: ref => {
+    return setAttribute({ schema, ...options }, ['$ref', ref, 'any'])
   },
 
+  /**
+   * The "definitions" keywords provides a standardized location for schema authors to inline re-usable JSON Schemas into a more general schema.
+   * There are no restrictions placed on the values within the array.
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.9}
+   * @param {string} name
+   * @param {FluentSchema} props
+   * @returns {FluentSchema}
+   */
+
   definition: (name, props = {}) =>
-    FluentSchema({ schema: { ...schema }, ...options }).prop(name, {
+    FluentSchema({ schema, ...options }).prop(name, {
       ...props,
       def: true,
     }),
 
+  /**
+   * The value of "properties" MUST be an object. Each value of this object MUST be a valid JSON Schema
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.4}
+   * @param {string} name
+   * @param {FluentSchema} props
+   * @returns {FluentSchema}
+   */
+
   prop: (name, props = {}) => {
     const target = props.def ? 'definitions' : 'properties'
-    props = props.valueOf()
+    let attributes = props.valueOf()
     const $id =
-      props.$id || (options.generateIds ? `#${target}/${name}` : undefined)
-    // console.log('generateIds:', options.generateIds)
-    const attributes = isFluentSchema(props) /*&& options.generateIds*/
-      ? patchIdsWithParentId({ schema: props, parentId: $id, ...options })
-      : props
+      attributes.$id || (options.generateIds ? `#${target}/${name}` : undefined)
+    attributes = isFluentSchema(props)
+      ? patchIdsWithParentId({ schema: attributes, parentId: $id, ...options })
+      : attributes
 
     const {
       type = hasCombiningKeywords(attributes) ? undefined : 'string',
@@ -206,19 +261,53 @@ const FluentSchema = (
     })
   },
 
+  /**
+   * The value of this keyword MUST be an array. This array SHOULD have at least one element. Elements in the array SHOULD be unique.
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.2}
+   * @param {array} values
+   * @returns {FluentSchema}
+   */
+
   enum: values => {
     if (!Array.isArray(values))
       throw new Error("'enum' must be an array e.g. ['1', 'one', 'foo']")
     return setAttribute({ schema, ...options }, ['enum', values, 'any'])
   },
 
+  /**
+   * The value of this keyword MAY be of any type, including null.
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.3}
+   * @param value
+   * @returns {FluentSchema}
+   */
+
   const: value => {
     return setAttribute({ schema, ...options }, ['const', value, 'any'])
   },
 
+  /**
+   * There are no restrictions placed on the value of this keyword.
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.2}
+   * @param defaults
+   * @returns {FluentSchema}
+   */
+
   default: defaults => {
     return setAttribute({ schema, ...options }, ['defaults', defaults, 'any'])
   },
+
+  /**
+   * Required' has to be chained to a property:
+   * Examples:
+   * - FluentSchema().prop('prop').required()
+   * - FluentSchema().prop('prop', FluentSchema().asNumber()).required()
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.3}
+   * @returns {FluentSchema}
+   */
 
   required: () => {
     const currentProp = last(schema.properties)
@@ -231,6 +320,13 @@ const FluentSchema = (
       options,
     })
   },
+
+  /**
+   * Can be applied only to a not followed by a anyOf, allOf or oneOf
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.4}
+   * @returns {FluentSchema}
+   */
 
   not: () => {
     const [currentProp, ...properties] = [...schema.properties].reverse()
@@ -246,6 +342,14 @@ const FluentSchema = (
     )
   },
 
+  /**
+   * It  MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.3}
+   * @param {array} attributes
+   * @returns {FluentSchema}
+   */
+
   anyOf: attributes => {
     const currentProp = last(schema.properties)
     const { name, not, type, ...props } = currentProp
@@ -259,6 +363,14 @@ const FluentSchema = (
     }
     return FluentSchema({ schema: { ...schema }, options }).prop(name, attr)
   },
+
+  /**
+   * It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.1}
+   * @param {array} attributes
+   * @returns {FluentSchema}
+   */
 
   allOf: attributes => {
     const currentProp = last(schema.properties)
@@ -274,6 +386,14 @@ const FluentSchema = (
     return FluentSchema({ schema: { ...schema }, options }).prop(name, attr)
   },
 
+  /**
+   * It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
+   *
+   * @param {array} attributes
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.2}
+   * @returns {FluentSchema}
+   */
+
   oneOf: attributes => {
     const currentProp = last(schema.properties)
     const { name, not, type, ...props } = currentProp
@@ -288,7 +408,22 @@ const FluentSchema = (
     return FluentSchema({ schema: { ...schema }, options }).prop(name, attr)
   },
 
+  /**
+   * Set a property to type string
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * @returns {FluentSchema}
+   */
+
   asString: () => FluentSchema({ schema: { ...schema }, options }).as('string'),
+
+  /**
+   * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
+   * The length of a string instance is defined as the number of its characters as defined by RFC 7159 [RFC7159].
+   *
+   * @param {number} min
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.2}
+   * @returns {FluentSchema}
+   */
 
   minLength: min => {
     if (!Number.isInteger(min))
@@ -296,11 +431,28 @@ const FluentSchema = (
     return setAttribute({ schema, ...options }, ['minLength', min, 'string'])
   },
 
+  /**
+   * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
+   * The length of a string instance is defined as the number of its characters as defined by RFC 7159 [RFC7159].
+   *
+   * @param {number} max
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.2}
+   * @returns {FluentSchema}
+   */
+
   maxLength: max => {
     if (!Number.isInteger(max))
       throw new Error("'maxLength' must be an Integer")
     return setAttribute({ schema, ...options }, ['maxLength', max, 'string'])
   },
+
+  /**
+   * A string value can be RELATIVE_JSON_POINTER, JSON_POINTER, UUID, REGEX, IPV6, IPV4, HOSTNAME, EMAIL, URL, URI_TEMPLATE, URI_REFERENCE, URI, TIME, DATE,
+   *
+   * @param {string} format
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.7.3}
+   * @returns {FluentSchema}
+   */
 
   format: format => {
     if (!Object.values(FORMATS).includes(format))
@@ -309,34 +461,80 @@ const FluentSchema = (
       )
     return setAttribute({ schema, ...options }, ['format', format, 'string'])
   },
+
   // TODO LS accept regex as well
+  /**
+   *  This string SHOULD be a valid regular expression, according to the ECMA 262 regular expression dialect.
+   *  A string instance is considered valid if the regular expression matches the instance successfully.
+   *
+   * @param {string} pattern
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.3}
+   * @returns {FluentSchema}
+   */
   pattern: pattern => {
     if (!typeof pattern === 'string')
       throw new Error(`'pattern' must be a string`)
     return setAttribute({ schema, ...options }, ['pattern', pattern, 'string'])
   },
 
+  /**
+   * Set a property to type number
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * @returns {FluentSchema}
+   */
+
   asNumber: () => FluentSchema({ schema: { ...schema }, options }).as('number'),
+
+  /**
+   * It represents  an inclusive lower limit for a numeric instance.
+   *
+   * @param {number} min
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.4}
+   * @returns {FluentSchema}
+   */
 
   minimum: min => {
     if (typeof min !== 'number') throw new Error("'minimum' must be a Number")
     return setAttribute({ schema, ...options }, ['minimum', min, 'number'])
   },
 
-  exclusiveMinimum: max => {
-    if (typeof max !== 'number')
+  /**
+   * It represents an exclusive lower limit for a numeric instance.
+   *
+   * * @param {number} min
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.5}
+   * @returns {FluentSchema}
+   */
+
+  exclusiveMinimum: min => {
+    if (typeof min !== 'number')
       throw new Error("'exclusiveMinimum' must be a Number")
     return setAttribute({ schema, ...options }, [
       'exclusiveMinimum',
-      max,
+      min,
       'number',
     ])
   },
+
+  /**
+   * It represents  an inclusive upper limit for a numeric instance.
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.2}
+   * @returns {FluentSchema}
+   */
 
   maximum: max => {
     if (typeof max !== 'number') throw new Error("'maximum' must be a Number")
     return setAttribute({ schema, ...options }, ['maximum', max, 'number'])
   },
+
+  /**
+   * It represents an exclusive upper limit for a numeric instance.
+   *
+   * @param {number} max
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.3}
+   * @returns {FluentSchema}
+   */
 
   exclusiveMaximum: max => {
     if (typeof max !== 'number')
@@ -348,6 +546,14 @@ const FluentSchema = (
     ])
   },
 
+  /**
+   * It's strictly greater than 0.
+   *
+   * @param {number} multiple
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.1}
+   * @returns {FluentSchema}
+   */
+
   multipleOf: multiple => {
     if (typeof multiple !== 'number')
       throw new Error("'multipleOf' must be an Integer")
@@ -358,50 +564,98 @@ const FluentSchema = (
     ])
   },
 
+  /**
+   * Set a property to type boolean
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * @returns {FluentSchema}
+   */
+
   asBoolean: () =>
     FluentSchema({ schema: { ...schema }, options }).as('boolean'),
+
+  /**
+   * Set a property to type integer
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * @returns {FluentSchema}
+   */
 
   asInteger: () =>
     FluentSchema({ schema: { ...schema }, options }).as('integer'),
 
+  /**
+   * Set a property to type array
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * @returns {FluentSchema}
+   */
+
   asArray: () => FluentSchema({ schema: { ...schema }, options }).as('array'),
 
-  items: value => {
+  /**
+   * This keyword determines how child instances validate for arrays, and does not directly validate the immediate instance itself.
+   * If "items" is a schema, validation succeeds if all elements in the array successfully validate against that schema.
+   * If "items" is an array of schemas, validation succeeds if each element of the instance validates against the schema at the same position, if any.
+   * Omitting this keyword has the same behavior as an empty schema.
+   *
+   * @param {FluentSchema|FluentSchema[]} items
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.1}
+   * @returns {FluentSchema}
+   */
+
+  items: items => {
     if (
-      !isFluentSchema(value) &&
-      !(Array.isArray(value) && value.filter(v => isFluentSchema(v)).length > 0)
+      !isFluentSchema(items) &&
+      !(Array.isArray(items) && items.filter(v => isFluentSchema(v)).length > 0)
     )
       throw new Error(
         "'items' must be a FluentSchema or an array of FluentSchema"
       )
-    if (Array.isArray(value)) {
-      const values = value.map(v => {
+    if (Array.isArray(items)) {
+      const values = items.map(v => {
         const { $schema, ...rest } = v.valueOf()
         return rest
       })
       return setAttribute({ schema, ...options }, ['items', values, 'array'])
     }
-    const { $schema, ...rest } = value.valueOf()
+    const { $schema, ...rest } = items.valueOf()
     return setAttribute({ schema, ...options }, ['items', { ...rest }, 'array'])
   },
 
-  additionalItems: value => {
-    if (typeof value !== 'boolean' && !isFluentSchema(value))
+  /**
+   * This keyword determines how child instances validate for arrays, and does not directly validate the immediate instance itself.
+   *
+   * @param {FluentSchema|boolean} items
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.2}
+   * @returns {FluentSchema}
+   */
+
+  additionalItems: items => {
+    if (typeof items !== 'boolean' && !isFluentSchema(items))
       throw new Error("'additionalItems' must be a boolean or a FluentSchema")
-    if (value === false) {
+    if (items === false) {
       return setAttribute({ schema, ...options }, [
         'additionalItems',
         false,
         'array',
       ])
     }
-    const { $schema, ...rest } = value.valueOf()
+    const { $schema, ...rest } = items.valueOf()
     return setAttribute({ schema, ...options }, [
       'additionalItems',
       { ...rest },
       'array',
     ])
   },
+
+  /**
+   * An array instance is valid against "contains" if at least one of its elements is valid against the given schema.
+   *
+   * @param {FluentSchema|boolean} value
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.2}
+   * @returns {FluentSchema}
+   */
 
   contains: value => {
     if (typeof value !== 'boolean' && !isFluentSchema(value))
@@ -423,6 +677,16 @@ const FluentSchema = (
     ])
   },
 
+  /**
+   * If this keyword has boolean value false, the instance validates successfully.
+   * If it has boolean value true, the instance validates successfully if all of its elements are unique.
+   * Omitting this keyword has the same behavior as a value of false.
+   *
+   * @param {boolean} boolean
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.5}
+   * @returns {FluentSchema}
+   */
+
   uniqueItems: boolean => {
     if (typeof boolean !== 'boolean')
       throw new Error("'uniqueItems' must be a boolean")
@@ -433,17 +697,54 @@ const FluentSchema = (
     ])
   },
 
+  /**
+   * An array instance is valid against "minItems" if its size is greater than, or equal to, the value of this keyword.
+   * Omitting this keyword has the same behavior as a value of 0.
+   *
+   * @param {number} min
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.4}
+   * @returns {FluentSchema}
+   */
+
   minItems: min => {
     if (!Number.isInteger(min)) throw new Error("'minItems' must be a integer")
     return setAttribute({ schema, ...options }, ['minItems', min, 'array'])
   },
+
+  /**
+   * An array instance is valid against "minItems" if its size is greater than, or equal to, the value of this keyword.
+   * Omitting this keyword has the same behavior as a value of 0.
+   *
+   * @param {number} max
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.3}
+   * @returns {FluentSchema}
+   */
 
   maxItems: max => {
     if (!Number.isInteger(max)) throw new Error("'maxItems' must be a integer")
     return setAttribute({ schema, ...options }, ['maxItems', max, 'array'])
   },
 
+  /**
+   * Set a property to type object
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * @returns {FluentSchema}
+   */
+
   asObject: () => FluentSchema({ schema: { ...schema }, options }).as('object'),
+
+  /**
+   * This keyword determines how child instances validate for objects, and does not directly validate the immediate instance itself.
+   * Validation with "additionalProperties" applies only to the child values of instance names that do not match any names in "properties",
+   * and do not match any regular expression in "patternProperties".
+   * For all such properties, validation succeeds if the child instance validates against the "additionalProperties" schema.
+   * Omitting this keyword has the same behavior as an empty schema.
+   *
+   * @param {FluentSchema|boolean} value
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.6}
+   * @returns {FluentSchema}
+   */
 
   additionalProperties: value => {
     if (typeof value !== 'boolean' && !isFluentSchema(value))
@@ -465,6 +766,14 @@ const FluentSchema = (
     ])
   },
 
+  /**
+   * An object instance is valid against "maxProperties" if its number of properties is less than, or equal to, the value of this keyword.
+   *
+   * @param {number} max
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.1}
+   * @returns {FluentSchema}
+   */
+
   maxProperties: max => {
     if (!Number.isInteger(max))
       throw new Error("'maxProperties' must be a Integer")
@@ -475,6 +784,14 @@ const FluentSchema = (
     ])
   },
 
+  /**
+   * An object instance is valid against "minProperties" if its number of properties is greater than, or equal to, the value of this keyword.
+   *
+   * @param {number} min
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.2}
+   * @returns {FluentSchema}
+   */
+
   minProperties: min => {
     if (!Number.isInteger(min))
       throw new Error("'minProperties' must be a Integer")
@@ -484,6 +801,18 @@ const FluentSchema = (
       'object',
     ])
   },
+
+  /**
+   * Each property name of this object SHOULD be a valid regular expression, according to the ECMA 262 regular expression dialect.
+   * Each property value of this object MUST be a valid JSON Schema.
+   * This keyword determines how child instances validate for objects, and does not directly validate the immediate instance itself.
+   * Validation of the primitive instance type against this keyword always succeeds.
+   * Validation succeeds if, for each instance name that matches any regular expressions that appear as a property name in this keyword's value, the child instance for that name successfully validates against each schema that corresponds to a matching regular expression.
+   *
+   * @param {object} options
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.5}
+   * @returns {FluentSchema}
+   */
 
   patternProperties: options => {
     const values = Object.entries(options).reduce((memo, [pattern, schema]) => {
@@ -503,8 +832,19 @@ const FluentSchema = (
     ])
   },
 
-  dependencies: opts => {
-    const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
+  /**
+   * This keyword specifies rules that are evaluated if the instance is an object and contains a certain property.
+   * This keyword's value MUST be an object. Each property specifies a dependency. Each dependency value MUST be an array or a valid JSON Schema.
+   * If the dependency value is a subschema, and the dependency key is a property in the instance, the entire instance must validate against the dependency value.
+   * If the dependency value is an array, each element in the array, if any, MUST be a string, and MUST be unique. If the dependency key is a property in the instance, each of the items in the dependency value must be a property that exists in the instance.
+   *
+   * @param {object} options
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.7}
+   * @returns {FluentSchema}
+   */
+
+  dependencies: options => {
+    const values = Object.entries(options).reduce((memo, [prop, schema]) => {
       if (!isFluentSchema(schema) && !Array.isArray(schema))
         throw new Error(
           "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': FluentSchema().asString() }"
@@ -523,21 +863,53 @@ const FluentSchema = (
     ])
   },
 
-  propertyNames: obj => {
-    if (!isFluentSchema(obj))
+  /**
+   * If the instance is an object, this keyword validates if every property name in the instance validates against the provided schema.
+   * Note the property name that the schema is testing will always be a string.
+   *
+   * @param {FluentSchema} value
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.7}
+   * @returns {FluentSchema}
+   */
+
+  propertyNames: value => {
+    if (!isFluentSchema(value))
       throw new Error("'propertyNames' must be a FluentSchema")
-    return setAttribute({ schema, ...options }, [
+    return setAttribute({ schema, ...value.valueOf() }, [
       'propertyNames',
-      omit(obj.valueOf(), ['$schema']),
+      omit(value.valueOf(), ['$schema']),
       'object',
     ])
   },
 
+  /**
+   * Set a property to type null
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * @returns {FluentSchema}
+   */
+
   asNull: () => FluentSchema({ schema: { ...schema }, options }).as('null'),
 
+  /**
+   * @private set a property to a type. Use asString asNumber etc.
+   * @returns {FluentSchema}
+   */
   as: type => {
     return setAttribute({ schema, ...options }, ['type', type])
   },
+
+  /**
+   * This validation outcome of this keyword's subschema has no direct effect on the overall validation result.
+   * Rather, it controls which of the "then" or "else" keywords are evaluated.
+   * When "if" is present, and the instance successfully validates against its subschema, then
+   * validation succeeds against this keyword if the instance also successfully validates against this keyword's subschema.
+   *
+   * @param {FluentSchema} ifClause
+   * @param {FluentSchema} thenClause
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.6.1}
+   * @returns {FluentSchema}
+   */
 
   ifThen: (ifClause, thenClause) => {
     if (!isFluentSchema(ifClause))
@@ -573,6 +945,17 @@ const FluentSchema = (
       ...options,
     })
   },
+
+  /**
+   * When "if" is present, and the instance fails to validate against its subschema,
+   * then validation succeeds against this keyword if the instance successfully validates against this keyword's subschema.
+   *
+   * @param {FluentSchema} ifClause
+   * @param {FluentSchema} thenClause
+   * @param {FluentSchema} elseClause
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.6.1}
+   * @returns {FluentSchema}
+   */
 
   ifThenElse: (ifClause, thenClause, elseClause) => {
     if (!isFluentSchema(ifClause))
@@ -622,6 +1005,11 @@ const FluentSchema = (
     })
   },
 
+  /**
+   * It returns all the schema values
+   *
+   * @returns {object}
+   */
   valueOf: () => {
     const { properties, definitions, required, $schema, ...rest } = schema
     return Object.assign(

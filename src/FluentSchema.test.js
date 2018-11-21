@@ -39,30 +39,60 @@ describe('FluentSchema', () => {
           })
         })
 
-        it('nested', () => {
-          const id = 'myId'
-          expect(
-            FluentSchema()
-              .prop(
-                'foo',
-                FluentSchema()
-                  .prop('bar')
-                  .id(id)
-                  .required()
-              )
-              .valueOf()
-          ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
-            properties: {
-              foo: {
-                properties: {
-                  bar: { $id: 'myId', type: 'string' },
+        describe('nested', () => {
+          it('true', () => {
+            expect(
+              FluentSchema({ generateIds: true })
+                .prop(
+                  'foo',
+                  FluentSchema()
+                    .prop('bar')
+                    .required()
+                )
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              properties: {
+                foo: {
+                  $id: '#properties/foo',
+                  properties: {
+                    bar: {
+                      $id: '#properties/foo/properties/bar',
+                      type: 'string',
+                    },
+                  },
+                  required: ['bar'],
+                  type: 'object',
                 },
-                required: ['bar'],
-                type: 'object',
               },
-            },
-            type: 'object',
+              type: 'object',
+            })
+          })
+          it('false', () => {
+            const id = 'myId'
+            expect(
+              FluentSchema()
+                .prop(
+                  'foo',
+                  FluentSchema()
+                    .prop('bar')
+                    .id(id)
+                    .required()
+                )
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              properties: {
+                foo: {
+                  properties: {
+                    bar: { $id: 'myId', type: 'string' },
+                  },
+                  required: ['bar'],
+                  type: 'object',
+                },
+              },
+              type: 'object',
+            })
           })
         })
       })
@@ -77,6 +107,8 @@ describe('FluentSchema', () => {
                   .prop('foo')
                   .prop('bar')
               )
+              .prop('prop')
+              .ref('entity')
               .valueOf()
           ).toEqual({
             $schema: 'http://json-schema.org/draft-07/schema#',
@@ -84,10 +116,21 @@ describe('FluentSchema', () => {
               entity: {
                 $id: '#definitions/entity',
                 properties: {
-                  bar: { type: 'string' },
-                  foo: { type: 'string' },
+                  bar: {
+                    type: 'string',
+                    $id: '#definitions/entity/properties/bar',
+                  },
+                  foo: {
+                    type: 'string',
+                    $id: '#definitions/entity/properties/foo',
+                  },
                 },
                 type: 'object',
+              },
+            },
+            properties: {
+              prop: {
+                $ref: 'entity',
               },
             },
             type: 'object',
@@ -103,6 +146,8 @@ describe('FluentSchema', () => {
                   .id('myCustomId')
                   .prop('foo')
               )
+              .prop('prop')
+              .ref('entity')
               .valueOf()
           ).toEqual({
             $schema: 'http://json-schema.org/draft-07/schema#',
@@ -113,6 +158,11 @@ describe('FluentSchema', () => {
                   foo: { type: 'string' },
                 },
                 type: 'object',
+              },
+            },
+            properties: {
+              prop: {
+                $ref: 'entity',
               },
             },
             type: 'object',

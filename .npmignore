@@ -1,0 +1,6 @@
+.editorconfig
+.gitignore
+.npmignore
+.nvmrc
+.prettierrc
+.travis.yml

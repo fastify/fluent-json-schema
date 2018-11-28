@@ -5,6 +5,14 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser.
 [![view on npm](https://img.shields.io/npm/v/fluent-schema.svg)](https://www.npmjs.org/package/fluent-schema)
 [![Build Status](https://travis-ci.com/fastify/fluent-schema.svg?branch=master)](https://travis-ci.com/fastify/fluent-schema?branch=master)
 
+## Features
+
+- Fluent schema implements JSON Schema draft-07 standards
+- Faster and shorter way to write a JSON Schema via a [fluent API](https://en.wikipedia.org/wiki/Fluent_interface)
+- Runtime errors for invalid options or keywords misuse
+- Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
+- Flexible API to write inline or nested props
+
 ## Install
 
     npm install fluent-schema --save
@@ -43,6 +51,7 @@ const schema = FluentSchema()
   .definition(
     'address',
     FluentSchema()
+      .id('#address')
       .prop('line1')
       .required()
       .prop('line2')
@@ -54,7 +63,7 @@ const schema = FluentSchema()
       .required()
   )
   .prop('address')
-  .ref('#definitions/address')
+  .ref('#address')
 
 console.log(JSON.stringify(schema.valueOf(), undefined, 2))
 ```
@@ -67,28 +76,23 @@ Schema generated:
   "definitions": {
     "address": {
       "type": "object",
-      "$id": "#definitions/address",
+      "$id": "#address",
       "required": ["line1", "country", "city", "zipcode"],
       "properties": {
         "line1": {
-          "type": "string",
-          "$id": "#definitions/address/properties/line1"
+          "type": "string"
         },
         "line2": {
-          "type": "string",
-          "$id": "#definitions/address/properties/line2"
+          "type": "string"
         },
         "country": {
-          "type": "string",
-          "$id": "#definitions/address/properties/country"
+          "type": "string"
         },
         "city": {
-          "type": "string",
-          "$id": "#definitions/address/properties/city"
+          "type": "string"
         },
         "zipcode": {
-          "type": "string",
-          "$id": "#definitions/address/properties/zipcode"
+          "type": "string"
         }
       }
     }
@@ -100,37 +104,26 @@ Schema generated:
   "properties": {
     "email": {
       "type": "string",
-      "$id": "#properties/email",
       "format": "email"
     },
     "password": {
       "type": "string",
-      "$id": "#properties/password",
       "minLength": 8
     },
     "role": {
       "type": "object",
       "default": "USER",
-      "$id": "#properties/role",
       "enum": ["ADMIN", "USER"]
     },
     "address": {
-      "$ref": "#definitions/address"
+      "$ref": "#address"
     }
   },
   "required": ["email", "password"]
 }
 ```
 
-## Features
-
-- Fluent schema implements JSON Schema draft-07 standards
-- Faster and shorter way to write a JSON Schema via a [fluent API](https://en.wikipedia.org/wiki/Fluent_interface)
-- Runtime errors for invalid options or keywords misuse
-- Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
-- Flexible API to write inline or nested props
-
-## Integration
+## Validation
 
 Fluent schema **doesn't** validate a JSON schema. However there are many libraries that can do that for you.
 Below a few examples using [AJV](https://ajv.js.org/)

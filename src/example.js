@@ -29,6 +29,7 @@ const userSchema = FluentSchema()
   .definition(
     'address',
     FluentSchema()
+      .id('#address')
       .prop('line1')
       .required()
       .prop('line2')
@@ -40,7 +41,7 @@ const userSchema = FluentSchema()
       .required()
   )
   .prop('address')
-  .ref('#definitions/address')
+  .ref('#address')
 
 console.log(JSON.stringify(userSchema.valueOf(), undefined, 2))
 

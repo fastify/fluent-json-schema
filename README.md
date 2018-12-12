@@ -305,6 +305,10 @@ Output:
 - [x] oneOf
 - [x] not
 
+## Documentation
+
+[API Doc](./docs/API.md).
+
 ## Acknowledgments
 
 Thanks to [Matteo Collina](https://twitter.com/matteocollina) for pushing me to implement this utility! 🙏

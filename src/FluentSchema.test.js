@@ -526,7 +526,7 @@ describe('FluentSchema', () => {
           })
         })
         describe('format', () => {
-          it('valid', () => {
+          it('valid FORMATS.DATE', () => {
             const prop = 'prop'
             expect(
               FluentSchema()
@@ -540,6 +540,24 @@ describe('FluentSchema', () => {
                 prop: {
                   type: 'string',
                   format: FORMATS.DATE,
+                },
+              },
+              type: 'object',
+            })
+          })
+          it('valid FORMATS.DATE_TIME', () => {
+            expect(
+              FluentSchema()
+                .prop('prop')
+                .asString()
+                .format(FORMATS.DATE_TIME)
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              properties: {
+                prop: {
+                  type: 'string',
+                  format: 'date-time',
                 },
               },
               type: 'object',

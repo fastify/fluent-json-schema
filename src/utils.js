@@ -53,6 +53,7 @@ const URI_REFERENCE = 'uri-reference'
 const URI = 'uri'
 const TIME = 'time'
 const DATE = 'date'
+const DATE_TIME = 'date-time'
 
 const FORMATS = {
   RELATIVE_JSON_POINTER,
@@ -69,6 +70,7 @@ const FORMATS = {
   URI,
   TIME,
   DATE,
+  DATE_TIME,
 }
 
 // TODO LS looking for a better name

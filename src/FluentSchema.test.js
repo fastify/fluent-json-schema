@@ -118,11 +118,9 @@ describe('FluentSchema', () => {
                 properties: {
                   bar: {
                     type: 'string',
-                    $id: '#definitions/entity/properties/bar',
                   },
                   foo: {
                     type: 'string',
-                    $id: '#definitions/entity/properties/foo',
                   },
                 },
                 type: 'object',

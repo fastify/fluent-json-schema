@@ -3,6 +3,7 @@
   "version": "0.3.1",
   "description": "JSON Schema fluent API",
   "main": "src/FluentSchema.js",
+  "typings": "src/FluentSchema.d.ts",
   "keywords": [
     "JSON",
     "schema",
@@ -35,7 +36,7 @@
   },
   "lint-staged": {
     "linters": {
-      "*.{json,md,js}": [
+      "*.{json,md,js,ts}": [
         "prettier --write",
         "git add"
       ]
@@ -45,8 +46,9 @@
     ]
   },
   "scripts": {
-    "test": "jest src/**.test.js --verbose",
+    "test": "jest src/**.test.js --verbose && yarn typescript",
     "test:watch": "jest src/**.test.js --verbose --watch",
+    "typescript": "tsc --project ./src/types/tsconfig.json",
     "format": "prettier --write ./src/**/*.js",
     "coverage": "jest src/**.test.js --coverage",
     "doc": "jsdoc2md ./src/FluentSchema.js > docs/API.md"
@@ -57,7 +59,8 @@
     "jest": "^23.6.0",
     "jsdoc-to-markdown": "^4.0.1",
     "lint-staged": "^8.0.4",
-    "prettier": "^1.14.3"
+    "prettier": "^1.14.3",
+    "typescript": "^3.2.2"
   },
   "dependencies": {}
 }

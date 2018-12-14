@@ -128,7 +128,7 @@ const FluentSchema = (
 
   definition: (name, props = {}) =>
     FluentSchema({ schema, ...options }).prop(name, {
-      ...props,
+      ...props.valueOf(),
       def: true,
     }),
 

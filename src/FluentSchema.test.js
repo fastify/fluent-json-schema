@@ -622,6 +622,67 @@ describe('FluentSchema', () => {
             ).toThrow("'prop' as 'number' doesn't accept 'pattern' option")
           })
         })
+        describe('contentEncoding', () => {
+          it('valid', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .contentEncoding('base64')
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              properties: {
+                prop: {
+                  type: 'string',
+                  contentEncoding: 'base64',
+                },
+              },
+              type: 'object',
+            })
+          })
+          it('invalid', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .contentEncoding(1000)
+            ).toThrow("'contentEncoding' must be a string")
+          })
+        })
+
+        describe('contentMediaType', () => {
+          it('valid', () => {
+            const prop = 'prop'
+            expect(
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .contentMediaType('image/png')
+                .valueOf()
+            ).toEqual({
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              properties: {
+                prop: {
+                  type: 'string',
+                  contentMediaType: 'image/png',
+                },
+              },
+              type: 'object',
+            })
+          })
+          it('invalid', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asString()
+                .contentMediaType(1000)
+            ).toThrow("'contentMediaType' must be a string")
+          })
+        })
       })
     })
     describe('number', () => {

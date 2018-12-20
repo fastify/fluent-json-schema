@@ -52,6 +52,8 @@ declare namespace FluentSchema {
     maxLength: (min: number) => FluentSchema
     format: (format: FORMATS) => FluentSchema
     pattern: (pattern: string) => FluentSchema
+    contentEncoding: (encoding: string) => FluentSchema
+    contentMediaType: (mediaType: string) => FluentSchema
     asNumber: () => FluentSchema
     minimum: (min: number) => FluentSchema
     exclusiveMinimum: (min: number) => FluentSchema

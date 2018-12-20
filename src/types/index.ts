@@ -16,6 +16,12 @@ const schema = FluentSchema()
       .prop('zipcode')
   )
   .prop('username')
+  .prop(
+    'avatar',
+    FluentSchema()
+      .contentEncoding('base64')
+      .contentMediaType('image/png')
+  )
   .asString()
   .required()
   .prop('password')

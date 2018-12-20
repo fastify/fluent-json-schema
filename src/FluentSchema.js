@@ -167,6 +167,8 @@ const FluentSchema = (
       maxLength,
       pattern,
       format,
+      contentEncoding,
+      contentMediaType,
       // number
       minimum,
       maximum,
@@ -224,6 +226,10 @@ const FluentSchema = (
                 maxLength !== undefined ? { maxLength } : undefined,
                 pattern !== undefined ? { pattern } : undefined,
                 format !== undefined ? { format } : undefined,
+                contentEncoding !== undefined ? { contentEncoding } : undefined,
+                contentMediaType !== undefined
+                  ? { contentMediaType }
+                  : undefined,
                 // number
                 minimum !== undefined ? { minimum } : undefined,
                 maximum !== undefined ? { maximum } : undefined,
@@ -462,7 +468,6 @@ const FluentSchema = (
     return setAttribute({ schema, ...options }, ['format', format, 'string'])
   },
 
-  // TODO LS accept regex as well
   /**
    *  This string SHOULD be a valid regular expression, according to the ECMA 262 regular expression dialect.
    *  A string instance is considered valid if the regular expression matches the instance successfully.
@@ -472,9 +477,48 @@ const FluentSchema = (
    * @returns {FluentSchema}
    */
   pattern: pattern => {
-    if (!typeof pattern === 'string')
+    if (!(typeof pattern === 'string'))
       throw new Error(`'pattern' must be a string`)
     return setAttribute({ schema, ...options }, ['pattern', pattern, 'string'])
+  },
+
+  /**
+   *  If the instance value is a string, this property defines that the string SHOULD
+   *  be interpreted as binary data and decoded using the encoding named by this property.
+   *  RFC 2045, Sec 6.1 [RFC2045] lists the possible values for this property.
+   *
+   * @param {string} encoding
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.8.3}
+   * @returns {FluentSchema}
+   */
+
+  contentEncoding: encoding => {
+    if (!(typeof encoding === 'string'))
+      throw new Error(`'contentEncoding' must be a string`)
+    return setAttribute({ schema, ...options }, [
+      'contentEncoding',
+      encoding,
+      'string',
+    ])
+  },
+
+  /**
+   *  The value of this property must be a media type, as defined by RFC 2046 [RFC2046].
+   *  This property defines the media type of instances which this schema defines.
+   *
+   * @param {string} mediaType
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.8.3}
+   * @returns {FluentSchema}
+   */
+
+  contentMediaType: mediaType => {
+    if (!(typeof mediaType === 'string'))
+      throw new Error(`'contentMediaType' must be a string`)
+    return setAttribute({ schema, ...options }, [
+      'contentMediaType',
+      mediaType,
+      'string',
+    ])
   },
 
   /**

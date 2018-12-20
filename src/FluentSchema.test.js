@@ -593,13 +593,13 @@ describe('FluentSchema', () => {
               type: 'object',
             })
           })
-          it.skip('as a regex', () => {
+          it('as a regex', () => {
             const prop = 'prop'
             expect(
               FluentSchema()
                 .prop(prop)
                 .asString()
-                .pattern(/.*/g)
+                .pattern(/.*/gi)
                 .valueOf()
             ).toEqual({
               $schema: 'http://json-schema.org/draft-07/schema#',
@@ -612,7 +612,7 @@ describe('FluentSchema', () => {
               type: 'object',
             })
           })
-          it('invalid', () => {
+          it('invalid usage', () => {
             const prop = 'prop'
             expect(() =>
               FluentSchema()
@@ -620,6 +620,15 @@ describe('FluentSchema', () => {
                 .asNumber()
                 .pattern('.*')
             ).toThrow("'prop' as 'number' doesn't accept 'pattern' option")
+          })
+          it('invalid value', () => {
+            const prop = 'prop'
+            expect(() =>
+              FluentSchema()
+                .prop(prop)
+                .asNumber()
+                .pattern(1111)
+            ).toThrow("'pattern' must be a string or a RegEx (e.g. /.*/)")
           })
         })
         describe('contentEncoding', () => {

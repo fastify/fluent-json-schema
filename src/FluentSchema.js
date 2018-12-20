@@ -477,8 +477,17 @@ const FluentSchema = (
    * @returns {FluentSchema}
    */
   pattern: pattern => {
-    if (!(typeof pattern === 'string'))
-      throw new Error(`'pattern' must be a string`)
+    if (!(typeof pattern === 'string') && !(pattern instanceof RegExp))
+      throw new Error(`'pattern' must be a string or a RegEx (e.g. /.*/)`)
+
+    if (pattern instanceof RegExp) {
+      const flags = new RegExp(pattern).flags
+      pattern = pattern
+        .toString()
+        .substr(1)
+        .replace(`/${flags}`, '')
+    }
+
     return setAttribute({ schema, ...options }, ['pattern', pattern, 'string'])
   },
 

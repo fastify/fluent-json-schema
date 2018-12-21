@@ -90,6 +90,15 @@ The length of a string instance is defined as the number of its characters as de
 <dd><p>This string SHOULD be a valid regular expression, according to the ECMA 262 regular expression dialect.
  A string instance is considered valid if the regular expression matches the instance successfully.</p>
 </dd>
+<dt><a href="#contentEncoding">contentEncoding(encoding)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dd><p>If the instance value is a string, this property defines that the string SHOULD
+ be interpreted as binary data and decoded using the encoding named by this property.
+ RFC 2045, Sec 6.1 [RFC2045] lists the possible values for this property.</p>
+</dd>
+<dt><a href="#contentMediaType">contentMediaType(mediaType)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dd><p>The value of this property must be a media type, as defined by RFC 2046 [RFC2046].
+ This property defines the media type of instances which this schema defines.</p>
+</dd>
 <dt><a href="#asNumber">asNumber()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
 <dd><p>Set a property to type number</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1</a></p>
@@ -482,6 +491,33 @@ A string instance is considered valid if the regular expression matches the inst
 | Param   | Type                | Description                                                                               |
 | ------- | ------------------- | ----------------------------------------------------------------------------------------- |
 | pattern | <code>string</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.3](reference) |
+
+<a name="contentEncoding"></a>
+
+## contentEncoding(encoding) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+
+If the instance value is a string, this property defines that the string SHOULD
+be interpreted as binary data and decoded using the encoding named by this property.
+RFC 2045, Sec 6.1 [RFC2045] lists the possible values for this property.
+
+**Kind**: global function
+
+| Param    | Type                | Description                                                                             |
+| -------- | ------------------- | --------------------------------------------------------------------------------------- |
+| encoding | <code>string</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.8.3](reference) |
+
+<a name="contentMediaType"></a>
+
+## contentMediaType(mediaType) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+
+The value of this property must be a media type, as defined by RFC 2046 [RFC2046].
+This property defines the media type of instances which this schema defines.
+
+**Kind**: global function
+
+| Param     | Type                | Description                                                                             |
+| --------- | ------------------- | --------------------------------------------------------------------------------------- |
+| mediaType | <code>string</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.8.3](reference) |
 
 <a name="asNumber"></a>
 

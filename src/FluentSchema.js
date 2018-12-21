@@ -353,7 +353,7 @@ const FluentSchema = (
   anyOf: attributes => {
     const currentProp = last(schema.properties)
     const { name, not, type, ...props } = currentProp
-    const properties = attributes.valueOf().properties
+    const properties = attributes.valueOf().properties || []
     const values = Object.entries(properties).reduce((memo, [key, value]) => {
       return [...memo, value]
     }, [])
@@ -375,7 +375,7 @@ const FluentSchema = (
   allOf: attributes => {
     const currentProp = last(schema.properties)
     const { name, not, type, ...props } = currentProp
-    const properties = attributes.valueOf().properties
+    const properties = attributes.valueOf().properties || []
     const values = Object.entries(properties).reduce((memo, [key, value]) => {
       return [...memo, value]
     }, [])
@@ -397,7 +397,7 @@ const FluentSchema = (
   oneOf: attributes => {
     const currentProp = last(schema.properties)
     const { name, not, type, ...props } = currentProp
-    const properties = attributes.valueOf().properties
+    const properties = attributes.valueOf().properties || []
     const values = Object.entries(properties).reduce((memo, [key, value]) => {
       return [...memo, value]
     }, [])

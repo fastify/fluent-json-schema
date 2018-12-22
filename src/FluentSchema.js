@@ -6,7 +6,9 @@ const {
   isFluentSchema,
   last,
   patchIdsWithParentId,
+  appendRequired,
   FORMATS,
+  REQUIRED,
 } = require('./utils')
 
 const initialState = {
@@ -166,9 +168,24 @@ const FluentSchema = (
     let attributes = props.valueOf()
     const $id =
       attributes.$id || (options.generateIds ? `#${target}/${name}` : undefined)
-    attributes = isFluentSchema(props)
-      ? patchIdsWithParentId({ schema: attributes, parentId: $id, ...options })
-      : attributes
+    if (isFluentSchema(props)) {
+      attributes = patchIdsWithParentId({
+        schema: attributes,
+        parentId: $id,
+        ...options,
+      })
+
+      const [schemaPatched, attributesPatched] = appendRequired({
+        schema,
+        attributes: {
+          ...attributes,
+          name,
+        },
+      })
+
+      schema = schemaPatched
+      attributes = attributesPatched
+    }
 
     const {
       type = hasCombiningKeywords(attributes) ? undefined : 'string',
@@ -270,7 +287,7 @@ const FluentSchema = (
                 // object
                 maxProperties !== undefined ? { maxProperties } : undefined,
                 minProperties !== undefined ? { minProperties } : undefined,
-                required !== undefined ? { required } : undefined,
+                required && required.length > 0 ? { required } : undefined,
                 properties !== undefined ? { properties } : undefined,
                 patternProperties !== undefined
                   ? { patternProperties }
@@ -326,7 +343,7 @@ const FluentSchema = (
   },
 
   /**
-   * Required' has to be chained to a property:
+   * Required has to be chained to a property:
    * Examples:
    * - FluentSchema().prop('prop').required()
    * - FluentSchema().prop('prop', FluentSchema().asNumber()).required()
@@ -337,12 +354,11 @@ const FluentSchema = (
 
   required: () => {
     const currentProp = last(schema.properties)
-    if (!currentProp)
-      throw new Error(
-        "'required' has to be chained to a prop: \nExamples: \n- FluentSchema().prop('prop').required() \n- FluentSchema().prop('prop', FluentSchema().asNumber()).required()"
-      )
+    const required = currentProp
+      ? [...schema.required, currentProp.name]
+      : [REQUIRED]
     return FluentSchema({
-      schema: { ...schema, required: [...schema.required, currentProp.name] },
+      schema: { ...schema, required },
       options,
     })
   },

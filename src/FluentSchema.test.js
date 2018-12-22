@@ -380,14 +380,74 @@ describe('FluentSchema', () => {
         ).toEqual([prop])
       })
 
-      it('invalid', () => {
-        expect(() => {
-          FluentSchema()
-            .asString()
-            .required()
-        }).toThrow(
-          "'required' has to be chained to a prop: \nExamples: \n- FluentSchema().prop('prop').required() \n- FluentSchema().prop('prop', FluentSchema().asNumber()).required()"
-        )
+      it('nested', () => {
+        const prop = 'foo'
+        const schema = FluentSchema()
+          .prop(
+            prop,
+            FluentSchema()
+              .asNumber()
+              .required()
+          )
+          .valueOf()
+        expect(schema.required).toEqual([prop])
+        expect(schema.properties[prop]).toEqual({ type: 'number' })
+      })
+
+      it('deep nested', () => {
+        const prop = 'foo'
+        const schema = FluentSchema()
+          .prop(
+            prop,
+            FluentSchema()
+              .required()
+              .prop('bar')
+              .required()
+          )
+          .valueOf()
+        expect(schema).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            foo: {
+              properties: { bar: { type: 'string' } },
+              required: ['bar'],
+              type: 'object',
+            },
+          },
+          required: ['foo'],
+          type: 'object',
+        })
+      })
+
+      it('multiple deep nested', () => {
+        const schema = FluentSchema()
+          .prop(
+            'foo',
+            FluentSchema()
+              .required()
+              .prop('bar')
+              .required()
+          )
+          .prop(
+            'prop',
+            FluentSchema()
+              .asString()
+              .required()
+          )
+          .valueOf()
+        expect(schema).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            foo: {
+              properties: { bar: { type: 'string' } },
+              required: ['bar'],
+              type: 'object',
+            },
+            prop: { type: 'string' },
+          },
+          required: ['foo', 'prop'],
+          type: 'object',
+        })
       })
     })
 

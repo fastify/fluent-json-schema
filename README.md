@@ -12,6 +12,7 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser.
 - Runtime errors for invalid options or keywords misuse
 - Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
 - Flexible API to write inline or nested props
+- Typescript friendly
 
 ## Install
 

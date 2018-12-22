@@ -34,6 +34,26 @@ const setAttribute = ({ schema, ...options }, attribute) => {
   return FluentSchema({ schema: { ...schema, [key]: value }, ...options })
 }
 
+const setComposeType = ({ prop, schemas, schema, options }) => {
+  if (!(Array.isArray(schemas) && schemas.every(v => isFluentSchema(v)))) {
+    throw new Error(
+      `'${prop}' must be a an array of FluentSchema rather than a '${typeof schemas}'`
+    )
+  }
+
+  const currentProp = last(schema.properties)
+  const { name, not, type, ...props } = currentProp
+  const values = schemas.map(schema => {
+    const { $schema, ...props } = schema.valueOf()
+    return props
+  })
+  const attr = {
+    ...props,
+    ...(not ? { not: { [prop]: values } } : { [prop]: values }),
+  }
+  return FluentSchema({ schema: { ...schema }, options }).prop(name, attr)
+}
+
 /**
  * Represents a FluentSchema.
  * @param {Object} [options] - Options
@@ -352,67 +372,31 @@ const FluentSchema = (
    * It  MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
    *
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.3}
-   * @param {array} attributes
+   * @param {array} schemas
    * @returns {FluentSchema}
    */
 
-  anyOf: attributes => {
-    const currentProp = last(schema.properties)
-    const { name, not, type, ...props } = currentProp
-    const properties = attributes.valueOf().properties || []
-    const values = Object.entries(properties).reduce((memo, [key, value]) => {
-      return [...memo, value]
-    }, [])
-    const attr = {
-      ...props,
-      ...(not ? { not: { anyOf: values } } : { anyOf: values }),
-    }
-    return FluentSchema({ schema: { ...schema }, options }).prop(name, attr)
-  },
+  anyOf: schemas => setComposeType({ prop: 'anyOf', schemas, schema, options }),
 
   /**
    * It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
    *
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.1}
-   * @param {array} attributes
+   * @param {array} schemas
    * @returns {FluentSchema}
    */
 
-  allOf: attributes => {
-    const currentProp = last(schema.properties)
-    const { name, not, type, ...props } = currentProp
-    const properties = attributes.valueOf().properties || []
-    const values = Object.entries(properties).reduce((memo, [key, value]) => {
-      return [...memo, value]
-    }, [])
-    const attr = {
-      ...props,
-      ...(not ? { not: { allOf: values } } : { allOf: values }),
-    }
-    return FluentSchema({ schema: { ...schema }, options }).prop(name, attr)
-  },
+  allOf: schemas => setComposeType({ prop: 'allOf', schemas, schema, options }),
 
   /**
    * It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
    *
-   * @param {array} attributes
+   * @param {array} schemas
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.2}
    * @returns {FluentSchema}
    */
 
-  oneOf: attributes => {
-    const currentProp = last(schema.properties)
-    const { name, not, type, ...props } = currentProp
-    const properties = attributes.valueOf().properties || []
-    const values = Object.entries(properties).reduce((memo, [key, value]) => {
-      return [...memo, value]
-    }, [])
-    const attr = {
-      ...props,
-      ...(not ? { not: { oneOf: values } } : { oneOf: values }),
-    }
-    return FluentSchema({ schema: { ...schema }, options }).prop(name, attr)
-  },
+  oneOf: schemas => setComposeType({ prop: 'oneOf', schemas, schema, options }),
 
   /**
    * Set a property to type string

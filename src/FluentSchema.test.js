@@ -1577,16 +1577,11 @@ describe('FluentSchema', () => {
 
   describe('combining keywords:', () => {
     describe('allOf', () => {
-      it('sets two alternative', () => {
+      it('two types', () => {
         expect(
           FluentSchema()
             .prop('prop')
-            .allOf(
-              FluentSchema()
-                .prop('boolean')
-                .asBoolean()
-                .prop('string')
-            )
+            .allOf([FluentSchema().asBoolean(), FluentSchema().asString()])
             .valueOf()
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
@@ -1598,18 +1593,63 @@ describe('FluentSchema', () => {
           type: 'object',
         })
       })
+      it('object', () => {
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .allOf([
+              FluentSchema()
+                .prop('foo')
+                .prop('bar')
+                .asInteger(),
+            ])
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            prop: {
+              allOf: [
+                {
+                  properties: {
+                    bar: { type: 'integer' },
+                    foo: { type: 'string' },
+                  },
+                  type: 'object',
+                },
+              ],
+            },
+          },
+          type: 'object',
+        })
+      })
+      describe('invalid', () => {
+        it('not an array', () => {
+          expect(() => {
+            return FluentSchema()
+              .prop('prop')
+              .allOf('test')
+          }).toThrow(
+            "'allOf' must be a an array of FluentSchema rather than a 'string'"
+          )
+        })
+        it('not an array of FluentSchema', () => {
+          expect(() => {
+            return FluentSchema()
+              .prop('prop')
+              .allOf(['test'])
+          }).toThrow(
+            "'allOf' must be a an array of FluentSchema rather than a 'object'"
+          )
+        })
+      })
     })
+
     describe('anyOf', () => {
-      it('sets two alternative', () => {
+      it('two types', () => {
         expect(
           FluentSchema()
             .prop('prop')
-            .anyOf(
-              FluentSchema()
-                .prop('boolean')
-                .asBoolean()
-                .prop('string')
-            )
+            .anyOf([FluentSchema().asBoolean(), FluentSchema().asString()])
             .valueOf()
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
@@ -1621,50 +1661,153 @@ describe('FluentSchema', () => {
           type: 'object',
         })
       })
+      it('object', () => {
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .anyOf([
+              FluentSchema()
+                .prop('foo')
+                .prop('bar')
+                .asInteger(),
+            ])
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            prop: {
+              anyOf: [
+                {
+                  properties: {
+                    bar: { type: 'integer' },
+                    foo: { type: 'string' },
+                  },
+                  type: 'object',
+                },
+              ],
+            },
+          },
+          type: 'object',
+        })
+      })
+      describe('invalid', () => {
+        it('not an array', () => {
+          expect(() => {
+            return FluentSchema()
+              .prop('prop')
+              .anyOf('test')
+          }).toThrow(
+            "'anyOf' must be a an array of FluentSchema rather than a 'string'"
+          )
+        })
+        it('not an array of FluentSchema', () => {
+          expect(() => {
+            return FluentSchema()
+              .prop('prop')
+              .anyOf(['test'])
+          }).toThrow(
+            "'anyOf' must be a an array of FluentSchema rather than a 'object'"
+          )
+        })
+      })
     })
+
     describe('oneOf', () => {
-      it('sets two alternative', () => {
+      it('two types', () => {
         expect(
           FluentSchema()
             .prop('prop')
-            .anyOf(
-              FluentSchema()
-                .prop('boolean')
-                .asBoolean()
-                .prop('string')
-            )
+            .oneOf([FluentSchema().asBoolean(), FluentSchema().asString()])
             .valueOf()
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             prop: {
-              anyOf: [{ type: 'boolean' }, { type: 'string' }],
+              oneOf: [{ type: 'boolean' }, { type: 'string' }],
             },
           },
           type: 'object',
         })
       })
+      it('object', () => {
+        expect(
+          FluentSchema()
+            .prop('prop')
+            .oneOf([
+              FluentSchema()
+                .prop('foo')
+                .prop('bar')
+                .asInteger(),
+            ])
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            prop: {
+              oneOf: [
+                {
+                  properties: {
+                    bar: { type: 'integer' },
+                    foo: { type: 'string' },
+                  },
+                  type: 'object',
+                },
+              ],
+            },
+          },
+          type: 'object',
+        })
+      })
+      describe('invalid', () => {
+        it('not an array', () => {
+          expect(() => {
+            return FluentSchema()
+              .prop('prop')
+              .oneOf('test')
+          }).toThrow(
+            "'oneOf' must be a an array of FluentSchema rather than a 'string'"
+          )
+        })
+        it('not an array of FluentSchema', () => {
+          expect(() => {
+            return FluentSchema()
+              .prop('prop')
+              .oneOf(['test'])
+          }).toThrow(
+            "'oneOf' must be a an array of FluentSchema rather than a 'object'"
+          )
+        })
+      })
     })
+
     describe('not', () => {
       it('add prop not', () => {
         expect(
           FluentSchema()
             .prop('prop')
             .not()
-            .anyOf(
+            .anyOf([
               FluentSchema()
                 .prop('boolean')
                 .asBoolean()
                 .prop('number')
-                .asNumber()
-            )
+                .asNumber(),
+            ])
             .valueOf()
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             prop: {
               not: {
-                anyOf: [{ type: 'boolean' }, { type: 'number' }],
+                anyOf: [
+                  {
+                    properties: {
+                      boolean: { type: 'boolean' },
+                      number: { type: 'number' },
+                    },
+                    type: 'object',
+                  },
+                ],
               },
             },
           },

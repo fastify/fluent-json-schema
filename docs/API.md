@@ -48,7 +48,7 @@ There are no restrictions placed on the values within the array.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.2</a></p>
 </dd>
 <dt><a href="#required">required()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
-<dd><p>Required&#39; has to be chained to a property:
+<dd><p>Required has to be chained to a property:
 Examples:</p>
 <ul>
 <li>FluentSchema().prop(&#39;prop&#39;).required()</li>
@@ -375,7 +375,7 @@ There are no restrictions placed on the value of this keyword.
 
 ## required() ⇒ [<code>FluentSchema</code>](#FluentSchema)
 
-Required' has to be chained to a property:
+Required has to be chained to a property:
 Examples:
 
 - FluentSchema().prop('prop').required()

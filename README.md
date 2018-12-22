@@ -34,20 +34,20 @@ const schema = FluentSchema()
     FluentSchema()
       .asString()
       .format(FORMATS.EMAIL)
+      .required()
   )
-  .required()
   .prop(
     'password',
     FluentSchema()
       .asString()
       .minLength(8)
   )
-  .required()
   .prop(
     'role',
     FluentSchema()
       .enum(['ADMIN', 'USER'])
       .default('USER')
+      .required()
   )
   .definition(
     'address',

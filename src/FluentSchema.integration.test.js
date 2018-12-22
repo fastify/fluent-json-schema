@@ -187,8 +187,12 @@ describe('FluentSchema', () => {
       )
       .prop('username')
       .required()
-      .prop('password')
-      .required()
+      .prop(
+        'password',
+        FluentSchema()
+          .asString()
+          .required()
+      )
       .prop('address')
       .ref('#address')
       .required()
@@ -196,10 +200,10 @@ describe('FluentSchema', () => {
         'role',
         FluentSchema()
           .id('http://foo.com/role')
+          .required()
           .prop('name')
           .prop('permissions')
       )
-      .required()
       .prop('age')
       .asNumber()
       .valueOf()

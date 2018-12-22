@@ -39,6 +39,8 @@ const flat = array =>
     }
   }, {})
 
+const REQUIRED = Symbol('required')
+
 const RELATIVE_JSON_POINTER = 'relative-json-pointer'
 const JSON_POINTER = 'json-pointer'
 const UUID = 'uuid'
@@ -96,13 +98,47 @@ const patchIdsWithParentId = ({ schema, generateIds, parentId }) => {
   }
 }
 
+const appendRequired = ({
+  attributes: { name, required, ...attributes },
+  schema,
+}) => {
+  const { schemaRequired, attributeRequired } = (required || []).reduce(
+    (memo, item) => {
+      return item === REQUIRED
+        ? {
+            ...memo,
+            // append prop name to the schema.required
+            schemaRequired: [...memo.schemaRequired, name],
+          }
+        : {
+            ...memo,
+            // propagate required attributes
+            attributeRequired: [...memo.attributeRequired, item],
+          }
+    },
+    { schemaRequired: [], attributeRequired: [] }
+  )
+
+  const schemaPatched = {
+    ...schema,
+    required: [...schema.required, ...schemaRequired],
+  }
+  const attributesPatched = {
+    ...attributes,
+    required: attributeRequired,
+  }
+  return [schemaPatched, attributesPatched]
+}
+
 module.exports = {
   isFluentSchema,
   hasCombiningKeywords,
   last,
   flat,
   omit,
+  REQUIRED,
   deepOmit,
   patchIdsWithParentId,
+  appendRequired,
   FORMATS,
 }

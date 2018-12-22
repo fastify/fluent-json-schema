@@ -60,15 +60,15 @@ Examples:</p>
 <dd><p>Can be applied only to a not followed by a anyOf, allOf or oneOf</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.4</a></p>
 </dd>
-<dt><a href="#anyOf">anyOf(attributes)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#anyOf">anyOf(schemas)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
 <dd><p>It  MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.3</a></p>
 </dd>
-<dt><a href="#allOf">allOf(attributes)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#allOf">allOf(schemas)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
 <dd><p>It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.1</a></p>
 </dd>
-<dt><a href="#oneOf">oneOf(attributes)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#oneOf">oneOf(schemas)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
 <dd><p>It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.</p>
 </dd>
 <dt><a href="#asString">asString()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
@@ -395,7 +395,7 @@ Can be applied only to a not followed by a anyOf, allOf or oneOf
 **Kind**: global function  
 <a name="anyOf"></a>
 
-## anyOf(attributes) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## anyOf(schemas) ⇒ [<code>FluentSchema</code>](#FluentSchema)
 
 It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
 
@@ -403,13 +403,13 @@ It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema
 
 **Kind**: global function
 
-| Param      | Type               |
-| ---------- | ------------------ |
-| attributes | <code>array</code> |
+| Param   | Type               |
+| ------- | ------------------ |
+| schemas | <code>array</code> |
 
 <a name="allOf"></a>
 
-## allOf(attributes) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## allOf(schemas) ⇒ [<code>FluentSchema</code>](#FluentSchema)
 
 It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
 
@@ -417,21 +417,21 @@ It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema
 
 **Kind**: global function
 
-| Param      | Type               |
-| ---------- | ------------------ |
-| attributes | <code>array</code> |
+| Param   | Type               |
+| ------- | ------------------ |
+| schemas | <code>array</code> |
 
 <a name="oneOf"></a>
 
-## oneOf(attributes) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## oneOf(schemas) ⇒ [<code>FluentSchema</code>](#FluentSchema)
 
 It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
 
 **Kind**: global function
 
-| Param      | Type               | Description                                                                               |
-| ---------- | ------------------ | ----------------------------------------------------------------------------------------- |
-| attributes | <code>array</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.2](reference) |
+| Param   | Type               | Description                                                                               |
+| ------- | ------------------ | ----------------------------------------------------------------------------------------- |
+| schemas | <code>array</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.2](reference) |
 
 <a name="asString"></a>
 

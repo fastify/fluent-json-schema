@@ -137,6 +137,40 @@ describe('FluentSchema', () => {
     })
   })
 
+  describe('compose keywords', () => {
+    const ajv = new Ajv()
+
+    const schema = FluentSchema()
+      .prop('foo')
+      .anyOf([FluentSchema().asString()])
+      .prop('bar')
+      .not()
+      .anyOf([FluentSchema().asInteger()])
+      .prop('prop')
+      .allOf([FluentSchema().asString(), FluentSchema().asBoolean()])
+      .prop('anotherProp')
+      .oneOf([FluentSchema().asString(), FluentSchema().asBoolean()])
+      .required()
+      .valueOf()
+    const validate = ajv.compile(schema)
+
+    it('valid', () => {
+      const valid = validate({
+        foo: 'foo',
+        anotherProp: true,
+      })
+      expect(valid).toBeTruthy()
+    })
+
+    it('invalid', () => {
+      const valid = validate({
+        foo: 'foo',
+        bar: 1,
+      })
+      expect(valid).toBeFalsy()
+    })
+  })
+
   describe('complex', () => {
     const ajv = new Ajv()
     const schema = FluentSchema()

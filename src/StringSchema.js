@@ -1,29 +1,12 @@
 'use strict'
 const { BaseSchema } = require('./BaseSchema')
-const { last, FORMATS } = require('./utils')
+const { last, FORMATS, setAttribute } = require('./utils')
 
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'string',
   properties: [],
   required: [],
-}
-
-const setAttribute = ({ schema, ...options }, attribute) => {
-  const [key, value, type = 'string'] = attribute
-  const currentProp = last(schema.properties)
-  if (currentProp) {
-    const { name, ...props } = currentProp
-    if (type !== currentProp.type && type !== 'any')
-      throw new Error(
-        `'${name}' as '${currentProp.type}' doesn't accept '${key}' option`
-      )
-    return StringSchema({ schema, ...options }).prop(name, {
-      ...props,
-      [key]: value,
-    })
-  }
-  return StringSchema({ schema: { ...schema, [key]: value }, ...options })
 }
 
 /**
@@ -36,9 +19,13 @@ const setAttribute = ({ schema, ...options }, attribute) => {
 // https://medium.com/javascript-scene/javascript-factory-functions-with-es6-4d224591a8b1
 // Factory Functions for Mixin Composition withBaseSchema
 const StringSchema = (
-  { schema = initialState, ...options } = { generateIds: false }
+  { schema, ...options } = {
+    schema: initialState,
+    generateIds: false,
+    factory: StringSchema,
+  }
 ) => ({
-  ...BaseSchema({ schema, ...options, factory: StringSchema }),
+  ...BaseSchema({ ...options, schema }),
   /**
    * Set a property to type string
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}

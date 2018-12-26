@@ -151,8 +151,9 @@ const appendRequired = ({
 const setAttribute = ({ schema, ...options }, attribute) => {
   const [key, value, type = 'string'] = attribute
   const currentProp = last(schema.properties)
-  if (currentProp) {
+  if (currentProp && typeof currentProp.prop === 'function') {
     const { name, ...props } = currentProp
+    // TODO LS REMOVE once schema type based refactoring is done
     if (type !== currentProp.type && type !== 'any')
       throw new Error(
         `'${name}' as '${currentProp.type}' doesn't accept '${key}' option`

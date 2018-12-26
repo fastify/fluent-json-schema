@@ -26,14 +26,14 @@ const StringSchema = (
   }
 ) => ({
   ...BaseSchema({ ...options, schema }),
-  /**
+  /*/!**
    * Set a property to type string
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
    * @returns {StringSchema}
-   */
+   *!/
 
   asString: () =>
-    StringSchema({ schema: { ...schema }, ...options }).as('string'),
+    StringSchema({ schema: { ...schema }, ...options }).as('string'),*/
 
   /**
    * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.

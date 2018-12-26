@@ -20,192 +20,7 @@ describe('StringSchema', () => {
           .asString()
           .valueOf()
       ).toEqual({
-        $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'object',
-      })
-    })
-
-    describe('options', () => {
-      describe('generatedIds', () => {
-        describe('properties', () => {
-          it('true', () => {
-            expect(
-              StringSchema({ generateIds: true })
-                .prop('prop')
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              properties: { prop: { $id: '#properties/prop', type: 'string' } },
-              type: 'object',
-            })
-          })
-
-          it('false', () => {
-            expect(
-              StringSchema()
-                .prop('prop')
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              properties: { prop: { type: 'string' } },
-              type: 'object',
-            })
-          })
-
-          describe('nested', () => {
-            it('true', () => {
-              expect(
-                StringSchema({ generateIds: true })
-                  .prop(
-                    'foo',
-                    StringSchema()
-                      .prop('bar')
-                      .required()
-                  )
-                  .valueOf()
-              ).toEqual({
-                $schema: 'http://json-schema.org/draft-07/schema#',
-                properties: {
-                  foo: {
-                    $id: '#properties/foo',
-                    properties: {
-                      bar: {
-                        $id: '#properties/foo/properties/bar',
-                        type: 'string',
-                      },
-                    },
-                    required: ['bar'],
-                    type: 'object',
-                  },
-                },
-                type: 'object',
-              })
-            })
-            it('false', () => {
-              const id = 'myId'
-              expect(
-                StringSchema()
-                  .prop(
-                    'foo',
-                    StringSchema()
-                      .prop('bar')
-                      .id(id)
-                      .required()
-                  )
-                  .valueOf()
-              ).toEqual({
-                $schema: 'http://json-schema.org/draft-07/schema#',
-                properties: {
-                  foo: {
-                    properties: {
-                      bar: { $id: 'myId', type: 'string' },
-                    },
-                    required: ['bar'],
-                    type: 'object',
-                  },
-                },
-                type: 'object',
-              })
-            })
-          })
-        })
-        describe('definitions', () => {
-          it('true', () => {
-            expect(
-              StringSchema({ generateIds: true })
-                .definition(
-                  'entity',
-                  StringSchema()
-                    .prop('foo')
-                    .prop('bar')
-                )
-                .prop('prop')
-                .ref('entity')
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {
-                entity: {
-                  $id: '#definitions/entity',
-                  properties: {
-                    bar: {
-                      type: 'string',
-                    },
-                    foo: {
-                      type: 'string',
-                    },
-                  },
-                  type: 'object',
-                },
-              },
-              properties: {
-                prop: {
-                  $ref: 'entity',
-                },
-              },
-              type: 'object',
-            })
-          })
-
-          it('false', () => {
-            expect(
-              StringSchema({ generateIds: false })
-                .definition(
-                  'entity',
-                  StringSchema()
-                    .id('myCustomId')
-                    .prop('foo')
-                )
-                .prop('prop')
-                .ref('entity')
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {
-                entity: {
-                  $id: 'myCustomId',
-                  properties: {
-                    foo: { type: 'string' },
-                  },
-                  type: 'object',
-                },
-              },
-              properties: {
-                prop: {
-                  $ref: 'entity',
-                },
-              },
-              type: 'object',
-            })
-          })
-
-          it('nested', () => {
-            const id = 'myId'
-            expect(
-              StringSchema()
-                .prop(
-                  'foo',
-                  StringSchema()
-                    .prop('bar')
-                    .id(id)
-                    .required()
-                )
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              properties: {
-                foo: {
-                  properties: {
-                    bar: { $id: 'myId', type: 'string' },
-                  },
-                  required: ['bar'],
-                  type: 'object',
-                },
-              },
-              type: 'object',
-            })
-          })
-        })
+        type: 'string',
       })
     })
   })
@@ -229,12 +44,7 @@ describe('StringSchema', () => {
     describe('minLength', () => {
       it('valid', () => {
         const schema = FluentSchema()
-          .prop(
-            'prop',
-            StringSchema()
-              .asString()
-              .minLength(5)
-          )
+          .prop('prop', StringSchema().minLength(5))
           .valueOf()
         expect(schema).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
@@ -253,16 +63,12 @@ describe('StringSchema', () => {
         )
       })
     })
-    describe('maxLength', () => {
+    describe.only('maxLength', () => {
       it('valid', () => {
-        const prop = 'prop'
-        expect(
-          StringSchema()
-            .prop(prop)
-            .asString()
-            .maxLength(10)
-            .valueOf()
-        ).toEqual({
+        const schema = FluentSchema()
+          .prop('prop', StringSchema().maxLength(10))
+          .valueOf()
+        expect(schema).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             prop: {
@@ -274,12 +80,8 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        const prop = 'prop'
         expect(() =>
-          StringSchema()
-            .prop(prop)
-            .asString()
-            .maxLength('5.1')
+          FluentSchema().prop('prop', StringSchema().maxLength('5.1'))
         ).toThrow("'maxLength' must be an Integer")
       })
     })
@@ -453,7 +255,7 @@ describe('StringSchema', () => {
     })
   })
 
-  it.only('works', () => {
+  it('works', () => {
     const schema = FluentSchema()
       .id('http://bar.com/object')
       .title('A object')

@@ -11,6 +11,8 @@ const {
   REQUIRED,
 } = require('./utils')
 
+const { StringSchema } = require('./StringSchema')
+
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'object',
@@ -65,7 +67,7 @@ const setComposeType = ({ prop, schemas, schema, options }) => {
  */
 
 const FluentSchema = (
-  { schema = initialState, ...options } = { generateIds: false }
+  { schema, ...options } = { generateIds: false, schema: initialState }
 ) => ({
   /**
    * It defines a URI for the schema, and the base URI that other URI references within the schema are resolved against.
@@ -420,7 +422,13 @@ const FluentSchema = (
    * @returns {FluentSchema}
    */
 
-  asString: () => FluentSchema({ schema: { ...schema }, options }).as('string'),
+  asString: () => {
+    return StringSchema({
+      ...options,
+      schema: { ...schema },
+      factory: StringSchema,
+    }).as('string')
+  },
 
   /**
    * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.

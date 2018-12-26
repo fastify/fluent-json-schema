@@ -148,6 +148,43 @@ const appendRequired = ({
   return [schemaPatched, attributesPatched]
 }
 
+const setAttribute = ({ schema, ...options }, attribute) => {
+  const [key, value, type = 'string'] = attribute
+  const currentProp = last(schema.properties)
+  if (currentProp) {
+    const { name, ...props } = currentProp
+    if (type !== currentProp.type && type !== 'any')
+      throw new Error(
+        `'${name}' as '${currentProp.type}' doesn't accept '${key}' option`
+      )
+    return options.factory({ schema, ...options }).prop(name, {
+      ...props,
+      [key]: value,
+    })
+  }
+  return options.factory({ schema: { ...schema, [key]: value }, ...options })
+}
+
+const setComposeType = ({ prop, schemas, schema, options }) => {
+  if (!(Array.isArray(schemas) && schemas.every(v => isFluentSchema(v)))) {
+    throw new Error(
+      `'${prop}' must be a an array of FluentSchema rather than a '${typeof schemas}'`
+    )
+  }
+
+  const currentProp = last(schema.properties)
+  const { name, not, type, ...props } = currentProp
+  const values = schemas.map(schema => {
+    const { $schema, ...props } = schema.valueOf()
+    return props
+  })
+  const attr = {
+    ...props,
+    ...(not ? { not: { [prop]: values } } : { [prop]: values }),
+  }
+  return options.factory({ schema: { ...schema }, options }).prop(name, attr)
+}
+
 module.exports = {
   isFluentSchema,
   hasCombiningKeywords,
@@ -159,5 +196,7 @@ module.exports = {
   patchIdsWithParentId,
   appendRequired,
   valueOf,
+  setAttribute,
+  setComposeType,
   FORMATS,
 }

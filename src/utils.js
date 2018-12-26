@@ -41,6 +41,24 @@ const flat = array =>
 
 const REQUIRED = Symbol('required')
 
+const valueOf = (schema, root = false) => {
+  const { properties, definitions, required, $schema, ...rest } = schema
+  return Object.assign(
+    root ? { $schema } : {},
+    Object.keys(definitions || []).length > 0
+      ? { definitions: flat(definitions) }
+      : undefined,
+    { ...omit(rest, ['if', 'then', 'else']) },
+    Object.keys(properties).length > 0
+      ? { properties: flat(properties) }
+      : undefined,
+    required.length > 0 ? { required } : undefined,
+    schema.if ? { if: schema.if } : undefined,
+    schema.then ? { then: schema.then } : undefined,
+    schema.else ? { else: schema.else } : undefined
+  )
+}
+
 const RELATIVE_JSON_POINTER = 'relative-json-pointer'
 const JSON_POINTER = 'json-pointer'
 const UUID = 'uuid'
@@ -140,5 +158,6 @@ module.exports = {
   deepOmit,
   patchIdsWithParentId,
   appendRequired,
+  valueOf,
   FORMATS,
 }

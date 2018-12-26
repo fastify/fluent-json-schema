@@ -25,33 +25,33 @@ or
 ## Usage
 
 ```javascript
-const schema = FluentSchema()
+const schema = StringSchema()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
   .description('A simple user')
   .prop(
     'email',
-    FluentSchema()
+    StringSchema()
       .asString()
       .format(FORMATS.EMAIL)
       .required()
   )
   .prop(
     'password',
-    FluentSchema()
+    StringSchema()
       .asString()
       .minLength(8)
   )
   .prop(
     'role',
-    FluentSchema()
+    StringSchema()
       .enum(['ADMIN', 'USER'])
       .default('USER')
       .required()
   )
   .definition(
     'address',
-    FluentSchema()
+    StringSchema()
       .id('#address')
       .prop('line1')
       .required()

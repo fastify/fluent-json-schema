@@ -1,210 +1,210 @@
 ## Functions
 
 <dl>
-<dt><a href="#FluentSchema">FluentSchema([options])</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
-<dd><p>Represents a FluentSchema.</p>
+<dt><a href="#StringSchema">StringSchema([options])</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
+<dd><p>Represents a StringSchema.</p>
 </dd>
-<dt><a href="#id">id(id)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#id">id(id)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It defines a URI for the schema, and the base URI that other URI references within the schema are resolved against.</p>
 <p><a href="https://json-schema.org/latest/json-schema-core.html#id-keyword">reference</a></p>
 </dd>
-<dt><a href="#title">title(title)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#title">title(title)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It can be used to decorate a user interface with information about the data produced by this user interface. A title will preferably be short.</p>
 <p><a href="https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.1">reference</a></p>
 </dd>
-<dt><a href="#description">description(description)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#description">description(description)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It can be used to decorate a user interface with information about the data
 produced by this user interface. A description provides explanation about
 the purpose of the instance described by the schema.</p>
 <p><a href="https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.1">reference</a></p>
 </dd>
-<dt><a href="#examples">examples(examples)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#examples">examples(examples)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>The value of this keyword MUST be an array.
 There are no restrictions placed on the values within the array.</p>
 <p><a href="https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.4">reference</a></p>
 </dd>
-<dt><a href="#ref">ref(ref)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#ref">ref(ref)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>The value must be a valid id e.g. #properties/foo</p>
 </dd>
-<dt><a href="#definition">definition(name, props)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#definition">definition(name, props)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>The &quot;definitions&quot; keywords provides a standardized location for schema authors to inline re-usable JSON Schemas into a more general schema.
 There are no restrictions placed on the values within the array.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.9</a></p>
 </dd>
-<dt><a href="#prop">prop(name, props)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#prop">prop(name, props)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>The value of &quot;properties&quot; MUST be an object. Each value of this object MUST be a valid JSON Schema</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.4</a></p>
 </dd>
-<dt><a href="#enum">enum(values)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#enum">enum(values)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>The value of this keyword MUST be an array. This array SHOULD have at least one element. Elements in the array SHOULD be unique.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.2</a></p>
 </dd>
-<dt><a href="#const">const(value)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#const">const(value)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>The value of this keyword MAY be of any type, including null.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.3</a></p>
 </dd>
-<dt><a href="#default">default(defaults)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#default">default(defaults)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>There are no restrictions placed on the value of this keyword.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.2</a></p>
 </dd>
-<dt><a href="#required">required()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#required">required()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Required has to be chained to a property:
 Examples:</p>
 <ul>
-<li>FluentSchema().prop(&#39;prop&#39;).required()</li>
-<li>FluentSchema().prop(&#39;prop&#39;, FluentSchema().asNumber()).required()</li>
+<li>StringSchema().prop(&#39;prop&#39;).required()</li>
+<li>StringSchema().prop(&#39;prop&#39;, StringSchema().asNumber()).required()</li>
 </ul>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.3</a></p>
 </dd>
-<dt><a href="#not">not()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#not">not()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Can be applied only to a not followed by a anyOf, allOf or oneOf</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.4</a></p>
 </dd>
-<dt><a href="#anyOf">anyOf(schemas)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#anyOf">anyOf(schemas)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It  MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.3</a></p>
 </dd>
-<dt><a href="#allOf">allOf(schemas)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#allOf">allOf(schemas)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.1</a></p>
 </dd>
-<dt><a href="#oneOf">oneOf(schemas)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#oneOf">oneOf(schemas)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.</p>
 </dd>
-<dt><a href="#asString">asString()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#asString">asString()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Set a property to type string
 <a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1</a></p>
 </dd>
-<dt><a href="#minLength">minLength(min)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#minLength">minLength(min)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
 The length of a string instance is defined as the number of its characters as defined by RFC 7159 [RFC7159].</p>
 </dd>
-<dt><a href="#maxLength">maxLength(max)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#maxLength">maxLength(max)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
 The length of a string instance is defined as the number of its characters as defined by RFC 7159 [RFC7159].</p>
 </dd>
-<dt><a href="#format">format(format)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#format">format(format)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>A string value can be RELATIVE_JSON_POINTER, JSON_POINTER, UUID, REGEX, IPV6, IPV4, HOSTNAME, EMAIL, URL, URI_TEMPLATE, URI_REFERENCE, URI, TIME, DATE,</p>
 </dd>
-<dt><a href="#pattern">pattern(pattern)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#pattern">pattern(pattern)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>This string SHOULD be a valid regular expression, according to the ECMA 262 regular expression dialect.
  A string instance is considered valid if the regular expression matches the instance successfully.</p>
 </dd>
-<dt><a href="#contentEncoding">contentEncoding(encoding)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#contentEncoding">contentEncoding(encoding)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>If the instance value is a string, this property defines that the string SHOULD
  be interpreted as binary data and decoded using the encoding named by this property.
  RFC 2045, Sec 6.1 [RFC2045] lists the possible values for this property.</p>
 </dd>
-<dt><a href="#contentMediaType">contentMediaType(mediaType)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#contentMediaType">contentMediaType(mediaType)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>The value of this property must be a media type, as defined by RFC 2046 [RFC2046].
  This property defines the media type of instances which this schema defines.</p>
 </dd>
-<dt><a href="#asNumber">asNumber()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#asNumber">asNumber()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Set a property to type number</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1</a></p>
 </dd>
-<dt><a href="#minimum">minimum(min)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#minimum">minimum(min)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It represents  an inclusive lower limit for a numeric instance.</p>
 </dd>
-<dt><a href="#exclusiveMinimum">exclusiveMinimum()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#exclusiveMinimum">exclusiveMinimum()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It represents an exclusive lower limit for a numeric instance.</p>
 <ul>
 <li>@param {number} min
 <a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.5</a></li>
 </ul>
 </dd>
-<dt><a href="#maximum">maximum()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#maximum">maximum()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It represents  an inclusive upper limit for a numeric instance.
 <a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.2</a></p>
 </dd>
-<dt><a href="#exclusiveMaximum">exclusiveMaximum(max)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#exclusiveMaximum">exclusiveMaximum(max)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It represents an exclusive upper limit for a numeric instance.</p>
 </dd>
-<dt><a href="#multipleOf">multipleOf(multiple)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#multipleOf">multipleOf(multiple)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>It&#39;s strictly greater than 0.</p>
 </dd>
-<dt><a href="#asBoolean">asBoolean()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#asBoolean">asBoolean()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Set a property to type boolean</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1</a></p>
 </dd>
-<dt><a href="#asInteger">asInteger()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#asInteger">asInteger()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Set a property to type integer</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1</a></p>
 </dd>
-<dt><a href="#asArray">asArray()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#asArray">asArray()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Set a property to type array</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1</a></p>
 </dd>
-<dt><a href="#items">items(items)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#items">items(items)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>This keyword determines how child instances validate for arrays, and does not directly validate the immediate instance itself.
 If &quot;items&quot; is a schema, validation succeeds if all elements in the array successfully validate against that schema.
 If &quot;items&quot; is an array of schemas, validation succeeds if each element of the instance validates against the schema at the same position, if any.
 Omitting this keyword has the same behavior as an empty schema.</p>
 </dd>
-<dt><a href="#additionalItems">additionalItems(items)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#additionalItems">additionalItems(items)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>This keyword determines how child instances validate for arrays, and does not directly validate the immediate instance itself.</p>
 </dd>
-<dt><a href="#contains">contains(value)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#contains">contains(value)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>An array instance is valid against &quot;contains&quot; if at least one of its elements is valid against the given schema.</p>
 </dd>
-<dt><a href="#uniqueItems">uniqueItems(boolean)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#uniqueItems">uniqueItems(boolean)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>If this keyword has boolean value false, the instance validates successfully.
 If it has boolean value true, the instance validates successfully if all of its elements are unique.
 Omitting this keyword has the same behavior as a value of false.</p>
 </dd>
-<dt><a href="#minItems">minItems(min)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#minItems">minItems(min)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>An array instance is valid against &quot;minItems&quot; if its size is greater than, or equal to, the value of this keyword.
 Omitting this keyword has the same behavior as a value of 0.</p>
 </dd>
-<dt><a href="#maxItems">maxItems(max)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#maxItems">maxItems(max)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>An array instance is valid against &quot;minItems&quot; if its size is greater than, or equal to, the value of this keyword.
 Omitting this keyword has the same behavior as a value of 0.</p>
 </dd>
-<dt><a href="#asObject">asObject()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#asObject">asObject()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Set a property to type object</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1</a></p>
 </dd>
-<dt><a href="#additionalProperties">additionalProperties(value)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#additionalProperties">additionalProperties(value)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>This keyword determines how child instances validate for objects, and does not directly validate the immediate instance itself.
 Validation with &quot;additionalProperties&quot; applies only to the child values of instance names that do not match any names in &quot;properties&quot;,
 and do not match any regular expression in &quot;patternProperties&quot;.
 For all such properties, validation succeeds if the child instance validates against the &quot;additionalProperties&quot; schema.
 Omitting this keyword has the same behavior as an empty schema.</p>
 </dd>
-<dt><a href="#maxProperties">maxProperties(max)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#maxProperties">maxProperties(max)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>An object instance is valid against &quot;maxProperties&quot; if its number of properties is less than, or equal to, the value of this keyword.</p>
 </dd>
-<dt><a href="#minProperties">minProperties(min)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#minProperties">minProperties(min)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>An object instance is valid against &quot;minProperties&quot; if its number of properties is greater than, or equal to, the value of this keyword.</p>
 </dd>
-<dt><a href="#patternProperties">patternProperties(options)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#patternProperties">patternProperties(options)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Each property name of this object SHOULD be a valid regular expression, according to the ECMA 262 regular expression dialect.
 Each property value of this object MUST be a valid JSON Schema.
 This keyword determines how child instances validate for objects, and does not directly validate the immediate instance itself.
 Validation of the primitive instance type against this keyword always succeeds.
 Validation succeeds if, for each instance name that matches any regular expressions that appear as a property name in this keyword&#39;s value, the child instance for that name successfully validates against each schema that corresponds to a matching regular expression.</p>
 </dd>
-<dt><a href="#dependencies">dependencies(options)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#dependencies">dependencies(options)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>This keyword specifies rules that are evaluated if the instance is an object and contains a certain property.
 This keyword&#39;s value MUST be an object. Each property specifies a dependency. Each dependency value MUST be an array or a valid JSON Schema.
 If the dependency value is a subschema, and the dependency key is a property in the instance, the entire instance must validate against the dependency value.
 If the dependency value is an array, each element in the array, if any, MUST be a string, and MUST be unique. If the dependency key is a property in the instance, each of the items in the dependency value must be a property that exists in the instance.</p>
 </dd>
-<dt><a href="#propertyNames">propertyNames(value)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#propertyNames">propertyNames(value)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>If the instance is an object, this keyword validates if every property name in the instance validates against the provided schema.
 Note the property name that the schema is testing will always be a string.</p>
 </dd>
-<dt><a href="#asNull">asNull()</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#asNull">asNull()</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Set a property to type null</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1</a></p>
 </dd>
-<dt><a href="#ifThen">ifThen(ifClause, thenClause)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#ifThen">ifThen(ifClause, thenClause)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>This validation outcome of this keyword&#39;s subschema has no direct effect on the overall validation result.
 Rather, it controls which of the &quot;then&quot; or &quot;else&quot; keywords are evaluated.
 When &quot;if&quot; is present, and the instance successfully validates against its subschema, then
 validation succeeds against this keyword if the instance also successfully validates against this keyword&#39;s subschema.</p>
 </dd>
-<dt><a href="#ifThenElse">ifThenElse(ifClause, thenClause, elseClause)</a> ⇒ <code><a href="#FluentSchema">FluentSchema</a></code></dt>
+<dt><a href="#ifThenElse">ifThenElse(ifClause, thenClause, elseClause)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>When &quot;if&quot; is present, and the instance fails to validate against its subschema,
 then validation succeeds against this keyword if the instance successfully validates against this keyword&#39;s subschema.</p>
 </dd>
@@ -213,23 +213,23 @@ then validation succeeds against this keyword if the instance successfully valid
 </dd>
 </dl>
 
-<a name="FluentSchema"></a>
+<a name="StringSchema"></a>
 
-## FluentSchema([options]) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## StringSchema([options]) ⇒ [<code>StringSchema</code>](#StringSchema)
 
-Represents a FluentSchema.
+Represents a StringSchema.
 
 **Kind**: global function
 
 | Param                 | Type                                       | Default            | Description                                        |
 | --------------------- | ------------------------------------------ | ------------------ | -------------------------------------------------- |
 | [options]             | <code>Object</code>                        |                    | Options                                            |
-| [options.schema]      | [<code>FluentSchema</code>](#FluentSchema) |                    | Default schema                                     |
+| [options.schema]      | [<code>StringSchema</code>](#StringSchema) |                    | Default schema                                     |
 | [options.generateIds] | <code>boolean</code>                       | <code>false</code> | generate the id automatically e.g. #properties.foo |
 
 <a name="id"></a>
 
-## id(id) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## id(id) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It defines a URI for the schema, and the base URI that other URI references within the schema are resolved against.
 
@@ -243,7 +243,7 @@ It defines a URI for the schema, and the base URI that other URI references with
 
 <a name="title"></a>
 
-## title(title) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## title(title) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It can be used to decorate a user interface with information about the data produced by this user interface. A title will preferably be short.
 
@@ -257,7 +257,7 @@ It can be used to decorate a user interface with information about the data prod
 
 <a name="description"></a>
 
-## description(description) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## description(description) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It can be used to decorate a user interface with information about the data
 produced by this user interface. A description provides explanation about
@@ -273,7 +273,7 @@ the purpose of the instance described by the schema.
 
 <a name="examples"></a>
 
-## examples(examples) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## examples(examples) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 The value of this keyword MUST be an array.
 There are no restrictions placed on the values within the array.
@@ -288,7 +288,7 @@ There are no restrictions placed on the values within the array.
 
 <a name="ref"></a>
 
-## ref(ref) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## ref(ref) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 The value must be a valid id e.g. #properties/foo
 
@@ -300,7 +300,7 @@ The value must be a valid id e.g. #properties/foo
 
 <a name="definition"></a>
 
-## definition(name, props) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## definition(name, props) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 The "definitions" keywords provides a standardized location for schema authors to inline re-usable JSON Schemas into a more general schema.
 There are no restrictions placed on the values within the array.
@@ -312,11 +312,11 @@ There are no restrictions placed on the values within the array.
 | Param | Type                                       |
 | ----- | ------------------------------------------ |
 | name  | <code>string</code>                        |
-| props | [<code>FluentSchema</code>](#FluentSchema) |
+| props | [<code>StringSchema</code>](#StringSchema) |
 
 <a name="prop"></a>
 
-## prop(name, props) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## prop(name, props) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 The value of "properties" MUST be an object. Each value of this object MUST be a valid JSON Schema
 
@@ -327,11 +327,11 @@ The value of "properties" MUST be an object. Each value of this object MUST be a
 | Param | Type                                       |
 | ----- | ------------------------------------------ |
 | name  | <code>string</code>                        |
-| props | [<code>FluentSchema</code>](#FluentSchema) |
+| props | [<code>StringSchema</code>](#StringSchema) |
 
 <a name="enum"></a>
 
-## enum(values) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## enum(values) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 The value of this keyword MUST be an array. This array SHOULD have at least one element. Elements in the array SHOULD be unique.
 
@@ -345,7 +345,7 @@ The value of this keyword MUST be an array. This array SHOULD have at least one 
 
 <a name="const"></a>
 
-## const(value) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## const(value) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 The value of this keyword MAY be of any type, including null.
 
@@ -359,7 +359,7 @@ The value of this keyword MAY be of any type, including null.
 
 <a name="default"></a>
 
-## default(defaults) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## default(defaults) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 There are no restrictions placed on the value of this keyword.
 
@@ -373,20 +373,20 @@ There are no restrictions placed on the value of this keyword.
 
 <a name="required"></a>
 
-## required() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## required() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 Required has to be chained to a property:
 Examples:
 
-- FluentSchema().prop('prop').required()
-- FluentSchema().prop('prop', FluentSchema().asNumber()).required()
+- StringSchema().prop('prop').required()
+- StringSchema().prop('prop', StringSchema().asNumber()).required()
 
 [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.3](reference)
 
 **Kind**: global function  
 <a name="not"></a>
 
-## not() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## not() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 Can be applied only to a not followed by a anyOf, allOf or oneOf
 
@@ -395,7 +395,7 @@ Can be applied only to a not followed by a anyOf, allOf or oneOf
 **Kind**: global function  
 <a name="anyOf"></a>
 
-## anyOf(schemas) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## anyOf(schemas) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
 
@@ -409,7 +409,7 @@ It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema
 
 <a name="allOf"></a>
 
-## allOf(schemas) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## allOf(schemas) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
 
@@ -423,7 +423,7 @@ It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema
 
 <a name="oneOf"></a>
 
-## oneOf(schemas) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## oneOf(schemas) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
 
@@ -435,7 +435,7 @@ It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema
 
 <a name="asString"></a>
 
-## asString() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## asString() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 Set a property to type string
 [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1](reference)
@@ -443,7 +443,7 @@ Set a property to type string
 **Kind**: global function  
 <a name="minLength"></a>
 
-## minLength(min) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## minLength(min) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
 The length of a string instance is defined as the number of its characters as defined by RFC 7159 [RFC7159].
@@ -456,7 +456,7 @@ The length of a string instance is defined as the number of its characters as de
 
 <a name="maxLength"></a>
 
-## maxLength(max) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## maxLength(max) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
 The length of a string instance is defined as the number of its characters as defined by RFC 7159 [RFC7159].
@@ -469,7 +469,7 @@ The length of a string instance is defined as the number of its characters as de
 
 <a name="format"></a>
 
-## format(format) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## format(format) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 A string value can be RELATIVE_JSON_POINTER, JSON_POINTER, UUID, REGEX, IPV6, IPV4, HOSTNAME, EMAIL, URL, URI_TEMPLATE, URI_REFERENCE, URI, TIME, DATE,
 
@@ -481,7 +481,7 @@ A string value can be RELATIVE_JSON_POINTER, JSON_POINTER, UUID, REGEX, IPV6, IP
 
 <a name="pattern"></a>
 
-## pattern(pattern) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## pattern(pattern) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 This string SHOULD be a valid regular expression, according to the ECMA 262 regular expression dialect.
 A string instance is considered valid if the regular expression matches the instance successfully.
@@ -494,7 +494,7 @@ A string instance is considered valid if the regular expression matches the inst
 
 <a name="contentEncoding"></a>
 
-## contentEncoding(encoding) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## contentEncoding(encoding) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 If the instance value is a string, this property defines that the string SHOULD
 be interpreted as binary data and decoded using the encoding named by this property.
@@ -508,7 +508,7 @@ RFC 2045, Sec 6.1 [RFC2045] lists the possible values for this property.
 
 <a name="contentMediaType"></a>
 
-## contentMediaType(mediaType) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## contentMediaType(mediaType) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 The value of this property must be a media type, as defined by RFC 2046 [RFC2046].
 This property defines the media type of instances which this schema defines.
@@ -521,7 +521,7 @@ This property defines the media type of instances which this schema defines.
 
 <a name="asNumber"></a>
 
-## asNumber() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## asNumber() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 Set a property to type number
 
@@ -530,7 +530,7 @@ Set a property to type number
 **Kind**: global function  
 <a name="minimum"></a>
 
-## minimum(min) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## minimum(min) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It represents an inclusive lower limit for a numeric instance.
 
@@ -542,7 +542,7 @@ It represents an inclusive lower limit for a numeric instance.
 
 <a name="exclusiveMinimum"></a>
 
-## exclusiveMinimum() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## exclusiveMinimum() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It represents an exclusive lower limit for a numeric instance.
 
@@ -552,7 +552,7 @@ It represents an exclusive lower limit for a numeric instance.
 **Kind**: global function  
 <a name="maximum"></a>
 
-## maximum() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## maximum() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It represents an inclusive upper limit for a numeric instance.
 [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.2](reference)
@@ -560,7 +560,7 @@ It represents an inclusive upper limit for a numeric instance.
 **Kind**: global function  
 <a name="exclusiveMaximum"></a>
 
-## exclusiveMaximum(max) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## exclusiveMaximum(max) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It represents an exclusive upper limit for a numeric instance.
 
@@ -572,7 +572,7 @@ It represents an exclusive upper limit for a numeric instance.
 
 <a name="multipleOf"></a>
 
-## multipleOf(multiple) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## multipleOf(multiple) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 It's strictly greater than 0.
 
@@ -584,7 +584,7 @@ It's strictly greater than 0.
 
 <a name="asBoolean"></a>
 
-## asBoolean() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## asBoolean() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 Set a property to type boolean
 
@@ -593,7 +593,7 @@ Set a property to type boolean
 **Kind**: global function  
 <a name="asInteger"></a>
 
-## asInteger() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## asInteger() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 Set a property to type integer
 
@@ -602,7 +602,7 @@ Set a property to type integer
 **Kind**: global function  
 <a name="asArray"></a>
 
-## asArray() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## asArray() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 Set a property to type array
 
@@ -611,7 +611,7 @@ Set a property to type array
 **Kind**: global function  
 <a name="items"></a>
 
-## items(items) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## items(items) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 This keyword determines how child instances validate for arrays, and does not directly validate the immediate instance itself.
 If "items" is a schema, validation succeeds if all elements in the array successfully validate against that schema.
@@ -622,11 +622,11 @@ Omitting this keyword has the same behavior as an empty schema.
 
 | Param | Type                                                                                                   | Description                                                                               |
 | ----- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| items | [<code>FluentSchema</code>](#FluentSchema) \| [<code>Array.&lt;FluentSchema&gt;</code>](#FluentSchema) | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.1](reference) |
+| items | [<code>StringSchema</code>](#StringSchema) \| [<code>Array.&lt;StringSchema&gt;</code>](#StringSchema) | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.1](reference) |
 
 <a name="additionalItems"></a>
 
-## additionalItems(items) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## additionalItems(items) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 This keyword determines how child instances validate for arrays, and does not directly validate the immediate instance itself.
 
@@ -634,11 +634,11 @@ This keyword determines how child instances validate for arrays, and does not di
 
 | Param | Type                                                               | Description                                                                               |
 | ----- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| items | [<code>FluentSchema</code>](#FluentSchema) \| <code>boolean</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.2](reference) |
+| items | [<code>StringSchema</code>](#StringSchema) \| <code>boolean</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.2](reference) |
 
 <a name="contains"></a>
 
-## contains(value) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## contains(value) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 An array instance is valid against "contains" if at least one of its elements is valid against the given schema.
 
@@ -646,11 +646,11 @@ An array instance is valid against "contains" if at least one of its elements is
 
 | Param | Type                                                               | Description                                                                               |
 | ----- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| value | [<code>FluentSchema</code>](#FluentSchema) \| <code>boolean</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.2](reference) |
+| value | [<code>StringSchema</code>](#StringSchema) \| <code>boolean</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.2](reference) |
 
 <a name="uniqueItems"></a>
 
-## uniqueItems(boolean) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## uniqueItems(boolean) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 If this keyword has boolean value false, the instance validates successfully.
 If it has boolean value true, the instance validates successfully if all of its elements are unique.
@@ -664,7 +664,7 @@ Omitting this keyword has the same behavior as a value of false.
 
 <a name="minItems"></a>
 
-## minItems(min) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## minItems(min) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 An array instance is valid against "minItems" if its size is greater than, or equal to, the value of this keyword.
 Omitting this keyword has the same behavior as a value of 0.
@@ -677,7 +677,7 @@ Omitting this keyword has the same behavior as a value of 0.
 
 <a name="maxItems"></a>
 
-## maxItems(max) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## maxItems(max) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 An array instance is valid against "minItems" if its size is greater than, or equal to, the value of this keyword.
 Omitting this keyword has the same behavior as a value of 0.
@@ -690,7 +690,7 @@ Omitting this keyword has the same behavior as a value of 0.
 
 <a name="asObject"></a>
 
-## asObject() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## asObject() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 Set a property to type object
 
@@ -699,7 +699,7 @@ Set a property to type object
 **Kind**: global function  
 <a name="additionalProperties"></a>
 
-## additionalProperties(value) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## additionalProperties(value) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 This keyword determines how child instances validate for objects, and does not directly validate the immediate instance itself.
 Validation with "additionalProperties" applies only to the child values of instance names that do not match any names in "properties",
@@ -711,11 +711,11 @@ Omitting this keyword has the same behavior as an empty schema.
 
 | Param | Type                                                               | Description                                                                               |
 | ----- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| value | [<code>FluentSchema</code>](#FluentSchema) \| <code>boolean</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.6](reference) |
+| value | [<code>StringSchema</code>](#StringSchema) \| <code>boolean</code> | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.6](reference) |
 
 <a name="maxProperties"></a>
 
-## maxProperties(max) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## maxProperties(max) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 An object instance is valid against "maxProperties" if its number of properties is less than, or equal to, the value of this keyword.
 
@@ -727,7 +727,7 @@ An object instance is valid against "maxProperties" if its number of properties 
 
 <a name="minProperties"></a>
 
-## minProperties(min) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## minProperties(min) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 An object instance is valid against "minProperties" if its number of properties is greater than, or equal to, the value of this keyword.
 
@@ -739,7 +739,7 @@ An object instance is valid against "minProperties" if its number of properties 
 
 <a name="patternProperties"></a>
 
-## patternProperties(options) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## patternProperties(options) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 Each property name of this object SHOULD be a valid regular expression, according to the ECMA 262 regular expression dialect.
 Each property value of this object MUST be a valid JSON Schema.
@@ -755,7 +755,7 @@ Validation succeeds if, for each instance name that matches any regular expressi
 
 <a name="dependencies"></a>
 
-## dependencies(options) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## dependencies(options) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 This keyword specifies rules that are evaluated if the instance is an object and contains a certain property.
 This keyword's value MUST be an object. Each property specifies a dependency. Each dependency value MUST be an array or a valid JSON Schema.
@@ -770,7 +770,7 @@ If the dependency value is an array, each element in the array, if any, MUST be 
 
 <a name="propertyNames"></a>
 
-## propertyNames(value) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## propertyNames(value) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 If the instance is an object, this keyword validates if every property name in the instance validates against the provided schema.
 Note the property name that the schema is testing will always be a string.
@@ -779,11 +779,11 @@ Note the property name that the schema is testing will always be a string.
 
 | Param | Type                                       | Description                                                                               |
 | ----- | ------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| value | [<code>FluentSchema</code>](#FluentSchema) | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.7](reference) |
+| value | [<code>StringSchema</code>](#StringSchema) | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.7](reference) |
 
 <a name="asNull"></a>
 
-## asNull() ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## asNull() ⇒ [<code>StringSchema</code>](#StringSchema)
 
 Set a property to type null
 
@@ -792,7 +792,7 @@ Set a property to type null
 **Kind**: global function  
 <a name="ifThen"></a>
 
-## ifThen(ifClause, thenClause) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## ifThen(ifClause, thenClause) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 This validation outcome of this keyword's subschema has no direct effect on the overall validation result.
 Rather, it controls which of the "then" or "else" keywords are evaluated.
@@ -803,12 +803,12 @@ validation succeeds against this keyword if the instance also successfully valid
 
 | Param      | Type                                       | Description                                                                               |
 | ---------- | ------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| ifClause   | [<code>FluentSchema</code>](#FluentSchema) |                                                                                           |
-| thenClause | [<code>FluentSchema</code>](#FluentSchema) | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.6.1](reference) |
+| ifClause   | [<code>StringSchema</code>](#StringSchema) |                                                                                           |
+| thenClause | [<code>StringSchema</code>](#StringSchema) | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.6.1](reference) |
 
 <a name="ifThenElse"></a>
 
-## ifThenElse(ifClause, thenClause, elseClause) ⇒ [<code>FluentSchema</code>](#FluentSchema)
+## ifThenElse(ifClause, thenClause, elseClause) ⇒ [<code>StringSchema</code>](#StringSchema)
 
 When "if" is present, and the instance fails to validate against its subschema,
 then validation succeeds against this keyword if the instance successfully validates against this keyword's subschema.
@@ -817,9 +817,9 @@ then validation succeeds against this keyword if the instance successfully valid
 
 | Param      | Type                                       | Description                                                                               |
 | ---------- | ------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| ifClause   | [<code>FluentSchema</code>](#FluentSchema) |                                                                                           |
-| thenClause | [<code>FluentSchema</code>](#FluentSchema) |                                                                                           |
-| elseClause | [<code>FluentSchema</code>](#FluentSchema) | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.6.1](reference) |
+| ifClause   | [<code>StringSchema</code>](#StringSchema) |                                                                                           |
+| thenClause | [<code>StringSchema</code>](#StringSchema) |                                                                                           |
+| elseClause | [<code>StringSchema</code>](#StringSchema) | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.6.1](reference) |
 
 <a name="valueOf"></a>
 

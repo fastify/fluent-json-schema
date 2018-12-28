@@ -4,3 +4,6 @@
 .nvmrc
 .prettierrc
 .travis.yml
+yarn.lock
+.idea
+coverage

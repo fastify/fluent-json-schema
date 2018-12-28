@@ -505,7 +505,7 @@ describe('FluentSchema', () => {
       })
     })
     describe('string', () => {
-      it('returns a type to the root schema', () => {
+      it('adds a type to the root schema', () => {
         expect(
           FluentSchema()
             .asString()
@@ -513,11 +513,13 @@ describe('FluentSchema', () => {
         ).toEqual('string')
       })
 
-      it('returns a type to the root schema', () => {
+      it.only('sets a type to a prop', () => {
         expect(
           FluentSchema()
-            .prop('value')
+            .prop('bar')
             .asString()
+            .pattern(/.*/g)
+            .prop('foo')
             .valueOf().properties.value.type
         ).toEqual('string')
       })

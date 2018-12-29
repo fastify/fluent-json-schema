@@ -10,7 +10,7 @@ describe('StringSchema', () => {
     it('without params', () => {
       expect(StringSchema().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'object',
+        type: 'string',
       })
     })
 
@@ -20,6 +20,7 @@ describe('StringSchema', () => {
           .asString()
           .valueOf()
       ).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string',
       })
     })
@@ -28,16 +29,8 @@ describe('StringSchema', () => {
   it('valueOf', () => {
     expect(StringSchema().valueOf()).toEqual({
       $schema: 'http://json-schema.org/draft-07/schema#',
-      type: 'object',
+      type: 'string',
     })
-  })
-
-  it('returns string type', () => {
-    expect(
-      StringSchema()
-        .asString()
-        .valueOf().type
-    ).toEqual('string')
   })
 
   describe('keywords:', () => {
@@ -63,7 +56,7 @@ describe('StringSchema', () => {
         )
       })
     })
-    describe.only('maxLength', () => {
+    describe('maxLength', () => {
       it('valid', () => {
         const schema = FluentSchema()
           .prop('prop', StringSchema().maxLength(10))

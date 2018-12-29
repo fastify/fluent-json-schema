@@ -8,6 +8,7 @@ const {
   patchIdsWithParentId,
   valueOf,
   FORMATS,
+  REQUIRED,
   setAttribute,
   setComposeType,
 } = require('./utils')
@@ -142,35 +143,34 @@ const BaseSchema = (
   },
 
   /**
-   * Required' has to be chained to a property:
+   * Required has to be chained to a property:
    * Examples:
-   * - BaseSchema().prop('prop').required()
-   * - BaseSchema().prop('prop', BaseSchema().asNumber()).required()
+   * - FluentSchema().prop('prop').required()
+   * - FluentSchema().prop('prop', FluentSchema().asNumber()).required()
    *
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.3}
-   * @returns {BaseSchema}
+   * @returns {FluentSchema}
    */
 
   required: () => {
     const currentProp = last(schema.properties)
-    if (!currentProp)
-      throw new Error(
-        "'required' has to be chained to a prop: \nExamples: \n- BaseSchema().prop('prop').required() \n- BaseSchema().prop('prop', BaseSchema().asNumber()).required()"
-      )
-    return BaseSchema({
-      schema: { ...schema, required: [...schema.required, currentProp.name] },
+    const required = currentProp
+      ? [...schema.required, currentProp.name]
+      : [REQUIRED]
+    return options.factory({
+      schema: { ...schema, required },
       options,
     })
   },
 
   /**
-   * Can be applied only to a not followed by a anyOf, allOf or oneOf
-   *
+   * Must be a valid FluentSchema
+   * @param not
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.4}
    * @returns {BaseSchema}
    */
 
-  not: () => {
+  /*not: () => {
     const [currentProp, ...properties] = [...schema.properties].reverse()
     if (!currentProp) throw new Error(`'not' can be applied only to a prop`)
     const { name, type, ...props } = currentProp
@@ -182,7 +182,25 @@ const BaseSchema = (
       name,
       attrs
     )
+  },*/
+  not: not => {
+    if (!isFluentSchema(not)) throw new Error("'not' must be a BaseSchema")
+
+    const notSchema = omit(not.valueOf(), ['$schema', 'definitions', 'type'])
+
+    return BaseSchema({
+      schema: {
+        ...schema,
+        not: patchIdsWithParentId({
+          schema: notSchema,
+          ...options,
+          parentId: '#if',
+        }),
+      },
+      ...options,
+    })
   },
+  // return setAttribute({ schema, ...options }, ['defaults', defaults, 'any'])
 
   /**
    * It  MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
@@ -339,7 +357,7 @@ const BaseSchema = (
    *
    * @returns {object}
    */
-  valueOf: (root = false) => {
+  valueOf: (root = true) => {
     // TODO LS infer if object is root and omit $schema
     const { properties, definitions, required, $schema, ...rest } = schema
     return Object.assign(

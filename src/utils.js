@@ -1,4 +1,5 @@
 'use strict'
+// TODO LS check a method for BaseSchema, ObjectSchema, ArraySchema, etc
 const isFluentSchema = obj => typeof obj.anyOf === 'function'
 
 const hasCombiningKeywords = attributes =>
@@ -173,17 +174,21 @@ const setComposeType = ({ prop, schemas, schema, options }) => {
     )
   }
 
-  const currentProp = last(schema.properties)
-  const { name, not, type, ...props } = currentProp
   const values = schemas.map(schema => {
     const { $schema, ...props } = schema.valueOf()
     return props
   })
-  const attr = {
-    ...props,
-    ...(not ? { not: { [prop]: values } } : { [prop]: values }),
+
+  const currentProp = last(schema.properties)
+  if (currentProp && typeof currentProp.prop === 'function') {
+    const { name, not, type, ...props } = currentProp
+    const attr = {
+      ...props,
+      ...(not ? { not: { [prop]: values } } : { [prop]: values }),
+    }
+    return options.factory({ schema: { ...schema }, options }).prop(name, attr)
   }
-  return options.factory({ schema: { ...schema }, options }).prop(name, attr)
+  return options.factory({ schema: { ...schema, [prop]: values }, ...options })
 }
 
 module.exports = {

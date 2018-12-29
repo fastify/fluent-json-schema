@@ -6,14 +6,15 @@ describe('BaseSchema', () => {
   })
 
   describe('constructor', () => {
-    it.only('without params', () => {
+    it('without params', () => {
       expect(BaseSchema().valueOf()).toEqual({
-        // $schema: 'http://json-schema.org/draft-07/schema#',
+        $schema: 'http://json-schema.org/draft-07/schema#',
       })
     })
 
     describe('options', () => {
-      describe('generatedIds', () => {
+      //LS TODO move to ObjectSchema
+      describe.skip('generatedIds', () => {
         describe('properties', () => {
           it('true', () => {
             expect(
@@ -197,35 +198,30 @@ describe('BaseSchema', () => {
       })
 
       describe('factory', () => {
-        it.only('default', () => {
+        it('default', () => {
           const title = 'title'
           expect(
             BaseSchema()
               .title(title)
               .valueOf()
           ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
             title,
           })
         })
 
-        it.only('override', () => {
+        it('override', () => {
           const title = 'title'
           expect(
             BaseSchema({ factory: BaseSchema })
               .title(title)
               .valueOf()
           ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
             title,
           })
         })
       })
-    })
-  })
-
-  it('valueOf', () => {
-    expect(BaseSchema().valueOf()).toEqual({
-      $schema: 'http://json-schema.org/draft-07/schema#',
-      type: 'object',
     })
   })
 
@@ -240,7 +236,8 @@ describe('BaseSchema', () => {
         ).toEqual(value)
       })
 
-      it('nested', () => {
+      // TODO LS move to ObjectSchema
+      it.skip('nested', () => {
         expect(
           BaseSchema()
             .prop(
@@ -251,16 +248,6 @@ describe('BaseSchema', () => {
                 .required()
             )
             .valueOf().properties.foo.$id
-        ).toEqual(value)
-      })
-
-      it('adds to number prop', () => {
-        expect(
-          BaseSchema()
-            .prop('prop')
-            .asNumber()
-            .id(value)
-            .valueOf().properties.prop.$id
         ).toEqual(value)
       })
     })
@@ -274,16 +261,6 @@ describe('BaseSchema', () => {
             .valueOf().title
         ).toEqual(value)
       })
-
-      it('adds to number prop', () => {
-        expect(
-          BaseSchema()
-            .prop('prop')
-            .asNumber()
-            .title(value)
-            .valueOf().properties.prop.title
-        ).toEqual(value)
-      })
     })
 
     describe('description', () => {
@@ -293,17 +270,6 @@ describe('BaseSchema', () => {
           BaseSchema()
             .description(value)
             .valueOf().description
-        ).toEqual(value)
-      })
-
-      it('add to number prop', () => {
-        const value = 'description'
-        expect(
-          BaseSchema()
-            .prop('prop')
-            .asNumber()
-            .description(value)
-            .valueOf().properties.prop.description
         ).toEqual(value)
       })
     })
@@ -318,17 +284,6 @@ describe('BaseSchema', () => {
         ).toEqual(value)
       })
 
-      it('add to number prop', () => {
-        const value = [123]
-        expect(
-          BaseSchema()
-            .prop('prop')
-            .asNumber()
-            .examples(value)
-            .valueOf().properties.prop.examples
-        ).toEqual(value)
-      })
-
       it('invalid', () => {
         const value = 'examples'
         expect(
@@ -339,8 +294,8 @@ describe('BaseSchema', () => {
         ).toThrow("'examples' must be an array e.g. ['1', 'one', 'foo']")
       })
     })
-
-    describe('required', () => {
+    // TODO LS test with FluentSchema.asObject()
+    describe.skip('required', () => {
       it('valid', () => {
         const prop = 'foo'
         expect(
@@ -362,7 +317,8 @@ describe('BaseSchema', () => {
       })
     })
 
-    it('ref', () => {
+    // TODO LS evaluate to move to ObjectSchema
+    it.skip('ref', () => {
       const value = 'description'
       expect(
         BaseSchema()
@@ -374,428 +330,146 @@ describe('BaseSchema', () => {
 
   describe('combining keywords:', () => {
     describe('allOf', () => {
-      it('two types', () => {
+      it('valid', () => {
         expect(
           BaseSchema()
-            .prop('prop')
-            .allOf([BaseSchema().asBoolean(), BaseSchema().asString()])
+            .allOf([BaseSchema().id('foo')])
             .valueOf()
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              allOf: [{ type: 'boolean' }, { type: 'string' }],
-            },
-          },
-          type: 'object',
-        })
-      })
-      it('object', () => {
-        expect(
-          BaseSchema()
-            .prop('prop')
-            .allOf([
-              BaseSchema()
-                .prop('foo')
-                .prop('bar')
-                .asInteger(),
-            ])
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              allOf: [
-                {
-                  properties: {
-                    bar: { type: 'integer' },
-                    foo: { type: 'string' },
-                  },
-                  type: 'object',
-                },
-              ],
-            },
-          },
-          type: 'object',
+          allOf: [{ $id: 'foo' }],
         })
       })
       describe('invalid', () => {
         it('not an array', () => {
           expect(() => {
-            return BaseSchema()
-              .prop('prop')
-              .allOf('test')
+            return BaseSchema().allOf('test')
           }).toThrow(
-            "'allOf' must be a an array of BaseSchema rather than a 'string'"
+            "'allOf' must be a an array of FluentSchema rather than a 'string'"
           )
         })
-        it('not an array of BaseSchema', () => {
+        it('not an array of FluentSchema', () => {
           expect(() => {
-            return BaseSchema()
-              .prop('prop')
-              .allOf(['test'])
+            return BaseSchema().allOf(['test'])
           }).toThrow(
-            "'allOf' must be a an array of BaseSchema rather than a 'object'"
+            "'allOf' must be a an array of FluentSchema rather than a 'object'"
           )
         })
       })
     })
 
     describe('anyOf', () => {
-      it('two types', () => {
+      it('valid', () => {
         expect(
           BaseSchema()
-            .prop('prop')
-            .anyOf([BaseSchema().asBoolean(), BaseSchema().asString()])
+            .anyOf([BaseSchema().id('foo')])
             .valueOf()
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              anyOf: [{ type: 'boolean' }, { type: 'string' }],
-            },
-          },
-          type: 'object',
-        })
-      })
-      it('object', () => {
-        expect(
-          BaseSchema()
-            .prop('prop')
-            .anyOf([
-              BaseSchema()
-                .prop('foo')
-                .prop('bar')
-                .asInteger(),
-            ])
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              anyOf: [
-                {
-                  properties: {
-                    bar: { type: 'integer' },
-                    foo: { type: 'string' },
-                  },
-                  type: 'object',
-                },
-              ],
-            },
-          },
-          type: 'object',
+          anyOf: [{ $id: 'foo' }],
         })
       })
       describe('invalid', () => {
         it('not an array', () => {
           expect(() => {
-            return BaseSchema()
-              .prop('prop')
-              .anyOf('test')
+            return BaseSchema().anyOf('test')
           }).toThrow(
-            "'anyOf' must be a an array of BaseSchema rather than a 'string'"
+            "'anyOf' must be a an array of FluentSchema rather than a 'string'"
           )
         })
-        it('not an array of BaseSchema', () => {
+        it('not an array of FluentSchema', () => {
           expect(() => {
-            return BaseSchema()
-              .prop('prop')
-              .anyOf(['test'])
+            return BaseSchema().anyOf(['test'])
           }).toThrow(
-            "'anyOf' must be a an array of BaseSchema rather than a 'object'"
+            "'anyOf' must be a an array of FluentSchema rather than a 'object'"
           )
         })
       })
     })
 
     describe('oneOf', () => {
-      it('two types', () => {
+      it('valid', () => {
         expect(
           BaseSchema()
-            .prop('prop')
-            .oneOf([BaseSchema().asBoolean(), BaseSchema().asString()])
+            .oneOf([BaseSchema().id('foo')])
             .valueOf()
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              oneOf: [{ type: 'boolean' }, { type: 'string' }],
-            },
-          },
-          type: 'object',
-        })
-      })
-      it('object', () => {
-        expect(
-          BaseSchema()
-            .prop('prop')
-            .oneOf([
-              BaseSchema()
-                .prop('foo')
-                .prop('bar')
-                .asInteger(),
-            ])
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              oneOf: [
-                {
-                  properties: {
-                    bar: { type: 'integer' },
-                    foo: { type: 'string' },
-                  },
-                  type: 'object',
-                },
-              ],
-            },
-          },
-          type: 'object',
+          oneOf: [{ $id: 'foo' }],
         })
       })
       describe('invalid', () => {
         it('not an array', () => {
           expect(() => {
-            return BaseSchema()
-              .prop('prop')
-              .oneOf('test')
+            return BaseSchema().oneOf('test')
           }).toThrow(
-            "'oneOf' must be a an array of BaseSchema rather than a 'string'"
+            "'oneOf' must be a an array of FluentSchema rather than a 'string'"
           )
         })
-        it('not an array of BaseSchema', () => {
+        it('not an array of FluentSchema', () => {
           expect(() => {
-            return BaseSchema()
-              .prop('prop')
-              .oneOf(['test'])
+            return BaseSchema().oneOf(['test'])
           }).toThrow(
-            "'oneOf' must be a an array of BaseSchema rather than a 'object'"
+            "'oneOf' must be a an array of FluentSchema rather than a 'object'"
           )
         })
       })
     })
 
     describe('not', () => {
-      it('add prop not', () => {
+      it('valid', () => {
         expect(
           BaseSchema()
-            .prop('prop')
-            .not()
-            .anyOf([
-              BaseSchema()
-                .prop('boolean')
-                .asBoolean()
-                .prop('number')
-                .asNumber(),
-            ])
+            .not(BaseSchema().anyOf([BaseSchema().id('foo')]))
             .valueOf()
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              not: {
-                anyOf: [
-                  {
-                    properties: {
-                      boolean: { type: 'boolean' },
-                      number: { type: 'number' },
-                    },
-                    type: 'object',
-                  },
-                ],
-              },
-            },
-          },
-          type: 'object',
+          not: { anyOf: [{ $id: 'foo' }] },
         })
       })
     })
   })
 
   describe('ifThen', () => {
-    it('simple', () => {
-      expect(
-        BaseSchema()
-          .prop('prop')
-          .maxLength(5)
-          .ifThen(
-            BaseSchema()
-              .prop('prop')
-              .maxLength(5),
-            BaseSchema()
-              .prop('extraProp')
-              .required()
-          )
-          .valueOf()
-      ).toEqual({
+    it('valid', () => {
+      const id = 'http://foo.com/user'
+      const schema = BaseSchema()
+        .id(id)
+        .title('A User')
+        .ifThen(BaseSchema().id(id), BaseSchema().description('A User desc'))
+        .valueOf()
+
+      expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        properties: {
-          prop: {
-            type: 'string',
-            maxLength: 5,
-          },
-        },
-        if: {
-          properties: {
-            prop: {
-              type: 'string',
-              maxLength: 5,
-            },
-          },
-        },
-        then: {
-          properties: {
-            extraProp: {
-              type: 'string',
-            },
-          },
-          required: ['extraProp'],
-        },
-        type: 'object',
+        $id: 'http://foo.com/user',
+        title: 'A User',
+        if: { $id: 'http://foo.com/user' },
+        then: { description: 'A User desc' },
       })
     })
   })
 
   describe('ifThenElse', () => {
-    it('simple', () => {
-      expect(
-        BaseSchema()
-          .prop('prop')
-          .maxLength(5)
-          .ifThenElse(
-            BaseSchema()
-              .prop('prop')
-              .maxLength(5),
-            BaseSchema()
-              .prop('extraProp')
-              .required(),
-            BaseSchema()
-              .prop('elseProp')
-              .required()
-          )
-          .valueOf()
-      ).toEqual({
+    it('valid', () => {
+      const id = 'http://foo.com/user'
+      const schema = BaseSchema()
+        .id(id)
+        .title('A User')
+        .ifThenElse(
+          BaseSchema().id(id),
+          BaseSchema().description('then'),
+          BaseSchema().description('else')
+        )
+        .valueOf()
+
+      expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        properties: {
-          prop: {
-            type: 'string',
-            maxLength: 5,
-          },
-        },
-        if: {
-          properties: {
-            prop: {
-              type: 'string',
-              maxLength: 5,
-            },
-          },
-        },
-        then: {
-          properties: {
-            extraProp: {
-              type: 'string',
-            },
-          },
-          required: ['extraProp'],
-        },
-        else: {
-          properties: {
-            elseProp: {
-              type: 'string',
-            },
-          },
-          required: ['elseProp'],
-        },
-        type: 'object',
+        $id: 'http://foo.com/user',
+        title: 'A User',
+        if: { $id: 'http://foo.com/user' },
+        then: { description: 'then' },
+        else: { description: 'else' },
       })
-    })
-  })
-
-  it('works', () => {
-    // TODO LS https://json-schema.org/latest/json-schema-core.html#idExamples
-    const schema = BaseSchema()
-      .id('http://foo.com/user')
-      .title('A User')
-      .description('A User desc')
-      .definition(
-        'address',
-        BaseSchema()
-          .id('#address')
-          .prop('country')
-          .prop('city')
-          .prop('zipcode')
-      )
-      .prop('username')
-      .required()
-      .prop('password')
-      .required()
-      .prop('address')
-      .ref('#address')
-      .required()
-      .prop(
-        'role',
-        BaseSchema()
-          .id('http://foo.com/role')
-          .prop('name')
-          .prop('permissions')
-      )
-      .required()
-      .prop('age')
-      .asNumber()
-      .valueOf()
-
-    expect(schema).toEqual({
-      definitions: {
-        address: {
-          type: 'object',
-          $id: '#address',
-          properties: {
-            country: {
-              type: 'string',
-            },
-            city: {
-              type: 'string',
-            },
-            zipcode: {
-              type: 'string',
-            },
-          },
-        },
-      },
-      $schema: 'http://json-schema.org/draft-07/schema#',
-      type: 'object',
-      required: ['username', 'password', 'address', 'role'],
-      $id: 'http://foo.com/user',
-      title: 'A User',
-      description: 'A User desc',
-      properties: {
-        username: {
-          type: 'string',
-        },
-        password: {
-          type: 'string',
-        },
-        address: {
-          $ref: '#address',
-        },
-        age: {
-          type: 'number',
-        },
-        role: {
-          type: 'object',
-          $id: 'http://foo.com/role',
-          properties: {
-            name: {
-              type: 'string',
-            },
-            permissions: {
-              type: 'string',
-            },
-          },
-        },
-      },
     })
   })
 })

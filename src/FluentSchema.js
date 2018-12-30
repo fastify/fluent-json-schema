@@ -3,6 +3,7 @@ const { FORMATS } = require('./utils')
 
 const { BaseSchema } = require('./BaseSchema')
 const { StringSchema } = require('./StringSchema')
+const { ObjectSchema } = require('./ObjectSchema')
 
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -65,9 +66,19 @@ const FluentSchema = (
 
   asArray: () => FluentSchema({ schema: { ...schema }, options }).as('array'),
 
-  asObject: () => FluentSchema({ schema: { ...schema }, options }).as('object'),
+  asObject: () =>
+    ObjectSchema({
+      ...options,
+      schema,
+      factory: ObjectSchema,
+    }).as('object'),
 
-  asNull: () => FluentSchema({ schema: { ...schema }, options }).as('null'),
+  asNull: () =>
+    BaseSchema({
+      ...options,
+      schema,
+      factory: BaseSchema,
+    }).as('null'),
 })
 
 module.exports = {

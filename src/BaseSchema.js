@@ -163,29 +163,9 @@ const BaseSchema = (
     })
   },
 
-  /**
-   * Must be a valid FluentSchema
-   * @param not
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.4}
-   * @returns {BaseSchema}
-   */
-
-  /*not: () => {
-    const [currentProp, ...properties] = [...schema.properties].reverse()
-    if (!currentProp) throw new Error(`'not' can be applied only to a prop`)
-    const { name, type, ...props } = currentProp
-    const attrs = {
-      ...props,
-      not: {},
-    }
-    return BaseSchema({ schema: { ...schema, properties }, options }).prop(
-      name,
-      attrs
-    )
-  },*/
   not: not => {
     if (!isFluentSchema(not)) throw new Error("'not' must be a BaseSchema")
-
+    // TODO LS double check if type should be really removed
     const notSchema = omit(not.valueOf(), ['$schema', 'definitions', 'type'])
 
     return BaseSchema({
@@ -194,7 +174,7 @@ const BaseSchema = (
         not: patchIdsWithParentId({
           schema: notSchema,
           ...options,
-          parentId: '#if',
+          parentId: '#not',
         }),
       },
       ...options,
@@ -361,7 +341,7 @@ const BaseSchema = (
     // TODO LS infer if object is root and omit $schema
     const { properties, definitions, required, $schema, ...rest } = schema
     return Object.assign(
-      root ? { $schema } : {},
+      $schema ? { $schema } : {},
       Object.keys(definitions || []).length > 0
         ? { definitions: flat(definitions) }
         : undefined,

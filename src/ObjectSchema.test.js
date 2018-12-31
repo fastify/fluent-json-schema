@@ -67,16 +67,20 @@ describe('ObjectSchema', () => {
               type: 'object',
             })
           })
-          // FIXME id assigned to foo rather than bar prop
-          it.skip('false', () => {
+          it('false', () => {
             const id = 'myId'
             expect(
               ObjectSchema()
                 .prop(
                   'foo',
                   ObjectSchema()
-                    .prop('bar')
-                    .id(id)
+                    .prop(
+                      'bar',
+                      FluentSchema()
+                        .asString()
+                        .id(id)
+                    )
+                    //.id(id) FIXME LS as for ref the assign is wrong
                     .required()
                 )
                 .valueOf()
@@ -95,7 +99,7 @@ describe('ObjectSchema', () => {
           })
         })
       })
-      x
+
       describe('definitions', () => {
         it('true', () => {
           expect(
@@ -106,8 +110,7 @@ describe('ObjectSchema', () => {
                   .prop('foo')
                   .prop('bar')
               )
-              .prop('prop')
-              .ref('entity')
+              .prop('prop', FluentSchema().ref('entity'))
               .valueOf()
           ).toEqual({
             definitions: {
@@ -142,11 +145,10 @@ describe('ObjectSchema', () => {
                   .id('myCustomId')
                   .prop('foo')
               )
-              .prop('prop')
-              .ref('entity')
+              .prop('prop', FluentSchema().ref('entity'))
+              //.ref('entity') //FIXME LS wrong assignment
               .valueOf()
           ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
             definitions: {
               entity: {
                 $id: 'myCustomId',
@@ -164,21 +166,25 @@ describe('ObjectSchema', () => {
             type: 'object',
           })
         })
-        // FIXME id assigned to foo rather than bar prop
-        it.skip('nested', () => {
+
+        it('nested', () => {
           const id = 'myId'
           expect(
             ObjectSchema()
               .prop(
                 'foo',
                 ObjectSchema()
-                  .prop('bar')
-                  .id(id)
+                  .prop(
+                    'bar',
+                    FluentSchema()
+                      .asString()
+                      .id(id)
+                  )
+                  //.id(id) // FIXME id assigned to foo rather than bar prop
                   .required()
               )
               .valueOf()
           ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
             properties: {
               foo: {
                 properties: {

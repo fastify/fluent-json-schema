@@ -3,7 +3,6 @@ const { BaseSchema } = require('./BaseSchema')
 const { last, FORMATS, setAttribute } = require('./utils')
 
 const initialState = {
-  $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'string',
   properties: [],
   required: [],

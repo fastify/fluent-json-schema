@@ -7,6 +7,7 @@ const {
   isFluentSchema,
   hasCombiningKeywords,
   patchIdsWithParentId,
+  appendRequired,
 } = require('./utils')
 
 const initialState = {
@@ -208,13 +209,24 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       const $id =
         attributes.$id ||
         (options.generateIds ? `#${target}/${name}` : undefined)
-      attributes = isFluentSchema(props)
-        ? patchIdsWithParentId({
-            schema: attributes,
-            parentId: $id,
-            ...options,
-          })
-        : attributes
+      if (isFluentSchema(props)) {
+        attributes = patchIdsWithParentId({
+          schema: attributes,
+          parentId: $id,
+          ...options,
+        })
+
+        const [schemaPatched, attributesPatched] = appendRequired({
+          schema,
+          attributes: {
+            ...attributes,
+            name,
+          },
+        })
+
+        schema = schemaPatched
+        attributes = attributesPatched
+      }
 
       const {
         type = hasCombiningKeywords(attributes) ? undefined : 'string',
@@ -320,7 +332,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
                   // object
                   maxProperties !== undefined ? { maxProperties } : undefined,
                   minProperties !== undefined ? { minProperties } : undefined,
-                  required !== undefined ? { required } : undefined,
+                  required && required.length > 0 ? { required } : undefined,
                   properties !== undefined ? { properties } : undefined,
                   patternProperties !== undefined
                     ? { patternProperties }

@@ -51,12 +51,19 @@ describe('FluentSchema', () => {
   describe('ifThen', () => {
     const ajv = new Ajv()
     const schema = FluentSchema()
-      .prop('prop')
-      .maxLength(5)
-      .ifThen(
+      .prop(
+        'prop',
         FluentSchema()
-          .prop('prop')
-          .maxLength(5),
+          .asString()
+          .maxLength(5)
+      )
+      .ifThen(
+        FluentSchema().prop(
+          'prop',
+          FluentSchema()
+            .asString()
+            .maxLength(5)
+        ),
         FluentSchema()
           .prop('extraProp')
           .required()
@@ -94,15 +101,16 @@ describe('FluentSchema', () => {
 
     const VALUES = ['ONE', 'TWO']
     const schema = FluentSchema()
-      .prop('prop')
+      .prop('ifProp')
       .ifThenElse(
+        FluentSchema().prop(
+          'ifProp',
+          FluentSchema()
+            .asString()
+            .enum([VALUES[0]])
+        ),
         FluentSchema()
-          .prop('prop')
-          // TODO LS workaround otherwise we have dup IDs
-          // .id('#properties/if/prop')
-          .enum([VALUES[0]]),
-        FluentSchema()
-          .prop('extraProp')
+          .prop('thenProp')
           .required(),
         FluentSchema()
           .prop('elseProp')
@@ -114,8 +122,8 @@ describe('FluentSchema', () => {
 
     it('then', () => {
       const valid = validate({
-        prop: 'ONE',
-        extraProp: 'foo',
+        ifProp: 'ONE',
+        thenProp: 'foo',
       })
       expect(valid).toBeTruthy()
     })
@@ -128,9 +136,9 @@ describe('FluentSchema', () => {
         {
           dataPath: '',
           keyword: 'required',
-          message: "should have required property 'elseProp'",
-          params: { missingProperty: 'elseProp' },
-          schemaPath: '#/else/required',
+          message: "should have required property 'thenProp'",
+          params: { missingProperty: 'thenProp' },
+          schemaPath: '#/then/required',
         },
       ])
       expect(valid).not.toBeTruthy()
@@ -193,19 +201,24 @@ describe('FluentSchema', () => {
           .asString()
           .required()
       )
-      .prop('address')
-      .ref('#address')
+      .prop(
+        'address',
+        FluentSchema()
+          .asObject()
+          .ref('#address')
+      )
+
       .required()
       .prop(
         'role',
         FluentSchema()
+          .asObject()
           .id('http://foo.com/role')
           .required()
           .prop('name')
           .prop('permissions')
       )
-      .prop('age')
-      .asNumber()
+      .prop('age', FluentSchema().asNumber())
       .valueOf()
     const validate = ajv.compile(schema)
     it('valid', () => {

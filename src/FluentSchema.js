@@ -22,7 +22,11 @@ const initialState = {
  */
 
 const FluentSchema = (
-  { schema, ...options } = { generateIds: false, schema: initialState }
+  { schema, ...options } = {
+    generateIds: false,
+    schema: initialState,
+    factory: ObjectSchema,
+  }
 ) => ({
   // TODO return an ObjectSchema as default
   ...BaseSchema({ ...options, schema }),

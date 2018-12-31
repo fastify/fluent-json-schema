@@ -9,7 +9,6 @@ describe('StringSchema', () => {
   describe('constructor', () => {
     it('without params', () => {
       expect(StringSchema().valueOf()).toEqual({
-        $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string',
       })
     })
@@ -28,7 +27,6 @@ describe('StringSchema', () => {
 
   it('valueOf', () => {
     expect(StringSchema().valueOf()).toEqual({
-      $schema: 'http://json-schema.org/draft-07/schema#',
       type: 'string',
     })
   })
@@ -37,6 +35,7 @@ describe('StringSchema', () => {
     describe('minLength', () => {
       it('valid', () => {
         const schema = FluentSchema()
+          .asObject()
           .prop('prop', StringSchema().minLength(5))
           .valueOf()
         expect(schema).toEqual({
@@ -58,192 +57,109 @@ describe('StringSchema', () => {
     })
     describe('maxLength', () => {
       it('valid', () => {
-        const schema = FluentSchema()
-          .prop('prop', StringSchema().maxLength(10))
+        const schema = StringSchema()
+          .maxLength(10)
           .valueOf()
         expect(schema).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'string',
-              maxLength: 10,
-            },
-          },
-          type: 'object',
+          type: 'string',
+          maxLength: 10,
         })
       })
       it('invalid', () => {
-        expect(() =>
-          FluentSchema().prop('prop', StringSchema().maxLength('5.1'))
-        ).toThrow("'maxLength' must be an Integer")
+        expect(() => StringSchema().maxLength('5.1')).toThrow(
+          "'maxLength' must be an Integer"
+        )
       })
     })
     describe('format', () => {
       it('valid FORMATS.DATE', () => {
-        const prop = 'prop'
         expect(
           StringSchema()
-            .prop(prop)
-            .asString()
             .format(FORMATS.DATE)
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'string',
-              format: FORMATS.DATE,
-            },
-          },
-          type: 'object',
+          type: 'string',
+          format: FORMATS.DATE,
         })
       })
       it('valid FORMATS.DATE_TIME', () => {
         expect(
           StringSchema()
-            .prop('prop')
-            .asString()
             .format(FORMATS.DATE_TIME)
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'string',
-              format: 'date-time',
-            },
-          },
-          type: 'object',
+          type: 'string',
+          format: 'date-time',
         })
       })
       it('invalid', () => {
-        const prop = 'prop'
-        expect(() =>
-          StringSchema()
-            .prop(prop)
-            .asNumber()
-            .format('invalid')
-        ).toThrow(
+        expect(() => StringSchema().format('invalid')).toThrow(
           "'format' must be one of relative-json-pointer, json-pointer, uuid, regex, ipv6, ipv4, hostname, email, url, uri-template, uri-reference, uri, time, date"
         )
       })
     })
     describe('pattern', () => {
       it('as a string', () => {
-        const prop = 'prop'
         expect(
           StringSchema()
-            .prop(prop)
-            .asString()
             .pattern('.*')
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'string',
-              pattern: '.*',
-            },
-          },
-          type: 'object',
+          type: 'string',
+          pattern: '.*',
         })
       })
       it('as a regex', () => {
         const prop = 'prop'
         expect(
           StringSchema()
-            .prop(prop)
-            .asString()
             .pattern(/.*/gi)
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'string',
-              pattern: '.*',
-            },
-          },
-          type: 'object',
+          type: 'string',
+          pattern: '.*',
         })
       })
-      it('invalid usage', () => {
-        const prop = 'prop'
-        expect(() =>
-          StringSchema()
-            .prop(prop)
-            .asNumber()
-            .pattern('.*')
-        ).toThrow("'prop' as 'number' doesn't accept 'pattern' option")
-      })
+
       it('invalid value', () => {
-        const prop = 'prop'
-        expect(() =>
-          StringSchema()
-            .prop(prop)
-            .asNumber()
-            .pattern(1111)
-        ).toThrow("'pattern' must be a string or a RegEx (e.g. /.*/)")
+        expect(() => StringSchema().pattern(1111)).toThrow(
+          "'pattern' must be a string or a RegEx (e.g. /.*/)"
+        )
       })
     })
     describe('contentEncoding', () => {
       it('valid', () => {
-        const prop = 'prop'
         expect(
           StringSchema()
-            .prop(prop)
-            .asString()
             .contentEncoding('base64')
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'string',
-              contentEncoding: 'base64',
-            },
-          },
-          type: 'object',
+          type: 'string',
+          contentEncoding: 'base64',
         })
       })
       it('invalid', () => {
-        const prop = 'prop'
-        expect(() =>
-          StringSchema()
-            .prop(prop)
-            .asString()
-            .contentEncoding(1000)
-        ).toThrow("'contentEncoding' must be a string")
+        expect(() => StringSchema().contentEncoding(1000)).toThrow(
+          "'contentEncoding' must be a string"
+        )
       })
     })
     describe('contentMediaType', () => {
       it('valid', () => {
-        const prop = 'prop'
         expect(
           StringSchema()
-            .prop(prop)
-            .asString()
             .contentMediaType('image/png')
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'string',
-              contentMediaType: 'image/png',
-            },
-          },
-          type: 'object',
+          type: 'string',
+          contentMediaType: 'image/png',
         })
       })
       it('invalid', () => {
         const prop = 'prop'
-        expect(() =>
-          StringSchema()
-            .prop(prop)
-            .asString()
-            .contentMediaType(1000)
-        ).toThrow("'contentMediaType' must be a string")
+        expect(() => StringSchema().contentMediaType(1000)).toThrow(
+          "'contentMediaType' must be a string"
+        )
       })
     })
   })

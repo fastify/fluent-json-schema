@@ -1,4 +1,5 @@
-const { BaseSchema, FORMATS } = require('./BaseSchema')
+const { BaseSchema } = require('./BaseSchema')
+const { FluentSchema } = require('./FluentSchema')
 
 describe('BaseSchema', () => {
   it('defined', () => {
@@ -236,15 +237,13 @@ describe('BaseSchema', () => {
         ).toEqual(value)
       })
 
-      // TODO LS move to ObjectSchema
-      it.skip('nested', () => {
+      it('nested', () => {
         expect(
-          BaseSchema()
+          FluentSchema()
             .prop(
               'foo',
               BaseSchema()
                 .id(value)
-                .prop('bar')
                 .required()
             )
             .valueOf().properties.foo.$id
@@ -294,26 +293,29 @@ describe('BaseSchema', () => {
         ).toThrow("'examples' must be an array e.g. ['1', 'one', 'foo']")
       })
     })
-    // TODO LS test with FluentSchema.asObject()
-    describe.skip('required', () => {
-      it('valid', () => {
+
+    describe('required', () => {
+      it('in line valid', () => {
         const prop = 'foo'
         expect(
-          BaseSchema()
+          FluentSchema()
             .prop(prop)
             .required()
             .valueOf().required
         ).toEqual([prop])
       })
-
-      it('invalid', () => {
-        expect(() => {
-          BaseSchema()
-            .asString()
-            .required()
-        }).toThrow(
-          "'required' has to be chained to a prop: \nExamples: \n- BaseSchema().prop('prop').required() \n- BaseSchema().prop('prop', BaseSchema().asNumber()).required()"
-        )
+      it('nested valid', () => {
+        const prop = 'foo'
+        expect(
+          FluentSchema()
+            .prop(
+              prop,
+              FluentSchema()
+                .asString()
+                .required()
+            )
+            .valueOf().required
+        ).toEqual([prop])
       })
     })
 

@@ -28,8 +28,7 @@ const FluentSchema = (
     factory: ObjectSchema,
   }
 ) => ({
-  // TODO return an ObjectSchema as default
-  ...BaseSchema({ ...options, schema }),
+  ...ObjectSchema({ ...options, schema }),
 
   asString: () => {
     return StringSchema({

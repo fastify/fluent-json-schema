@@ -197,7 +197,7 @@ describe('FluentSchema', () => {
     })
   })
 
-  it.only('valueOf', () => {
+  it('valueOf', () => {
     expect(
       FluentSchema()
         .asObject()
@@ -205,6 +205,7 @@ describe('FluentSchema', () => {
         .valueOf()
     ).toEqual({
       $schema: 'http://json-schema.org/draft-07/schema#',
+      properties: { foo: { type: 'string' } },
       type: 'object',
     })
   })

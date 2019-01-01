@@ -25,17 +25,10 @@ describe('StringSchema', () => {
     })
   })
 
-  it('valueOf', () => {
-    expect(StringSchema().valueOf()).toEqual({
-      type: 'string',
-    })
-  })
-
   describe('keywords:', () => {
     describe('minLength', () => {
       it('valid', () => {
         const schema = FluentSchema()
-          .asObject()
           .prop('prop', StringSchema().minLength(5))
           .valueOf()
         expect(schema).toEqual({

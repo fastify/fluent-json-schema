@@ -337,8 +337,7 @@ const BaseSchema = (
    *
    * @returns {object}
    */
-  valueOf: (root = true) => {
-    // TODO LS infer if object is root and omit $schema
+  valueOf: () => {
     const { properties, definitions, required, $schema, ...rest } = schema
     return Object.assign(
       $schema ? { $schema } : {},
@@ -346,10 +345,10 @@ const BaseSchema = (
         ? { definitions: flat(definitions) }
         : undefined,
       { ...omit(rest, ['if', 'then', 'else']) },
-      Object.keys(properties).length > 0
+      Object.keys(properties || []).length > 0
         ? { properties: flat(properties) }
         : undefined,
-      required.length > 0 ? { required } : undefined,
+      required && required.length > 0 ? { required } : undefined,
       schema.if ? { if: schema.if } : undefined,
       schema.then ? { then: schema.then } : undefined,
       schema.else ? { else: schema.else } : undefined

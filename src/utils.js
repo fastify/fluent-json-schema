@@ -5,7 +5,7 @@ const isFluentSchema = obj => typeof obj.anyOf === 'function'
 const hasCombiningKeywords = attributes =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
 
-const last = array => {
+const last = (array = []) => {
   const [prop] = [...array].reverse()
   return prop
 }

@@ -3,6 +3,7 @@ const { FORMATS } = require('./utils')
 
 const { BaseSchema } = require('./BaseSchema')
 const { StringSchema } = require('./StringSchema')
+const { NumberSchema } = require('./NumberSchema')
 const { ObjectSchema } = require('./ObjectSchema')
 
 const initialState = {
@@ -30,25 +31,19 @@ const FluentSchema = (
 ) => ({
   ...ObjectSchema({ ...options, schema }),
 
-  asString: () => {
-    return StringSchema({
+  asString: () =>
+    StringSchema({
       ...options,
       schema,
       factory: StringSchema,
-    }).as('string')
-  },
+    }).as('string'),
 
-  asNumber: () => FluentSchema({ schema: { ...schema }, options }).as('number'),
-
-  /**
-   * Set a property to type boolean
-   *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
-   * @returns {FluentSchema}
-   */
-
-  asBoolean: () =>
-    FluentSchema({ schema: { ...schema }, options }).as('boolean'),
+  asNumber: () =>
+    NumberSchema({
+      ...options,
+      schema,
+      factory: NumberSchema,
+    }).as('number'),
 
   /**
    * Set a property to type integer
@@ -59,6 +54,16 @@ const FluentSchema = (
 
   asInteger: () =>
     FluentSchema({ schema: { ...schema }, options }).as('integer'),
+
+  /**
+   * Set a property to type boolean
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * @returns {FluentSchema}
+   */
+
+  asBoolean: () =>
+    FluentSchema({ schema: { ...schema }, options }).as('boolean'),
 
   /**
    * Set a property to type array

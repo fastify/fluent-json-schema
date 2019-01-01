@@ -4,6 +4,7 @@ const { FORMATS } = require('./utils')
 const { BaseSchema } = require('./BaseSchema')
 const { StringSchema } = require('./StringSchema')
 const { NumberSchema } = require('./NumberSchema')
+const { IntegerSchema } = require('./IntegerSchema')
 const { ObjectSchema } = require('./ObjectSchema')
 
 const initialState = {
@@ -53,7 +54,11 @@ const FluentSchema = (
    */
 
   asInteger: () =>
-    FluentSchema({ schema: { ...schema }, options }).as('integer'),
+    IntegerSchema({
+      ...options,
+      schema,
+      factory: IntegerSchema,
+    }).as('integer'),
 
   /**
    * Set a property to type boolean

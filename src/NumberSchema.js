@@ -1,6 +1,6 @@
 'use strict'
 const { BaseSchema } = require('./BaseSchema')
-const { FORMATS, setAttribute } = require('./utils')
+const { setAttribute } = require('./utils')
 
 const initialState = {
   type: 'number',
@@ -34,6 +34,8 @@ const NumberSchema = (
 
   minimum: min => {
     if (typeof min !== 'number') throw new Error("'minimum' must be a Number")
+    if (schema.type === 'integer' && !Number.isInteger(min))
+      throw new Error("'minimum' must be an Integer")
     return setAttribute({ schema, ...options }, ['minimum', min, 'number'])
   },
 
@@ -48,6 +50,8 @@ const NumberSchema = (
   exclusiveMinimum: min => {
     if (typeof min !== 'number')
       throw new Error("'exclusiveMinimum' must be a Number")
+    if (schema.type === 'integer' && !Number.isInteger(min))
+      throw new Error("'exclusiveMinimum' must be an Integer")
     return setAttribute({ schema, ...options }, [
       'exclusiveMinimum',
       min,
@@ -63,6 +67,8 @@ const NumberSchema = (
 
   maximum: max => {
     if (typeof max !== 'number') throw new Error("'maximum' must be a Number")
+    if (schema.type === 'integer' && !Number.isInteger(max))
+      throw new Error("'maximum' must be an Integer")
     return setAttribute({ schema, ...options }, ['maximum', max, 'number'])
   },
 
@@ -76,6 +82,8 @@ const NumberSchema = (
 
   exclusiveMaximum: max => {
     if (typeof max !== 'number')
+      throw new Error("'exclusiveMaximum' must be a Number")
+    if (schema.type === 'integer' && !Number.isInteger(max))
       throw new Error("'exclusiveMaximum' must be an Integer")
     return setAttribute({ schema, ...options }, [
       'exclusiveMaximum',
@@ -95,6 +103,8 @@ const NumberSchema = (
   multipleOf: multiple => {
     if (typeof multiple !== 'number')
       throw new Error("'multipleOf' must be a Number")
+    if (schema.type === 'integer' && !Number.isInteger(multiple))
+      throw new Error("'multipleOf' must be an Integer")
     return setAttribute({ schema, ...options }, [
       'multipleOf',
       multiple,
@@ -105,6 +115,5 @@ const NumberSchema = (
 
 module.exports = {
   NumberSchema,
-  FORMATS,
   default: NumberSchema,
 }

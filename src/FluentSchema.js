@@ -2,6 +2,8 @@
 const { FORMATS } = require('./utils')
 
 const { BaseSchema } = require('./BaseSchema')
+const { NullSchema } = require('./NullSchema')
+const { BooleanSchema } = require('./BooleanSchema')
 const { StringSchema } = require('./StringSchema')
 const { NumberSchema } = require('./NumberSchema')
 const { IntegerSchema } = require('./IntegerSchema')
@@ -28,10 +30,10 @@ const FluentSchema = (
   { schema, ...options } = {
     generateIds: false,
     schema: initialState,
-    factory: ObjectSchema,
+    factory: BaseSchema,
   }
 ) => ({
-  ...ObjectSchema({ ...options, schema }),
+  ...BaseSchema({ ...options, schema }),
 
   asString: () =>
     StringSchema({
@@ -61,6 +63,11 @@ const FluentSchema = (
       factory: IntegerSchema,
     }).as('integer'),
 
+  /*type: (types) => {
+    // TODO LS what should we return? ObjectSchema?
+    return setAttribute({ schema, ...options }, ['type', types, 'any'])
+  },*/
+
   /**
    * Set a property to type boolean
    *
@@ -69,7 +76,11 @@ const FluentSchema = (
    */
 
   asBoolean: () =>
-    FluentSchema({ schema: { ...schema }, options }).as('boolean'),
+    BooleanSchema({
+      ...options,
+      schema,
+      factory: BooleanSchema,
+    }).as('boolean'),
 
   /**
    * Set a property to type array
@@ -93,11 +104,11 @@ const FluentSchema = (
     }).as('object'),
 
   asNull: () =>
-    BaseSchema({
+    NullSchema({
       ...options,
       schema,
-      factory: BaseSchema,
-    }).as('null'),
+      factory: NullSchema,
+    }).asNull(),
 })
 
 module.exports = {

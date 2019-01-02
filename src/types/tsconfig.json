@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "noEmit": false,
+    "noEmit": true,
     "strict": true
   },
   "files": ["./index.ts"]

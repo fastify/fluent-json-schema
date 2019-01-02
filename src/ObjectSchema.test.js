@@ -1,5 +1,5 @@
-const { ObjectSchema, FORMATS } = require('./ObjectSchema')
-const { FluentSchema } = require('./FluentSchema')
+const { ObjectSchema } = require('./ObjectSchema')
+const { FluentSchema, FORMATS } = require('./FluentSchema')
 
 describe('ObjectSchema', () => {
   it('defined', () => {

@@ -27,6 +27,7 @@ describe('NullSchema', () => {
   it('sets a null type to the prop', () => {
     expect(
       FluentSchema()
+        .asObject()
         .prop('prop', FluentSchema().asNull())
         .valueOf().properties.prop.type
     ).toEqual('null')

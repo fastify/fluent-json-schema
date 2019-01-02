@@ -31,6 +31,7 @@ describe('NumberSchema', () => {
         const prop = 'prop'
         expect(
           FluentSchema()
+            .asObject()
             .prop(
               prop,
               FluentSchema()
@@ -62,6 +63,7 @@ describe('NumberSchema', () => {
         const prop = 'prop'
         expect(
           FluentSchema()
+            .asObject()
             .prop(
               prop,
               FluentSchema()
@@ -93,6 +95,7 @@ describe('NumberSchema', () => {
         const prop = 'prop'
         expect(
           FluentSchema()
+            .asObject()
             .prop(
               prop,
               FluentSchema()
@@ -126,6 +129,7 @@ describe('NumberSchema', () => {
         const prop = 'prop'
         expect(
           FluentSchema()
+            .asObject()
             .prop(
               prop,
               FluentSchema()
@@ -158,6 +162,7 @@ describe('NumberSchema', () => {
         const prop = 'prop'
         expect(
           FluentSchema()
+            .asObject()
             .prop(
               prop,
               FluentSchema()
@@ -190,6 +195,7 @@ describe('NumberSchema', () => {
   it('works', () => {
     // TODO LS https://json-schema.org/latest/json-schema-core.html#idExamples
     const schema = FluentSchema()
+      .asObject()
       .id('http://foo.com/user')
       .title('A User')
       .description('A User desc')

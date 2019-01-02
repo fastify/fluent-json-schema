@@ -45,6 +45,7 @@ declare namespace FluentSchema {
     | NumberSchema
     | ArraySchema
     | IntegerSchema
+    | BooleanSchema
 
   interface SchemaOptions {
     schema: object
@@ -62,6 +63,10 @@ declare namespace FluentSchema {
 
   interface NullSchema {
     asNull: () => StringSchema
+  }
+
+  interface BooleanSchema extends BaseSchema<BooleanSchema> {
+    asBoolean: () => BooleanSchema
   }
 
   interface NumberSchema extends BaseSchema<NumberSchema> {
@@ -119,7 +124,7 @@ declare namespace FluentSchema {
     asString: () => StringSchema
     asNumber: () => NumberSchema
     asInteger: () => IntegerSchema
-    asBoolean: () => FluentSchema
+    asBoolean: () => BooleanSchema
     asArray: () => ArraySchema
     asObject: () => ObjectSchema
     asNull: () => NullSchema

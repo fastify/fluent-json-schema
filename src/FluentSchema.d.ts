@@ -60,6 +60,10 @@ declare namespace FluentSchema {
     contentMediaType: (mediaType: string) => StringSchema
   }
 
+  interface NullSchema {
+    asNull: () => StringSchema
+  }
+
   interface NumberSchema extends BaseSchema<NumberSchema> {
     minimum: (min: number) => NumberSchema
     exclusiveMinimum: (min: number) => NumberSchema
@@ -118,7 +122,7 @@ declare namespace FluentSchema {
     asBoolean: () => FluentSchema
     asArray: () => ArraySchema
     asObject: () => ObjectSchema
-    asNull: () => FluentSchema
+    asNull: () => NullSchema
   }
 }
 export = FluentSchema

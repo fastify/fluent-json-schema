@@ -63,8 +63,12 @@ const schema = FluentSchema()
       .prop('zipcode')
       .required()
   )
-  .prop('address')
-  .ref('#address')
+  .prop(
+    'address',
+    FluentSchema()
+      .asObject()
+      .ref('#address')
+  )
 
 console.log(JSON.stringify(schema.valueOf(), undefined, 2))
 ```

@@ -1,7 +1,6 @@
 // This file will be passed to the TypeScript CLI to verify our typings compile
 
 import { FluentSchema } from '../FluentSchema'
-
 const schema = FluentSchema()
   .id('http://foo.com/user')
   .title('A User')
@@ -19,17 +18,20 @@ const schema = FluentSchema()
   .prop(
     'avatar',
     FluentSchema()
+      .asString()
       .contentEncoding('base64')
       .contentMediaType('image/png')
   )
-  .asString()
   .required()
-  .prop('password')
-  .asString()
-  .default('123456')
-  .minLength(6)
-  .maxLength(12)
-  .pattern('.*')
+  .prop(
+    'password',
+    FluentSchema()
+      .asString()
+      .default('123456')
+      .minLength(6)
+      .maxLength(12)
+      .pattern('.*')
+  )
   .required()
   .prop(
     'addresses',
@@ -48,8 +50,8 @@ const schema = FluentSchema()
       .prop('permissions')
   )
   .required()
-  .prop('age')
-  .asInteger()
+  .prop('age', FluentSchema().asInteger())
+
   .valueOf()
 
 console.log({ schema })

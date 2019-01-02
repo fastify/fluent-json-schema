@@ -2,7 +2,6 @@
 const { BaseSchema } = require('./BaseSchema')
 const {
   omit,
-  FORMATS,
   setAttribute,
   isFluentSchema,
   hasCombiningKeywords,
@@ -184,15 +183,6 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         'object',
       ])
     },
-
-    /**
-     * Set a property to type null
-     *
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
-     * @returns {FluentSchema}
-     */
-
-    asNull: () => FluentSchema({ schema: { ...schema }, options }).as('null'),
 
     /**
      * The value of "properties" MUST be an object. Each value of this object MUST be a valid JSON Schema
@@ -380,6 +370,5 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
 module.exports = {
   ObjectSchema,
-  FORMATS,
   default: ObjectSchema,
 }

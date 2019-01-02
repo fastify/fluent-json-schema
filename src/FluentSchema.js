@@ -6,6 +6,7 @@ const { StringSchema } = require('./StringSchema')
 const { NumberSchema } = require('./NumberSchema')
 const { IntegerSchema } = require('./IntegerSchema')
 const { ObjectSchema } = require('./ObjectSchema')
+const { ArraySchema } = require('./ArraySchema')
 
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -77,7 +78,12 @@ const FluentSchema = (
    * @returns {FluentSchema}
    */
 
-  asArray: () => FluentSchema({ schema: { ...schema }, options }).as('array'),
+  asArray: () =>
+    ArraySchema({
+      ...options,
+      schema,
+      factory: ArraySchema,
+    }).as('array'),
 
   asObject: () =>
     ObjectSchema({

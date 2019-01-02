@@ -29,6 +29,7 @@ describe('StringSchema', () => {
     describe('minLength', () => {
       it('valid', () => {
         const schema = FluentSchema()
+          .asObject()
           .prop('prop', StringSchema().minLength(5))
           .valueOf()
         expect(schema).toEqual({
@@ -159,6 +160,7 @@ describe('StringSchema', () => {
 
   it('works', () => {
     const schema = FluentSchema()
+      .asObject()
       .id('http://bar.com/object')
       .title('A object')
       .description('A object desc')

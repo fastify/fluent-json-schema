@@ -2,6 +2,7 @@
 
 import { FluentSchema } from '../FluentSchema'
 const schema = FluentSchema()
+  .asObject()
   .id('http://foo.com/user')
   .title('A User')
   .description('A User desc')
@@ -39,7 +40,6 @@ const schema = FluentSchema()
       .asArray()
       .items([FluentSchema().ref('#address')])
   )
-
   .required()
   .prop(
     'role',

@@ -17,6 +17,7 @@ describe('FluentSchema', () => {
   describe('basic', () => {
     const ajv = new Ajv()
     const schema = FluentSchema()
+      .asObject()
       .prop('username')
       .prop('password')
       .valueOf()
@@ -51,6 +52,7 @@ describe('FluentSchema', () => {
   describe('ifThen', () => {
     const ajv = new Ajv()
     const schema = FluentSchema()
+      .asObject()
       .prop(
         'prop',
         FluentSchema()
@@ -101,6 +103,7 @@ describe('FluentSchema', () => {
 
     const VALUES = ['ONE', 'TWO']
     const schema = FluentSchema()
+      .asObject()
       .prop('ifProp')
       .ifThenElse(
         FluentSchema().prop(
@@ -147,19 +150,31 @@ describe('FluentSchema', () => {
 
   describe('compose keywords', () => {
     const ajv = new Ajv()
-
     const schema = FluentSchema()
-      .prop('foo')
-      .anyOf([FluentSchema().asString()])
-      .prop('bar')
-      .not()
-      .anyOf([FluentSchema().asInteger()])
-      .prop('prop')
-      .allOf([FluentSchema().asString(), FluentSchema().asBoolean()])
-      .prop('anotherProp')
-      .oneOf([FluentSchema().asString(), FluentSchema().asBoolean()])
+      .asObject()
+      .prop('foo', FluentSchema().anyOf([FluentSchema().asString()]))
+      .prop(
+        'bar',
+        FluentSchema().not(FluentSchema().anyOf([FluentSchema().asInteger()]))
+      )
+      .prop(
+        'prop',
+        FluentSchema().allOf([
+          FluentSchema().asString(),
+          FluentSchema().asBoolean(),
+        ])
+      )
+      .prop(
+        'anotherProp',
+        FluentSchema().oneOf([
+          FluentSchema().asString(),
+          FluentSchema().asBoolean(),
+        ])
+      )
       .required()
       .valueOf()
+
+    // console.log(JSON.stringify(schema, null, 2))
     const validate = ajv.compile(schema)
 
     it('valid', () => {
@@ -167,6 +182,7 @@ describe('FluentSchema', () => {
         foo: 'foo',
         anotherProp: true,
       })
+      // console.log(validate.errors)
       expect(valid).toBeTruthy()
     })
 
@@ -182,6 +198,7 @@ describe('FluentSchema', () => {
   describe('complex', () => {
     const ajv = new Ajv()
     const schema = FluentSchema()
+      .asObject()
       .id('http://foo.com/user')
       .title('A User')
       .description('A User desc')

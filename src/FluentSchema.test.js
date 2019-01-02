@@ -18,6 +18,7 @@ describe('FluentSchema', () => {
         it('true', () => {
           expect(
             FluentSchema({ generateIds: true })
+              .asObject()
               .prop('prop')
               .valueOf()
           ).toEqual({
@@ -30,6 +31,7 @@ describe('FluentSchema', () => {
         it('false', () => {
           expect(
             FluentSchema()
+              .asObject()
               .prop('prop')
               .valueOf()
           ).toEqual({
@@ -43,9 +45,11 @@ describe('FluentSchema', () => {
           it('true', () => {
             expect(
               FluentSchema({ generateIds: true })
+                .asObject()
                 .prop(
                   'foo',
                   FluentSchema()
+                    .asObject()
                     .prop('bar')
                     .required()
                 )
@@ -72,11 +76,18 @@ describe('FluentSchema', () => {
             const id = 'myId'
             expect(
               FluentSchema()
+                .asObject()
                 .prop(
                   'foo',
                   FluentSchema()
-                    .prop('bar')
-                    .id(id)
+                    .asObject()
+                    .prop(
+                      'bar',
+                      FluentSchema()
+                        .asString()
+                        .id(id)
+                    )
+
                     .required()
                 )
                 .valueOf()
@@ -101,9 +112,11 @@ describe('FluentSchema', () => {
         it('true', () => {
           expect(
             FluentSchema({ generateIds: true })
+              .asObject()
               .definition(
                 'entity',
                 FluentSchema()
+                  .asObject()
                   .prop('foo')
                   .prop('bar')
               )
@@ -138,9 +151,11 @@ describe('FluentSchema', () => {
         it('false', () => {
           expect(
             FluentSchema({ generateIds: false })
+              .asObject()
               .definition(
                 'entity',
                 FluentSchema()
+                  .asObject()
                   .id('myCustomId')
                   .prop('foo')
               )
@@ -171,11 +186,17 @@ describe('FluentSchema', () => {
           const id = 'myId'
           expect(
             FluentSchema()
+              .asObject()
               .prop(
                 'foo',
                 FluentSchema()
-                  .prop('bar')
-                  .id(id)
+                  .asObject()
+                  .prop(
+                    'bar',
+                    FluentSchema()
+                      .asString()
+                      .id(id)
+                  )
                   .required()
               )
               .valueOf()
@@ -197,6 +218,55 @@ describe('FluentSchema', () => {
     })
   })
 
+  describe('composition', () => {
+    it('anyOf', () => {
+      const schema = FluentSchema()
+        .asObject()
+        .prop('foo', FluentSchema().anyOf([FluentSchema().asString()]))
+        .valueOf()
+      expect(schema).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        properties: { foo: { anyOf: [{ type: 'string' }] } },
+        type: 'object',
+      })
+    })
+
+    it('fix', () => {
+      const schema = FluentSchema()
+        .asObject()
+        .prop(
+          'multipleRestrictedTypesKey',
+          FluentSchema().oneOf([
+            FluentSchema().asString(),
+            FluentSchema()
+              .asNumber()
+              .minimum(10),
+          ])
+        )
+        .prop(
+          'notTypeKey',
+          FluentSchema().not(
+            FluentSchema().oneOf([
+              FluentSchema()
+                .asString()
+                .pattern('js$'),
+            ])
+          )
+        )
+        .valueOf()
+      expect(schema).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        properties: {
+          multipleRestrictedTypesKey: {
+            oneOf: [{ type: 'string' }, { minimum: 10, type: 'number' }],
+          },
+          notTypeKey: { not: { oneOf: [{ pattern: 'js$', type: 'string' }] } },
+        },
+        type: 'object',
+      })
+    })
+  })
+
   it('valueOf', () => {
     expect(
       FluentSchema()
@@ -210,9 +280,10 @@ describe('FluentSchema', () => {
     })
   })
 
-  it.only('works', () => {
+  it('works', () => {
     // TODO LS https://json-schema.org/latest/json-schema-core.html#idExamples
     const schema = FluentSchema()
+      .asObject()
       .id('http://foo.com/user')
       .title('A User')
       .description('A User desc')
@@ -235,6 +306,7 @@ describe('FluentSchema', () => {
       .prop(
         'role',
         FluentSchema()
+          .asObject()
           .id('http://foo.com/role')
           .prop('name')
           .prop('permissions')

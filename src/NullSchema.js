@@ -7,7 +7,7 @@ const initialState = {
 }
 
 /**
- * Represents a ObjectSchema.
+ * Represents a NullSchema.
  * @param {Object} [options] - Options
  * @param {StringSchema} [options.schema] - Default schema
  * @param {boolean} [options.generateIds = false] - generate the id automatically e.g. #properties.foo

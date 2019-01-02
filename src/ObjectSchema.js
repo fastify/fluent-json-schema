@@ -218,8 +218,11 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         attributes = attributesPatched
       }
 
+      const type = hasCombiningKeywords(attributes)
+        ? undefined
+        : attributes.type
+
       const {
-        type = hasCombiningKeywords(attributes) ? undefined : 'string',
         $ref,
         title,
         description,

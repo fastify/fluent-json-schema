@@ -113,20 +113,20 @@ declare namespace FluentSchema {
   }
 
   interface PatternPropertiesOptions {
-    [key: string]: FluentSchema
+    [key: string]: JSONSchema
   }
 
   interface DependenciesOptions {
-    [key: string]: FluentSchema[]
+    [key: string]: JSONSchema[]
   }
 
-  interface FluentSchema extends BaseSchema<ObjectSchema> {
+  interface FluentSchema extends BaseSchema<FluentSchema> {
     string: () => StringSchema
     number: () => NumberSchema
     integer: () => IntegerSchema
     boolean: () => BooleanSchema
     array: () => ArraySchema
-    asObject: () => ObjectSchema
+    object: () => ObjectSchema
     null: () => NullSchema
   }
 }

@@ -2,13 +2,14 @@
 
 import { FluentSchema } from '../FluentSchema'
 const schema = FluentSchema()
-  .asObject()
+  .object()
   .id('http://foo.com/user')
   .title('A User')
   .description('A User desc')
   .definition(
     'address',
     FluentSchema()
+      .object()
       .id('#address')
       .prop('country')
       .allOf([FluentSchema().string()])
@@ -44,6 +45,7 @@ const schema = FluentSchema()
   .prop(
     'role',
     FluentSchema()
+      .object()
       .id('http://foo.com/role')
       .prop('name')
       .enum(['ADMIN', 'USER'])

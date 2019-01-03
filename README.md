@@ -12,8 +12,8 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser.
 - Faster and shorter way to write a JSON Schema via a [fluent API](https://en.wikipedia.org/wiki/Fluent_interface)
 - Runtime errors for invalid options or keywords misuse
 - Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
-- Flexible API to write inline or nested props
 - Typescript friendly
+- No dependencies
 
 ## Install
 
@@ -26,33 +26,35 @@ or
 ## Usage
 
 ```javascript
-const schema = FluentSchema()
+const userSchema = FluentSchema()
+  .object()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
   .description('A simple user')
   .prop(
     'email',
     FluentSchema()
-      .asString()
+      .string()
       .format(FORMATS.EMAIL)
       .required()
   )
   .prop(
     'password',
     FluentSchema()
-      .asString()
+      .string()
       .minLength(8)
+      .required()
   )
   .prop(
     'role',
     FluentSchema()
       .enum(['ADMIN', 'USER'])
       .default('USER')
-      .required()
   )
   .definition(
     'address',
     FluentSchema()
+      .object()
       .id('#address')
       .prop('line1')
       .required()
@@ -64,14 +66,10 @@ const schema = FluentSchema()
       .prop('zipcode')
       .required()
   )
-  .prop(
-    'address',
-    FluentSchema()
-      .asObject()
-      .ref('#address')
-  )
+  .prop('address')
+  .ref('#address')
 
-console.log(JSON.stringify(schema.valueOf(), undefined, 2))
+console.log(JSON.stringify(userSchema.valueOf(), undefined, 2))
 ```
 
 Schema generated:

@@ -3,6 +3,7 @@ const { FluentSchema, FORMATS } = require('./FluentSchema')
 const Ajv = require('ajv')
 
 const userSchema = FluentSchema()
+  .object()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
   .description('A simple user')
@@ -29,6 +30,7 @@ const userSchema = FluentSchema()
   .definition(
     'address',
     FluentSchema()
+      .object()
       .id('#address')
       .prop('line1')
       .required()

@@ -222,8 +222,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
       const $ref = attributes.$ref
 
-      // strip undefined or empty array
-      const obj = Object.entries({ ...attributes, $id, type }).reduce(
+      // strip undefined values or empty arrays or internals
+      attributes = Object.entries({ ...attributes, $id, type }).reduce(
         (memo, [key, value]) => {
           return key === '$schema' ||
             key === 'def' ||
@@ -240,7 +240,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
           ...schema,
           [target]: [
             ...schema[target],
-            $ref ? { name, $ref } : Object.assign({}, { name }, obj),
+            $ref ? { name, $ref } : Object.assign({}, { name }, attributes),
           ],
         },
         ...options,

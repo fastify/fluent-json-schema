@@ -62,11 +62,11 @@ declare namespace FluentSchema {
   }
 
   interface NullSchema {
-    asNull: () => StringSchema
+    null: () => StringSchema
   }
 
   interface BooleanSchema extends BaseSchema<BooleanSchema> {
-    asBoolean: () => BooleanSchema
+    boolean: () => BooleanSchema
   }
 
   interface NumberSchema extends BaseSchema<NumberSchema> {
@@ -121,13 +121,13 @@ declare namespace FluentSchema {
   }
 
   interface FluentSchema extends BaseSchema<ObjectSchema> {
-    asString: () => StringSchema
-    asNumber: () => NumberSchema
-    asInteger: () => IntegerSchema
-    asBoolean: () => BooleanSchema
-    asArray: () => ArraySchema
+    string: () => StringSchema
+    number: () => NumberSchema
+    integer: () => IntegerSchema
+    boolean: () => BooleanSchema
+    array: () => ArraySchema
     asObject: () => ObjectSchema
-    asNull: () => NullSchema
+    null: () => NullSchema
   }
 }
 export = FluentSchema

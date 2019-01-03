@@ -15,7 +15,7 @@ describe('BooleanSchema', () => {
     it('from FluentSchema', () => {
       expect(
         FluentSchema()
-          .asBoolean()
+          .boolean()
           .valueOf()
       ).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -27,8 +27,8 @@ describe('BooleanSchema', () => {
   it('sets a null type to the prop', () => {
     expect(
       FluentSchema()
-        .asObject()
-        .prop('prop', FluentSchema().asBoolean())
+        .object()
+        .prop('prop', FluentSchema().boolean())
         .valueOf().properties.prop.type
     ).toEqual('boolean')
   })

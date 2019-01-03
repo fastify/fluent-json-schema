@@ -16,7 +16,7 @@ describe('ArraySchema', () => {
     it('from FluentSchema', () => {
       expect(
         FluentSchema()
-          .asArray()
+          .array()
           .valueOf()
       ).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -30,7 +30,7 @@ describe('ArraySchema', () => {
       it('valid object', () => {
         expect(
           ArraySchema()
-            .items(FluentSchema().asNumber())
+            .items(FluentSchema().number())
             .valueOf()
         ).toEqual({
           type: 'array',
@@ -40,7 +40,7 @@ describe('ArraySchema', () => {
       it('valid array', () => {
         expect(
           ArraySchema()
-            .items([FluentSchema().asNumber(), FluentSchema().asString()])
+            .items([FluentSchema().number(), FluentSchema().string()])
             .valueOf()
         ).toEqual({
           type: 'array',
@@ -58,8 +58,8 @@ describe('ArraySchema', () => {
       it('valid', () => {
         expect(
           ArraySchema()
-            .items([FluentSchema().asNumber(), FluentSchema().asString()])
-            .additionalItems(FluentSchema().asString())
+            .items([FluentSchema().number(), FluentSchema().string()])
+            .additionalItems(FluentSchema().string())
             .valueOf()
         ).toEqual({
           type: 'array',
@@ -70,7 +70,7 @@ describe('ArraySchema', () => {
       it('false', () => {
         expect(
           ArraySchema()
-            .items([FluentSchema().asNumber(), FluentSchema().asString()])
+            .items([FluentSchema().number(), FluentSchema().string()])
             .additionalItems(false)
             .valueOf()
         ).toEqual({
@@ -90,7 +90,7 @@ describe('ArraySchema', () => {
       it('valid', () => {
         expect(
           ArraySchema()
-            .contains(FluentSchema().asString())
+            .contains(FluentSchema().string())
             .valueOf()
         ).toEqual({
           type: 'array',

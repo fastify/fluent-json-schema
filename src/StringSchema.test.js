@@ -16,7 +16,7 @@ describe('StringSchema', () => {
     it('from FluentSchema', () => {
       expect(
         FluentSchema()
-          .asString()
+          .string()
           .valueOf()
       ).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -29,7 +29,7 @@ describe('StringSchema', () => {
     describe('minLength', () => {
       it('valid', () => {
         const schema = FluentSchema()
-          .asObject()
+          .object()
           .prop('prop', StringSchema().minLength(5))
           .valueOf()
         expect(schema).toEqual({
@@ -160,7 +160,7 @@ describe('StringSchema', () => {
 
   it('works', () => {
     const schema = FluentSchema()
-      .asObject()
+      .object()
       .id('http://bar.com/object')
       .title('A object')
       .description('A object desc')

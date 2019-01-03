@@ -54,7 +54,7 @@ describe('BaseSchema', () => {
       it('nested', () => {
         expect(
           FluentSchema()
-            .asObject()
+            .object()
             .prop(
               'foo',
               BaseSchema()
@@ -122,7 +122,7 @@ describe('BaseSchema', () => {
         const prop = 'foo'
         expect(
           FluentSchema()
-            .asObject()
+            .object()
             .prop(prop)
             .required()
             .valueOf().required
@@ -132,11 +132,11 @@ describe('BaseSchema', () => {
         const prop = 'foo'
         expect(
           FluentSchema()
-            .asObject()
+            .object()
             .prop(
               prop,
               FluentSchema()
-                .asString()
+                .string()
                 .required()
             )
             .valueOf().required

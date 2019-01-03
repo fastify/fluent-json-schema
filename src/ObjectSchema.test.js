@@ -80,7 +80,6 @@ describe('ObjectSchema', () => {
                         .asString()
                         .id(id)
                     )
-                    //.id(id) FIXME LS as for ref the assign is wrong
                     .required()
                 )
                 .valueOf()
@@ -146,7 +145,6 @@ describe('ObjectSchema', () => {
                   .prop('foo')
               )
               .prop('prop', FluentSchema().ref('entity'))
-              //.ref('entity') //FIXME LS wrong assignment
               .valueOf()
           ).toEqual({
             definitions: {
@@ -180,7 +178,6 @@ describe('ObjectSchema', () => {
                       .asString()
                       .id(id)
                   )
-                  //.id(id) // FIXME id assigned to foo rather than bar prop
                   .required()
               )
               .valueOf()

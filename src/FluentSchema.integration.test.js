@@ -320,75 +320,70 @@ describe('FluentSchema', () => {
     it('generate', () => {
       const [step] = basic
       expect(
-        deepOmit(
-          FluentSchema()
-            .asArray()
-            .title('Product set')
-            .items(
-              FluentSchema()
-                .asObject()
-                .title('Product')
-                .prop(
-                  'uuid',
-                  FluentSchema()
-                    .asNumber()
-                    .description('The unique identifier for a product')
-                    .required()
-                ) // TODO LS bug if we use `id` the property is removed by deepOmit
-                .prop('name')
-                .required()
-                .prop(
-                  'price',
-                  FluentSchema()
-                    .asNumber()
-                    .exclusiveMinimum(0)
-                    .required()
-                )
-                .prop(
-                  'tags',
-                  FluentSchema()
-                    .asArray()
-                    .items(FluentSchema().asString())
-                    .minItems(1)
-                    .uniqueItems(true)
-                )
+        FluentSchema()
+          .asArray()
+          .title('Product set')
+          .items(
+            FluentSchema()
+              .asObject()
+              .title('Product')
+              .prop(
+                'uuid',
+                FluentSchema()
+                  .asNumber()
+                  .description('The unique identifier for a product')
+                  .required()
+              ) // TODO LS bug if we use `id` the property is removed by deepOmit
+              .prop('name')
+              .required()
+              .prop(
+                'price',
+                FluentSchema()
+                  .asNumber()
+                  .exclusiveMinimum(0)
+                  .required()
+              )
+              .prop(
+                'tags',
+                FluentSchema()
+                  .asArray()
+                  .items(FluentSchema().asString())
+                  .minItems(1)
+                  .uniqueItems(true)
+              )
 
-                .prop(
-                  'dimensions',
-                  FluentSchema()
-                    .asObject()
-                    .prop(
-                      'length',
-                      FluentSchema()
-                        .asNumber()
-                        .required()
-                    )
+              .prop(
+                'dimensions',
+                FluentSchema()
+                  .asObject()
+                  .prop(
+                    'length',
+                    FluentSchema()
+                      .asNumber()
+                      .required()
+                  )
 
-                    .prop(
-                      'width',
-                      FluentSchema()
-                        .asNumber()
-                        .required()
-                    )
-                    .prop(
-                      'height',
-                      FluentSchema()
-                        .asNumber()
-                        .required()
-                    )
-                )
-                .prop(
-                  'warehouseLocation',
-                  FluentSchema()
-                    .asString()
-                    .description(
-                      'Coordinates of the warehouse with the product'
-                    )
-                )
-            )
-            .valueOf(),
-          '$id'
-        )
+                  .prop(
+                    'width',
+                    FluentSchema()
+                      .asNumber()
+                      .required()
+                  )
+                  .prop(
+                    'height',
+                    FluentSchema()
+                      .asNumber()
+                      .required()
+                  )
+              )
+              .prop(
+                'warehouseLocation',
+                FluentSchema()
+                  .asString()
+                  .description('Coordinates of the warehouse with the product')
+              )
+          )
+          .valueOf()
       ).toEqual(step.schema)
     })
   })

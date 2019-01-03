@@ -281,7 +281,6 @@ describe('FluentSchema', () => {
   })
 
   it('works', () => {
-    // TODO LS https://json-schema.org/latest/json-schema-core.html#idExamples
     const schema = FluentSchema()
       .asObject()
       .id('http://foo.com/user')

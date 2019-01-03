@@ -24,8 +24,7 @@ const initialState = {
  * @param {boolean} [options.generateIds = false] - generate the id automatically e.g. #properties.foo
  * @returns {StringSchema}
  */
-// https://medium.com/javascript-scene/javascript-factory-functions-with-es6-4d224591a8b1
-// Factory Functions for Mixin Composition withBaseSchema
+
 const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
   // TODO LS think about default values and how pass all of them through the functions
   options = {
@@ -220,7 +219,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
       const type = hasCombiningKeywords(attributes)
         ? undefined
-        : attributes.type
+        : //TODO LS think if we set the default type as string
+          attributes.type || 'string'
 
       const {
         $ref,
@@ -268,7 +268,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         schema: {
           ...schema,
           [target]: [
-            ...schema[target], //.filter(p => p.$id !== id),
+            ...schema[target],
             $ref
               ? { name, $ref }
               : Object.assign(

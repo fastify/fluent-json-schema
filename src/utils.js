@@ -1,6 +1,6 @@
 'use strict'
 // TODO LS check a method for BaseSchema, ObjectSchema, ArraySchema, etc
-const isFluentSchema = obj => typeof obj.anyOf === 'function'
+const isFluentSchema = obj => obj && typeof obj.anyOf === 'function'
 
 const hasCombiningKeywords = attributes =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
@@ -19,18 +19,6 @@ const omit = (obj, props) =>
     }
   }, {})
 
-const deepOmit = (obj, props) =>
-  Object.entries(obj).reduce((memo, [key, value]) => {
-    if (props.includes(key)) return memo
-    return {
-      ...memo,
-      [key]:
-        typeof value === 'object' && !Array.isArray(value)
-          ? deepOmit(value, props)
-          : value,
-    }
-  }, {})
-
 const flat = array =>
   array.reduce((memo, prop) => {
     const { name, ...rest } = prop
@@ -41,24 +29,6 @@ const flat = array =>
   }, {})
 
 const REQUIRED = Symbol('required')
-
-const valueOf = (schema, root = false) => {
-  const { properties, definitions, required, $schema, ...rest } = schema
-  return Object.assign(
-    root ? { $schema } : {},
-    Object.keys(definitions || []).length > 0
-      ? { definitions: flat(definitions) }
-      : undefined,
-    { ...omit(rest, ['if', 'then', 'else']) },
-    Object.keys(properties).length > 0
-      ? { properties: flat(properties) }
-      : undefined,
-    required.length > 0 ? { required } : undefined,
-    schema.if ? { if: schema.if } : undefined,
-    schema.then ? { then: schema.then } : undefined,
-    schema.else ? { else: schema.else } : undefined
-  )
-}
 
 const RELATIVE_JSON_POINTER = 'relative-json-pointer'
 const JSON_POINTER = 'json-pointer'
@@ -94,7 +64,6 @@ const FORMATS = {
   DATE_TIME,
 }
 
-// TODO LS looking for a better name
 const patchIdsWithParentId = ({ schema, generateIds, parentId }) => {
   const properties = Object.entries(schema.properties || {})
   if (properties.length === 0) return schema
@@ -150,15 +119,10 @@ const appendRequired = ({
 }
 
 const setAttribute = ({ schema, ...options }, attribute) => {
-  const [key, value, type = 'string'] = attribute
+  const [key, value] = attribute
   const currentProp = last(schema.properties)
-  if (currentProp && typeof currentProp.prop === 'function') {
+  if (currentProp) {
     const { name, ...props } = currentProp
-    // TODO LS REMOVE once schema type based refactoring is done
-    if (type !== currentProp.type && type !== 'any')
-      throw new Error(
-        `'${name}' as '${currentProp.type}' doesn't accept '${key}' option`
-      )
     return options.factory({ schema, ...options }).prop(name, {
       ...props,
       [key]: value,
@@ -166,7 +130,7 @@ const setAttribute = ({ schema, ...options }, attribute) => {
   }
   return options.factory({ schema: { ...schema, [key]: value }, ...options })
 }
-
+// TODO LS maybe we can just use setAttribute and remove this one
 const setComposeType = ({ prop, schemas, schema, options }) => {
   if (!(Array.isArray(schemas) && schemas.every(v => isFluentSchema(v)))) {
     throw new Error(
@@ -179,15 +143,6 @@ const setComposeType = ({ prop, schemas, schema, options }) => {
     return props
   })
 
-  const currentProp = last(schema.properties)
-  if (currentProp && typeof currentProp.prop === 'function') {
-    const { name, not, type, ...props } = currentProp
-    const attr = {
-      ...props,
-      ...(not ? { not: { [prop]: values } } : { [prop]: values }),
-    }
-    return options.factory({ schema: { ...schema }, options }).prop(name, attr)
-  }
   return options.factory({ schema: { ...schema, [prop]: values }, ...options })
 }
 
@@ -198,10 +153,8 @@ module.exports = {
   flat,
   omit,
   REQUIRED,
-  deepOmit,
   patchIdsWithParentId,
   appendRequired,
-  valueOf,
   setAttribute,
   setComposeType,
   FORMATS,

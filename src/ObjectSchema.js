@@ -10,7 +10,6 @@ const {
 } = require('./utils')
 
 const initialState = {
-  // $schema: 'http://json-schema.org/draft-07/schema#',
   type: 'object',
   definitions: [],
   properties: [],
@@ -219,123 +218,29 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
       const type = hasCombiningKeywords(attributes)
         ? undefined
-        : //TODO LS think if we set the default type as string
-          attributes.type || 'string'
+        : attributes.type || 'string'
 
-      const {
-        $ref,
-        title,
-        description,
-        defaults,
-        examples,
-        // compound
-        anyOf,
-        allOf,
-        oneOf,
-        not,
-        // string
-        minLength,
-        maxLength,
-        pattern,
-        format,
-        contentEncoding,
-        contentMediaType,
-        // number
-        minimum,
-        maximum,
-        multipleOf,
-        exclusiveMaximum,
-        exclusiveMinimum,
-        // array
-        items,
-        contains,
-        uniqueItems,
-        minItems,
-        maxItems,
-        additionalItems,
-        // object
-        maxProperties,
-        minProperties,
-        required,
-        properties,
-        patternProperties,
-        additionalProperties,
-        dependencies,
-        propertyNames,
-      } = attributes
+      const $ref = attributes.$ref
+
+      // strip undefined or empty array
+      const obj = Object.entries({ ...attributes, $id, type }).reduce(
+        (memo, [key, value]) => {
+          return key === '$schema' ||
+            key === 'def' ||
+            value === undefined ||
+            (Array.isArray(value) && value.length === 0)
+            ? memo
+            : { ...memo, [key]: value }
+        },
+        {}
+      )
 
       return ObjectSchema({
         schema: {
           ...schema,
           [target]: [
             ...schema[target],
-            $ref
-              ? { name, $ref }
-              : Object.assign(
-                  {},
-                  { name },
-                  // TODO LS that's quite verbose :)
-                  type !== undefined ? { type } : undefined,
-                  defaults !== undefined ? { default: defaults } : undefined,
-                  title !== undefined ? { title } : undefined,
-                  examples !== undefined ? { examples } : undefined,
-                  $id !== undefined ? { $id } : undefined,
-                  description !== undefined ? { description } : undefined,
-                  attributes.const !== undefined
-                    ? { const: attributes.const }
-                    : undefined,
-                  attributes.enum !== undefined
-                    ? { enum: attributes.enum }
-                    : undefined,
-                  // compounds
-                  anyOf !== undefined ? { anyOf } : undefined,
-                  oneOf !== undefined ? { oneOf } : undefined,
-                  allOf !== undefined ? { allOf } : undefined,
-                  not !== undefined ? { not } : undefined,
-                  // string
-                  minLength !== undefined ? { minLength } : undefined,
-                  maxLength !== undefined ? { maxLength } : undefined,
-                  pattern !== undefined ? { pattern } : undefined,
-                  format !== undefined ? { format } : undefined,
-                  contentEncoding !== undefined
-                    ? { contentEncoding }
-                    : undefined,
-                  contentMediaType !== undefined
-                    ? { contentMediaType }
-                    : undefined,
-                  // number
-                  minimum !== undefined ? { minimum } : undefined,
-                  maximum !== undefined ? { maximum } : undefined,
-                  multipleOf !== undefined ? { multipleOf } : undefined,
-                  exclusiveMaximum !== undefined
-                    ? { exclusiveMaximum }
-                    : undefined,
-                  exclusiveMinimum !== undefined
-                    ? { exclusiveMinimum }
-                    : undefined,
-                  // array
-                  items !== undefined ? { items } : undefined,
-                  contains !== undefined ? { contains } : undefined,
-                  uniqueItems !== undefined ? { uniqueItems } : undefined,
-                  minItems !== undefined ? { minItems } : undefined,
-                  maxItems !== undefined ? { maxItems } : undefined,
-                  additionalItems !== undefined
-                    ? { additionalItems }
-                    : undefined,
-                  // object
-                  maxProperties !== undefined ? { maxProperties } : undefined,
-                  minProperties !== undefined ? { minProperties } : undefined,
-                  required && required.length > 0 ? { required } : undefined,
-                  properties !== undefined ? { properties } : undefined,
-                  patternProperties !== undefined
-                    ? { patternProperties }
-                    : undefined,
-                  additionalProperties !== undefined
-                    ? { additionalProperties }
-                    : undefined,
-                  dependencies !== undefined ? { dependencies } : undefined,
-                  propertyNames !== undefined ? { propertyNames } : undefined
-                ),
+            $ref ? { name, $ref } : Object.assign({}, { name }, obj),
           ],
         },
         ...options,

@@ -1,6 +1,6 @@
 'use strict'
 // TODO LS check a method for BaseSchema, ObjectSchema, ArraySchema, etc
-const isFluentSchema = obj => typeof obj.anyOf === 'function'
+const isFluentSchema = obj => obj && typeof obj.anyOf === 'function'
 
 const hasCombiningKeywords = attributes =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
@@ -182,10 +182,10 @@ const setComposeType = ({ prop, schemas, schema, options }) => {
 
   const currentProp = last(schema.properties)
   if (currentProp && typeof currentProp.prop === 'function') {
-    const { name, not, type, ...props } = currentProp
+    const { name, ...props } = currentProp
     const attr = {
       ...props,
-      ...(not ? { not: { [prop]: values } } : { [prop]: values }),
+      [prop]: values,
     }
     return options.factory({ schema: { ...schema }, options }).prop(name, attr)
   }

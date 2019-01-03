@@ -269,7 +269,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         schema: {
           ...schema,
           [target]: [
-            ...schema[target], //.filter(p => p.$id !== id),
+            ...schema[target],
             $ref
               ? { name, $ref }
               : Object.assign(

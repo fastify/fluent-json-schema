@@ -43,7 +43,7 @@ const BaseSchema = (
 
   id: id => {
     if (!id)
-      return new Error(
+      throw new Error(
         `id should not be an empty fragment <#> or an empty string <> (e.g. #myId)`
       )
     return setAttribute({ schema, ...options }, ['$id', id, 'any'])
@@ -114,7 +114,9 @@ const BaseSchema = (
 
   enum: values => {
     if (!Array.isArray(values))
-      throw new Error("'enum' must be an array e.g. ['1', 'one', 'foo']")
+      throw new Error(
+        "'enums' must be an array with at least an element e.g. ['1', 'one', 'foo']"
+      )
     return setAttribute({ schema, ...options }, ['enum', values, 'any'])
   },
 

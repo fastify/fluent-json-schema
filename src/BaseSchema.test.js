@@ -13,214 +13,28 @@ describe('BaseSchema', () => {
       })
     })
 
-    describe('options', () => {
-      //LS TODO move to ObjectSchema
-      describe.skip('generatedIds', () => {
-        describe('properties', () => {
-          it('true', () => {
-            expect(
-              BaseSchema({ generateIds: true })
-                .prop('prop')
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              properties: { prop: { $id: '#properties/prop', type: 'string' } },
-              type: 'object',
-            })
-          })
-
-          it('false', () => {
-            expect(
-              BaseSchema()
-                .prop('prop')
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              properties: { prop: { type: 'string' } },
-              type: 'object',
-            })
-          })
-
-          describe('nested', () => {
-            it('true', () => {
-              expect(
-                BaseSchema({ generateIds: true })
-                  .prop(
-                    'foo',
-                    BaseSchema()
-                      .prop('bar')
-                      .required()
-                  )
-                  .valueOf()
-              ).toEqual({
-                $schema: 'http://json-schema.org/draft-07/schema#',
-                properties: {
-                  foo: {
-                    $id: '#properties/foo',
-                    properties: {
-                      bar: {
-                        $id: '#properties/foo/properties/bar',
-                        type: 'string',
-                      },
-                    },
-                    required: ['bar'],
-                    type: 'object',
-                  },
-                },
-                type: 'object',
-              })
-            })
-            it('false', () => {
-              const id = 'myId'
-              expect(
-                BaseSchema()
-                  .prop(
-                    'foo',
-                    BaseSchema()
-                      .prop('bar')
-                      .id(id)
-                      .required()
-                  )
-                  .valueOf()
-              ).toEqual({
-                $schema: 'http://json-schema.org/draft-07/schema#',
-                properties: {
-                  foo: {
-                    properties: {
-                      bar: { $id: 'myId', type: 'string' },
-                    },
-                    required: ['bar'],
-                    type: 'object',
-                  },
-                },
-                type: 'object',
-              })
-            })
-          })
-        })
-
-        describe('definitions', () => {
-          it('true', () => {
-            expect(
-              BaseSchema({ generateIds: true })
-                .definition(
-                  'entity',
-                  BaseSchema()
-                    .prop('foo')
-                    .prop('bar')
-                )
-                .prop('prop')
-                .ref('entity')
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {
-                entity: {
-                  $id: '#definitions/entity',
-                  properties: {
-                    bar: {
-                      type: 'string',
-                    },
-                    foo: {
-                      type: 'string',
-                    },
-                  },
-                  type: 'object',
-                },
-              },
-              properties: {
-                prop: {
-                  $ref: 'entity',
-                },
-              },
-              type: 'object',
-            })
-          })
-
-          it('false', () => {
-            expect(
-              BaseSchema({ generateIds: false })
-                .definition(
-                  'entity',
-                  BaseSchema()
-                    .id('myCustomId')
-                    .prop('foo')
-                )
-                .prop('prop')
-                .ref('entity')
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              definitions: {
-                entity: {
-                  $id: 'myCustomId',
-                  properties: {
-                    foo: { type: 'string' },
-                  },
-                  type: 'object',
-                },
-              },
-              properties: {
-                prop: {
-                  $ref: 'entity',
-                },
-              },
-              type: 'object',
-            })
-          })
-
-          it('nested', () => {
-            const id = 'myId'
-            expect(
-              BaseSchema()
-                .prop(
-                  'foo',
-                  BaseSchema()
-                    .prop('bar')
-                    .id(id)
-                    .required()
-                )
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              properties: {
-                foo: {
-                  properties: {
-                    bar: { $id: 'myId', type: 'string' },
-                  },
-                  required: ['bar'],
-                  type: 'object',
-                },
-              },
-              type: 'object',
-            })
-          })
+    describe('factory', () => {
+      it('default', () => {
+        const title = 'title'
+        expect(
+          BaseSchema()
+            .title(title)
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          title,
         })
       })
 
-      describe('factory', () => {
-        it('default', () => {
-          const title = 'title'
-          expect(
-            BaseSchema()
-              .title(title)
-              .valueOf()
-          ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
-            title,
-          })
-        })
-
-        it('override', () => {
-          const title = 'title'
-          expect(
-            BaseSchema({ factory: BaseSchema })
-              .title(title)
-              .valueOf()
-          ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
-            title,
-          })
+      it('override', () => {
+        const title = 'title'
+        expect(
+          BaseSchema({ factory: BaseSchema })
+            .title(title)
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          title,
         })
       })
     })
@@ -249,6 +63,14 @@ describe('BaseSchema', () => {
             )
             .valueOf().properties.foo.$id
         ).toEqual(value)
+      })
+
+      it('invalid', () => {
+        expect(() => {
+          BaseSchema().id('')
+        }).toThrow(
+          'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
+        )
       })
     })
 
@@ -322,14 +144,58 @@ describe('BaseSchema', () => {
       })
     })
 
-    // TODO LS evaluate to move to ObjectSchema
-    it.skip('ref', () => {
-      const value = 'description'
+    describe('enum', () => {
+      it('valid', () => {
+        const value = ['VALUE']
+        expect(
+          BaseSchema()
+            .enum(value)
+            .valueOf().enum
+        ).toEqual(value)
+      })
+
+      it('invalid', () => {
+        const value = 'VALUE'
+        expect(
+          () =>
+            BaseSchema()
+              .enum(value)
+              .valueOf().examples
+        ).toThrow(
+          "'enums' must be an array with at least an element e.g. ['1', 'one', 'foo']"
+        )
+      })
+    })
+
+    describe('const', () => {
+      it('valid', () => {
+        const value = 'VALUE'
+        expect(
+          BaseSchema()
+            .const(value)
+            .valueOf().const
+        ).toEqual(value)
+      })
+    })
+
+    describe('default', () => {
+      it('valid', () => {
+        const value = 'VALUE'
+        expect(
+          BaseSchema()
+            .default(value)
+            .valueOf().defaults
+        ).toEqual(value)
+      })
+    })
+
+    it('ref', () => {
+      const ref = 'myRef'
       expect(
         BaseSchema()
-          .description(value)
-          .valueOf().description
-      ).toEqual(value)
+          .ref(ref)
+          .valueOf().$ref
+      ).toEqual(ref)
     })
   })
 
@@ -432,6 +298,12 @@ describe('BaseSchema', () => {
           not: { anyOf: [{ $id: 'foo' }] },
         })
       })
+
+      it('invalid', () => {
+        expect(() => {
+          BaseSchema().not(undefined)
+        }).toThrow("'not' must be a BaseSchema")
+      })
     })
   })
 
@@ -450,6 +322,21 @@ describe('BaseSchema', () => {
         title: 'A User',
         if: { $id: 'http://foo.com/user' },
         then: { description: 'A User desc' },
+      })
+    })
+    describe('invalid', () => {
+      it('ifClause', () => {
+        expect(() => {
+          BaseSchema().ifThen(
+            undefined,
+            BaseSchema().description('A User desc')
+          )
+        }).toThrow("'ifClause' must be a BaseSchema")
+      })
+      it('thenClause', () => {
+        expect(() => {
+          BaseSchema().ifThen(BaseSchema().id('id'), undefined)
+        }).toThrow("'thenClause' must be a BaseSchema")
       })
     })
   })
@@ -474,6 +361,35 @@ describe('BaseSchema', () => {
         if: { $id: 'http://foo.com/user' },
         then: { description: 'then' },
         else: { description: 'else' },
+      })
+    })
+    describe('invalid', () => {
+      it('ifClause', () => {
+        expect(() => {
+          BaseSchema().ifThenElse(
+            undefined,
+            BaseSchema().description('then'),
+            BaseSchema().description('else')
+          )
+        }).toThrow("'ifClause' must be a BaseSchema")
+      })
+      it('thenClause', () => {
+        expect(() => {
+          BaseSchema().ifThenElse(
+            BaseSchema().id('id'),
+            undefined,
+            BaseSchema().description('else')
+          )
+        }).toThrow("'thenClause' must be a BaseSchema")
+      })
+      it('elseClause', () => {
+        expect(() => {
+          BaseSchema().ifThenElse(
+            BaseSchema().id('id'),
+            BaseSchema().description('then'),
+            undefined
+          )
+        }).toThrow("'elseClause' must be a BaseSchema")
       })
     })
   })

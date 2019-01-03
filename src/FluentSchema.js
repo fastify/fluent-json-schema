@@ -27,9 +27,8 @@ const initialState = {
  */
 
 const FluentSchema = (
-  { schema, ...options } = {
+  { schema = initialState, ...options } = {
     generateIds: false,
-    schema: initialState,
     factory: BaseSchema,
   }
 ) => ({

@@ -220,7 +220,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
       const type = hasCombiningKeywords(attributes)
         ? undefined
-        : attributes.type
+        : //TODO LS think if we set the default type as string
+          attributes.type || 'string'
 
       const {
         $ref,

@@ -231,7 +231,7 @@ describe('FluentSchema', () => {
       })
     })
 
-    it('fix', () => {
+    it('oneOf', () => {
       const schema = FluentSchema()
         .asObject()
         .prop(

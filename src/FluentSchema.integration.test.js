@@ -60,13 +60,16 @@ describe('FluentSchema', () => {
           .maxLength(5)
       )
       .ifThen(
-        FluentSchema().prop(
-          'prop',
-          FluentSchema()
-            .asString()
-            .maxLength(5)
-        ),
         FluentSchema()
+          .asObject()
+          .prop(
+            'prop',
+            FluentSchema()
+              .asString()
+              .maxLength(5)
+          ),
+        FluentSchema()
+          .asObject()
           .prop('extraProp')
           .required()
       )
@@ -106,16 +109,20 @@ describe('FluentSchema', () => {
       .asObject()
       .prop('ifProp')
       .ifThenElse(
-        FluentSchema().prop(
-          'ifProp',
-          FluentSchema()
-            .asString()
-            .enum([VALUES[0]])
-        ),
         FluentSchema()
+          .asObject()
+          .prop(
+            'ifProp',
+            FluentSchema()
+              .asString()
+              .enum([VALUES[0]])
+          ),
+        FluentSchema()
+          .asObject()
           .prop('thenProp')
           .required(),
         FluentSchema()
+          .asObject()
           .prop('elseProp')
           .required()
       )
@@ -205,6 +212,7 @@ describe('FluentSchema', () => {
       .definition(
         'address',
         FluentSchema()
+          .asObject()
           .id('#address')
           .prop('country')
           .prop('city')
@@ -318,37 +326,65 @@ describe('FluentSchema', () => {
             .title('Product set')
             .items(
               FluentSchema()
+                .asObject()
                 .title('Product')
-                .prop('uuid') // TODO LS bug if we use `id` the property is removed by deepOmit
-                .description('The unique identifier for a product')
-                .asNumber()
-                .required()
+                .prop(
+                  'uuid',
+                  FluentSchema()
+                    .asNumber()
+                    .description('The unique identifier for a product')
+                    .required()
+                ) // TODO LS bug if we use `id` the property is removed by deepOmit
                 .prop('name')
                 .required()
-                .prop('price')
-                .asNumber()
-                .exclusiveMinimum(0)
-                .required()
-                .prop('tags')
-                .asArray()
-                .items(FluentSchema().asString())
-                .minItems(1)
-                .uniqueItems(true)
+                .prop(
+                  'price',
+                  FluentSchema()
+                    .asNumber()
+                    .exclusiveMinimum(0)
+                    .required()
+                )
+                .prop(
+                  'tags',
+                  FluentSchema()
+                    .asArray()
+                    .items(FluentSchema().asString())
+                    .minItems(1)
+                    .uniqueItems(true)
+                )
+
                 .prop(
                   'dimensions',
                   FluentSchema()
-                    .prop('length')
-                    .asNumber()
-                    .required()
-                    .prop('width')
-                    .asNumber()
-                    .required()
-                    .prop('height')
-                    .asNumber()
-                    .required()
+                    .asObject()
+                    .prop(
+                      'length',
+                      FluentSchema()
+                        .asNumber()
+                        .required()
+                    )
+
+                    .prop(
+                      'width',
+                      FluentSchema()
+                        .asNumber()
+                        .required()
+                    )
+                    .prop(
+                      'height',
+                      FluentSchema()
+                        .asNumber()
+                        .required()
+                    )
                 )
-                .prop('warehouseLocation')
-                .description('Coordinates of the warehouse with the product')
+                .prop(
+                  'warehouseLocation',
+                  FluentSchema()
+                    .asString()
+                    .description(
+                      'Coordinates of the warehouse with the product'
+                    )
+                )
             )
             .valueOf(),
           '$id'

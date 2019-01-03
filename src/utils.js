@@ -130,7 +130,7 @@ const setAttribute = ({ schema, ...options }, attribute) => {
   }
   return options.factory({ schema: { ...schema, [key]: value }, ...options })
 }
-
+// TODO LS maybe we can just use setAttribute and remove this one
 const setComposeType = ({ prop, schemas, schema, options }) => {
   if (!(Array.isArray(schemas) && schemas.every(v => isFluentSchema(v)))) {
     throw new Error(
@@ -143,15 +143,6 @@ const setComposeType = ({ prop, schemas, schema, options }) => {
     return props
   })
 
-  const currentProp = last(schema.properties)
-  if (currentProp && typeof currentProp.prop === 'function') {
-    const { name, ...props } = currentProp
-    const attr = {
-      ...props,
-      [prop]: values,
-    }
-    return options.factory({ schema: { ...schema }, options }).prop(name, attr)
-  }
   return options.factory({ schema: { ...schema, [prop]: values }, ...options })
 }
 

@@ -80,7 +80,6 @@ describe('ObjectSchema', () => {
                         .asString()
                         .id(id)
                     )
-                    //.id(id) FIXME LS as for ref the assign is wrong
                     .required()
                 )
                 .valueOf()
@@ -146,7 +145,6 @@ describe('ObjectSchema', () => {
                   .prop('foo')
               )
               .prop('prop', FluentSchema().ref('entity'))
-              //.ref('entity') //FIXME LS wrong assignment
               .valueOf()
           ).toEqual({
             definitions: {
@@ -180,7 +178,6 @@ describe('ObjectSchema', () => {
                       .asString()
                       .id(id)
                   )
-                  //.id(id) // FIXME id assigned to foo rather than bar prop
                   .required()
               )
               .valueOf()
@@ -229,6 +226,59 @@ describe('ObjectSchema', () => {
   })
 
   describe('keywords:', () => {
+    describe('id', () => {
+      it('valid', () => {
+        const id = 'myId'
+        const prop = 'prop'
+        expect(
+          ObjectSchema()
+            .prop('prop')
+            .id(id)
+            .valueOf().properties[prop]
+        ).toEqual({
+          type: 'string',
+          $id: id,
+        })
+      })
+
+      describe('nested', () => {
+        it('object', () => {
+          const id = 'myId'
+          expect(
+            ObjectSchema()
+              .prop(
+                'foo',
+                FluentSchema()
+                  .asString()
+                  .id(id)
+              )
+              .valueOf().properties.foo
+          ).toEqual({
+            type: 'string',
+            $id: id,
+          })
+        })
+
+        it('string', () => {
+          expect(
+            ObjectSchema()
+              .prop(
+                'foo',
+                FluentSchema()
+                  .asString()
+                  .title('Foo')
+              )
+              .valueOf().properties
+          ).toEqual({
+            foo: {
+              type: 'string',
+              title: 'Foo',
+            },
+          })
+        })
+      })
+    })
+
     describe('properties', () => {
       it('with type string', () => {
         expect(

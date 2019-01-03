@@ -1,11 +1,15 @@
 'use strict'
-// TODO LS check a method for BaseSchema, ObjectSchema, ArraySchema, etc
-const isFluentSchema = obj => obj && typeof obj.anyOf === 'function'
+const isFluentSchema = obj =>
+  obj &&
+  (typeof obj.anyOf === 'function' || // BaseSchema
+  typeof obj.definition === 'function' || // ObjectSchema
+  typeof obj.min === 'function' || // NumberSchema & IntegerSchema
+    typeof obj.format === 'function') // StringSchema
 
 const hasCombiningKeywords = attributes =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
 
-const last = (array = []) => {
+const last = array => {
   const [prop] = [...array].reverse()
   return prop
 }

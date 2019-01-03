@@ -148,7 +148,7 @@ const BaseSchema = (
    * Required has to be chained to a property:
    * Examples:
    * - FluentSchema().prop('prop').required()
-   * - FluentSchema().prop('prop', FluentSchema().asNumber()).required()
+   * - FluentSchema().prop('prop', FluentSchema().number()).required()
    *
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.3}
    * @returns {FluentSchema}
@@ -221,7 +221,7 @@ const BaseSchema = (
    */
 
   /**
-   * @private set a property to a type. Use asString asNumber etc.
+   * @private set a property to a type. Use string number etc.
    * @returns {BaseSchema}
    */
   as: type => {

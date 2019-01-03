@@ -15,7 +15,7 @@ describe('NullSchema', () => {
     it('from FluentSchema', () => {
       expect(
         FluentSchema()
-          .asNull()
+          .null()
           .valueOf()
       ).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -27,8 +27,8 @@ describe('NullSchema', () => {
   it('sets a null type to the prop', () => {
     expect(
       FluentSchema()
-        .asObject()
-        .prop('prop', FluentSchema().asNull())
+        .object()
+        .prop('prop', FluentSchema().null())
         .valueOf().properties.prop.type
     ).toEqual('null')
   })

@@ -118,7 +118,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       const values = Object.entries(opts).reduce((memo, [pattern, schema]) => {
         if (!isFluentSchema(schema))
           throw new Error(
-            "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': FluentSchema().asString() }"
+            "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': FluentSchema().string() }"
           )
         return {
           ...memo,
@@ -147,7 +147,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
         if (!isFluentSchema(schema) && !Array.isArray(schema))
           throw new Error(
-            "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': FluentSchema().asString() }"
+            "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': FluentSchema().string() }"
           )
         return {
           ...memo,

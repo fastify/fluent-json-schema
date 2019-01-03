@@ -62,11 +62,11 @@ declare namespace FluentSchema {
   }
 
   interface NullSchema {
-    asNull: () => StringSchema
+    null: () => StringSchema
   }
 
   interface BooleanSchema extends BaseSchema<BooleanSchema> {
-    asBoolean: () => BooleanSchema
+    boolean: () => BooleanSchema
   }
 
   interface NumberSchema extends BaseSchema<NumberSchema> {
@@ -113,21 +113,21 @@ declare namespace FluentSchema {
   }
 
   interface PatternPropertiesOptions {
-    [key: string]: FluentSchema
+    [key: string]: JSONSchema
   }
 
   interface DependenciesOptions {
-    [key: string]: FluentSchema[]
+    [key: string]: JSONSchema[]
   }
 
-  interface FluentSchema extends BaseSchema<ObjectSchema> {
-    asString: () => StringSchema
-    asNumber: () => NumberSchema
-    asInteger: () => IntegerSchema
-    asBoolean: () => BooleanSchema
-    asArray: () => ArraySchema
-    asObject: () => ObjectSchema
-    asNull: () => NullSchema
+  interface FluentSchema extends BaseSchema<FluentSchema> {
+    string: () => StringSchema
+    number: () => NumberSchema
+    integer: () => IntegerSchema
+    boolean: () => BooleanSchema
+    array: () => ArraySchema
+    object: () => ObjectSchema
+    null: () => NullSchema
   }
 }
 export = FluentSchema

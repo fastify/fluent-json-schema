@@ -9,14 +9,14 @@ const userSchema = FluentSchema()
   .prop(
     'email',
     FluentSchema()
-      .asString()
+      .string()
       .format(FORMATS.EMAIL)
       .required()
   )
   .prop(
     'password',
     FluentSchema()
-      .asString()
+      .string()
       .minLength(8)
       .required()
   )

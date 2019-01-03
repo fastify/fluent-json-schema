@@ -2,16 +2,17 @@
 
 import { FluentSchema } from '../FluentSchema'
 const schema = FluentSchema()
-  .asObject()
+  .object()
   .id('http://foo.com/user')
   .title('A User')
   .description('A User desc')
   .definition(
     'address',
     FluentSchema()
+      .object()
       .id('#address')
       .prop('country')
-      .allOf([FluentSchema().asString()])
+      .allOf([FluentSchema().string()])
       .prop('city')
       .prop('zipcode')
   )
@@ -19,7 +20,7 @@ const schema = FluentSchema()
   .prop(
     'avatar',
     FluentSchema()
-      .asString()
+      .string()
       .contentEncoding('base64')
       .contentMediaType('image/png')
   )
@@ -27,7 +28,7 @@ const schema = FluentSchema()
   .prop(
     'password',
     FluentSchema()
-      .asString()
+      .string()
       .default('123456')
       .minLength(6)
       .maxLength(12)
@@ -37,20 +38,21 @@ const schema = FluentSchema()
   .prop(
     'addresses',
     FluentSchema()
-      .asArray()
+      .array()
       .items([FluentSchema().ref('#address')])
   )
   .required()
   .prop(
     'role',
     FluentSchema()
+      .object()
       .id('http://foo.com/role')
       .prop('name')
       .enum(['ADMIN', 'USER'])
       .prop('permissions')
   )
   .required()
-  .prop('age', FluentSchema().asInteger())
+  .prop('age', FluentSchema().integer())
 
   .valueOf()
 

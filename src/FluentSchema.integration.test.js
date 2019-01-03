@@ -17,7 +17,7 @@ describe('FluentSchema', () => {
   describe('basic', () => {
     const ajv = new Ajv()
     const schema = FluentSchema()
-      .asObject()
+      .object()
       .prop('username')
       .prop('password')
       .valueOf()
@@ -52,24 +52,24 @@ describe('FluentSchema', () => {
   describe('ifThen', () => {
     const ajv = new Ajv()
     const schema = FluentSchema()
-      .asObject()
+      .object()
       .prop(
         'prop',
         FluentSchema()
-          .asString()
+          .string()
           .maxLength(5)
       )
       .ifThen(
         FluentSchema()
-          .asObject()
+          .object()
           .prop(
             'prop',
             FluentSchema()
-              .asString()
+              .string()
               .maxLength(5)
           ),
         FluentSchema()
-          .asObject()
+          .object()
           .prop('extraProp')
           .required()
       )
@@ -106,23 +106,23 @@ describe('FluentSchema', () => {
 
     const VALUES = ['ONE', 'TWO']
     const schema = FluentSchema()
-      .asObject()
+      .object()
       .prop('ifProp')
       .ifThenElse(
         FluentSchema()
-          .asObject()
+          .object()
           .prop(
             'ifProp',
             FluentSchema()
-              .asString()
+              .string()
               .enum([VALUES[0]])
           ),
         FluentSchema()
-          .asObject()
+          .object()
           .prop('thenProp')
           .required(),
         FluentSchema()
-          .asObject()
+          .object()
           .prop('elseProp')
           .required()
       )
@@ -158,24 +158,24 @@ describe('FluentSchema', () => {
   describe('compose keywords', () => {
     const ajv = new Ajv()
     const schema = FluentSchema()
-      .asObject()
-      .prop('foo', FluentSchema().anyOf([FluentSchema().asString()]))
+      .object()
+      .prop('foo', FluentSchema().anyOf([FluentSchema().string()]))
       .prop(
         'bar',
-        FluentSchema().not(FluentSchema().anyOf([FluentSchema().asInteger()]))
+        FluentSchema().not(FluentSchema().anyOf([FluentSchema().integer()]))
       )
       .prop(
         'prop',
         FluentSchema().allOf([
-          FluentSchema().asString(),
-          FluentSchema().asBoolean(),
+          FluentSchema().string(),
+          FluentSchema().boolean(),
         ])
       )
       .prop(
         'anotherProp',
         FluentSchema().oneOf([
-          FluentSchema().asString(),
-          FluentSchema().asBoolean(),
+          FluentSchema().string(),
+          FluentSchema().boolean(),
         ])
       )
       .required()
@@ -205,14 +205,14 @@ describe('FluentSchema', () => {
   describe('complex', () => {
     const ajv = new Ajv()
     const schema = FluentSchema()
-      .asObject()
+      .object()
       .id('http://foo.com/user')
       .title('A User')
       .description('A User desc')
       .definition(
         'address',
         FluentSchema()
-          .asObject()
+          .object()
           .id('#address')
           .prop('country')
           .prop('city')
@@ -223,13 +223,13 @@ describe('FluentSchema', () => {
       .prop(
         'password',
         FluentSchema()
-          .asString()
+          .string()
           .required()
       )
       .prop(
         'address',
         FluentSchema()
-          .asObject()
+          .object()
           .ref('#address')
       )
 
@@ -237,13 +237,13 @@ describe('FluentSchema', () => {
       .prop(
         'role',
         FluentSchema()
-          .asObject()
+          .object()
           .id('http://foo.com/role')
           .required()
           .prop('name')
           .prop('permissions')
       )
-      .prop('age', FluentSchema().asNumber())
+      .prop('age', FluentSchema().number())
       .valueOf()
     const validate = ajv.compile(schema)
     it('valid', () => {
@@ -321,16 +321,16 @@ describe('FluentSchema', () => {
       const [step] = basic
       expect(
         FluentSchema()
-          .asArray()
+          .array()
           .title('Product set')
           .items(
             FluentSchema()
-              .asObject()
+              .object()
               .title('Product')
               .prop(
                 'uuid',
                 FluentSchema()
-                  .asNumber()
+                  .number()
                   .description('The unique identifier for a product')
                   .required()
               ) // TODO LS bug if we use `id` the property is removed by deepOmit
@@ -339,15 +339,15 @@ describe('FluentSchema', () => {
               .prop(
                 'price',
                 FluentSchema()
-                  .asNumber()
+                  .number()
                   .exclusiveMinimum(0)
                   .required()
               )
               .prop(
                 'tags',
                 FluentSchema()
-                  .asArray()
-                  .items(FluentSchema().asString())
+                  .array()
+                  .items(FluentSchema().string())
                   .minItems(1)
                   .uniqueItems(true)
               )
@@ -355,31 +355,31 @@ describe('FluentSchema', () => {
               .prop(
                 'dimensions',
                 FluentSchema()
-                  .asObject()
+                  .object()
                   .prop(
                     'length',
                     FluentSchema()
-                      .asNumber()
+                      .number()
                       .required()
                   )
 
                   .prop(
                     'width',
                     FluentSchema()
-                      .asNumber()
+                      .number()
                       .required()
                   )
                   .prop(
                     'height',
                     FluentSchema()
-                      .asNumber()
+                      .number()
                       .required()
                   )
               )
               .prop(
                 'warehouseLocation',
                 FluentSchema()
-                  .asString()
+                  .string()
                   .description('Coordinates of the warehouse with the product')
               )
           )

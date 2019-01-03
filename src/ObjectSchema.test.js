@@ -77,7 +77,7 @@ describe('ObjectSchema', () => {
                     .prop(
                       'bar',
                       FluentSchema()
-                        .asString()
+                        .string()
                         .id(id)
                     )
                     .required()
@@ -175,7 +175,7 @@ describe('ObjectSchema', () => {
                   .prop(
                     'bar',
                     FluentSchema()
-                      .asString()
+                      .string()
                       .id(id)
                   )
                   .required()
@@ -201,7 +201,7 @@ describe('ObjectSchema', () => {
   it('from FluentSchema', () => {
     expect(
       FluentSchema()
-        .asObject()
+        .object()
         .valueOf()
     ).toEqual({
       $schema: 'http://json-schema.org/draft-07/schema#',
@@ -212,7 +212,7 @@ describe('ObjectSchema', () => {
   it('sets a type object to the prop', () => {
     expect(
       ObjectSchema()
-        .prop('prop', FluentSchema().asObject())
+        .prop('prop', FluentSchema().object())
         .valueOf().properties.prop.type
     ).toEqual('object')
   })
@@ -220,7 +220,7 @@ describe('ObjectSchema', () => {
   it('valueOf', () => {
     expect(
       ObjectSchema()
-        .prop('foo', FluentSchema().asString())
+        .prop('foo', FluentSchema().string())
         .valueOf()
     ).toEqual({ properties: { foo: { type: 'string' } }, type: 'object' })
   })
@@ -249,7 +249,7 @@ describe('ObjectSchema', () => {
               .prop(
                 'foo',
                 FluentSchema()
-                  .asString()
+                  .string()
                   .id(id)
               )
               .valueOf().properties.foo
@@ -265,7 +265,7 @@ describe('ObjectSchema', () => {
               .prop(
                 'foo',
                 FluentSchema()
-                  .asString()
+                  .string()
                   .title('Foo')
               )
               .valueOf().properties
@@ -311,7 +311,7 @@ describe('ObjectSchema', () => {
               .prop(
                 'foo',
                 FluentSchema()
-                  .asString()
+                  .string()
                   .title('Foo')
               )
               .valueOf().properties
@@ -339,7 +339,7 @@ describe('ObjectSchema', () => {
       it('object', () => {
         expect(
           ObjectSchema()
-            .additionalProperties(FluentSchema().asString())
+            .additionalProperties(FluentSchema().string())
             .prop('prop')
             .valueOf().additionalProperties
         ).toEqual({ type: 'string' })
@@ -408,7 +408,7 @@ describe('ObjectSchema', () => {
         expect(
           ObjectSchema()
             .patternProperties({
-              '^fo.*$': FluentSchema().asString(),
+              '^fo.*$': FluentSchema().string(),
             })
             .prop('foo')
             .valueOf()
@@ -428,7 +428,7 @@ describe('ObjectSchema', () => {
               .patternProperties(value)
           ).toEqual(value)
         ).toThrow(
-          "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': FluentSchema().asString() }"
+          "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': FluentSchema().string() }"
         )
       })
     })
@@ -457,7 +457,7 @@ describe('ObjectSchema', () => {
         expect(
           ObjectSchema()
             .dependencies({
-              foo: ObjectSchema().prop('bar', FluentSchema().asString()),
+              foo: ObjectSchema().prop('bar', FluentSchema().string()),
             })
             .prop('foo')
             .valueOf()
@@ -483,7 +483,7 @@ describe('ObjectSchema', () => {
               .dependencies(value)
           ).toEqual(value)
         ).toThrow(
-          "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': FluentSchema().asString() }"
+          "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': FluentSchema().string() }"
         )
       })
     })
@@ -494,7 +494,7 @@ describe('ObjectSchema', () => {
           ObjectSchema()
             .propertyNames(
               FluentSchema()
-                .asString()
+                .string()
                 .format(FORMATS.EMAIL)
             )
             .prop('foo@bar.com')
@@ -522,7 +522,7 @@ describe('ObjectSchema', () => {
     it('sets a type object from the root', () => {
       expect(
         FluentSchema()
-          .asNull()
+          .null()
           .valueOf().type
       ).toEqual('null')
     })
@@ -530,7 +530,7 @@ describe('ObjectSchema', () => {
     it('sets a type object from the prop', () => {
       expect(
         ObjectSchema()
-          .prop('value', FluentSchema().asNull())
+          .prop('value', FluentSchema().null())
 
           .valueOf().properties.value.type
       ).toEqual('null')

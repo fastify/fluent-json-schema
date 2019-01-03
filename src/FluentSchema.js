@@ -34,14 +34,14 @@ const FluentSchema = (
 ) => ({
   ...BaseSchema({ ...options, schema }),
 
-  asString: () =>
+  string: () =>
     StringSchema({
       ...options,
       schema,
       factory: StringSchema,
     }).as('string'),
 
-  asNumber: () =>
+  number: () =>
     NumberSchema({
       ...options,
       schema,
@@ -55,7 +55,7 @@ const FluentSchema = (
    * @returns {FluentSchema}
    */
 
-  asInteger: () =>
+  integer: () =>
     IntegerSchema({
       ...options,
       schema,
@@ -74,7 +74,7 @@ const FluentSchema = (
    * @returns {FluentSchema}
    */
 
-  asBoolean: () =>
+  boolean: () =>
     BooleanSchema({
       ...options,
       schema,
@@ -88,26 +88,26 @@ const FluentSchema = (
    * @returns {FluentSchema}
    */
 
-  asArray: () =>
+  array: () =>
     ArraySchema({
       ...options,
       schema,
       factory: ArraySchema,
     }).as('array'),
 
-  asObject: () =>
+  object: () =>
     ObjectSchema({
       ...options,
       schema,
       factory: ObjectSchema,
     }).as('object'),
 
-  asNull: () =>
+  null: () =>
     NullSchema({
       ...options,
       schema,
       factory: NullSchema,
-    }).asNull(),
+    }).null(),
 })
 
 module.exports = {

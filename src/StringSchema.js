@@ -31,7 +31,7 @@ const StringSchema = (
    * @returns {StringSchema}
    *!/
 
-  asString: () =>
+  string: () =>
     StringSchema({ schema: { ...schema }, ...options }).as('string'),*/
 
   /**

@@ -34,12 +34,26 @@ const FluentSchema = (
 ) => ({
   ...BaseSchema({ ...options, schema }),
 
+  /**
+   * Set a property to type string
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * @returns {StringSchema}
+   */
+
   string: () =>
     StringSchema({
       ...options,
       schema,
       factory: StringSchema,
     }).as('string'),
+
+  /**
+   * Set a property to type number
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#numeric}
+   * @returns {NumberSchema}
+   */
 
   number: () =>
     NumberSchema({
@@ -51,8 +65,8 @@ const FluentSchema = (
   /**
    * Set a property to type integer
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
-   * @returns {FluentSchema}
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#numeric}
+   * @returns {IntegerSchema}
    */
 
   integer: () =>
@@ -62,16 +76,16 @@ const FluentSchema = (
       factory: IntegerSchema,
     }).as('integer'),
 
+  // TODO LS what should we return? ObjectSchema?
   /*type: (types) => {
-    // TODO LS what should we return? ObjectSchema?
     return setAttribute({ schema, ...options }, ['type', types, 'any'])
   },*/
 
   /**
    * Set a property to type boolean
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
-   * @returns {FluentSchema}
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#general}
+   * @returns {BooleanSchema}
    */
 
   boolean: () =>
@@ -84,8 +98,8 @@ const FluentSchema = (
   /**
    * Set a property to type array
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
-   * @returns {FluentSchema}
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4}
+   * @returns {ArraySchema}
    */
 
   array: () =>
@@ -95,12 +109,26 @@ const FluentSchema = (
       factory: ArraySchema,
     }).as('array'),
 
+  /**
+   * Set a property to type object
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5}
+   * @returns {ObjectSchema}
+   */
+
   object: () =>
     ObjectSchema({
       ...options,
       schema,
       factory: ObjectSchema,
     }).as('object'),
+
+  /**
+   * Set a property to type null
+   *
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#general}
+   * @returns {NullSchema}
+   */
 
   null: () =>
     NullSchema({

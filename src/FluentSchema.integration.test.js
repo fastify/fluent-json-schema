@@ -245,7 +245,6 @@ describe('FluentSchema', () => {
       .required()
       .valueOf()
 
-    // console.log(JSON.stringify(schema, null, 2))
     const validate = ajv.compile(schema)
 
     it('valid', () => {
@@ -253,7 +252,6 @@ describe('FluentSchema', () => {
         foo: 'foo',
         anotherProp: true,
       })
-      // console.log(validate.errors)
       expect(valid).toBeTruthy()
     })
 
@@ -263,6 +261,111 @@ describe('FluentSchema', () => {
         bar: 1,
       })
       expect(valid).toBeFalsy()
+    })
+  })
+
+  describe('compose ifThen', () => {
+    const ajv = new Ajv()
+    const schema = FluentSchema()
+      .object()
+      .prop(
+        'foo',
+        FluentSchema()
+          .string()
+          .default(false)
+          .required()
+      )
+      .prop(
+        'bar',
+        FluentSchema()
+          .string()
+          .default(false)
+          .required()
+      )
+      .prop('thenFooA')
+      .prop('thenFooB')
+      .allOf([
+        FluentSchema().ifThen(
+          FluentSchema()
+            .object()
+            .prop('foo')
+            .enum(['foo']),
+          FluentSchema().required(['thenFooA', 'thenFooB'])
+        ),
+        FluentSchema().ifThen(
+          FluentSchema()
+            .object()
+            .prop('bar')
+            .enum(['BAR']),
+          FluentSchema().required(['thenBarA', 'thenBarB'])
+        ),
+      ])
+      .valueOf()
+
+    const validate = ajv.compile(schema)
+    it('matches', () => {
+      expect(schema).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        required: ['foo', 'bar'],
+        properties: {
+          foo: {
+            type: 'string',
+            default: false,
+          },
+          bar: {
+            type: 'string',
+            default: false,
+          },
+          thenFooA: {
+            type: 'string',
+          },
+          thenFooB: {
+            type: 'string',
+          },
+        },
+        allOf: [
+          {
+            if: {
+              properties: {
+                foo: {
+                  type: 'string',
+                  enum: [false],
+                },
+              },
+            },
+            then: {
+              required: ['thenFooA', 'thenFooB'],
+            },
+          },
+          {
+            if: {
+              properties: {
+                bar: {
+                  type: 'string',
+                  enum: ['BAR'],
+                },
+              },
+            },
+            then: {
+              required: ['thenBarA', 'thenBarB'],
+            },
+          },
+        ],
+      })
+    })
+
+    it('valid', () => {
+      const valid = validate({
+        foo: 'foo',
+        thenFooA: 'thenFooA',
+        thenFooB: 'thenFooB',
+        bar: 'BAR',
+        thenBarA: 'thenBarA',
+        thenBarB: 'thenBarB',
+      })
+      expect(validate.errors).toEqual(null)
+      expect(valid).toBeTruthy()
     })
   })
 

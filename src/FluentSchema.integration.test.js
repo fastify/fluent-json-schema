@@ -306,52 +306,32 @@ describe('FluentSchema', () => {
     it('matches', () => {
       expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'object',
-        required: ['foo', 'bar'],
-        properties: {
-          foo: {
-            type: 'string',
-            default: false,
-          },
-          bar: {
-            type: 'string',
-            default: false,
-          },
-          thenFooA: {
-            type: 'string',
-          },
-          thenFooB: {
-            type: 'string',
-          },
-        },
         allOf: [
           {
             if: {
               properties: {
-                foo: {
-                  type: 'string',
-                  enum: [false],
-                },
+                foo: { $id: undefined, enum: ['foo'], type: 'string' },
               },
             },
-            then: {
-              required: ['thenFooA', 'thenFooB'],
-            },
+            then: { required: ['thenFooA', 'thenFooB'] },
           },
           {
             if: {
               properties: {
-                bar: {
-                  type: 'string',
-                  enum: ['BAR'],
-                },
+                bar: { $id: undefined, enum: ['BAR'], type: 'string' },
               },
             },
-            then: {
-              required: ['thenBarA', 'thenBarB'],
-            },
+            then: { required: ['thenBarA', 'thenBarB'] },
           },
         ],
+        properties: {
+          bar: { default: false, type: 'string' },
+          foo: { default: false, type: 'string' },
+          thenFooA: { type: 'string' },
+          thenFooB: { type: 'string' },
+        },
+        required: ['foo', 'bar'],
+        type: 'object',
       })
     })
 

@@ -248,17 +248,6 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     },
 
     /**
-     * The value must be a valid id e.g. #properties/foo
-     *
-     * @param {string} ref
-     * @returns {FluentSchema}
-     */
-
-    ref: ref => {
-      return setAttribute({ schema, ...options }, ['$ref', ref, 'any'])
-    },
-
-    /**
      * The "definitions" keywords provides a standardized location for schema authors to inline re-usable JSON Schemas into a more general schema.
      * There are no restrictions placed on the values within the array.
      *
@@ -267,7 +256,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * @param {FluentSchema} props
      * @returns {FluentSchema}
      */
-
+    // FIXME LS move to BaseSchema and remove .prop
     definition: (name, props = {}) =>
       ObjectSchema({ schema, ...options }).prop(name, {
         ...props.valueOf(),

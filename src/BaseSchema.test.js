@@ -8,9 +8,7 @@ describe('BaseSchema', () => {
 
   describe('constructor', () => {
     it('without params', () => {
-      expect(BaseSchema().valueOf()).toEqual({
-        $schema: 'http://json-schema.org/draft-07/schema#',
-      })
+      expect(BaseSchema().valueOf()).toEqual({})
     })
 
     describe('factory', () => {
@@ -21,7 +19,6 @@ describe('BaseSchema', () => {
             .title(title)
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
           title,
         })
       })
@@ -33,7 +30,6 @@ describe('BaseSchema', () => {
             .title(title)
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
           title,
         })
       })
@@ -189,13 +185,27 @@ describe('BaseSchema', () => {
       })
     })
 
-    it('ref', () => {
-      const ref = 'myRef'
-      expect(
-        BaseSchema()
-          .ref(ref)
-          .valueOf().$ref
-      ).toEqual(ref)
+    describe('ref', () => {
+      it('ref', () => {
+        const ref = 'myRef'
+        expect(
+          BaseSchema()
+            .ref(ref)
+            .valueOf()
+        ).toEqual({ $ref: ref })
+      })
+
+      it('ref', () => {
+        const ref = 'myRef'
+        expect(
+          FluentSchema()
+            .ref(ref)
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          $ref: ref,
+        })
+      })
     })
   })
 
@@ -207,7 +217,6 @@ describe('BaseSchema', () => {
             .allOf([BaseSchema().id('foo')])
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
           allOf: [{ $id: 'foo' }],
         })
       })
@@ -236,7 +245,6 @@ describe('BaseSchema', () => {
             .anyOf([BaseSchema().id('foo')])
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
           anyOf: [{ $id: 'foo' }],
         })
       })
@@ -265,7 +273,6 @@ describe('BaseSchema', () => {
             .oneOf([BaseSchema().id('foo')])
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
           oneOf: [{ $id: 'foo' }],
         })
       })
@@ -294,7 +301,6 @@ describe('BaseSchema', () => {
             .not(BaseSchema().anyOf([BaseSchema().id('foo')]))
             .valueOf()
         ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
           not: { anyOf: [{ $id: 'foo' }] },
         })
       })
@@ -317,7 +323,6 @@ describe('BaseSchema', () => {
         .valueOf()
 
       expect(schema).toEqual({
-        $schema: 'http://json-schema.org/draft-07/schema#',
         $id: 'http://foo.com/user',
         title: 'A User',
         if: { $id: 'http://foo.com/user' },
@@ -355,7 +360,6 @@ describe('BaseSchema', () => {
         .valueOf()
 
       expect(schema).toEqual({
-        $schema: 'http://json-schema.org/draft-07/schema#',
         $id: 'http://foo.com/user',
         title: 'A User',
         if: { $id: 'http://foo.com/user' },

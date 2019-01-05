@@ -12,7 +12,6 @@ const { ArraySchema } = require('./ArraySchema')
 
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
-  type: 'object',
   definitions: [],
   properties: [],
   required: [],

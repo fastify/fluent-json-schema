@@ -1,6 +1,5 @@
 const basic = require('./schemas/basic')
-const { deepOmit } = require('./utils')
-const { FluentSchema } = require('./FluentSchema')
+const { FluentSchema, FORMATS } = require('./FluentSchema')
 const Ajv = require('ajv')
 
 // TODO pick some ideas from here:https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/master/tests/draft7
@@ -152,6 +151,71 @@ describe('FluentSchema', () => {
         },
       ])
       expect(valid).not.toBeTruthy()
+    })
+  })
+
+  describe('combine and definition', () => {
+    const ajv = new Ajv()
+    const schema = FluentSchema()
+      .object() //FIXME LS it shouldn't be object()
+      .definition(
+        'address',
+        FluentSchema()
+          .object()
+          .id('#/definitions/address')
+          .prop('street_address')
+          .required()
+          .prop('city')
+          .required()
+          .prop('state')
+          .required()
+      )
+      .allOf([
+        FluentSchema().ref('#/definitions/address'),
+        FluentSchema()
+          .object()
+          .prop('type')
+          .enum(['residential', 'business']),
+      ])
+      .valueOf()
+    const validate = ajv.compile(schema)
+    it('matches', () => {
+      expect(schema).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        definitions: {
+          address: {
+            $id: '#/definitions/address',
+            type: 'object',
+            properties: {
+              street_address: { type: 'string' },
+              city: { type: 'string' },
+              state: { type: 'string' },
+            },
+            required: ['street_address', 'city', 'state'],
+          },
+        },
+        allOf: [
+          { $ref: '#/definitions/address' },
+          {
+            type: 'object',
+            properties: {
+              type: { type: 'string', enum: ['residential', 'business'] },
+            },
+          },
+        ],
+      })
+    })
+
+    it('valid', () => {
+      const valid = validate({
+        street_address: 'via Paolo Rossi',
+        city: 'Topolinia',
+        state: 'Disney World',
+        type: 'business',
+      })
+      expect(validate.errors).toEqual(null)
+      expect(valid).toBeTruthy()
     })
   })
 

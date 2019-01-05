@@ -141,7 +141,7 @@ const BaseSchema = (
    */
 
   default: defaults => {
-    return setAttribute({ schema, ...options }, ['defaults', defaults, 'any'])
+    return setAttribute({ schema, ...options }, ['default', defaults, 'any'])
   },
 
   /**
@@ -153,7 +153,7 @@ const BaseSchema = (
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.3}
    * @returns {FluentSchema}
    */
-
+  // TODO LS accept an array?
   required: () => {
     const currentProp = last(schema.properties)
     const required = currentProp

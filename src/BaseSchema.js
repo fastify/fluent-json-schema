@@ -14,7 +14,6 @@ const {
 } = require('./utils')
 
 const initialState = {
-  $schema: 'http://json-schema.org/draft-07/schema#',
   properties: [],
   required: [],
 }

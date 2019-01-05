@@ -184,7 +184,7 @@ describe('BaseSchema', () => {
         expect(
           BaseSchema()
             .default(value)
-            .valueOf().defaults
+            .valueOf().default
         ).toEqual(value)
       })
     })

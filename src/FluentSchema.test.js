@@ -9,7 +9,6 @@ describe('FluentSchema', () => {
     it('without params', () => {
       expect(FluentSchema().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'object',
       })
     })
 

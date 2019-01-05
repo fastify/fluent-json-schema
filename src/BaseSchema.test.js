@@ -138,6 +138,35 @@ describe('BaseSchema', () => {
             .valueOf().required
         ).toEqual([prop])
       })
+
+      describe('array', () => {
+        it('simple', () => {
+          const required = ['foo', 'bar']
+          expect(
+            FluentSchema()
+              .required(required)
+              .valueOf()
+          ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            required,
+          })
+        })
+        it('nested', () => {
+          expect(
+            FluentSchema()
+              .object()
+              .prop('foo')
+              .prop('bar', FluentSchema().required())
+              .required(['foo'])
+              .valueOf()
+          ).toEqual({
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: { bar: { type: 'string' }, foo: { type: 'string' } },
+            required: ['bar', 'foo'],
+            type: 'object',
+          })
+        })
+      })
     })
 
     describe('enum', () => {

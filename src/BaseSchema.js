@@ -148,14 +148,16 @@ const BaseSchema = (
    * Examples:
    * - FluentSchema().prop('prop').required()
    * - FluentSchema().prop('prop', FluentSchema().number()).required()
+   * - FluentSchema().required(['foo', 'bar'])
    *
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.3}
    * @returns {FluentSchema}
    */
-  // TODO LS accept an array?
-  required: () => {
+  required: props => {
     const currentProp = last(schema.properties)
-    const required = currentProp
+    const required = Array.isArray(props)
+      ? [...schema.required, ...props]
+      : currentProp
       ? [...schema.required, currentProp.name]
       : [REQUIRED]
     return options.factory({

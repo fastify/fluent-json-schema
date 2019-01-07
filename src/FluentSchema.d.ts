@@ -1,3 +1,5 @@
+import { StringSchema } from './FluentSchema'
+
 declare namespace FluentSchema {
   function BaseSchema<T>(opt?: SchemaOptions): T
 
@@ -105,6 +107,30 @@ declare namespace FluentSchema {
     propertyNames: (value: JSONSchema) => ObjectSchema
   }
 
+  /*
+  type Mixed = ObjectSchema &
+    StringSchema &
+    NumberSchema &
+    ArraySchema &
+    IntegerSchema &
+    BooleanSchema
+
+  // Define Omit.  Can be defined in a utilities package
+  type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
+  type MixedSchema = Omit<ObjectSchema, "anyOf" >
+
+  interface MixedSchema<T> extends ObjectSchema, StringSchema, BaseSchema<T> {
+    definition: (name: string, props?: JSONSchema) => T
+    prop: (name: string, props?: JSONSchema) => T
+    additionalProperties: (value: JSONSchema | boolean) => T
+    maxProperties: (max: number) => T
+    minProperties: (min: number) => T
+    patternProperties: (options: PatternPropertiesOptions) => T
+    dependencies: (options: DependenciesOptions) => T
+    propertyNames: (value: JSONSchema) => T
+  }*/
+
   function FluentSchema(opt?: SchemaOptions): FluentSchema
 
   interface SchemaOptions {
@@ -128,6 +154,7 @@ declare namespace FluentSchema {
     array: () => ArraySchema
     object: () => ObjectSchema
     null: () => NullSchema
+    mixed: <T>(types: string[]) => T & any //FIXME LS it should always return T despite the method called
   }
 }
 export = FluentSchema

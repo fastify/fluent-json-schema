@@ -1,6 +1,10 @@
 // This file will be passed to the TypeScript CLI to verify our typings compile
 
-import { FluentSchema } from '../FluentSchema'
+import { FluentSchema, StringSchema, NumberSchema } from '../FluentSchema'
+const mixedSchema = FluentSchema().mixed<StringSchema | NumberSchema>()
+// let mixed: StringSchema|NumberSchema
+// // mixed.minimum()
+
 const schema = FluentSchema()
   .object()
   .id('http://foo.com/user')

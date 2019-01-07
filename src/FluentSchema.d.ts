@@ -1,3 +1,5 @@
+import { StringSchema } from './FluentSchema'
+
 declare namespace FluentSchema {
   function BaseSchema<T>(opt?: SchemaOptions): T
 
@@ -105,6 +107,8 @@ declare namespace FluentSchema {
     propertyNames: (value: JSONSchema) => ObjectSchema
   }
 
+  interface MixedSchema<T> extends BaseSchema<T> {}
+
   function FluentSchema(opt?: SchemaOptions): FluentSchema
 
   interface SchemaOptions {
@@ -128,6 +132,8 @@ declare namespace FluentSchema {
     array: () => ArraySchema
     object: () => ObjectSchema
     null: () => NullSchema
+    mixed: <T>() => MixedSchema<T>
   }
 }
 export = FluentSchema
+// export const  StringSchema

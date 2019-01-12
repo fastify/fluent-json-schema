@@ -1,31 +1,28 @@
+'use strict'
 // This file will be passed to the TypeScript CLI to verify our typings compile
-
-import { FluentSchema, StringSchema, NumberSchema } from '../FluentSchema'
-const mixed = FluentSchema().mixed<NumberSchema & StringSchema>([
-  'string',
-  'number',
-])
-mixed.minimum().maxLength()
-
-const schema = FluentSchema()
+Object.defineProperty(exports, '__esModule', { value: true })
+const FluentSchema_1 = require('../FluentSchema')
+const mixed = FluentSchema_1.FluentSchema().mixed()
+mixed.maxLength(1).minimum(3)
+const schema = FluentSchema_1.FluentSchema()
   .object()
   .id('http://foo.com/user')
   .title('A User')
   .description('A User desc')
   .definition(
     'address',
-    FluentSchema()
+    FluentSchema_1.FluentSchema()
       .object()
       .id('#address')
       .prop('country')
-      .allOf([FluentSchema().string()])
+      .allOf([FluentSchema_1.FluentSchema().string()])
       .prop('city')
       .prop('zipcode')
   )
   .prop('username')
   .prop(
     'avatar',
-    FluentSchema()
+    FluentSchema_1.FluentSchema()
       .string()
       .contentEncoding('base64')
       .contentMediaType('image/png')
@@ -33,7 +30,7 @@ const schema = FluentSchema()
   .required()
   .prop(
     'password',
-    FluentSchema()
+    FluentSchema_1.FluentSchema()
       .string()
       .default('123456')
       .minLength(6)
@@ -43,14 +40,14 @@ const schema = FluentSchema()
   .required()
   .prop(
     'addresses',
-    FluentSchema()
+    FluentSchema_1.FluentSchema()
       .array()
-      .items([FluentSchema().ref('#address')])
+      .items([FluentSchema_1.FluentSchema().ref('#address')])
   )
   .required()
   .prop(
     'role',
-    FluentSchema()
+    FluentSchema_1.FluentSchema()
       .object()
       .id('http://foo.com/role')
       .prop('name')
@@ -58,8 +55,6 @@ const schema = FluentSchema()
       .prop('permissions')
   )
   .required()
-  .prop('age', FluentSchema().integer())
-
+  .prop('age', FluentSchema_1.FluentSchema().integer())
   .valueOf()
-
 console.log({ schema })

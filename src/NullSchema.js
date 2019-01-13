@@ -30,7 +30,7 @@ const NullSchema = ({ schema = initialState, ...options } = {}) => {
      * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
      * @returns {FluentSchema}
      */
-    null: () => setAttribute({ schema, ...options }, ['type', 'null', 'any']),
+    null: () => setAttribute({ schema, ...options }, ['type', 'null']),
   }
 }
 

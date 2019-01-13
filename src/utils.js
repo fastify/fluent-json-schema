@@ -68,6 +68,16 @@ const FORMATS = {
   DATE_TIME,
 }
 
+const TYPES = {
+  STRING: 'string',
+  NUMBER: 'number',
+  BOOLEAN: 'boolean',
+  INTEGER: 'integer',
+  OBJECT: 'object',
+  ARRAY: 'array',
+  NULL: 'null',
+}
+
 const patchIdsWithParentId = ({ schema, generateIds, parentId }) => {
   const properties = Object.entries(schema.properties || {})
   if (properties.length === 0) return schema
@@ -162,4 +172,5 @@ module.exports = {
   setAttribute,
   setComposeType,
   FORMATS,
+  TYPES,
 }

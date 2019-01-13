@@ -1,5 +1,5 @@
 'use strict'
-const { FORMATS } = require('./utils')
+const { FORMATS, TYPES } = require('./utils')
 
 const { BaseSchema } = require('./BaseSchema')
 const { NullSchema } = require('./NullSchema')
@@ -9,6 +9,7 @@ const { NumberSchema } = require('./NumberSchema')
 const { IntegerSchema } = require('./IntegerSchema')
 const { ObjectSchema } = require('./ObjectSchema')
 const { ArraySchema } = require('./ArraySchema')
+const { MixedSchema } = require('./MixedSchema')
 
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -135,10 +136,22 @@ const FluentSchema = (
       schema,
       factory: NullSchema,
     }).null(),
+
+  mixed: types => {
+    return MixedSchema({
+      ...options,
+      schema: {
+        ...schema,
+        type: types,
+      },
+      factory: MixedSchema,
+    })
+  },
 })
 
 module.exports = {
   FluentSchema,
   FORMATS,
+  TYPES,
   default: FluentSchema,
 }

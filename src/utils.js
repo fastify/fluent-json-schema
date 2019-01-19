@@ -68,14 +68,22 @@ const FORMATS = {
   DATE_TIME,
 }
 
+const STRING = 'string'
+const NUMBER = 'number'
+const BOOLEAN = 'boolean'
+const INTEGER = 'integer'
+const OBJECT = 'object'
+const ARRAY = 'array'
+const NULL = 'null'
+
 const TYPES = {
-  STRING: 'string',
-  NUMBER: 'number',
-  BOOLEAN: 'boolean',
-  INTEGER: 'integer',
-  OBJECT: 'object',
-  ARRAY: 'array',
-  NULL: 'null',
+  STRING,
+  NUMBER,
+  BOOLEAN,
+  INTEGER,
+  OBJECT,
+  ARRAY,
+  NULL,
 }
 
 const patchIdsWithParentId = ({ schema, generateIds, parentId }) => {

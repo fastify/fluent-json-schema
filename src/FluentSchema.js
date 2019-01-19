@@ -137,7 +137,26 @@ const FluentSchema = (
       factory: NullSchema,
     }).null(),
 
+  /**
+   * A mixed schema is the union of multiple types (e.g. ['string', 'integer']
+   *
+   * @param {Array.<string>} types
+   * @returns {MixedSchema}
+   */
+
   mixed: types => {
+    if (
+      !Array.isArray(types) ||
+      (Array.isArray(types) &&
+        types.filter(t => !Object.values(TYPES).includes(t)).length > 0)
+    ) {
+      throw new Error(
+        `Invalid 'types'. It must be an array of types. Valid types are ${Object.values(
+          TYPES
+        ).join(' | ')}`
+      )
+    }
+
     return MixedSchema({
       ...options,
       schema: {

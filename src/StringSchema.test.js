@@ -1,5 +1,5 @@
 const { StringSchema, FORMATS } = require('./StringSchema')
-const { FluentSchema } = require('./FluentSchema')
+const S = require('./FluentSchema')
 
 describe('StringSchema', () => {
   it('defined', () => {
@@ -13,12 +13,8 @@ describe('StringSchema', () => {
       })
     })
 
-    it('from FluentSchema', () => {
-      expect(
-        FluentSchema()
-          .string()
-          .valueOf()
-      ).toEqual({
+    it('from S', () => {
+      expect(S.string().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string',
       })
@@ -28,8 +24,7 @@ describe('StringSchema', () => {
   describe('keywords:', () => {
     describe('minLength', () => {
       it('valid', () => {
-        const schema = FluentSchema()
-          .object()
+        const schema = S.object()
           .prop('prop', StringSchema().minLength(5))
           .valueOf()
         expect(schema).toEqual({
@@ -159,8 +154,7 @@ describe('StringSchema', () => {
   })
 
   it('works', () => {
-    const schema = FluentSchema()
-      .object()
+    const schema = S.object()
       .id('http://bar.com/object')
       .title('A object')
       .description('A object desc')

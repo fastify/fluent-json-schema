@@ -1,33 +1,29 @@
 const { MixedSchema } = require('./MixedSchema')
-const { FluentSchema, FORMATS, TYPES } = require('./FluentSchema')
+const S = require('./FluentSchema')
 
 describe('MixedSchema', () => {
   it('defined', () => {
     expect(MixedSchema).toBeDefined()
   })
 
-  describe('constructor', () => {
+  describe('factory', () => {
     it('without params', () => {
       expect(MixedSchema().valueOf()).toEqual({})
     })
   })
 
-  describe('from FluentSchema', () => {
+  describe('from S', () => {
     it('valid', () => {
       const types = [
-        TYPES.STRING,
-        TYPES.NUMBER,
-        TYPES.BOOLEAN,
-        TYPES.INTEGER,
-        TYPES.OBJECT,
-        TYPES.ARRAY,
-        TYPES.NULL,
+        S.TYPES.STRING,
+        S.TYPES.NUMBER,
+        S.TYPES.BOOLEAN,
+        S.TYPES.INTEGER,
+        S.TYPES.OBJECT,
+        S.TYPES.ARRAY,
+        S.TYPES.NULL,
       ]
-      expect(
-        FluentSchema()
-          .mixed(types)
-          .valueOf()
-      ).toEqual({
+      expect(S.mixed(types).valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: types,
       })
@@ -35,7 +31,7 @@ describe('MixedSchema', () => {
     it('invalid param', () => {
       const types = ''
       expect(() => {
-        FluentSchema().mixed(types)
+        S.mixed(types)
       }).toThrow(
         "Invalid 'types'. It must be an array of types. Valid types are string | number | boolean | integer | object | array | null"
       )
@@ -44,7 +40,7 @@ describe('MixedSchema', () => {
     it('invalid type', () => {
       const types = ['string', 'invalid']
       expect(() => {
-        FluentSchema().mixed(types)
+        S.mixed(types)
       }).toThrow(
         "Invalid 'types'. It must be an array of types. Valid types are string | number | boolean | integer | object | array | null"
       )
@@ -53,12 +49,10 @@ describe('MixedSchema', () => {
 
   it('sets a type object to the prop', () => {
     expect(
-      FluentSchema()
-        .object()
+      S.object()
         .prop(
           'prop',
-          FluentSchema()
-            .mixed([TYPES.STRING, TYPES.NUMBER])
+          S.mixed([S.TYPES.STRING, S.TYPES.NUMBER])
             .minimum(10)
             .maxLength(5)
         )

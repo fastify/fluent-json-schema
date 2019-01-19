@@ -12,8 +12,8 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser.
 - Faster and shorter way to write a JSON Schema via a [fluent API](https://en.wikipedia.org/wiki/Fluent_interface)
 - Runtime errors for invalid options or keywords misuse
 - Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
-- Typescript friendly
-- No dependencies
+- Typescript definitions
+- Zero dependencies
 
 ## Install
 
@@ -26,35 +26,27 @@ or
 ## Usage
 
 ```javascript
-const userSchema = FluentSchema()
-  .object()
+const S = require('fluent-schema')
+const schema = S.object()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
   .description('A simple user')
   .prop(
     'email',
-    FluentSchema()
-      .string()
-      .format(FORMATS.EMAIL)
+    S.string()
+      .format(S.FORMATS.EMAIL)
       .required()
   )
   .prop(
     'password',
-    FluentSchema()
-      .string()
+    S.string()
       .minLength(8)
       .required()
   )
-  .prop(
-    'role',
-    FluentSchema()
-      .enum(['ADMIN', 'USER'])
-      .default('USER')
-  )
+  .prop('role', S.enum(['ADMIN', 'USER']).default('USER'))
   .definition(
     'address',
-    FluentSchema()
-      .object()
+    S.object()
       .id('#address')
       .prop('line1')
       .required()
@@ -69,7 +61,7 @@ const userSchema = FluentSchema()
   .prop('address')
   .ref('#address')
 
-console.log(JSON.stringify(userSchema.valueOf(), undefined, 2))
+console.log(JSON.stringify(schema.valueOf(), undefined, 2))
 ```
 
 Schema generated:
@@ -81,7 +73,6 @@ Schema generated:
     "address": {
       "type": "object",
       "$id": "#address",
-      "required": ["line1", "country", "city", "zipcode"],
       "properties": {
         "line1": {
           "type": "string"
@@ -98,7 +89,8 @@ Schema generated:
         "zipcode": {
           "type": "string"
         }
-      }
+      },
+      "required": ["line1", "country", "city", "zipcode"]
     }
   },
   "type": "object",
@@ -115,9 +107,9 @@ Schema generated:
       "minLength": 8
     },
     "role": {
-      "type": "object",
+      "enum": ["ADMIN", "USER"],
       "default": "USER",
-      "enum": ["ADMIN", "USER"]
+      "type": "string"
     },
     "address": {
       "$ref": "#address"
@@ -125,6 +117,30 @@ Schema generated:
   },
   "required": ["email", "password"]
 }
+```
+
+## Typescript
+
+with `"esModuleInterop": true` activated in the `tsconfig.json`
+
+```typescript
+import S from 'fluent-schema'
+
+const schema = S.object()
+  .prop('foo', S.string())
+  .prop('bar', S.number())
+  .valueOf()
+```
+
+with `"esModuleInterop": false` in the `tsconfig.json`
+
+```typescript
+import * as S from 'fluent-schema'
+
+const schema = S.object()
+  .prop('foo', S.string())
+  .prop('bar', S.number())
+  .valueOf()
 ```
 
 ## Validation
@@ -144,7 +160,7 @@ Snippet
 
 ```javascript
 const ajv = new Ajv({ allErrors: true })
-const validate = ajv.compile(userSchema.valueOf())
+const validate = ajv.compile(schema.valueOf())
 let user = {}
 let valid = validate(user)
 console.log({ valid }) //=> {valid: false}
@@ -242,76 +258,12 @@ console.log({ valid })
 
 Output:
 
-     {valid: true}
-
-## Validation Keywords Supported
-
-[Reference](https://json-schema.org/latest/json-schema-validation.html):
-
-1. Validation Keywords for Any Instance Type
-
-- [x] types
-  - [x] string
-  - [x] boolean
-  - [x] number
-  - [x] integer
-  - [x] array
-  - [x] object
-  - [x] null
-- [x] enum
-- [x] const
-
-2. Validation Keywords for Numeric Instances (number and integer)
-
-- [x] multipleOf
-- [x] maximum
-- [x] exclusiveMaximum
-- [x] minimum
-- [x] exclusiveMinimum
-
-3. Validation Keywords for Strings
-
-- [x] maxLength
-- [x] minLength
-- [x] pattern
-- [x] format
-
-4. Validation Keywords for Arrays
-
-- [x] items
-- [x] additionalItems
-- [x] maxItems
-- [x] minItems
-- [x] uniqueItems
-- [x] contains
-
-5. Validation Keywords for Objects
-
-- [x] maxProperties
-- [x] minProperties
-- [x] required
-- [x] properties
-- [x] patternProperties
-- [x] additionalProperties
-- [x] dependencies
-- [x] propertyNames
-
-6. Keywords for Applying Subschemas Conditionally
-
-- [x] if
-- [x] then
-- [x] else
-
-7. Keywords for Applying Subschemas With Boolean Logic
-
-- [x] allOf
-- [x] anyOf
-- [x] oneOf
-- [x] not
+    {valid: true}
 
 ## Documentation
 
 [API Doc](./docs/API.md).
+[JSON schema reference](https://json-schema.org/latest/json-schema-validation.html):
 
 ## Acknowledgments
 

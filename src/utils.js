@@ -3,6 +3,7 @@ const isFluentSchema = obj =>
   obj &&
   (typeof obj.anyOf === 'function' || // BaseSchema
   typeof obj.definition === 'function' || // ObjectSchema
+  typeof obj.items === 'function' || // ArraySchema
   typeof obj.min === 'function' || // NumberSchema & IntegerSchema
     typeof obj.format === 'function') // StringSchema
 

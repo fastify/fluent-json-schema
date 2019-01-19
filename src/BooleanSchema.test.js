@@ -1,5 +1,5 @@
 const { BooleanSchema } = require('./BooleanSchema')
-const { FluentSchema } = require('./FluentSchema')
+const S = require('./FluentSchema')
 
 describe('BooleanSchema', () => {
   it('defined', () => {
@@ -12,12 +12,8 @@ describe('BooleanSchema', () => {
         type: 'boolean',
       })
     })
-    it('from FluentSchema', () => {
-      expect(
-        FluentSchema()
-          .boolean()
-          .valueOf()
-      ).toEqual({
+    it('from S', () => {
+      expect(S.boolean().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'boolean',
       })
@@ -26,9 +22,8 @@ describe('BooleanSchema', () => {
 
   it('sets a null type to the prop', () => {
     expect(
-      FluentSchema()
-        .object()
-        .prop('prop', FluentSchema().boolean())
+      S.object()
+        .prop('prop', S.boolean())
         .valueOf().properties.prop.type
     ).toEqual('boolean')
   })

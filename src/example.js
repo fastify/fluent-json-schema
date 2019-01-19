@@ -1,36 +1,27 @@
 'use strict'
-const { FluentSchema, FORMATS } = require('./FluentSchema')
+const S = require('./FluentSchema')
 const Ajv = require('ajv')
 
-const userSchema = FluentSchema()
-  .object()
+const schema = S.object()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
   .description('A simple user')
   .prop(
     'email',
-    FluentSchema()
-      .string()
-      .format(FORMATS.EMAIL)
+    S.string()
+      .format(S.FORMATS.EMAIL)
       .required()
   )
   .prop(
     'password',
-    FluentSchema()
-      .string()
+    S.string()
       .minLength(8)
       .required()
   )
-  .prop(
-    'role',
-    FluentSchema()
-      .enum(['ADMIN', 'USER'])
-      .default('USER')
-  )
+  .prop('role', S.enum(['ADMIN', 'USER']).default('USER'))
   .definition(
     'address',
-    FluentSchema()
-      .object()
+    S.object()
       .id('#address')
       .prop('line1')
       .required()
@@ -45,10 +36,10 @@ const userSchema = FluentSchema()
   .prop('address')
   .ref('#address')
 
-console.log(JSON.stringify(userSchema.valueOf(), undefined, 2))
+console.log(JSON.stringify(schema.valueOf(), undefined, 2))
 
 const ajv = new Ajv({ allErrors: true })
-const validate = ajv.compile(userSchema.valueOf())
+const validate = ajv.compile(schema.valueOf())
 let user = {}
 let valid = validate(user)
 console.log({ valid }) //=> {valid: false}

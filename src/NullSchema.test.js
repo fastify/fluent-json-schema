@@ -1,5 +1,5 @@
 const { NullSchema } = require('./NullSchema')
-const { FluentSchema } = require('./FluentSchema')
+const S = require('./FluentSchema')
 
 describe('NullSchema', () => {
   it('defined', () => {
@@ -12,12 +12,8 @@ describe('NullSchema', () => {
         type: 'null',
       })
     })
-    it('from FluentSchema', () => {
-      expect(
-        FluentSchema()
-          .null()
-          .valueOf()
-      ).toEqual({
+    it('from S', () => {
+      expect(S.null().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'null',
       })
@@ -26,9 +22,8 @@ describe('NullSchema', () => {
 
   it('sets a null type to the prop', () => {
     expect(
-      FluentSchema()
-        .object()
-        .prop('prop', FluentSchema().null())
+      S.object()
+        .prop('prop', S.null())
         .valueOf().properties.prop.type
     ).toEqual('null')
   })

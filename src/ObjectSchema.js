@@ -48,9 +48,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
     additionalProperties: value => {
       if (typeof value !== 'boolean' && !isFluentSchema(value))
-        throw new Error(
-          "'additionalProperties' must be a boolean or a FluentSchema"
-        )
+        throw new Error("'additionalProperties' must be a boolean or a S")
       if (value === false) {
         return setAttribute({ schema, ...options }, [
           'additionalProperties',
@@ -118,7 +116,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       const values = Object.entries(opts).reduce((memo, [pattern, schema]) => {
         if (!isFluentSchema(schema))
           throw new Error(
-            "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': FluentSchema().string() }"
+            "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': S.string() }"
           )
         return {
           ...memo,
@@ -147,7 +145,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
         if (!isFluentSchema(schema) && !Array.isArray(schema))
           throw new Error(
-            "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': FluentSchema().string() }"
+            "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': S.string() }"
           )
         return {
           ...memo,
@@ -173,8 +171,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     propertyNames: value => {
-      if (!isFluentSchema(value))
-        throw new Error("'propertyNames' must be a FluentSchema")
+      if (!isFluentSchema(value)) throw new Error("'propertyNames' must be a S")
       return setAttribute({ schema, ...options }, [
         'propertyNames',
         omit(value.valueOf(), ['$schema']),
@@ -257,6 +254,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * @returns {FluentSchema}
      */
     // FIXME LS move to BaseSchema and remove .prop
+    // TODO LS Is a definition a proper schema?
     definition: (name, props = {}) =>
       ObjectSchema({ schema, ...options }).prop(name, {
         ...props.valueOf(),

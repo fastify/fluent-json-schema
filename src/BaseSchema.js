@@ -146,9 +146,9 @@ const BaseSchema = (
   /**
    * Required has to be chained to a property:
    * Examples:
-   * - FluentSchema().prop('prop').required()
-   * - FluentSchema().prop('prop', FluentSchema().number()).required()
-   * - FluentSchema().required(['foo', 'bar'])
+   * - S.prop('prop').required()
+   * - S.prop('prop', S.number()).required()
+   * - S.required(['foo', 'bar'])
    *
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.3}
    * @returns {FluentSchema}
@@ -168,8 +168,7 @@ const BaseSchema = (
 
   not: not => {
     if (!isFluentSchema(not)) throw new Error("'not' must be a BaseSchema")
-    // TODO LS double check if type should be really removed
-    const notSchema = omit(not.valueOf(), ['$schema', 'definitions', 'type'])
+    const notSchema = omit(not.valueOf(), ['$schema', 'definitions'])
 
     return BaseSchema({
       schema: {

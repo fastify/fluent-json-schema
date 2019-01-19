@@ -1,14 +1,15 @@
-const { FluentSchema, FORMATS } = require('./FluentSchema')
+const S = require('./FluentSchema')
 
-describe('FluentSchema', () => {
+describe('S', () => {
   it('defined', () => {
-    expect(FluentSchema).toBeDefined()
+    expect(S).toBeDefined()
   })
 
-  describe('constructor', () => {
+  describe('factory', () => {
     it('without params', () => {
-      expect(FluentSchema().valueOf()).toEqual({
+      expect(S.object().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
       })
     })
 
@@ -16,7 +17,7 @@ describe('FluentSchema', () => {
       describe('properties', () => {
         it('true', () => {
           expect(
-            FluentSchema({ generateIds: true })
+            S.withOptions({ generateIds: true })
               .object()
               .prop('prop')
               .valueOf()
@@ -29,8 +30,7 @@ describe('FluentSchema', () => {
 
         it('false', () => {
           expect(
-            FluentSchema()
-              .object()
+            S.object()
               .prop('prop')
               .valueOf()
           ).toEqual({
@@ -43,12 +43,11 @@ describe('FluentSchema', () => {
         describe('nested', () => {
           it('true', () => {
             expect(
-              FluentSchema({ generateIds: true })
+              S.withOptions({ generateIds: true })
                 .object()
                 .prop(
                   'foo',
-                  FluentSchema()
-                    .object()
+                  S.object()
                     .prop('bar')
                     .required()
                 )
@@ -74,18 +73,11 @@ describe('FluentSchema', () => {
           it('false', () => {
             const id = 'myId'
             expect(
-              FluentSchema()
-                .object()
+              S.object()
                 .prop(
                   'foo',
-                  FluentSchema()
-                    .object()
-                    .prop(
-                      'bar',
-                      FluentSchema()
-                        .string()
-                        .id(id)
-                    )
+                  S.object()
+                    .prop('bar', S.string().id(id))
 
                     .required()
                 )
@@ -106,16 +98,15 @@ describe('FluentSchema', () => {
           })
         })
       })
-
+      // TODO LS not sure the test makes sense
       describe('definitions', () => {
         it('true', () => {
           expect(
-            FluentSchema({ generateIds: true })
+            S.withOptions({ generateIds: true })
               .object()
               .definition(
                 'entity',
-                FluentSchema()
-                  .object()
+                S.object()
                   .prop('foo')
                   .prop('bar')
               )
@@ -149,12 +140,11 @@ describe('FluentSchema', () => {
 
         it('false', () => {
           expect(
-            FluentSchema({ generateIds: false })
+            S.withOptions({ generateIds: false })
               .object()
               .definition(
                 'entity',
-                FluentSchema()
-                  .object()
+                S.object()
                   .id('myCustomId')
                   .prop('foo')
               )
@@ -184,18 +174,11 @@ describe('FluentSchema', () => {
         it('nested', () => {
           const id = 'myId'
           expect(
-            FluentSchema()
-              .object()
+            S.object()
               .prop(
                 'foo',
-                FluentSchema()
-                  .object()
-                  .prop(
-                    'bar',
-                    FluentSchema()
-                      .string()
-                      .id(id)
-                  )
+                S.object()
+                  .prop('bar', S.string().id(id))
                   .required()
               )
               .valueOf()
@@ -219,9 +202,8 @@ describe('FluentSchema', () => {
 
   describe('composition', () => {
     it('anyOf', () => {
-      const schema = FluentSchema()
-        .object()
-        .prop('foo', FluentSchema().anyOf([FluentSchema().string()]))
+      const schema = S.object()
+        .prop('foo', S.anyOf([S.string()]))
         .valueOf()
       expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -231,27 +213,12 @@ describe('FluentSchema', () => {
     })
 
     it('oneOf', () => {
-      const schema = FluentSchema()
-        .object()
+      const schema = S.object()
         .prop(
           'multipleRestrictedTypesKey',
-          FluentSchema().oneOf([
-            FluentSchema().string(),
-            FluentSchema()
-              .number()
-              .minimum(10),
-          ])
+          S.oneOf([S.string(), S.number().minimum(10)])
         )
-        .prop(
-          'notTypeKey',
-          FluentSchema().not(
-            FluentSchema().oneOf([
-              FluentSchema()
-                .string()
-                .pattern('js$'),
-            ])
-          )
-        )
+        .prop('notTypeKey', S.not(S.oneOf([S.string().pattern('js$')])))
         .valueOf()
       expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -268,9 +235,8 @@ describe('FluentSchema', () => {
 
   it('valueOf', () => {
     expect(
-      FluentSchema()
-        .object()
-        .prop('foo', FluentSchema().string())
+      S.object()
+        .prop('foo', S.string())
         .valueOf()
     ).toEqual({
       $schema: 'http://json-schema.org/draft-07/schema#',
@@ -280,15 +246,13 @@ describe('FluentSchema', () => {
   })
 
   it('works', () => {
-    const schema = FluentSchema()
-      .object()
+    const schema = S.object()
       .id('http://foo.com/user')
       .title('A User')
       .description('A User desc')
       .definition(
         'address',
-        FluentSchema()
-          .object()
+        S.object()
           .id('#address')
           .prop('country')
           .prop('city')
@@ -298,19 +262,18 @@ describe('FluentSchema', () => {
       .required()
       .prop('password')
       .required()
-      .prop('address', FluentSchema().ref('#address'))
+      .prop('address', S.ref('#address'))
 
       .required()
       .prop(
         'role',
-        FluentSchema()
-          .object()
+        S.object()
           .id('http://foo.com/role')
           .prop('name')
           .prop('permissions')
       )
       .required()
-      .prop('age', FluentSchema().number())
+      .prop('age', S.number())
 
       .valueOf()
 

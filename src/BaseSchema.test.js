@@ -1,12 +1,12 @@
 const { BaseSchema } = require('./BaseSchema')
-const { FluentSchema } = require('./FluentSchema')
+const S = require('./FluentSchema')
 
 describe('BaseSchema', () => {
   it('defined', () => {
     expect(BaseSchema).toBeDefined()
   })
 
-  describe('constructor', () => {
+  describe('factory', () => {
     it('without params', () => {
       expect(BaseSchema().valueOf()).toEqual({})
     })
@@ -49,8 +49,7 @@ describe('BaseSchema', () => {
 
       it('nested', () => {
         expect(
-          FluentSchema()
-            .object()
+          S.object()
             .prop(
               'foo',
               BaseSchema()
@@ -117,8 +116,7 @@ describe('BaseSchema', () => {
       it('in line valid', () => {
         const prop = 'foo'
         expect(
-          FluentSchema()
-            .object()
+          S.object()
             .prop(prop)
             .required()
             .valueOf().required
@@ -127,14 +125,8 @@ describe('BaseSchema', () => {
       it('nested valid', () => {
         const prop = 'foo'
         expect(
-          FluentSchema()
-            .object()
-            .prop(
-              prop,
-              FluentSchema()
-                .string()
-                .required()
-            )
+          S.object()
+            .prop(prop, S.string().required())
             .valueOf().required
         ).toEqual([prop])
       })
@@ -142,21 +134,15 @@ describe('BaseSchema', () => {
       describe('array', () => {
         it('simple', () => {
           const required = ['foo', 'bar']
-          expect(
-            FluentSchema()
-              .required(required)
-              .valueOf()
-          ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
+          expect(S.required(required).valueOf()).toEqual({
             required,
           })
         })
         it('nested', () => {
           expect(
-            FluentSchema()
-              .object()
+            S.object()
               .prop('foo')
-              .prop('bar', FluentSchema().required())
+              .prop('bar', S.required())
               .required(['foo'])
               .valueOf()
           ).toEqual({
@@ -226,12 +212,7 @@ describe('BaseSchema', () => {
 
       it('ref', () => {
         const ref = 'myRef'
-        expect(
-          FluentSchema()
-            .ref(ref)
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
+        expect(S.ref(ref).valueOf()).toEqual({
           $ref: ref,
         })
       })
@@ -324,14 +305,28 @@ describe('BaseSchema', () => {
     })
 
     describe('not', () => {
-      it('valid', () => {
-        expect(
-          BaseSchema()
-            .not(BaseSchema().anyOf([BaseSchema().id('foo')]))
-            .valueOf()
-        ).toEqual({
-          not: { anyOf: [{ $id: 'foo' }] },
+      describe('valid', () => {
+        it('simple', () => {
+          expect(
+            BaseSchema()
+              .not(S.string().maxLength(10))
+              .valueOf()
+          ).toEqual({
+            not: { type: 'string', maxLength: 10 },
+          })
         })
+
+        it('complex', () => {
+          expect(
+            BaseSchema()
+              .not(BaseSchema().anyOf([BaseSchema().id('foo')]))
+              .valueOf()
+          ).toEqual({
+            not: { anyOf: [{ $id: 'foo' }] },
+          })
+        })
+
+        // .prop('notTypeKey', S.not(S.string().maxLength(10))) => notTypeKey: { not: { type: 'string', "maxLength": 10 } }
       })
 
       it('invalid', () => {

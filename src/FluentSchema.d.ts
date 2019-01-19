@@ -107,31 +107,7 @@ declare namespace FluentSchema {
     propertyNames: (value: JSONSchema) => ObjectSchema
   }
 
-  /*
-  type Mixed = ObjectSchema &
-    StringSchema &
-    NumberSchema &
-    ArraySchema &
-    IntegerSchema &
-    BooleanSchema
-
-  // Define Omit.  Can be defined in a utilities package
-  type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
-  type MixedSchema = Omit<ObjectSchema, "anyOf" >
-
-  interface MixedSchema<T> extends ObjectSchema, StringSchema, BaseSchema<T> {
-    definition: (name: string, props?: JSONSchema) => T
-    prop: (name: string, props?: JSONSchema) => T
-    additionalProperties: (value: JSONSchema | boolean) => T
-    maxProperties: (max: number) => T
-    minProperties: (min: number) => T
-    patternProperties: (options: PatternPropertiesOptions) => T
-    dependencies: (options: DependenciesOptions) => T
-    propertyNames: (value: JSONSchema) => T
-  }*/
-
-  function FluentSchema(opt?: SchemaOptions): FluentSchema
+  function S(opt?: SchemaOptions): S
 
   interface SchemaOptions {
     schema: object
@@ -146,7 +122,7 @@ declare namespace FluentSchema {
     [key: string]: JSONSchema[]
   }
 
-  interface FluentSchema extends BaseSchema<FluentSchema> {
+  interface S extends BaseSchema<S> {
     string: () => StringSchema
     number: () => NumberSchema
     integer: () => IntegerSchema

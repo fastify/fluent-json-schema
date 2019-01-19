@@ -1,5 +1,5 @@
 const { StringSchema, FORMATS } = require('./StringSchema')
-const { FluentSchema } = require('./FluentSchema')
+const { S } = require('./FluentSchema')
 
 describe('StringSchema', () => {
   it('defined', () => {
@@ -13,9 +13,9 @@ describe('StringSchema', () => {
       })
     })
 
-    it('from FluentSchema', () => {
+    it('from S', () => {
       expect(
-        FluentSchema()
+        S()
           .string()
           .valueOf()
       ).toEqual({
@@ -28,7 +28,7 @@ describe('StringSchema', () => {
   describe('keywords:', () => {
     describe('minLength', () => {
       it('valid', () => {
-        const schema = FluentSchema()
+        const schema = S()
           .object()
           .prop('prop', StringSchema().minLength(5))
           .valueOf()
@@ -159,7 +159,7 @@ describe('StringSchema', () => {
   })
 
   it('works', () => {
-    const schema = FluentSchema()
+    const schema = S()
       .object()
       .id('http://bar.com/object')
       .title('A object')

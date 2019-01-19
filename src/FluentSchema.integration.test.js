@@ -1,13 +1,13 @@
 const basic = require('./schemas/basic')
-const { FluentSchema, FORMATS } = require('./FluentSchema')
+const { S, FORMATS } = require('./FluentSchema')
 const Ajv = require('ajv')
 
 // TODO pick some ideas from here:https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/master/tests/draft7
 
-describe('FluentSchema', () => {
+describe('S', () => {
   it('compiles', () => {
     const ajv = new Ajv()
-    const schema = FluentSchema().valueOf()
+    const schema = S().valueOf()
     const validate = ajv.compile(schema)
     var valid = validate({})
     expect(valid).toBeTruthy()
@@ -15,7 +15,7 @@ describe('FluentSchema', () => {
 
   describe('basic', () => {
     const ajv = new Ajv()
-    const schema = FluentSchema()
+    const schema = S()
       .object()
       .prop('username')
       .prop('password')
@@ -50,24 +50,24 @@ describe('FluentSchema', () => {
 
   describe('ifThen', () => {
     const ajv = new Ajv()
-    const schema = FluentSchema()
+    const schema = S()
       .object()
       .prop(
         'prop',
-        FluentSchema()
+        S()
           .string()
           .maxLength(5)
       )
       .ifThen(
-        FluentSchema()
+        S()
           .object()
           .prop(
             'prop',
-            FluentSchema()
+            S()
               .string()
               .maxLength(5)
           ),
-        FluentSchema()
+        S()
           .object()
           .prop('extraProp')
           .required()
@@ -104,23 +104,23 @@ describe('FluentSchema', () => {
     const ajv = new Ajv()
 
     const VALUES = ['ONE', 'TWO']
-    const schema = FluentSchema()
+    const schema = S()
       .object()
       .prop('ifProp')
       .ifThenElse(
-        FluentSchema()
+        S()
           .object()
           .prop(
             'ifProp',
-            FluentSchema()
+            S()
               .string()
               .enum([VALUES[0]])
           ),
-        FluentSchema()
+        S()
           .object()
           .prop('thenProp')
           .required(),
-        FluentSchema()
+        S()
           .object()
           .prop('elseProp')
           .required()
@@ -156,11 +156,11 @@ describe('FluentSchema', () => {
 
   describe('combine and definition', () => {
     const ajv = new Ajv()
-    const schema = FluentSchema()
+    const schema = S()
       .object() //FIXME LS it shouldn't be object()
       .definition(
         'address',
-        FluentSchema()
+        S()
           .object()
           .id('#/definitions/address')
           .prop('street_address')
@@ -171,8 +171,8 @@ describe('FluentSchema', () => {
           .required()
       )
       .allOf([
-        FluentSchema().ref('#/definitions/address'),
-        FluentSchema()
+        S().ref('#/definitions/address'),
+        S()
           .object()
           .prop('type')
           .enum(['residential', 'business']),
@@ -221,27 +221,12 @@ describe('FluentSchema', () => {
 
   describe('compose keywords', () => {
     const ajv = new Ajv()
-    const schema = FluentSchema()
+    const schema = S()
       .object()
-      .prop('foo', FluentSchema().anyOf([FluentSchema().string()]))
-      .prop(
-        'bar',
-        FluentSchema().not(FluentSchema().anyOf([FluentSchema().integer()]))
-      )
-      .prop(
-        'prop',
-        FluentSchema().allOf([
-          FluentSchema().string(),
-          FluentSchema().boolean(),
-        ])
-      )
-      .prop(
-        'anotherProp',
-        FluentSchema().oneOf([
-          FluentSchema().string(),
-          FluentSchema().boolean(),
-        ])
-      )
+      .prop('foo', S().anyOf([S().string()]))
+      .prop('bar', S().not(S().anyOf([S().integer()])))
+      .prop('prop', S().allOf([S().string(), S().boolean()]))
+      .prop('anotherProp', S().oneOf([S().string(), S().boolean()]))
       .required()
       .valueOf()
 
@@ -266,18 +251,18 @@ describe('FluentSchema', () => {
 
   describe('compose ifThen', () => {
     const ajv = new Ajv()
-    const schema = FluentSchema()
+    const schema = S()
       .object()
       .prop(
         'foo',
-        FluentSchema()
+        S()
           .string()
           .default(false)
           .required()
       )
       .prop(
         'bar',
-        FluentSchema()
+        S()
           .string()
           .default(false)
           .required()
@@ -285,19 +270,19 @@ describe('FluentSchema', () => {
       .prop('thenFooA')
       .prop('thenFooB')
       .allOf([
-        FluentSchema().ifThen(
-          FluentSchema()
+        S().ifThen(
+          S()
             .object()
             .prop('foo')
             .enum(['foo']),
-          FluentSchema().required(['thenFooA', 'thenFooB'])
+          S().required(['thenFooA', 'thenFooB'])
         ),
-        FluentSchema().ifThen(
-          FluentSchema()
+        S().ifThen(
+          S()
             .object()
             .prop('bar')
             .enum(['BAR']),
-          FluentSchema().required(['thenBarA', 'thenBarB'])
+          S().required(['thenBarA', 'thenBarB'])
         ),
       ])
       .valueOf()
@@ -351,14 +336,14 @@ describe('FluentSchema', () => {
 
   describe('complex', () => {
     const ajv = new Ajv()
-    const schema = FluentSchema()
+    const schema = S()
       .object()
       .id('http://foo.com/user')
       .title('A User')
       .description('A User desc')
       .definition(
         'address',
-        FluentSchema()
+        S()
           .object()
           .id('#address')
           .prop('country')
@@ -369,13 +354,13 @@ describe('FluentSchema', () => {
       .required()
       .prop(
         'password',
-        FluentSchema()
+        S()
           .string()
           .required()
       )
       .prop(
         'address',
-        FluentSchema()
+        S()
           .object()
           .ref('#address')
       )
@@ -383,14 +368,14 @@ describe('FluentSchema', () => {
       .required()
       .prop(
         'role',
-        FluentSchema()
+        S()
           .object()
           .id('http://foo.com/role')
           .required()
           .prop('name')
           .prop('permissions')
       )
-      .prop('age', FluentSchema().number())
+      .prop('age', S().number())
       .valueOf()
     const validate = ajv.compile(schema)
     it('valid', () => {
@@ -467,16 +452,16 @@ describe('FluentSchema', () => {
     it('generate', () => {
       const [step] = basic
       expect(
-        FluentSchema()
+        S()
           .array()
           .title('Product set')
           .items(
-            FluentSchema()
+            S()
               .object()
               .title('Product')
               .prop(
                 'uuid',
-                FluentSchema()
+                S()
                   .number()
                   .description('The unique identifier for a product')
                   .required()
@@ -485,47 +470,47 @@ describe('FluentSchema', () => {
               .required()
               .prop(
                 'price',
-                FluentSchema()
+                S()
                   .number()
                   .exclusiveMinimum(0)
                   .required()
               )
               .prop(
                 'tags',
-                FluentSchema()
+                S()
                   .array()
-                  .items(FluentSchema().string())
+                  .items(S().string())
                   .minItems(1)
                   .uniqueItems(true)
               )
 
               .prop(
                 'dimensions',
-                FluentSchema()
+                S()
                   .object()
                   .prop(
                     'length',
-                    FluentSchema()
+                    S()
                       .number()
                       .required()
                   )
 
                   .prop(
                     'width',
-                    FluentSchema()
+                    S()
                       .number()
                       .required()
                   )
                   .prop(
                     'height',
-                    FluentSchema()
+                    S()
                       .number()
                       .required()
                   )
               )
               .prop(
                 'warehouseLocation',
-                FluentSchema()
+                S()
                   .string()
                   .description('Coordinates of the warehouse with the product')
               )

@@ -1,5 +1,5 @@
 const { ObjectSchema } = require('./ObjectSchema')
-const { FluentSchema, FORMATS } = require('./FluentSchema')
+const { S, FORMATS } = require('./FluentSchema')
 
 describe('ObjectSchema', () => {
   it('defined', () => {
@@ -76,7 +76,7 @@ describe('ObjectSchema', () => {
                   ObjectSchema()
                     .prop(
                       'bar',
-                      FluentSchema()
+                      S()
                         .string()
                         .id(id)
                     )
@@ -109,7 +109,7 @@ describe('ObjectSchema', () => {
                   .prop('foo')
                   .prop('bar')
               )
-              .prop('prop', FluentSchema().ref('entity'))
+              .prop('prop', S().ref('entity'))
               .valueOf()
           ).toEqual({
             definitions: {
@@ -144,7 +144,7 @@ describe('ObjectSchema', () => {
                   .id('myCustomId')
                   .prop('foo')
               )
-              .prop('prop', FluentSchema().ref('entity'))
+              .prop('prop', S().ref('entity'))
               .valueOf()
           ).toEqual({
             definitions: {
@@ -174,7 +174,7 @@ describe('ObjectSchema', () => {
                 ObjectSchema()
                   .prop(
                     'bar',
-                    FluentSchema()
+                    S()
                       .string()
                       .id(id)
                   )
@@ -198,9 +198,9 @@ describe('ObjectSchema', () => {
     })
   })
 
-  it('from FluentSchema', () => {
+  it('from S', () => {
     expect(
-      FluentSchema()
+      S()
         .object()
         .valueOf()
     ).toEqual({
@@ -212,7 +212,7 @@ describe('ObjectSchema', () => {
   it('sets a type object to the prop', () => {
     expect(
       ObjectSchema()
-        .prop('prop', FluentSchema().object())
+        .prop('prop', S().object())
         .valueOf().properties.prop.type
     ).toEqual('object')
   })
@@ -220,7 +220,7 @@ describe('ObjectSchema', () => {
   it('valueOf', () => {
     expect(
       ObjectSchema()
-        .prop('foo', FluentSchema().string())
+        .prop('foo', S().string())
         .valueOf()
     ).toEqual({ properties: { foo: { type: 'string' } }, type: 'object' })
   })
@@ -248,7 +248,7 @@ describe('ObjectSchema', () => {
             ObjectSchema()
               .prop(
                 'foo',
-                FluentSchema()
+                S()
                   .string()
                   .id(id)
               )
@@ -264,7 +264,7 @@ describe('ObjectSchema', () => {
             ObjectSchema()
               .prop(
                 'foo',
-                FluentSchema()
+                S()
                   .string()
                   .title('Foo')
               )
@@ -310,7 +310,7 @@ describe('ObjectSchema', () => {
             ObjectSchema()
               .prop(
                 'foo',
-                FluentSchema()
+                S()
                   .string()
                   .title('Foo')
               )
@@ -339,7 +339,7 @@ describe('ObjectSchema', () => {
       it('object', () => {
         expect(
           ObjectSchema()
-            .additionalProperties(FluentSchema().string())
+            .additionalProperties(S().string())
             .prop('prop')
             .valueOf().additionalProperties
         ).toEqual({ type: 'string' })
@@ -353,7 +353,7 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .additionalProperties(value)
           ).toEqual(value)
-        ).toThrow("'additionalProperties' must be a boolean or a FluentSchema")
+        ).toThrow("'additionalProperties' must be a boolean or a S")
       })
     })
 
@@ -408,7 +408,7 @@ describe('ObjectSchema', () => {
         expect(
           ObjectSchema()
             .patternProperties({
-              '^fo.*$': FluentSchema().string(),
+              '^fo.*$': S().string(),
             })
             .prop('foo')
             .valueOf()
@@ -428,7 +428,7 @@ describe('ObjectSchema', () => {
               .patternProperties(value)
           ).toEqual(value)
         ).toThrow(
-          "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': FluentSchema().string() }"
+          "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': S().string() }"
         )
       })
     })
@@ -457,7 +457,7 @@ describe('ObjectSchema', () => {
         expect(
           ObjectSchema()
             .dependencies({
-              foo: ObjectSchema().prop('bar', FluentSchema().string()),
+              foo: ObjectSchema().prop('bar', S().string()),
             })
             .prop('foo')
             .valueOf()
@@ -483,7 +483,7 @@ describe('ObjectSchema', () => {
               .dependencies(value)
           ).toEqual(value)
         ).toThrow(
-          "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': FluentSchema().string() }"
+          "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': S().string() }"
         )
       })
     })
@@ -493,7 +493,7 @@ describe('ObjectSchema', () => {
         expect(
           ObjectSchema()
             .propertyNames(
-              FluentSchema()
+              S()
                 .string()
                 .format(FORMATS.EMAIL)
             )
@@ -513,7 +513,7 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .propertyNames(value)
           ).toEqual(value)
-        ).toThrow("'propertyNames' must be a FluentSchema")
+        ).toThrow("'propertyNames' must be a S")
       })
     })
   })
@@ -521,7 +521,7 @@ describe('ObjectSchema', () => {
   describe('null', () => {
     it('sets a type object from the root', () => {
       expect(
-        FluentSchema()
+        S()
           .null()
           .valueOf().type
       ).toEqual('null')
@@ -530,7 +530,7 @@ describe('ObjectSchema', () => {
     it('sets a type object from the prop', () => {
       expect(
         ObjectSchema()
-          .prop('value', FluentSchema().null())
+          .prop('value', S().null())
 
           .valueOf().properties.value.type
       ).toEqual('null')

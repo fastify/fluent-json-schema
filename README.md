@@ -26,34 +26,34 @@ or
 ## Usage
 
 ```javascript
-const userSchema = FluentSchema()
+const userSchema = S()
   .object()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
   .description('A simple user')
   .prop(
     'email',
-    FluentSchema()
+    S()
       .string()
       .format(FORMATS.EMAIL)
       .required()
   )
   .prop(
     'password',
-    FluentSchema()
+    S()
       .string()
       .minLength(8)
       .required()
   )
   .prop(
     'role',
-    FluentSchema()
+    S()
       .enum(['ADMIN', 'USER'])
       .default('USER')
   )
   .definition(
     'address',
-    FluentSchema()
+    S()
       .object()
       .id('#address')
       .prop('line1')

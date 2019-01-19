@@ -1,5 +1,5 @@
 const { NumberSchema } = require('./NumberSchema')
-const { FluentSchema } = require('./FluentSchema')
+const { S } = require('./FluentSchema')
 
 describe('NumberSchema', () => {
   it('defined', () => {
@@ -13,9 +13,9 @@ describe('NumberSchema', () => {
       })
     })
 
-    it('from FluentSchema', () => {
+    it('from S', () => {
       expect(
-        FluentSchema()
+        S()
           .number()
           .valueOf()
       ).toEqual({
@@ -30,11 +30,11 @@ describe('NumberSchema', () => {
       it('valid', () => {
         const prop = 'prop'
         expect(
-          FluentSchema()
+          S()
             .object()
             .prop(
               prop,
-              FluentSchema()
+              S()
                 .number()
                 .minimum(5.1)
             )
@@ -52,7 +52,7 @@ describe('NumberSchema', () => {
       })
       it('invalid value', () => {
         expect(() =>
-          FluentSchema()
+          S()
             .number()
             .minimum('5.1')
         ).toThrow("'minimum' must be a Number")
@@ -62,11 +62,11 @@ describe('NumberSchema', () => {
       it('valid', () => {
         const prop = 'prop'
         expect(
-          FluentSchema()
+          S()
             .object()
             .prop(
               prop,
-              FluentSchema()
+              S()
                 .number()
                 .maximum(5.1)
             )
@@ -84,7 +84,7 @@ describe('NumberSchema', () => {
       })
       it('invalid value', () => {
         expect(() =>
-          FluentSchema()
+          S()
             .number()
             .maximum('5.1')
         ).toThrow("'maximum' must be a Number")
@@ -94,11 +94,11 @@ describe('NumberSchema', () => {
       it('valid', () => {
         const prop = 'prop'
         expect(
-          FluentSchema()
+          S()
             .object()
             .prop(
               prop,
-              FluentSchema()
+              S()
                 .number()
                 .multipleOf(5.1)
             )
@@ -117,7 +117,7 @@ describe('NumberSchema', () => {
       })
       it('invalid value', () => {
         expect(() =>
-          FluentSchema()
+          S()
             .number()
             .multipleOf('5.1')
         ).toThrow("'multipleOf' must be a Number")
@@ -128,11 +128,11 @@ describe('NumberSchema', () => {
       it('valid', () => {
         const prop = 'prop'
         expect(
-          FluentSchema()
+          S()
             .object()
             .prop(
               prop,
-              FluentSchema()
+              S()
                 .number()
                 .exclusiveMinimum(5.1)
             )
@@ -151,7 +151,7 @@ describe('NumberSchema', () => {
       })
       it('invalid value', () => {
         expect(() =>
-          FluentSchema()
+          S()
             .number()
             .exclusiveMinimum('5.1')
         ).toThrow("'exclusiveMinimum' must be a Number")
@@ -161,11 +161,11 @@ describe('NumberSchema', () => {
       it('valid', () => {
         const prop = 'prop'
         expect(
-          FluentSchema()
+          S()
             .object()
             .prop(
               prop,
-              FluentSchema()
+              S()
                 .number()
                 .exclusiveMaximum(5.1)
             )
@@ -184,7 +184,7 @@ describe('NumberSchema', () => {
       })
       it('invalid value', () => {
         expect(() =>
-          FluentSchema()
+          S()
             .number()
             .exclusiveMaximum('5.1')
         ).toThrow("'exclusiveMaximum' must be a Number")
@@ -193,14 +193,14 @@ describe('NumberSchema', () => {
   })
 
   it('works', () => {
-    const schema = FluentSchema()
+    const schema = S()
       .object()
       .id('http://foo.com/user')
       .title('A User')
       .description('A User desc')
       .prop(
         'age',
-        FluentSchema()
+        S()
           .number()
           .maximum(10)
       )

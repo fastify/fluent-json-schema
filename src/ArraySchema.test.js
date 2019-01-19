@@ -1,5 +1,5 @@
 const { ArraySchema } = require('./ArraySchema')
-const { FluentSchema } = require('./FluentSchema')
+const { S } = require('./FluentSchema')
 
 describe('ArraySchema', () => {
   it('defined', () => {
@@ -13,9 +13,9 @@ describe('ArraySchema', () => {
       })
     })
 
-    it('from FluentSchema', () => {
+    it('from S', () => {
       expect(
-        FluentSchema()
+        S()
           .array()
           .valueOf()
       ).toEqual({
@@ -30,7 +30,7 @@ describe('ArraySchema', () => {
       it('valid object', () => {
         expect(
           ArraySchema()
-            .items(FluentSchema().number())
+            .items(S().number())
             .valueOf()
         ).toEqual({
           type: 'array',
@@ -40,7 +40,7 @@ describe('ArraySchema', () => {
       it('valid array', () => {
         expect(
           ArraySchema()
-            .items([FluentSchema().number(), FluentSchema().string()])
+            .items([S().number(), S().string()])
             .valueOf()
         ).toEqual({
           type: 'array',
@@ -49,7 +49,7 @@ describe('ArraySchema', () => {
       })
       it('invalid', () => {
         expect(() => ArraySchema().items('')).toThrow(
-          "'items' must be a FluentSchema or an array of FluentSchema"
+          "'items' must be a S or an array of S"
         )
       })
     })
@@ -58,8 +58,8 @@ describe('ArraySchema', () => {
       it('valid', () => {
         expect(
           ArraySchema()
-            .items([FluentSchema().number(), FluentSchema().string()])
-            .additionalItems(FluentSchema().string())
+            .items([S().number(), S().string()])
+            .additionalItems(S().string())
             .valueOf()
         ).toEqual({
           type: 'array',
@@ -70,7 +70,7 @@ describe('ArraySchema', () => {
       it('false', () => {
         expect(
           ArraySchema()
-            .items([FluentSchema().number(), FluentSchema().string()])
+            .items([S().number(), S().string()])
             .additionalItems(false)
             .valueOf()
         ).toEqual({
@@ -81,7 +81,7 @@ describe('ArraySchema', () => {
       })
       it('invalid', () => {
         expect(() => ArraySchema().additionalItems('')).toThrow(
-          "'additionalItems' must be a boolean or a FluentSchema"
+          "'additionalItems' must be a boolean or a S"
         )
       })
     })
@@ -90,7 +90,7 @@ describe('ArraySchema', () => {
       it('valid', () => {
         expect(
           ArraySchema()
-            .contains(FluentSchema().string())
+            .contains(S().string())
             .valueOf()
         ).toEqual({
           type: 'array',
@@ -102,7 +102,7 @@ describe('ArraySchema', () => {
           ArraySchema()
             .contains('')
             .valueOf()
-        ).toThrow("'contains' must be a FluentSchema")
+        ).toThrow("'contains' must be a S")
       })
     })
 

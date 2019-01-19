@@ -19,14 +19,14 @@ const initialState = {
 }
 
 /**
- * Represents a FluentSchema.
+ * Represents a S.
  * @param {Object} [options] - Options
- * @param {FluentSchema} [options.schema] - Default schema
+ * @param {S} [options.schema] - Default schema
  * @param {boolean} [options.generateIds = false] - generate the id automatically e.g. #properties.foo
- * @returns {FluentSchema}
+ * @returns {S}
  */
 
-const FluentSchema = (
+const S = (
   { schema = initialState, ...options } = {
     generateIds: false,
     factory: BaseSchema,
@@ -75,11 +75,6 @@ const FluentSchema = (
       schema,
       factory: IntegerSchema,
     }).as('integer'),
-
-  // TODO LS what should we return? ObjectSchema?
-  /*type: (types) => {
-    return setAttribute({ schema, ...options }, ['type', types, 'any'])
-  },*/
 
   /**
    * Set a property to type boolean
@@ -169,8 +164,8 @@ const FluentSchema = (
 })
 
 module.exports = {
-  FluentSchema,
+  S,
   FORMATS,
   TYPES,
-  default: FluentSchema,
+  default: S,
 }

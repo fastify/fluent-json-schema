@@ -1,5 +1,5 @@
 const { BaseSchema } = require('./BaseSchema')
-const { FluentSchema } = require('./FluentSchema')
+const { S } = require('./FluentSchema')
 
 describe('BaseSchema', () => {
   it('defined', () => {
@@ -49,7 +49,7 @@ describe('BaseSchema', () => {
 
       it('nested', () => {
         expect(
-          FluentSchema()
+          S()
             .object()
             .prop(
               'foo',
@@ -117,7 +117,7 @@ describe('BaseSchema', () => {
       it('in line valid', () => {
         const prop = 'foo'
         expect(
-          FluentSchema()
+          S()
             .object()
             .prop(prop)
             .required()
@@ -127,11 +127,11 @@ describe('BaseSchema', () => {
       it('nested valid', () => {
         const prop = 'foo'
         expect(
-          FluentSchema()
+          S()
             .object()
             .prop(
               prop,
-              FluentSchema()
+              S()
                 .string()
                 .required()
             )
@@ -143,7 +143,7 @@ describe('BaseSchema', () => {
         it('simple', () => {
           const required = ['foo', 'bar']
           expect(
-            FluentSchema()
+            S()
               .required(required)
               .valueOf()
           ).toEqual({
@@ -153,10 +153,10 @@ describe('BaseSchema', () => {
         })
         it('nested', () => {
           expect(
-            FluentSchema()
+            S()
               .object()
               .prop('foo')
-              .prop('bar', FluentSchema().required())
+              .prop('bar', S().required())
               .required(['foo'])
               .valueOf()
           ).toEqual({
@@ -227,7 +227,7 @@ describe('BaseSchema', () => {
       it('ref', () => {
         const ref = 'myRef'
         expect(
-          FluentSchema()
+          S()
             .ref(ref)
             .valueOf()
         ).toEqual({

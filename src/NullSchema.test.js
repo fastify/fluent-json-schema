@@ -1,5 +1,5 @@
 const { NullSchema } = require('./NullSchema')
-const { FluentSchema } = require('./FluentSchema')
+const { S } = require('./FluentSchema')
 
 describe('NullSchema', () => {
   it('defined', () => {
@@ -12,9 +12,9 @@ describe('NullSchema', () => {
         type: 'null',
       })
     })
-    it('from FluentSchema', () => {
+    it('from S', () => {
       expect(
-        FluentSchema()
+        S()
           .null()
           .valueOf()
       ).toEqual({
@@ -26,9 +26,9 @@ describe('NullSchema', () => {
 
   it('sets a null type to the prop', () => {
     expect(
-      FluentSchema()
+      S()
         .object()
-        .prop('prop', FluentSchema().null())
+        .prop('prop', S().null())
         .valueOf().properties.prop.type
     ).toEqual('null')
   })

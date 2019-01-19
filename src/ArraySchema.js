@@ -48,9 +48,7 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
           items.filter(v => isFluentSchema(v)).length > 0
         )
       )
-        throw new Error(
-          "'items' must be a FluentSchema or an array of FluentSchema"
-        )
+        throw new Error("'items' must be a S or an array of S")
       if (Array.isArray(items)) {
         const values = items.map(v => {
           const { $schema, ...rest } = v.valueOf()
@@ -76,7 +74,7 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
 
     additionalItems: items => {
       if (typeof items !== 'boolean' && !isFluentSchema(items))
-        throw new Error("'additionalItems' must be a boolean or a FluentSchema")
+        throw new Error("'additionalItems' must be a boolean or a S")
       if (items === false) {
         return setAttribute({ schema, ...options }, [
           'additionalItems',
@@ -101,8 +99,7 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     contains: value => {
-      if (!isFluentSchema(value))
-        throw new Error("'contains' must be a FluentSchema")
+      if (!isFluentSchema(value)) throw new Error("'contains' must be a S")
       const {
         $schema,
         definitions,

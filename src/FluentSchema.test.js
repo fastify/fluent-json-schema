@@ -1,14 +1,19 @@
-const { S, FORMATS } = require('./FluentSchema')
+// const {default: S, FORMATS} = require('./FluentSchema')
+
+const S = require('./FluentSchema')
+// console.log({FORMATS: S.FORMATS})
+// console.log({S})
 
 describe('S', () => {
   it('defined', () => {
     expect(S).toBeDefined()
   })
 
-  describe('constructor', () => {
+  describe('factory', () => {
     it('without params', () => {
-      expect(S().valueOf()).toEqual({
+      expect(S.object().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
       })
     })
 
@@ -16,7 +21,7 @@ describe('S', () => {
       describe('properties', () => {
         it('true', () => {
           expect(
-            S({ generateIds: true })
+            S.withOptions({ generateIds: true })
               .object()
               .prop('prop')
               .valueOf()
@@ -29,8 +34,7 @@ describe('S', () => {
 
         it('false', () => {
           expect(
-            S()
-              .object()
+            S.object()
               .prop('prop')
               .valueOf()
           ).toEqual({
@@ -43,12 +47,11 @@ describe('S', () => {
         describe('nested', () => {
           it('true', () => {
             expect(
-              S({ generateIds: true })
+              S.withOptions({ generateIds: true })
                 .object()
                 .prop(
                   'foo',
-                  S()
-                    .object()
+                  S.object()
                     .prop('bar')
                     .required()
                 )
@@ -74,18 +77,11 @@ describe('S', () => {
           it('false', () => {
             const id = 'myId'
             expect(
-              S()
-                .object()
+              S.object()
                 .prop(
                   'foo',
-                  S()
-                    .object()
-                    .prop(
-                      'bar',
-                      S()
-                        .string()
-                        .id(id)
-                    )
+                  S.object()
+                    .prop('bar', S.string().id(id))
 
                     .required()
                 )
@@ -110,12 +106,11 @@ describe('S', () => {
       describe('definitions', () => {
         it('true', () => {
           expect(
-            S({ generateIds: true })
+            S.withOptions({ generateIds: true })
               .object()
               .definition(
                 'entity',
-                S()
-                  .object()
+                S.object()
                   .prop('foo')
                   .prop('bar')
               )
@@ -149,12 +144,11 @@ describe('S', () => {
 
         it('false', () => {
           expect(
-            S({ generateIds: false })
+            S.withOptions({ generateIds: false })
               .object()
               .definition(
                 'entity',
-                S()
-                  .object()
+                S.object()
                   .id('myCustomId')
                   .prop('foo')
               )
@@ -184,18 +178,11 @@ describe('S', () => {
         it('nested', () => {
           const id = 'myId'
           expect(
-            S()
-              .object()
+            S.object()
               .prop(
                 'foo',
-                S()
-                  .object()
-                  .prop(
-                    'bar',
-                    S()
-                      .string()
-                      .id(id)
-                  )
+                S.object()
+                  .prop('bar', S.string().id(id))
                   .required()
               )
               .valueOf()
@@ -219,9 +206,8 @@ describe('S', () => {
 
   describe('composition', () => {
     it('anyOf', () => {
-      const schema = S()
-        .object()
-        .prop('foo', S().anyOf([S().string()]))
+      const schema = S.object()
+        .prop('foo', S.anyOf([S.string()]))
         .valueOf()
       expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -231,27 +217,12 @@ describe('S', () => {
     })
 
     it('oneOf', () => {
-      const schema = S()
-        .object()
+      const schema = S.object()
         .prop(
           'multipleRestrictedTypesKey',
-          S().oneOf([
-            S().string(),
-            S()
-              .number()
-              .minimum(10),
-          ])
+          S.oneOf([S.string(), S.number().minimum(10)])
         )
-        .prop(
-          'notTypeKey',
-          S().not(
-            S().oneOf([
-              S()
-                .string()
-                .pattern('js$'),
-            ])
-          )
-        )
+        .prop('notTypeKey', S.not(S.oneOf([S.string().pattern('js$')])))
         .valueOf()
       expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -268,9 +239,8 @@ describe('S', () => {
 
   it('valueOf', () => {
     expect(
-      S()
-        .object()
-        .prop('foo', S().string())
+      S.object()
+        .prop('foo', S.string())
         .valueOf()
     ).toEqual({
       $schema: 'http://json-schema.org/draft-07/schema#',
@@ -280,15 +250,13 @@ describe('S', () => {
   })
 
   it('works', () => {
-    const schema = S()
-      .object()
+    const schema = S.object()
       .id('http://foo.com/user')
       .title('A User')
       .description('A User desc')
       .definition(
         'address',
-        S()
-          .object()
+        S.object()
           .id('#address')
           .prop('country')
           .prop('city')
@@ -298,19 +266,18 @@ describe('S', () => {
       .required()
       .prop('password')
       .required()
-      .prop('address', S().ref('#address'))
+      .prop('address', S.ref('#address'))
 
       .required()
       .prop(
         'role',
-        S()
-          .object()
+        S.object()
           .id('http://foo.com/role')
           .prop('name')
           .prop('permissions')
       )
       .required()
-      .prop('age', S().number())
+      .prop('age', S.number())
 
       .valueOf()
 

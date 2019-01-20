@@ -1,5 +1,5 @@
 const basic = require('./schemas/basic')
-const { S, FORMATS } = require('./FluentSchema')
+const S = require('./FluentSchema')
 const Ajv = require('ajv')
 
 // TODO pick some ideas from here:https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/master/tests/draft7
@@ -7,7 +7,7 @@ const Ajv = require('ajv')
 describe('S', () => {
   it('compiles', () => {
     const ajv = new Ajv()
-    const schema = S().valueOf()
+    const schema = S.valueOf()
     const validate = ajv.compile(schema)
     var valid = validate({})
     expect(valid).toBeTruthy()
@@ -15,8 +15,7 @@ describe('S', () => {
 
   describe('basic', () => {
     const ajv = new Ajv()
-    const schema = S()
-      .object()
+    const schema = S.object()
       .prop('username')
       .prop('password')
       .valueOf()
@@ -50,25 +49,11 @@ describe('S', () => {
 
   describe('ifThen', () => {
     const ajv = new Ajv()
-    const schema = S()
-      .object()
-      .prop(
-        'prop',
-        S()
-          .string()
-          .maxLength(5)
-      )
+    const schema = S.object()
+      .prop('prop', S.string().maxLength(5))
       .ifThen(
-        S()
-          .object()
-          .prop(
-            'prop',
-            S()
-              .string()
-              .maxLength(5)
-          ),
-        S()
-          .object()
+        S.object().prop('prop', S.string().maxLength(5)),
+        S.object()
           .prop('extraProp')
           .required()
       )
@@ -104,24 +89,14 @@ describe('S', () => {
     const ajv = new Ajv()
 
     const VALUES = ['ONE', 'TWO']
-    const schema = S()
-      .object()
+    const schema = S.object()
       .prop('ifProp')
       .ifThenElse(
-        S()
-          .object()
-          .prop(
-            'ifProp',
-            S()
-              .string()
-              .enum([VALUES[0]])
-          ),
-        S()
-          .object()
+        S.object().prop('ifProp', S.string().enum([VALUES[0]])),
+        S.object()
           .prop('thenProp')
           .required(),
-        S()
-          .object()
+        S.object()
           .prop('elseProp')
           .required()
       )
@@ -156,12 +131,10 @@ describe('S', () => {
 
   describe('combine and definition', () => {
     const ajv = new Ajv()
-    const schema = S()
-      .object() //FIXME LS it shouldn't be object()
+    const schema = S.object() //FIXME LS it shouldn't be object()
       .definition(
         'address',
-        S()
-          .object()
+        S.object()
           .id('#/definitions/address')
           .prop('street_address')
           .required()
@@ -171,9 +144,8 @@ describe('S', () => {
           .required()
       )
       .allOf([
-        S().ref('#/definitions/address'),
-        S()
-          .object()
+        S.ref('#/definitions/address'),
+        S.object()
           .prop('type')
           .enum(['residential', 'business']),
       ])
@@ -221,12 +193,11 @@ describe('S', () => {
 
   describe('compose keywords', () => {
     const ajv = new Ajv()
-    const schema = S()
-      .object()
-      .prop('foo', S().anyOf([S().string()]))
-      .prop('bar', S().not(S().anyOf([S().integer()])))
-      .prop('prop', S().allOf([S().string(), S().boolean()]))
-      .prop('anotherProp', S().oneOf([S().string(), S().boolean()]))
+    const schema = S.object()
+      .prop('foo', S.anyOf([S.string()]))
+      .prop('bar', S.not(S.anyOf([S.integer()])))
+      .prop('prop', S.allOf([S.string(), S.boolean()]))
+      .prop('anotherProp', S.oneOf([S.string(), S.boolean()]))
       .required()
       .valueOf()
 
@@ -251,38 +222,33 @@ describe('S', () => {
 
   describe('compose ifThen', () => {
     const ajv = new Ajv()
-    const schema = S()
-      .object()
+    const schema = S.object()
       .prop(
         'foo',
-        S()
-          .string()
+        S.string()
           .default(false)
           .required()
       )
       .prop(
         'bar',
-        S()
-          .string()
+        S.string()
           .default(false)
           .required()
       )
       .prop('thenFooA')
       .prop('thenFooB')
       .allOf([
-        S().ifThen(
-          S()
-            .object()
+        S.ifThen(
+          S.object()
             .prop('foo')
             .enum(['foo']),
-          S().required(['thenFooA', 'thenFooB'])
+          S.required(['thenFooA', 'thenFooB'])
         ),
-        S().ifThen(
-          S()
-            .object()
+        S.ifThen(
+          S.object()
             .prop('bar')
             .enum(['BAR']),
-          S().required(['thenBarA', 'thenBarB'])
+          S.required(['thenBarA', 'thenBarB'])
         ),
       ])
       .valueOf()
@@ -336,15 +302,13 @@ describe('S', () => {
 
   describe('complex', () => {
     const ajv = new Ajv()
-    const schema = S()
-      .object()
+    const schema = S.object()
       .id('http://foo.com/user')
       .title('A User')
       .description('A User desc')
       .definition(
         'address',
-        S()
-          .object()
+        S.object()
           .id('#address')
           .prop('country')
           .prop('city')
@@ -352,30 +316,19 @@ describe('S', () => {
       )
       .prop('username')
       .required()
-      .prop(
-        'password',
-        S()
-          .string()
-          .required()
-      )
-      .prop(
-        'address',
-        S()
-          .object()
-          .ref('#address')
-      )
+      .prop('password', S.string().required())
+      .prop('address', S.object().ref('#address'))
 
       .required()
       .prop(
         'role',
-        S()
-          .object()
+        S.object()
           .id('http://foo.com/role')
           .required()
           .prop('name')
           .prop('permissions')
       )
-      .prop('age', S().number())
+      .prop('age', S.number())
       .valueOf()
     const validate = ajv.compile(schema)
     it('valid', () => {
@@ -452,17 +405,14 @@ describe('S', () => {
     it('generate', () => {
       const [step] = basic
       expect(
-        S()
-          .array()
+        S.array()
           .title('Product set')
           .items(
-            S()
-              .object()
+            S.object()
               .title('Product')
               .prop(
                 'uuid',
-                S()
-                  .number()
+                S.number()
                   .description('The unique identifier for a product')
                   .required()
               ) // TODO LS bug if we use `id` the property is removed by deepOmit
@@ -470,49 +420,31 @@ describe('S', () => {
               .required()
               .prop(
                 'price',
-                S()
-                  .number()
+                S.number()
                   .exclusiveMinimum(0)
                   .required()
               )
               .prop(
                 'tags',
-                S()
-                  .array()
-                  .items(S().string())
+                S.array()
+                  .items(S.string())
                   .minItems(1)
                   .uniqueItems(true)
               )
 
               .prop(
                 'dimensions',
-                S()
-                  .object()
-                  .prop(
-                    'length',
-                    S()
-                      .number()
-                      .required()
-                  )
+                S.object()
+                  .prop('length', S.number().required())
 
-                  .prop(
-                    'width',
-                    S()
-                      .number()
-                      .required()
-                  )
-                  .prop(
-                    'height',
-                    S()
-                      .number()
-                      .required()
-                  )
+                  .prop('width', S.number().required())
+                  .prop('height', S.number().required())
               )
               .prop(
                 'warehouseLocation',
-                S()
-                  .string()
-                  .description('Coordinates of the warehouse with the product')
+                S.string().description(
+                  'Coordinates of the warehouse with the product'
+                )
               )
           )
           .valueOf()

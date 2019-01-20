@@ -1,12 +1,12 @@
 const { BaseSchema } = require('./BaseSchema')
-const { S } = require('./FluentSchema')
+const S = require('./FluentSchema')
 
 describe('BaseSchema', () => {
   it('defined', () => {
     expect(BaseSchema).toBeDefined()
   })
 
-  describe('constructor', () => {
+  describe('factory', () => {
     it('without params', () => {
       expect(BaseSchema().valueOf()).toEqual({})
     })
@@ -49,8 +49,7 @@ describe('BaseSchema', () => {
 
       it('nested', () => {
         expect(
-          S()
-            .object()
+          S.object()
             .prop(
               'foo',
               BaseSchema()
@@ -117,8 +116,7 @@ describe('BaseSchema', () => {
       it('in line valid', () => {
         const prop = 'foo'
         expect(
-          S()
-            .object()
+          S.object()
             .prop(prop)
             .required()
             .valueOf().required
@@ -127,14 +125,8 @@ describe('BaseSchema', () => {
       it('nested valid', () => {
         const prop = 'foo'
         expect(
-          S()
-            .object()
-            .prop(
-              prop,
-              S()
-                .string()
-                .required()
-            )
+          S.object()
+            .prop(prop, S.string().required())
             .valueOf().required
         ).toEqual([prop])
       })
@@ -142,21 +134,15 @@ describe('BaseSchema', () => {
       describe('array', () => {
         it('simple', () => {
           const required = ['foo', 'bar']
-          expect(
-            S()
-              .required(required)
-              .valueOf()
-          ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
+          expect(S.required(required).valueOf()).toEqual({
             required,
           })
         })
         it('nested', () => {
           expect(
-            S()
-              .object()
+            S.object()
               .prop('foo')
-              .prop('bar', S().required())
+              .prop('bar', S.required())
               .required(['foo'])
               .valueOf()
           ).toEqual({
@@ -226,12 +212,7 @@ describe('BaseSchema', () => {
 
       it('ref', () => {
         const ref = 'myRef'
-        expect(
-          S()
-            .ref(ref)
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
+        expect(S.ref(ref).valueOf()).toEqual({
           $ref: ref,
         })
       })

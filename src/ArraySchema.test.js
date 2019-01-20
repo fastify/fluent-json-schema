@@ -1,5 +1,5 @@
 const { ArraySchema } = require('./ArraySchema')
-const { S } = require('./FluentSchema')
+const S = require('./FluentSchema')
 
 describe('ArraySchema', () => {
   it('defined', () => {
@@ -14,11 +14,7 @@ describe('ArraySchema', () => {
     })
 
     it('from S', () => {
-      expect(
-        S()
-          .array()
-          .valueOf()
-      ).toEqual({
+      expect(S.array().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'array',
       })
@@ -30,7 +26,7 @@ describe('ArraySchema', () => {
       it('valid object', () => {
         expect(
           ArraySchema()
-            .items(S().number())
+            .items(S.number())
             .valueOf()
         ).toEqual({
           type: 'array',
@@ -40,7 +36,7 @@ describe('ArraySchema', () => {
       it('valid array', () => {
         expect(
           ArraySchema()
-            .items([S().number(), S().string()])
+            .items([S.number(), S.string()])
             .valueOf()
         ).toEqual({
           type: 'array',
@@ -58,8 +54,8 @@ describe('ArraySchema', () => {
       it('valid', () => {
         expect(
           ArraySchema()
-            .items([S().number(), S().string()])
-            .additionalItems(S().string())
+            .items([S.number(), S.string()])
+            .additionalItems(S.string())
             .valueOf()
         ).toEqual({
           type: 'array',
@@ -70,7 +66,7 @@ describe('ArraySchema', () => {
       it('false', () => {
         expect(
           ArraySchema()
-            .items([S().number(), S().string()])
+            .items([S.number(), S.string()])
             .additionalItems(false)
             .valueOf()
         ).toEqual({
@@ -90,7 +86,7 @@ describe('ArraySchema', () => {
       it('valid', () => {
         expect(
           ArraySchema()
-            .contains(S().string())
+            .contains(S.string())
             .valueOf()
         ).toEqual({
           type: 'array',

@@ -164,8 +164,19 @@ const S = (
 })
 
 module.exports = {
-  S,
+  // S, TODO LS do I need that with import?
   FORMATS,
   TYPES,
-  default: S,
+  withOptions: S,
+  // TODO LS do I need a default ?
+  // default: throw new Error('Invalid factory. Please use S.object() or S.withOptions(someOpts)'),
+  string: () => S().string(),
+  mixed: types => S().mixed(types),
+  object: () => S().object(),
+  array: () => S().array(),
+  boolean: () => S().boolean(),
+  integer: () => S().integer(),
+  number: () => S().number(),
+  null: () => S().null(),
+  ...BaseSchema(),
 }

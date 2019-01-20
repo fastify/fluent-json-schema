@@ -146,9 +146,9 @@ const BaseSchema = (
   /**
    * Required has to be chained to a property:
    * Examples:
-   * - S().prop('prop').required()
-   * - S().prop('prop', S().number()).required()
-   * - S().required(['foo', 'bar'])
+   * - S.prop('prop').required()
+   * - S.prop('prop', S.number()).required()
+   * - S.required(['foo', 'bar'])
    *
    * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.3}
    * @returns {FluentSchema}

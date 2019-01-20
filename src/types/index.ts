@@ -1,64 +1,54 @@
 // This file will be passed to the TypeScript CLI to verify our typings compile
 
-import { FluentSchema, StringSchema, NumberSchema } from '../FluentSchema'
-const mixed = FluentSchema().mixed<NumberSchema & StringSchema>([
+import S, { StringSchema, NumberSchema, ArraySchema } from '../FluentSchema'
+const mixed = S.mixed<NumberSchema, StringSchema, ArraySchema>([
   'string',
   'number',
 ])
-mixed.minimum().maxLength()
+mixed.maxLength(1).minimum(5)
 
-const schema = FluentSchema()
-  .object()
+const schema = S.object()
   .id('http://foo.com/user')
   .title('A User')
   .description('A User desc')
   .definition(
     'address',
-    FluentSchema()
-      .object()
+    S.object()
       .id('#address')
       .prop('country')
-      .allOf([FluentSchema().string()])
+      .allOf([S.string()])
       .prop('city')
       .prop('zipcode')
   )
   .prop('username')
   .prop(
     'avatar',
-    FluentSchema()
-      .string()
+    S.string()
       .contentEncoding('base64')
       .contentMediaType('image/png')
   )
   .required()
   .prop(
     'password',
-    FluentSchema()
-      .string()
+    S.string()
       .default('123456')
       .minLength(6)
       .maxLength(12)
       .pattern('.*')
   )
   .required()
-  .prop(
-    'addresses',
-    FluentSchema()
-      .array()
-      .items([FluentSchema().ref('#address')])
-  )
+  .prop('addresses', S.array().items([S.ref('#address')]))
   .required()
   .prop(
     'role',
-    FluentSchema()
-      .object()
+    S.object()
       .id('http://foo.com/role')
       .prop('name')
       .enum(['ADMIN', 'USER'])
       .prop('permissions')
   )
   .required()
-  .prop('age', FluentSchema().integer())
+  .prop('age', S.integer())
 
   .valueOf()
 

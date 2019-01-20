@@ -107,7 +107,14 @@ declare namespace FluentSchema {
     propertyNames: (value: JSONSchema) => ObjectSchema
   }
 
-  function S(opt?: SchemaOptions): S
+  interface MixedSchema<T> extends BaseSchema<T> {
+    // [any]: () => any
+    //FIXME LS it should implement all the methods from the generics*/
+    // maxLength(max:number):T
+    // minimum(min:number):T
+  }
+
+  const S: FluentSchema
 
   interface SchemaOptions {
     schema: object
@@ -122,7 +129,7 @@ declare namespace FluentSchema {
     [key: string]: JSONSchema[]
   }
 
-  interface S extends BaseSchema<S> {
+  interface FluentSchema extends BaseSchema<FluentSchema> {
     string: () => StringSchema
     number: () => NumberSchema
     integer: () => IntegerSchema
@@ -130,7 +137,12 @@ declare namespace FluentSchema {
     array: () => ArraySchema
     object: () => ObjectSchema
     null: () => NullSchema
-    mixed: <T>(types: string[]) => T & any //FIXME LS it should always return T despite the method called
+    /*mixed: <T, U, V = null, X = null, Y = null, W = null, Z = null>(
+      types: string[]
+    ) => MixedSchema<T & U & V & X & Y & W & Z & any>  //FIXME LS it should return a MixedSchema without any*!/*/
+    mixed: <T, U, V = null, X = null, Y = null, W = null, Z = null>(
+      types: string[]
+    ) => any
   }
 }
 export = FluentSchema

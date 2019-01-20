@@ -415,7 +415,7 @@ describe('S', () => {
                 S.number()
                   .description('The unique identifier for a product')
                   .required()
-              ) // TODO LS bug if we use `id` the property is removed by deepOmit
+              )
               .prop('name')
               .required()
               .prop(

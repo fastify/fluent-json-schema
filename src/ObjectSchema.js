@@ -195,6 +195,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         attributes.$id ||
         (options.generateIds ? `#${target}/${name}` : undefined)
       if (isFluentSchema(props)) {
+        console.log('patchIdsWithParentId!!!!')
         attributes = patchIdsWithParentId({
           schema: attributes,
           parentId: $id,
@@ -254,6 +255,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * @returns {FluentSchema}
      */
     // FIXME LS move to BaseSchema and remove .prop
+    // TODO LS Is a definition a proper schema?
     definition: (name, props = {}) =>
       ObjectSchema({ schema, ...options }).prop(name, {
         ...props.valueOf(),

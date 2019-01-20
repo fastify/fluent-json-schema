@@ -20,7 +20,6 @@ const initialState = {
 // https://medium.com/javascript-scene/javascript-factory-functions-with-es6-4d224591a8b1
 // Factory Functions for Mixin Composition withBaseSchema
 const ArraySchema = ({ schema = initialState, ...options } = {}) => {
-  // TODO LS think about default values and how pass all of them through the functions
   options = {
     generateIds: false,
     factory: ArraySchema,

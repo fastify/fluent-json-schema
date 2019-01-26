@@ -1,8 +1,4 @@
-// const {default: S, FORMATS} = require('./FluentSchema')
-
 const S = require('./FluentSchema')
-// console.log({FORMATS: S.FORMATS})
-// console.log({S})
 
 describe('S', () => {
   it('defined', () => {

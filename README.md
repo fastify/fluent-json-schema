@@ -26,7 +26,7 @@ or
 ## Usage
 
 ```javascript
-const S = require('./FluentSchema')
+const S = require('fluent-schema')
 const schema = S.object()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
@@ -117,6 +117,30 @@ Schema generated:
   },
   "required": ["email", "password"]
 }
+```
+
+## Typescript
+
+with `"esModuleInterop": true` activated in the `tsconfig.json`
+
+```typescript
+import S from 'fluent-schema'
+
+const schema = S.object()
+  .prop('foo', S.string())
+  .prop('bar', S.number())
+  .valueOf()
+```
+
+with `"esModuleInterop": false` in the `tsconfig.json`
+
+```typescript
+import * as S from 'fluent-schema'
+
+const schema = S.object()
+  .prop('foo', S.string())
+  .prop('bar', S.number())
+  .valueOf()
 ```
 
 ## Validation

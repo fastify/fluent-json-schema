@@ -1,11 +1,6 @@
 // This file will be passed to the TypeScript CLI to verify our typings compile
 
-import S, { StringSchema, NumberSchema, ArraySchema } from '../FluentSchema'
-const mixed = S.mixed<NumberSchema, StringSchema, ArraySchema>([
-  'string',
-  'number',
-])
-mixed.maxLength(1).minimum(5)
+import S from '../FluentSchema'
 
 const schema = S.object()
   .id('http://foo.com/user')
@@ -21,6 +16,7 @@ const schema = S.object()
       .prop('zipcode')
   )
   .prop('username')
+  .prop('email', S.string().format('email'))
   .prop(
     'avatar',
     S.string()
@@ -48,7 +44,7 @@ const schema = S.object()
       .prop('permissions')
   )
   .required()
-  .prop('age', S.integer())
+  .prop('age', S.mixed<S.NumberSchema & S.StringSchema>(['string', 'integer']))
 
   .valueOf()
 

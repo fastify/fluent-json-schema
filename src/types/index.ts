@@ -1,6 +1,6 @@
 // This file will be passed to the TypeScript CLI to verify our typings compile
 
-import S from '../FluentSchema'
+import S, { NumberSchema, StringSchema } from '../FluentSchema'
 
 const schema = S.object()
   .id('http://foo.com/user')
@@ -44,7 +44,7 @@ const schema = S.object()
       .prop('permissions')
   )
   .required()
-  .prop('age', S.mixed<S.NumberSchema & S.StringSchema>(['string', 'integer']))
+  .prop('age', S.mixed<NumberSchema & StringSchema>(['string', 'integer']))
 
   .valueOf()
 

@@ -126,30 +126,6 @@ interface DependenciesOptions {
   [key: string]: JSONSchema[]
 }
 export function withOptions<T>(options: SchemaOptions): T
-export function id<T>(id: string): T
-export function title<T>(title: string): T
-export function description<T>(description: string): T
-export function examples<T>(examples: Array<any>): T
-export function ref<T>(ref: string): T
-// FIXME enum is a reserved word
-// export function enum<T>(values: Array<any>): T
-// FIXME const is a reserved word
-// export function constant<T>(value: any): T
-export function required<T>(): T
-export function not<T>(schema: JSONSchema): T
-export function anyOf<T>(schema: Array<JSONSchema>): T
-export function allOf<T>(schema: Array<JSONSchema>): T
-export function oneOf<T>(schema: Array<JSONSchema>): T
-export function string(): StringSchema & BaseSchema<StringSchema>
-export function number(): NumberSchema & BaseSchema<NumberSchema>
-export function integer(): IntegerSchema & BaseSchema<IntegerSchema>
-export function boolean(): BooleanSchema & BaseSchema<BooleanSchema>
-export function array(): ArraySchema & BaseSchema<ArraySchema>
-export function object(): ObjectSchema & BaseSchema<ObjectSchema>
-// FIXME null is a reserved word
-// export function null(): NullSchema & BaseSchema<NullSchema>
-//FIXME LS we should return only a MixedSchema
-export function mixed<T>(types: TYPE[]): MixedSchema<T> & any
 
 export interface S extends BaseSchema<S> {
   string: () => StringSchema
@@ -162,3 +138,6 @@ export interface S extends BaseSchema<S> {
   //FIXME LS we should return only a MixedSchema
   mixed: <T>(types: TYPE[]) => MixedSchema<T> & any
 }
+
+declare var s: S
+export default s

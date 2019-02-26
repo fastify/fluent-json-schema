@@ -5,7 +5,8 @@ const isFluentSchema = obj =>
   typeof obj.definition === 'function' || // ObjectSchema
   typeof obj.items === 'function' || // ArraySchema
   typeof obj.min === 'function' || // NumberSchema & IntegerSchema
-    typeof obj.format === 'function') // StringSchema
+  typeof obj.format === 'function' || // StringSchema
+    typeof obj.null === 'function') // NullSchema
 
 const hasCombiningKeywords = attributes =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not

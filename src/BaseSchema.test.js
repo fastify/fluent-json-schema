@@ -206,7 +206,7 @@ describe('BaseSchema', () => {
     })
 
     describe('ref', () => {
-      it('ref', () => {
+      it('base', () => {
         const ref = 'myRef'
         expect(
           BaseSchema()
@@ -215,7 +215,7 @@ describe('BaseSchema', () => {
         ).toEqual({ $ref: ref })
       })
 
-      it('ref', () => {
+      it('S', () => {
         const ref = 'myRef'
         expect(S.ref(ref).valueOf()).toEqual({
           $ref: ref,
@@ -226,12 +226,17 @@ describe('BaseSchema', () => {
 
   describe('combining keywords:', () => {
     describe('allOf', () => {
-      it('valid', () => {
+      it('base', () => {
         expect(
           BaseSchema()
             .allOf([BaseSchema().id('foo')])
             .valueOf()
         ).toEqual({
+          allOf: [{ $id: 'foo' }],
+        })
+      })
+      it('S', () => {
+        expect(S.allOf([S.id('foo')]).valueOf()).toEqual({
           allOf: [{ $id: 'foo' }],
         })
       })
@@ -263,6 +268,33 @@ describe('BaseSchema', () => {
           anyOf: [{ $id: 'foo' }],
         })
       })
+      it('S nested', () => {
+        expect(
+          S.object()
+            .prop('prop', S.anyOf([S.string(), S.null()]))
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            prop: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+          },
+          type: 'object',
+        })
+      })
+
+      it('S nested', () => {
+        expect(
+          S.object()
+            .prop('prop', S.anyOf([]).required())
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: { prop: {} },
+          required: ['prop'],
+          type: 'object',
+        })
+      })
+
       describe('invalid', () => {
         it('not an array', () => {
           expect(() => {

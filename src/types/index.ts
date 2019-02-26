@@ -10,6 +10,8 @@ const schema = S.object()
     'address',
     S.object()
       .id('#address')
+      .prop('line1')
+      .prop('line2', S.anyOf([S.string(), S.null()]))
       .prop('country')
       .allOf([S.string()])
       .prop('city')

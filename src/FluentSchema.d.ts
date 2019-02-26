@@ -47,6 +47,7 @@ export type JSONSchema =
   | ArraySchema
   | IntegerSchema
   | BooleanSchema
+  | NullSchema
 
 export interface SchemaOptions {
   schema: object

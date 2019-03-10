@@ -4,7 +4,6 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser.
 
 [![view on npm](https://img.shields.io/npm/v/fluent-schema.svg)](https://www.npmjs.org/package/fluent-schema)
 [![Build Status](https://travis-ci.com/fastify/fluent-schema.svg?branch=master)](https://travis-ci.com/fastify/fluent-schema?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/fastify/fluent-schema/badge.svg?branch=master)](https://coveralls.io/github/fastify/fluent-schema?branch=master)
 
 ## Features
 
@@ -14,6 +13,7 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser.
 - Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
 - Typescript definitions
 - Zero dependencies
+- Coverage 99%
 
 ## Install
 
@@ -27,6 +27,12 @@ or
 
 ```javascript
 const S = require('fluent-schema')
+
+const ROLES = {
+  ADMIN: 'ADMIN',
+  USER: 'USER',
+}
+
 const schema = S.object()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
@@ -43,23 +49,24 @@ const schema = S.object()
       .minLength(8)
       .required()
   )
-  .prop('role', S.enum(['ADMIN', 'USER']).default('USER'))
+  .prop(
+    'role',
+    S.string()
+      .enum(Object.values(ROLES))
+      .default(ROLES.USER)
+  )
   .definition(
     'address',
     S.object()
       .id('#address')
-      .prop('line1')
-      .required()
-      .prop('line2')
-      .prop('country')
-      .required()
-      .prop('city')
-      .required()
-      .prop('zipcode')
-      .required()
+      .prop('line1', S.string())
+      .prop('line2', S.string())
+      .prop('country', S.string())
+      .prop('city', S.string())
+      .prop('zipcode', S.string())
+      .required(['line1', 'country', 'city', 'zipcode'])
   )
-  .prop('address')
-  .ref('#address')
+  .prop('address', S.ref('#address'))
 
 console.log(JSON.stringify(schema.valueOf(), undefined, 2))
 ```

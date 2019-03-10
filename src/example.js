@@ -2,6 +2,11 @@
 const S = require('./FluentSchema')
 const Ajv = require('ajv')
 
+const ROLES = {
+  ADMIN: 'ADMIN',
+  USER: 'USER',
+}
+
 const schema = S.object()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
@@ -18,23 +23,24 @@ const schema = S.object()
       .minLength(8)
       .required()
   )
-  .prop('role', S.enum(['ADMIN', 'USER']).default('USER'))
+  .prop(
+    'role',
+    S.string()
+      .enum(Object.values(ROLES))
+      .default(ROLES.USER)
+  )
   .definition(
     'address',
     S.object()
       .id('#address')
-      .prop('line1')
-      .required()
-      .prop('line2')
-      .prop('country')
-      .required()
-      .prop('city')
-      .required()
-      .prop('zipcode')
-      .required()
+      .prop('line1', S.string())
+      .prop('line2', S.string())
+      .prop('country', S.string())
+      .prop('city', S.string())
+      .prop('zipcode', S.string())
+      .required(['line1', 'country', 'city', 'zipcode'])
   )
-  .prop('address')
-  .ref('#address')
+  .prop('address', S.ref('#address'))
 
 console.log(JSON.stringify(schema.valueOf(), undefined, 2))
 

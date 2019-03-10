@@ -126,7 +126,12 @@ describe('BaseSchema', () => {
         const prop = 'foo'
         expect(
           S.object()
-            .prop(prop, S.string().required())
+            .prop(
+              prop,
+              S.string()
+                .required()
+                .minLength(3)
+            )
             .valueOf().required
         ).toEqual([prop])
       })

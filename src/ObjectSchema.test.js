@@ -19,7 +19,7 @@ describe('ObjectSchema', () => {
         it('true', () => {
           expect(
             ObjectSchema({ generateIds: true })
-              .prop('prop')
+              .prop('prop', S.string())
               .valueOf()
           ).toEqual({
             properties: { prop: { $id: '#properties/prop', type: 'string' } },
@@ -33,7 +33,7 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .valueOf()
           ).toEqual({
-            properties: { prop: { type: 'string' } },
+            properties: { prop: {} },
             type: 'object',
           })
         })
@@ -50,14 +50,12 @@ describe('ObjectSchema', () => {
                 )
                 .valueOf()
             ).toEqual({
-              // $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 foo: {
                   $id: '#properties/foo',
                   properties: {
                     bar: {
                       $id: '#properties/foo/properties/bar',
-                      type: 'string',
                     },
                   },
                   required: ['bar'],
@@ -74,7 +72,7 @@ describe('ObjectSchema', () => {
                 .prop(
                   'foo',
                   ObjectSchema()
-                    .prop('bar', S.string().id(id))
+                    .prop('bar', S.id(id))
                     .required()
                 )
                 .valueOf()
@@ -82,7 +80,7 @@ describe('ObjectSchema', () => {
               properties: {
                 foo: {
                   properties: {
-                    bar: { $id: 'myId', type: 'string' },
+                    bar: { $id: 'myId' },
                   },
                   required: ['bar'],
                   type: 'object',
@@ -111,12 +109,8 @@ describe('ObjectSchema', () => {
               entity: {
                 $id: '#definitions/entity',
                 properties: {
-                  bar: {
-                    type: 'string',
-                  },
-                  foo: {
-                    type: 'string',
-                  },
+                  bar: {},
+                  foo: {},
                 },
                 type: 'object',
               },
@@ -146,7 +140,7 @@ describe('ObjectSchema', () => {
               entity: {
                 $id: 'myCustomId',
                 properties: {
-                  foo: { type: 'string' },
+                  foo: {},
                 },
                 type: 'object',
               },
@@ -222,7 +216,6 @@ describe('ObjectSchema', () => {
             .id(id)
             .valueOf().properties[prop]
         ).toEqual({
-          type: 'string',
           $id: id,
         })
       })
@@ -256,10 +249,10 @@ describe('ObjectSchema', () => {
     })
 
     describe('properties', () => {
-      it('with type string', () => {
+      it('string', () => {
         expect(
           ObjectSchema()
-            .prop('prop')
+            .prop('prop', S.string())
             .valueOf().properties
         ).toEqual({
           prop: {
@@ -275,9 +268,7 @@ describe('ObjectSchema', () => {
               .prop('foo', ObjectSchema().prop('bar'))
               .valueOf().properties.foo.properties
           ).toEqual({
-            bar: {
-              type: 'string',
-            },
+            bar: {},
           })
         })
 
@@ -385,7 +376,7 @@ describe('ObjectSchema', () => {
             .valueOf()
         ).toEqual({
           patternProperties: { '^fo.*$': { type: 'string' } },
-          properties: { foo: { type: 'string' } },
+          properties: { foo: {} },
           type: 'object',
         })
       })
@@ -417,8 +408,8 @@ describe('ObjectSchema', () => {
         ).toEqual({
           dependencies: { foo: ['bar'] },
           properties: {
-            bar: { type: 'string' },
-            foo: { type: 'string' },
+            bar: {},
+            foo: {},
           },
           type: 'object',
         })
@@ -440,7 +431,7 @@ describe('ObjectSchema', () => {
               },
             },
           },
-          properties: { foo: { type: 'string' } },
+          properties: { foo: {} },
           type: 'object',
         })
       })
@@ -515,12 +506,8 @@ describe('ObjectSchema', () => {
         foo: {
           type: 'object',
           properties: {
-            foo: {
-              type: 'string',
-            },
-            bar: {
-              type: 'string',
-            },
+            foo: {},
+            bar: {},
           },
         },
       })
@@ -542,12 +529,8 @@ describe('ObjectSchema', () => {
           $id: 'myDefId',
           type: 'object',
           properties: {
-            foo: {
-              type: 'string',
-            },
-            bar: {
-              type: 'string',
-            },
+            foo: {},
+            bar: {},
           },
         },
       })

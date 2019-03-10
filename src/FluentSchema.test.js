@@ -19,7 +19,7 @@ describe('S', () => {
           expect(
             S.withOptions({ generateIds: true })
               .object()
-              .prop('prop')
+              .prop('prop', S.string())
               .valueOf()
           ).toEqual({
             $schema: 'http://json-schema.org/draft-07/schema#',
@@ -31,7 +31,7 @@ describe('S', () => {
         it('false', () => {
           expect(
             S.object()
-              .prop('prop')
+              .prop('prop', S.string())
               .valueOf()
           ).toEqual({
             $schema: 'http://json-schema.org/draft-07/schema#',
@@ -48,7 +48,7 @@ describe('S', () => {
                 .prop(
                   'foo',
                   S.object()
-                    .prop('bar')
+                    .prop('bar', S.string())
                     .required()
                 )
                 .valueOf()
@@ -107,8 +107,8 @@ describe('S', () => {
               .definition(
                 'entity',
                 S.object()
-                  .prop('foo')
-                  .prop('bar')
+                  .prop('foo', S.string())
+                  .prop('bar', S.string())
               )
               .prop('prop')
               .ref('entity')
@@ -146,7 +146,7 @@ describe('S', () => {
                 'entity',
                 S.object()
                   .id('myCustomId')
-                  .prop('foo')
+                  .prop('foo', S.string())
               )
               .prop('prop')
               .ref('entity')
@@ -254,13 +254,13 @@ describe('S', () => {
         'address',
         S.object()
           .id('#address')
-          .prop('country')
-          .prop('city')
-          .prop('zipcode')
+          .prop('country', S.string())
+          .prop('city', S.string())
+          .prop('zipcode', S.string())
       )
-      .prop('username')
+      .prop('username', S.string())
       .required()
-      .prop('password')
+      .prop('password', S.string())
       .required()
       .prop('address', S.ref('#address'))
 
@@ -269,8 +269,8 @@ describe('S', () => {
         'role',
         S.object()
           .id('http://foo.com/role')
-          .prop('name')
-          .prop('permissions')
+          .prop('name', S.string())
+          .prop('permissions', S.string())
       )
       .required()
       .prop('age', S.number())

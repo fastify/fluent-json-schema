@@ -146,8 +146,8 @@ describe('BaseSchema', () => {
         it('nested', () => {
           expect(
             S.object()
-              .prop('foo')
-              .prop('bar', S.required())
+              .prop('foo', S.string())
+              .prop('bar', S.string().required())
               .required(['foo'])
               .valueOf()
           ).toEqual({

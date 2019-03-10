@@ -215,7 +215,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
       const type = hasCombiningKeywords(attributes)
         ? undefined
-        : attributes.type || 'string'
+        : attributes.type
 
       const $ref = attributes.$ref
 

@@ -16,8 +16,8 @@ describe('S', () => {
   describe('basic', () => {
     const ajv = new Ajv()
     const schema = S.object()
-      .prop('username')
-      .prop('password')
+      .prop('username', S.string())
+      .prop('password', S.string())
       .valueOf()
     const validate = ajv.compile(schema)
 
@@ -54,7 +54,7 @@ describe('S', () => {
       .ifThen(
         S.object().prop('prop', S.string().maxLength(5)),
         S.object()
-          .prop('extraProp')
+          .prop('extraProp', S.string())
           .required()
       )
       .valueOf()
@@ -94,10 +94,10 @@ describe('S', () => {
       .ifThenElse(
         S.object().prop('ifProp', S.string().enum([VALUES[0]])),
         S.object()
-          .prop('thenProp')
+          .prop('thenProp', S.string())
           .required(),
         S.object()
-          .prop('elseProp')
+          .prop('elseProp', S.string())
           .required()
       )
       .valueOf()
@@ -136,17 +136,16 @@ describe('S', () => {
         'address',
         S.object()
           .id('#/definitions/address')
-          .prop('street_address')
+          .prop('street_address', S.string())
           .required()
-          .prop('city')
+          .prop('city', S.string())
           .required()
-          .prop('state')
-          .required()
+          .prop('state', S.string().required())
       )
       .allOf([
         S.ref('#/definitions/address'),
         S.object()
-          .prop('type')
+          .prop('type', S.string())
           .enum(['residential', 'business']),
       ])
       .valueOf()
@@ -235,18 +234,18 @@ describe('S', () => {
           .default(false)
           .required()
       )
-      .prop('thenFooA')
-      .prop('thenFooB')
+      .prop('thenFooA', S.string())
+      .prop('thenFooB', S.string())
       .allOf([
         S.ifThen(
           S.object()
-            .prop('foo')
+            .prop('foo', S.string())
             .enum(['foo']),
           S.required(['thenFooA', 'thenFooB'])
         ),
         S.ifThen(
           S.object()
-            .prop('bar')
+            .prop('bar', S.string())
             .enum(['BAR']),
           S.required(['thenBarA', 'thenBarB'])
         ),
@@ -310,11 +309,11 @@ describe('S', () => {
         'address',
         S.object()
           .id('#address')
-          .prop('country')
-          .prop('city')
-          .prop('zipcode')
+          .prop('country', S.string())
+          .prop('city', S.string())
+          .prop('zipcode', S.string())
       )
-      .prop('username')
+      .prop('username', S.string())
       .required()
       .prop('password', S.string().required())
       .prop('address', S.object().ref('#address'))
@@ -325,7 +324,7 @@ describe('S', () => {
         S.object()
           .id('http://foo.com/role')
           .required()
-          .prop('name')
+          .prop('name', S.string())
           .prop('permissions')
       )
       .prop('age', S.number())
@@ -416,7 +415,7 @@ describe('S', () => {
                   .description('The unique identifier for a product')
                   .required()
               )
-              .prop('name')
+              .prop('name', S.string())
               .required()
               .prop(
                 'price',

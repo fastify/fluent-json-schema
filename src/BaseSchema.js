@@ -2,12 +2,9 @@
 const {
   flat,
   omit,
-  hasCombiningKeywords,
   isFluentSchema,
   last,
   patchIdsWithParentId,
-  valueOf,
-  FORMATS,
   REQUIRED,
   setAttribute,
   setComposeType,
@@ -162,7 +159,7 @@ const BaseSchema = (
       : [REQUIRED]
     return options.factory({
       schema: { ...schema, required },
-      options,
+      ...options,
     })
   },
 

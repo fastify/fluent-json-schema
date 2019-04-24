@@ -7,7 +7,13 @@ export interface BaseSchema<T> {
   enum: (values: Array<any>) => T
   const: (value: any) => T
   default: (value: any) => T
-  required: () => T
+  required: (fields?: string[]) => T
+  ifThen: (ifClause: JSONSchema, thenClause: JSONSchema) => T
+  ifThenElse: (
+    ifClause: JSONSchema,
+    thenClause: JSONSchema,
+    elseClause: JSONSchema
+  ) => T
   not: (schema: JSONSchema) => T
   anyOf: (schema: Array<JSONSchema>) => T
   allOf: (schema: Array<JSONSchema>) => T
@@ -58,7 +64,7 @@ export interface StringSchema extends BaseSchema<StringSchema> {
   minLength: (min: number) => StringSchema
   maxLength: (min: number) => StringSchema
   format: (format: FORMATS) => StringSchema
-  pattern: (pattern: string) => StringSchema
+  pattern: (pattern: string | RegExp) => StringSchema
   contentEncoding: (encoding: string) => StringSchema
   contentMediaType: (mediaType: string) => StringSchema
 }

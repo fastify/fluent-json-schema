@@ -47,7 +47,8 @@ const schema = S.object()
   )
   .required()
   .prop('age', S.mixed<NumberSchema & StringSchema>(['string', 'integer']))
+  .ifThen(S.object().prop('age', S.string()), S.required(['age']))
 
   .valueOf()
 
-console.log({ schema })
+console.log(JSON.stringify(schema))

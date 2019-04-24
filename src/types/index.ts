@@ -17,7 +17,7 @@ const schema = S.object()
       .prop('city')
       .prop('zipcode')
   )
-  .prop('username')
+  .prop('username', S.string().pattern(/[a-z]*/g))
   .prop('email', S.string().format('email'))
   .prop(
     'avatar',

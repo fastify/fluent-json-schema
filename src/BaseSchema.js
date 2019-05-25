@@ -141,6 +141,34 @@ const BaseSchema = (
   },
 
   /**
+   * The value of readOnly can be left empty to indicate the property is readOnly.
+   * It takes an optional boolean which can be used to explicitly set readOnly true/false
+   *
+   * {@link readOnly|https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3}
+   * @param {boolean|undefined} isReadOnly
+   * @returns {BaseSchema}
+   */
+
+  readOnly: isReadOnly => {
+    const value = isReadOnly !== undefined ? isReadOnly : true
+    return setAttribute({ schema, ...options }, ['readOnly', value, 'boolean'])
+  },
+
+  /**
+   * The value of writeOnly can be left empty to indicate the property is writeOnly.
+   * It takes an optional boolean which can be used to explicitly set writeOnly true/false
+   *
+   * {@link writeOnly|https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3}
+   * @param {boolean|undefined} isWriteOnly
+   * @returns {BaseSchema}
+   */
+
+  writeOnly: isWriteOnly => {
+    const value = isWriteOnly !== undefined ? isWriteOnly : true
+    return setAttribute({ schema, ...options }, ['writeOnly', value, 'boolean'])
+  },
+
+  /**
    * Required has to be chained to a property:
    * Examples:
    * - S.prop('prop').required()

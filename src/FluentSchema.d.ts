@@ -18,6 +18,8 @@ export interface BaseSchema<T> {
   anyOf: (schema: Array<JSONSchema>) => T
   allOf: (schema: Array<JSONSchema>) => T
   oneOf: (schema: Array<JSONSchema>) => T
+  readOnly: (isReadOnly?: boolean) => T
+  writeOnly: (isWriteOnly?: boolean) => T
 }
 
 export type TYPE =

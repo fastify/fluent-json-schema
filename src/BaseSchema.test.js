@@ -205,6 +205,54 @@ describe('BaseSchema', () => {
       })
     })
 
+    describe('readOnly', () => {
+      it('valid', () => {
+        expect(
+          BaseSchema()
+            .readOnly(true)
+            .valueOf().readOnly
+        ).toEqual(true)
+      })
+      it('valid with no value', () => {
+        expect(
+          BaseSchema()
+            .readOnly()
+            .valueOf().readOnly
+        ).toEqual(true)
+      })
+      it('can be set to false', () => {
+        expect(
+          BaseSchema()
+            .readOnly(false)
+            .valueOf().readOnly
+        ).toEqual(false)
+      })
+    })
+
+    describe('writeOnly', () => {
+      it('valid', () => {
+        expect(
+          BaseSchema()
+            .writeOnly(true)
+            .valueOf().writeOnly
+        ).toEqual(true)
+      })
+      it('valid with no value', () => {
+        expect(
+          BaseSchema()
+            .writeOnly()
+            .valueOf().writeOnly
+        ).toEqual(true)
+      })
+      it('can be set to false', () => {
+        expect(
+          BaseSchema()
+            .writeOnly(false)
+            .valueOf().writeOnly
+        ).toEqual(false)
+      })
+    })
+
     describe('ref', () => {
       it('base', () => {
         const ref = 'myRef'

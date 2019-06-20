@@ -6,6 +6,10 @@ describe('NumberSchema', () => {
     expect(NumberSchema).toBeDefined()
   })
 
+  it('Expose symbol', () => {
+    expect(NumberSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+  })
+
   describe('constructor', () => {
     it('without params', () => {
       expect(NumberSchema().valueOf()).toEqual({

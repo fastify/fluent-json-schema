@@ -6,6 +6,10 @@ describe('StringSchema', () => {
     expect(StringSchema).toBeDefined()
   })
 
+  it('Expose symbol', () => {
+    expect(StringSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+  })
+
   describe('constructor', () => {
     it('without params', () => {
       expect(StringSchema().valueOf()).toEqual({

@@ -8,7 +8,7 @@ const { IntegerSchema } = require('./IntegerSchema')
 const { ObjectSchema } = require('./ObjectSchema')
 const { ArraySchema } = require('./ArraySchema')
 
-const { TYPES, setAttribute } = require('./utils')
+const { TYPES, setAttribute, FLUENT_SCHEMA } = require('./utils')
 
 const initialState = {
   type: [],
@@ -32,6 +32,7 @@ const MixedSchema = ({ schema = initialState, ...options } = {}) => {
     ...options,
   }
   return {
+    [FLUENT_SCHEMA]: true,
     ...(schema.type.includes(TYPES.STRING)
       ? StringSchema({ ...options, schema, factory: MixedSchema })
       : {}),

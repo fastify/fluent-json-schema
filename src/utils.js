@@ -35,6 +35,7 @@ const flat = array =>
   }, {})
 
 const REQUIRED = Symbol('required')
+const FLUENT_SCHEMA = Symbol.for('fluent-schema-object')
 
 const RELATIVE_JSON_POINTER = 'relative-json-pointer'
 const JSON_POINTER = 'json-pointer'
@@ -183,4 +184,5 @@ module.exports = {
   setComposeType,
   FORMATS,
   TYPES,
+  FLUENT_SCHEMA,
 }

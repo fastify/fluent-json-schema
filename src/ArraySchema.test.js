@@ -6,6 +6,10 @@ describe('ArraySchema', () => {
     expect(ArraySchema).toBeDefined()
   })
 
+  it('Expose symbol', () => {
+    expect(ArraySchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+  })
+
   describe('constructor', () => {
     it('without params', () => {
       expect(ArraySchema().valueOf()).toEqual({

@@ -6,6 +6,10 @@ describe('BooleanSchema', () => {
     expect(BooleanSchema).toBeDefined()
   })
 
+  it('Expose symbol', () => {
+    expect(BooleanSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+  })
+
   describe('constructor', () => {
     it('without params', () => {
       expect(BooleanSchema().valueOf()).toEqual({

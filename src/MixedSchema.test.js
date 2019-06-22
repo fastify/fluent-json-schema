@@ -6,9 +6,28 @@ describe('MixedSchema', () => {
     expect(MixedSchema).toBeDefined()
   })
 
+  it('Expose symbol / 1', () => {
+    expect(MixedSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+  })
+
+  it('Expose symbol / 2', () => {
+    const types = [
+      S.TYPES.STRING,
+      S.TYPES.NUMBER,
+      S.TYPES.BOOLEAN,
+      S.TYPES.INTEGER,
+      S.TYPES.OBJECT,
+      S.TYPES.ARRAY,
+      S.TYPES.NULL,
+    ]
+    expect(MixedSchema(types)[Symbol.for('fluent-schema-object')]).toBeDefined()
+  })
+
   describe('factory', () => {
     it('without params', () => {
-      expect(MixedSchema().valueOf()).toEqual({})
+      expect(MixedSchema().valueOf()).toEqual({
+        [Symbol.for('fluent-schema-object')]: true,
+      })
     })
   })
 

@@ -6,6 +6,10 @@ describe('BaseSchema', () => {
     expect(BaseSchema).toBeDefined()
   })
 
+  it('Expose symbol', () => {
+    expect(BaseSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+  })
+
   describe('factory', () => {
     it('without params', () => {
       expect(BaseSchema().valueOf()).toEqual({})

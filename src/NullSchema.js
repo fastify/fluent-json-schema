@@ -1,6 +1,6 @@
 'use strict'
 const { BaseSchema } = require('./BaseSchema')
-const { setAttribute } = require('./utils')
+const { setAttribute, FLUENT_SCHEMA } = require('./utils')
 
 const initialState = {
   type: 'null',
@@ -23,6 +23,7 @@ const NullSchema = ({ schema = initialState, ...options } = {}) => {
   const { valueOf } = BaseSchema({ ...options, schema })
   return {
     valueOf,
+    [FLUENT_SCHEMA]: true,
 
     /**
      * Set a property to type null

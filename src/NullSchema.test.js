@@ -6,6 +6,10 @@ describe('NullSchema', () => {
     expect(NullSchema).toBeDefined()
   })
 
+  it('Expose symbol', () => {
+    expect(NullSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+  })
+
   describe('constructor', () => {
     it('without params', () => {
       expect(NullSchema().valueOf()).toEqual({

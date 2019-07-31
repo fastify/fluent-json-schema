@@ -279,6 +279,16 @@ const schema = S.object()
 console.log(schema[Symbol.for('fluent-schema-object')]) // true
 ```
 
+Alternatively, you can use the `isFluentSchema` boolean:
+
+```js
+const S = require('fluent-schema')
+const schema = S.object()
+  .prop('foo', S.string())
+  .prop('bar', S.number())
+console.log(schema.isFluentSchema) // true
+```
+
 ## Documentation
 
 [API Doc](./docs/API.md).

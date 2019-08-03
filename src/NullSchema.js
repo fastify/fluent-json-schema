@@ -24,6 +24,7 @@ const NullSchema = ({ schema = initialState, ...options } = {}) => {
   return {
     valueOf,
     [FLUENT_SCHEMA]: true,
+    isFluentSchema: true,
 
     /**
      * Set a property to type null

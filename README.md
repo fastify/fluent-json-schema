@@ -268,18 +268,7 @@ Output:
     {valid: true}
 
 ### Detect Fluent Schema objects
-Every Fluent Schema objects contains a symbol that you can access with `Symbol.for('fluent-schema-object')`. In this way you can write your own utilities that understands the Fluent Schema API and improve the user experience of your tool.
-
-```js
-const S = require('fluent-schema')
-
-const schema = S.object()
-  .prop('foo', S.string())
-  .prop('bar', S.number())
-console.log(schema[Symbol.for('fluent-schema-object')]) // true
-```
-
-Alternatively, you can use the `isFluentSchema` boolean:
+Every Fluent Schema objects contains a boolean `isFluentSchema`. In this way you can write your own utilities that understands the Fluent Schema API and improve the user experience of your tool.
 
 ```js
 const S = require('fluent-schema')

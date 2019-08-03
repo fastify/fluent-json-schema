@@ -190,6 +190,38 @@ describe('S', () => {
     })
   })
 
+  // https://github.com/fastify/fluent-schema/pull/40
+  describe('cloning objects retains boolean', () => {
+    const ajv = new Ajv()
+    const config = {
+      schema: S.object().prop('foo', S.string().enum(['foo']))
+    }
+    const _config = require('lodash.merge')({}, config)
+    expect(config.schema[Symbol.for('fluent-schema-object')]).toBeDefined()
+    expect(_config.schema.isFluentSchema).toBeTruthy()
+    expect(_config.schema[Symbol.for('fluent-schema-object')]).toBeUndefined()
+    const schema = _config.schema.valueOf()
+    const validate = ajv.compile(schema)
+    it('matches', () => {
+      expect(schema).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          foo: {
+            type: 'string',
+            enum: ['foo']
+          }
+        }
+      })
+    })
+
+    it('valid', () => {
+      const valid = validate({foo: 'foo'})
+      expect(validate.errors).toEqual(null)
+      expect(valid).toBeTruthy()
+    })
+  })
+
   describe('compose keywords', () => {
     const ajv = new Ajv()
     const schema = S.object()

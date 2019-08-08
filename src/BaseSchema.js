@@ -31,6 +31,8 @@ const BaseSchema = (
   }
 ) => ({
   [FLUENT_SCHEMA]: true,
+  isFluentSchema: true,
+
   /**
    * It defines a URI for the schema, and the base URI that other URI references within the schema are resolved against.
    *

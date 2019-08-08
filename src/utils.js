@@ -1,6 +1,6 @@
 'use strict'
 
-const isFluentSchema = obj => obj && obj[FLUENT_SCHEMA]
+const isFluentSchema = obj => obj && obj.isFluentSchema
 
 const hasCombiningKeywords = attributes =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not

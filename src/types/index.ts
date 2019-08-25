@@ -2,6 +2,7 @@
 
 import S, { NumberSchema, StringSchema } from '../FluentSchema'
 
+console.log('isFluentSchema:', S.object().isFluentSchema)
 const schema = S.object()
   .id('http://foo.com/user')
   .title('A User')
@@ -54,3 +55,4 @@ const schema = S.object()
   .valueOf()
 
 console.log(JSON.stringify(schema))
+console.log(S.object().isFluentSchema)

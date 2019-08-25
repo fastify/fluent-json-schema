@@ -47,21 +47,23 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     additionalProperties: value => {
-      if (typeof value !== 'boolean' && !isFluentSchema(value))
-        throw new Error("'additionalProperties' must be a boolean or a S")
-      if (value === false) {
+      if (typeof value === 'boolean') {
         return setAttribute({ schema, ...options }, [
           'additionalProperties',
-          false,
+          value,
           'object',
         ])
       }
-      const { $schema, ...rest } = value.valueOf()
-      return setAttribute({ schema, ...options }, [
-        'additionalProperties',
-        { ...rest },
-        'array',
-      ])
+      if (isFluentSchema(value)) {
+        const { $schema, ...rest } = value.valueOf()
+        return setAttribute({ schema, ...options }, [
+          'additionalProperties',
+          { ...rest },
+          'array',
+        ])
+      }
+
+      throw new Error("'additionalProperties' must be a boolean or a S")
     },
 
     /**

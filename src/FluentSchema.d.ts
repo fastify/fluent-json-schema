@@ -20,6 +20,7 @@ export interface BaseSchema<T> {
   oneOf: (schema: Array<JSONSchema>) => T
   readOnly: (isReadOnly?: boolean) => T
   writeOnly: (isWriteOnly?: boolean) => T
+  isFluentSchema: boolean
 }
 
 export type TYPE =

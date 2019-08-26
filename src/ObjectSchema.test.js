@@ -292,6 +292,16 @@ describe('ObjectSchema', () => {
     })
 
     describe('additionalProperties', () => {
+      it('true', () => {
+        const value = true
+        expect(
+          ObjectSchema()
+            .additionalProperties(value)
+            .prop('prop')
+            .valueOf().additionalProperties
+        ).toEqual(value)
+      })
+
       it('false', () => {
         const value = false
         expect(

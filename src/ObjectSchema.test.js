@@ -550,4 +550,77 @@ describe('ObjectSchema', () => {
       })
     })
   })
+
+  describe('compose', () => {
+    it('merges two simple schemas', () => {
+      const base = S.object()
+        .additionalProperties(false)
+        .prop('foo', S.string())
+
+      const extended = S.object(base).prop('bar', S.number())
+
+      expect(extended.valueOf()).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        additionalProperties: false,
+        properties: {
+          foo: {
+            type: 'string',
+          },
+          bar: {
+            type: 'number',
+          },
+        },
+        type: 'object',
+      })
+    })
+    it('merges two nested schemas', () => {
+      const base = S.object()
+        .additionalProperties(false)
+        .prop(
+          'foo',
+          S.object().prop(
+            'id',
+            S.string()
+              .format('uuid')
+              .required()
+          )
+        )
+        .prop('str', S.string().required())
+        .prop('bol', S.boolean().required())
+        .prop('num', S.integer().required())
+
+      const extended = S.object(base).prop('bar', S.number())
+
+      expect(extended.valueOf()).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        additionalProperties: false,
+        properties: {
+          foo: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                format: 'uuid',
+              },
+            },
+            required: ['id'],
+          },
+          bar: {
+            type: 'number',
+          },
+          str: {
+            type: 'string',
+          },
+          bol: {
+            type: 'boolean',
+          },
+          num: {
+            type: 'integer',
+          },
+        },
+        required: ['str', 'bol', 'num'],
+        type: 'object',
+      })
+    })
+  })
 })

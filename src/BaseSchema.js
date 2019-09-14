@@ -363,6 +363,10 @@ const BaseSchema = (
     })
   },
 
+  _getState: () => {
+    return schema
+  },
+
   /**
    * It returns all the schema values
    *

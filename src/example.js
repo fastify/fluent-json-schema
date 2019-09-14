@@ -107,3 +107,11 @@ console.log(validate.errors)
     params: { missingProperty: 'zipcoce' },
     message: 'should have required property \'zipcode\'' } ]
 */
+
+const base = S.object()
+  .additionalProperties(false)
+  .prop('foo', S.string())
+
+const extended = S.object(base).prop('bar', S.number())
+
+console.log(extended.valueOf())

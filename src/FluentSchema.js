@@ -111,10 +111,10 @@ const S = (
    * @returns {ObjectSchema}
    */
 
-  object: () =>
+  object: baseSchema =>
     ObjectSchema({
       ...options,
-      schema,
+      schema: baseSchema || schema,
       factory: ObjectSchema,
     }).as('object'),
 
@@ -169,7 +169,18 @@ module.exports = {
   withOptions: S,
   string: () => S().string(),
   mixed: types => S().mixed(types),
-  object: () => S().object(),
+  // object: () => S().object(),
+  object: schema => {
+    if (schema && !schema.isFluentSchema)
+      throw new Error('schema has to be FluentSchema type')
+    if (schema) {
+      const state = schema._getState()
+      console.log({ schema: JSON.stringify(schema.valueOf(), undefined, 2) })
+      console.log({ state: JSON.stringify(state, undefined, 2) })
+      return S().object(state)
+    }
+    return S().object()
+  },
   array: () => S().array(),
   boolean: () => S().boolean(),
   integer: () => S().integer(),

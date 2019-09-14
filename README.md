@@ -274,7 +274,30 @@ Output:
 
     {valid: true}
 
+## Advance usage
+
+You can combine different schemas
+
+```js
+const S = require('fluent-schema')
+const userBaseSchema = S.object()
+  .additionalProperties(false)
+  .prop('username', S.string())
+  .prop('password', S.string())
+
+const userSchema = S.object(userBaseSchema).prop(
+  'id',
+  S.string().format('uuid')
+)
+
+console.log(userSchema)
+```
+
+This useful for a CRUD api where POST /users uses the `userBaseSchema` rather than GET /users uses the `userSchema`
+which contains the id generated server sidegs
+
 ### Detect Fluent Schema objects
+
 Every Fluent Schema objects contains a boolean `isFluentSchema`. In this way you can write your own utilities that understands the Fluent Schema API and improve the user experience of your tool.
 
 ```js
@@ -284,6 +307,8 @@ const schema = S.object()
   .prop('bar', S.number())
 console.log(schema.isFluentSchema) // true
 ```
+
+## Usage
 
 ## Documentation
 

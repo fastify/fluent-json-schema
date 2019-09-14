@@ -140,7 +140,8 @@ const appendRequired = ({
 const setAttribute = ({ schema, ...options }, attribute) => {
   const [key, value] = attribute
   const currentProp = last(schema.properties)
-  if (currentProp) {
+  // TODO LS I don't get why it could occur an override as for 'it merges two simple schemas'
+  if (currentProp && !currentProp[key]) {
     const { name, ...props } = currentProp
     return options.factory({ schema, ...options }).prop(name, {
       ...props,

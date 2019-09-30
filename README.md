@@ -60,7 +60,7 @@ const schema = S.object()
     S.object()
       .id('#address')
       .prop('line1', S.string())
-      .prop('line2', S.string())
+      .prop('line2', S.anyOf([S.string(), S.null()]))
       .prop('country', S.string())
       .prop('city', S.string())
       .prop('zipcode', S.string())
@@ -85,7 +85,14 @@ Schema generated:
           "type": "string"
         },
         "line2": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "country": {
           "type": "string"

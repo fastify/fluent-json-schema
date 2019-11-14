@@ -431,21 +431,48 @@ describe('BaseSchema', () => {
   })
 
   describe('ifThen', () => {
-    it('valid', () => {
-      const id = 'http://foo.com/user'
-      const schema = BaseSchema()
-        .id(id)
-        .title('A User')
-        .ifThen(BaseSchema().id(id), BaseSchema().description('A User desc'))
-        .valueOf()
+    describe('valid', () => {
+      it('returns a schema', () => {
+        const id = 'http://foo.com/user'
+        const schema = BaseSchema()
+          .id(id)
+          .title('A User')
+          .ifThen(BaseSchema().id(id), BaseSchema().description('A User desc'))
+          .valueOf()
 
-      expect(schema).toEqual({
-        $id: 'http://foo.com/user',
-        title: 'A User',
-        if: { $id: 'http://foo.com/user' },
-        then: { description: 'A User desc' },
+        expect(schema).toEqual({
+          $id: 'http://foo.com/user',
+          title: 'A User',
+          if: { $id: 'http://foo.com/user' },
+          then: { description: 'A User desc' },
+        })
+      })
+
+      it('appends a prop after the clause', () => {
+        const id = 'http://foo.com/user'
+        const schema = S.object()
+          .id(id)
+          .title('A User')
+          .prop('bar')
+          .ifThen(
+            S.object().prop('foo', S.null()),
+            S.object().prop('bar', S.string().required())
+          )
+          .prop('foo')
+          .valueOf()
+
+        expect(schema).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          type: 'object',
+          $id: 'http://foo.com/user',
+          title: 'A User',
+          properties: { bar: {}, foo: {} },
+          if: { properties: { foo: { type: 'null' } } },
+          then: { properties: { bar: { type: 'string' } }, required: ['bar'] },
+        })
       })
     })
+
     describe('invalid', () => {
       it('ifClause', () => {
         expect(() => {
@@ -464,53 +491,82 @@ describe('BaseSchema', () => {
   })
 
   describe('ifThenElse', () => {
-    it('valid', () => {
-      const id = 'http://foo.com/user'
-      const schema = BaseSchema()
-        .id(id)
-        .title('A User')
-        .ifThenElse(
-          BaseSchema().id(id),
-          BaseSchema().description('then'),
-          BaseSchema().description('else')
-        )
-        .valueOf()
+    describe('valid', () => {
+      it('returns a schema', () => {
+        const id = 'http://foo.com/user'
+        const schema = BaseSchema()
+          .id(id)
+          .title('A User')
+          .ifThenElse(
+            BaseSchema().id(id),
+            BaseSchema().description('then'),
+            BaseSchema().description('else')
+          )
+          .valueOf()
 
-      expect(schema).toEqual({
-        $id: 'http://foo.com/user',
-        title: 'A User',
-        if: { $id: 'http://foo.com/user' },
-        then: { description: 'then' },
-        else: { description: 'else' },
+        expect(schema).toEqual({
+          $id: 'http://foo.com/user',
+          title: 'A User',
+          if: { $id: 'http://foo.com/user' },
+          then: { description: 'then' },
+          else: { description: 'else' },
+        })
       })
-    })
-    describe('invalid', () => {
-      it('ifClause', () => {
-        expect(() => {
-          BaseSchema().ifThenElse(
-            undefined,
-            BaseSchema().description('then'),
-            BaseSchema().description('else')
+
+      it('appends a prop after the clause', () => {
+        const id = 'http://foo.com/user'
+        const schema = S.object()
+          .id(id)
+          .title('A User')
+          .prop('bar')
+          .ifThenElse(
+            S.object().prop('foo', S.null()),
+            S.object().prop('bar', S.string().required()),
+            S.object().prop('bar', S.string())
           )
-        }).toThrow("'ifClause' must be a BaseSchema")
+          .prop('foo')
+          .valueOf()
+
+        expect(schema).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          type: 'object',
+          $id: 'http://foo.com/user',
+          title: 'A User',
+          properties: { bar: {}, foo: {} },
+          if: { properties: { foo: { type: 'null' } } },
+          then: { properties: { bar: { type: 'string' } }, required: ['bar'] },
+          else: { properties: { bar: { type: 'string' } } },
+        })
       })
-      it('thenClause', () => {
-        expect(() => {
-          BaseSchema().ifThenElse(
-            BaseSchema().id('id'),
-            undefined,
-            BaseSchema().description('else')
-          )
-        }).toThrow("'thenClause' must be a BaseSchema")
-      })
-      it('elseClause', () => {
-        expect(() => {
-          BaseSchema().ifThenElse(
-            BaseSchema().id('id'),
-            BaseSchema().description('then'),
-            undefined
-          )
-        }).toThrow("'elseClause' must be a BaseSchema")
+
+      describe('invalid', () => {
+        it('ifClause', () => {
+          expect(() => {
+            BaseSchema().ifThenElse(
+              undefined,
+              BaseSchema().description('then'),
+              BaseSchema().description('else')
+            )
+          }).toThrow("'ifClause' must be a BaseSchema")
+        })
+        it('thenClause', () => {
+          expect(() => {
+            BaseSchema().ifThenElse(
+              BaseSchema().id('id'),
+              undefined,
+              BaseSchema().description('else')
+            )
+          }).toThrow("'thenClause' must be a BaseSchema")
+        })
+        it('elseClause', () => {
+          expect(() => {
+            BaseSchema().ifThenElse(
+              BaseSchema().id('id'),
+              BaseSchema().description('then'),
+              undefined
+            )
+          }).toThrow("'elseClause' must be a BaseSchema")
+        })
       })
     })
   })

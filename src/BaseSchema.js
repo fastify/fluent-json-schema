@@ -286,7 +286,7 @@ const BaseSchema = (
       'type',
     ])
 
-    return BaseSchema({
+    return options.factory({
       schema: {
         ...schema,
         if: patchIdsWithParentId({
@@ -340,7 +340,7 @@ const BaseSchema = (
       'type',
     ])
 
-    return BaseSchema({
+    return options.factory({
       schema: {
         ...schema,
         if: patchIdsWithParentId({

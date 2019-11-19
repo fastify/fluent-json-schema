@@ -254,7 +254,9 @@ const BaseSchema = (
    * @returns {BaseSchema}
    */
   as: type => {
-    return setAttribute({ schema, ...options }, ['type', type])
+    return type !== schema.type
+      ? setAttribute({ schema, ...options }, ['type', type])
+      : options.factory({ schema, ...options })
   },
 
   /**
@@ -363,6 +365,10 @@ const BaseSchema = (
     })
   },
 
+  /**
+   * @private It returns the internal schema data structure
+   * @returns {object}
+   */
   _getState: () => {
     return schema
   },

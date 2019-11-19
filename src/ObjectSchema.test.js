@@ -555,7 +555,7 @@ describe('ObjectSchema', () => {
     it('merges two simple schemas', () => {
       const base = S.object()
         .additionalProperties(false)
-        .prop('foo', S.string())
+        .prop('foo', S.string().minLength(5))
 
       const extended = S.object(base).prop('bar', S.number())
 
@@ -565,6 +565,7 @@ describe('ObjectSchema', () => {
         properties: {
           foo: {
             type: 'string',
+            minLength: 5,
           },
           bar: {
             type: 'number',

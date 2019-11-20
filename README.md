@@ -274,9 +274,13 @@ Output:
 
     {valid: true}
 
-## Advance usage
+## Extend schema
 
-You can combine different schemas
+Normally inheritance with JSON Schema is achieved with `allOf`. However when `.additionalProperties(false)` is used the validator won't
+understand which properties come from the base schema. `S.extend` creates a schema merging the base into the new one so
+that the validator knows all the properties because it's evaluating only a single schema.
+For example in a CRUD API `POST /users` could use the `userBaseSchema` rather than `GET /users` or `PATCH /users` use the `userSchema`
+which contains the `id`, `createdAt` and `updatedAt` generated server side.
 
 ```js
 const S = require('fluent-schema')
@@ -285,16 +289,13 @@ const userBaseSchema = S.object()
   .prop('username', S.string())
   .prop('password', S.string())
 
-const userSchema = S.object(userBaseSchema).prop(
-  'id',
-  S.string().format('uuid')
-)
+const userSchema = S.extend(userBaseSchema)
+  .prop('id', S.string().format('uuid'))
+  .prop('createdAt', S.string().format('time'))
+  .prop('updatedAt', S.string().format('time'))
 
 console.log(userSchema)
 ```
-
-This useful for a CRUD api where POST /users uses the `userBaseSchema` rather than GET /users uses the `userSchema`
-which contains the id generated server sidegs
 
 ### Detect Fluent Schema objects
 

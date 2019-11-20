@@ -551,13 +551,13 @@ describe('ObjectSchema', () => {
     })
   })
 
-  describe('compose', () => {
-    it('merges two simple schemas', () => {
+  describe('extend', () => {
+    it('extends a simple schema', () => {
       const base = S.object()
         .additionalProperties(false)
         .prop('foo', S.string().minLength(5))
 
-      const extended = S.object(base).prop('bar', S.number())
+      const extended = S.extend(base).prop('bar', S.number())
 
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -574,7 +574,7 @@ describe('ObjectSchema', () => {
         type: 'object',
       })
     })
-    it('merges two nested schemas', () => {
+    it('extends a nested schema', () => {
       const base = S.object()
         .additionalProperties(false)
         .prop(
@@ -590,7 +590,7 @@ describe('ObjectSchema', () => {
         .prop('bol', S.boolean().required())
         .prop('num', S.integer().required())
 
-      const extended = S.object(base).prop('bar', S.number())
+      const extended = S.extend(base).prop('bar', S.number())
 
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',

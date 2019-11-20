@@ -169,9 +169,9 @@ module.exports = {
   withOptions: S,
   string: () => S().string(),
   mixed: types => S().mixed(types),
-  // object: () => S().object(),
-  object: schema => {
-    if (schema && !schema.isFluentSchema)
+  object: () => S().object(),
+  extend: schema => {
+    if (!schema || (schema && !schema.isFluentSchema))
       throw new Error('schema has to be FluentSchema type')
     if (schema) {
       const state = schema._getState()
@@ -179,7 +179,6 @@ module.exports = {
     }
     return S().object()
   },
-
   array: () => S().array(),
   boolean: () => S().boolean(),
   integer: () => S().integer(),

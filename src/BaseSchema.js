@@ -254,9 +254,10 @@ const BaseSchema = (
    * @returns {BaseSchema}
    */
   as: type => {
-    return type !== schema.type
-      ? setAttribute({ schema, ...options }, ['type', type])
-      : options.factory({ schema, ...options })
+    return setAttribute({ schema, ...options }, ['type', type])
+    // return type !== schema.type
+    //   ?
+    //   : options.factory({ schema, ...options })
   },
 
   /**

@@ -143,8 +143,8 @@ const setAttribute = ({ schema, ...options }, attribute) => {
   if (currentProp) {
     const { name, ...props } = currentProp
     return options.factory({ schema, ...options }).prop(name, {
-      ...props,
       [key]: value,
+      ...props,
     })
   }
   return options.factory({ schema: { ...schema, [key]: value }, ...options })

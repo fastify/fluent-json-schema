@@ -108,10 +108,15 @@ console.log(validate.errors)
     message: 'should have required property \'zipcode\'' } ]
 */
 
-const base = S.object()
+const userBaseSchema = S.object()
   .additionalProperties(false)
-  .prop('foo', S.string())
+  .prop('username', S.string())
+  .prop('password', S.string())
 
-const extended = S.object(base).prop('bar', S.number())
+const userSchema = S.extend(userBaseSchema)
+  .prop('id', S.string().format('uuid'))
+  .prop('createdAt', S.string().format('time'))
+  .prop('updatedAt', S.string().format('time'))
+  .valueOf()
 
-console.log(extended.valueOf())
+console.log(userSchema.valueOf())

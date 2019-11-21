@@ -253,12 +253,7 @@ const BaseSchema = (
    * @private set a property to a type. Use string number etc.
    * @returns {BaseSchema}
    */
-  as: type => {
-    return setAttribute({ schema, ...options }, ['type', type])
-    // return type !== schema.type
-    //   ?
-    //   : options.factory({ schema, ...options })
-  },
+  as: type => setAttribute({ schema, ...options }, ['type', type]),
 
   /**
    * This validation outcome of this keyword's subschema has no direct effect on the overall validation result.

@@ -309,8 +309,6 @@ const schema = S.object()
 console.log(schema.isFluentSchema) // true
 ```
 
-## Usage
-
 ## Documentation
 
 [API Doc](./docs/API.md).

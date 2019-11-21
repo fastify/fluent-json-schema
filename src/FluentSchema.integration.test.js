@@ -482,34 +482,4 @@ describe('S', () => {
       ).toEqual(step.schema)
     })
   })
-
-  describe('null', () => {
-    it.only('throws an execption if the property is null', () => {
-      const room = S.object()
-        .prop('_id', S.string())
-        .prop('owner', S.string())
-        .prop('name', S.string())
-        .prop('moderators', S.array().items(S.string()))
-        .prop('members', S.array().items(S.string()))
-
-      const invite = S.object()
-        .prop('inviter', S.string())
-        .prop('room', room) // THROWS an error if property room has null value
-        .prop('email', S.string())
-        .prop('type', S.string())
-        .prop('createdAt', S.string())
-        .prop('updatedAt', S.string())
-        .required(['room'])
-
-      const ajv = new Ajv().valueOf()
-      const validate = ajv.compile(invite.valueOf())
-      const isValid = validate({
-        room: null,
-      })
-
-      console.log('\n', JSON.stringify(invite.valueOf(), undefined, 2))
-      console.log(validate.errors)
-      expect(isValid).toBeFalsy()
-    })
-  })
 })

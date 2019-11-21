@@ -623,5 +623,15 @@ describe('ObjectSchema', () => {
         type: 'object',
       })
     })
+    it('throws an error if a schema is not provided', () => {
+      expect(() => {
+        S.extend()
+      }).toThrow("Schema can't be null or undefined")
+    })
+    it('throws an error if a schema is not provided', () => {
+      expect(() => {
+        S.extend('boom!')
+      }).toThrow("Schema isn't FluentSchema type")
+    })
   })
 })

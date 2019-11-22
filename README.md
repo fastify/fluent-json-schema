@@ -274,7 +274,31 @@ Output:
 
     {valid: true}
 
+## Extend schema
+
+Normally inheritance with JSON Schema is achieved with `allOf`. However when `.additionalProperties(false)` is used the validator won't
+understand which properties come from the base schema. `S.extend` creates a schema merging the base into the new one so
+that the validator knows all the properties because it's evaluating only a single schema.
+For example in a CRUD API `POST /users` could use the `userBaseSchema` rather than `GET /users` or `PATCH /users` use the `userSchema`
+which contains the `id`, `createdAt` and `updatedAt` generated server side.
+
+```js
+const S = require('fluent-schema')
+const userBaseSchema = S.object()
+  .additionalProperties(false)
+  .prop('username', S.string())
+  .prop('password', S.string())
+
+const userSchema = S.extend(userBaseSchema)
+  .prop('id', S.string().format('uuid'))
+  .prop('createdAt', S.string().format('time'))
+  .prop('updatedAt', S.string().format('time'))
+
+console.log(userSchema)
+```
+
 ### Detect Fluent Schema objects
+
 Every Fluent Schema objects contains a boolean `isFluentSchema`. In this way you can write your own utilities that understands the Fluent Schema API and improve the user experience of your tool.
 
 ```js

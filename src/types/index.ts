@@ -51,8 +51,20 @@ const schema = S.object()
   .ifThen(S.object().prop('age', S.string()), S.required(['age']))
   .readOnly()
   .writeOnly(true)
-
   .valueOf()
 
 console.log(JSON.stringify(schema))
 console.log(S.object().isFluentSchema)
+
+const userBaseSchema = S.object()
+  .additionalProperties(false)
+  .prop('username', S.string())
+  .prop('password', S.string())
+
+const userSchema = S.extend(userBaseSchema)
+  .prop('id', S.string().format('uuid'))
+  .prop('createdAt', S.string().format('time'))
+  .prop('updatedAt', S.string().format('time'))
+  .valueOf()
+
+console.log('\n user:', JSON.stringify(userSchema))

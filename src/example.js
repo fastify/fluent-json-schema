@@ -107,3 +107,16 @@ console.log(validate.errors)
     params: { missingProperty: 'zipcoce' },
     message: 'should have required property \'zipcode\'' } ]
 */
+
+const userBaseSchema = S.object()
+  .additionalProperties(false)
+  .prop('username', S.string())
+  .prop('password', S.string())
+
+const userSchema = S.extend(userBaseSchema)
+  .prop('id', S.string().format('uuid'))
+  .prop('createdAt', S.string().format('time'))
+  .prop('updatedAt', S.string().format('time'))
+  .valueOf()
+
+console.log(userSchema.valueOf())

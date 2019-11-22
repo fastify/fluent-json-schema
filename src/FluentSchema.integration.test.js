@@ -194,7 +194,7 @@ describe('S', () => {
   describe('cloning objects retains boolean', () => {
     const ajv = new Ajv()
     const config = {
-      schema: S.object().prop('foo', S.string().enum(['foo']))
+      schema: S.object().prop('foo', S.string().enum(['foo'])),
     }
     const _config = require('lodash.merge')({}, config)
     expect(config.schema[Symbol.for('fluent-schema-object')]).toBeDefined()
@@ -209,14 +209,14 @@ describe('S', () => {
         properties: {
           foo: {
             type: 'string',
-            enum: ['foo']
-          }
-        }
+            enum: ['foo'],
+          },
+        },
       })
     })
 
     it('valid', () => {
-      const valid = validate({foo: 'foo'})
+      const valid = validate({ foo: 'foo' })
       expect(validate.errors).toEqual(null)
       expect(valid).toBeTruthy()
     })

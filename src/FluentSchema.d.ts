@@ -145,6 +145,7 @@ export interface S extends BaseSchema<S> {
   array: () => ArraySchema
   object: () => ObjectSchema
   null: () => NullSchema
+  extend: (schema: ObjectSchema) => ObjectSchema
   //FIXME LS we should return only a MixedSchema
   mixed: <T>(types: TYPE[]) => MixedSchema<T> & any
 }

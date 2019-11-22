@@ -550,4 +550,88 @@ describe('ObjectSchema', () => {
       })
     })
   })
+
+  describe('extend', () => {
+    it('extends a simple schema', () => {
+      const base = S.object()
+        .additionalProperties(false)
+        .prop('foo', S.string().minLength(5))
+
+      const extended = S.extend(base).prop('bar', S.number())
+
+      expect(extended.valueOf()).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        additionalProperties: false,
+        properties: {
+          foo: {
+            type: 'string',
+            minLength: 5,
+          },
+          bar: {
+            type: 'number',
+          },
+        },
+        type: 'object',
+      })
+    })
+    it('extends a nested schema', () => {
+      const base = S.object()
+        .additionalProperties(false)
+        .prop(
+          'foo',
+          S.object().prop(
+            'id',
+            S.string()
+              .format('uuid')
+              .required()
+          )
+        )
+        .prop('str', S.string().required())
+        .prop('bol', S.boolean().required())
+        .prop('num', S.integer().required())
+
+      const extended = S.extend(base).prop('bar', S.number())
+
+      expect(extended.valueOf()).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        additionalProperties: false,
+        properties: {
+          foo: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'string',
+                format: 'uuid',
+              },
+            },
+            required: ['id'],
+          },
+          bar: {
+            type: 'number',
+          },
+          str: {
+            type: 'string',
+          },
+          bol: {
+            type: 'boolean',
+          },
+          num: {
+            type: 'integer',
+          },
+        },
+        required: ['str', 'bol', 'num'],
+        type: 'object',
+      })
+    })
+    it('throws an error if a schema is not provided', () => {
+      expect(() => {
+        S.extend()
+      }).toThrow("Schema can't be null or undefined")
+    })
+    it('throws an error if a schema is not provided', () => {
+      expect(() => {
+        S.extend('boom!')
+      }).toThrow("Schema isn't FluentSchema type")
+    })
+  })
 })

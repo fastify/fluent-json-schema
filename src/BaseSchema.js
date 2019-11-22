@@ -253,9 +253,7 @@ const BaseSchema = (
    * @private set a property to a type. Use string number etc.
    * @returns {BaseSchema}
    */
-  as: type => {
-    return setAttribute({ schema, ...options }, ['type', type])
-  },
+  as: type => setAttribute({ schema, ...options }, ['type', type]),
 
   /**
    * This validation outcome of this keyword's subschema has no direct effect on the overall validation result.
@@ -361,6 +359,14 @@ const BaseSchema = (
       },
       ...options,
     })
+  },
+
+  /**
+   * @private It returns the internal schema data structure
+   * @returns {object}
+   */
+  _getState: () => {
+    return schema
   },
 
   /**

@@ -554,13 +554,17 @@ describe('ObjectSchema', () => {
   describe('extend', () => {
     it('extends a simple schema', () => {
       const base = S.object()
+        .id('base')
         .additionalProperties(false)
         .prop('foo', S.string().minLength(5))
 
-      const extended = S.extend(base).prop('bar', S.number())
+      const extended = S.extend(base)
+        .id('extended')
+        .prop('bar', S.number())
 
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
+        $id: 'extended',
         additionalProperties: false,
         properties: {
           foo: {
@@ -576,6 +580,7 @@ describe('ObjectSchema', () => {
     })
     it('extends a nested schema', () => {
       const base = S.object()
+        .id('base')
         .additionalProperties(false)
         .prop(
           'foo',
@@ -590,10 +595,13 @@ describe('ObjectSchema', () => {
         .prop('bol', S.boolean().required())
         .prop('num', S.integer().required())
 
-      const extended = S.extend(base).prop('bar', S.number())
+      const extended = S.extend(base)
+        .prop('bar', S.number())
+        .id('extended')
 
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
+        $id: 'extended',
         additionalProperties: false,
         properties: {
           foo: {
@@ -621,6 +629,54 @@ describe('ObjectSchema', () => {
         },
         required: ['str', 'bol', 'num'],
         type: 'object',
+      })
+    })
+    it('extends a schema with definitions', () => {
+      const base = S.object()
+        .id('base')
+        .additionalProperties(false)
+        .definition('def1', S.object().prop('some'))
+        .definition('def2', S.object().prop('somethingElse'))
+        .prop(
+          'foo',
+          S.object().prop(
+            'id',
+            S.string()
+              .format('uuid')
+              .required()
+          )
+        )
+        .prop('str', S.string().required())
+        .prop('bol', S.boolean().required())
+        .prop('num', S.integer().required())
+
+      const extended = S.extend(base)
+        .id('extended')
+        .definition('def1', S.object().prop('someExtended'))
+        .prop('bar', S.number())
+
+      console.log(JSON.stringify(extended.valueOf()))
+      expect(extended.valueOf()).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        definitions: {
+          def1: { type: 'object', properties: { someExtended: {} } },
+          def2: { type: 'object', properties: { somethingElse: {} } },
+        },
+        type: 'object',
+        $id: 'extended',
+        additionalProperties: false,
+        properties: {
+          foo: {
+            type: 'object',
+            properties: { id: { type: 'string', format: 'uuid' } },
+            required: ['id'],
+          },
+          str: { type: 'string' },
+          bol: { type: 'boolean' },
+          num: { type: 'integer' },
+          bar: { type: 'number' },
+        },
+        required: ['str', 'bol', 'num'],
       })
     })
     it('throws an error if a schema is not provided', () => {

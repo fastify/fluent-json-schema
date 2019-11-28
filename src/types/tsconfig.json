@@ -3,7 +3,7 @@
     "target": "es6",
     "module": "commonjs",
     "esModuleInterop": true,
-    "noEmit": true,
+    "noEmit": false,
     "strict": true
   },
   "files": ["./index.ts"]

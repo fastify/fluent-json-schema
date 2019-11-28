@@ -53,18 +53,19 @@ const schema = S.object()
   .writeOnly(true)
   .valueOf()
 
-console.log(JSON.stringify(schema))
-console.log(S.object().isFluentSchema)
+console.log('example:\n', JSON.stringify(schema))
+console.log('isFluentSchema:', S.object().isFluentSchema)
 
 const userBaseSchema = S.object()
   .additionalProperties(false)
   .prop('username', S.string())
   .prop('password', S.string())
 
-const userSchema = S.extend(userBaseSchema)
+const userSchema = S.object()
   .prop('id', S.string().format('uuid'))
   .prop('createdAt', S.string().format('time'))
   .prop('updatedAt', S.string().format('time'))
+  .extend(userBaseSchema)
   .valueOf()
 
-console.log('\n user:', JSON.stringify(userSchema))
+console.log('user:\n', JSON.stringify(userSchema))

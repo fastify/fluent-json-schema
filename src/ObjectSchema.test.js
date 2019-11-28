@@ -555,16 +555,20 @@ describe('ObjectSchema', () => {
     it('extends a simple schema', () => {
       const base = S.object()
         .id('base')
+        .title('base')
         .additionalProperties(false)
         .prop('foo', S.string().minLength(5))
 
-      const extended = S.extend(base)
+      const extended = S.object()
         .id('extended')
+        .title('extended')
         .prop('bar', S.number())
+        .extend(base)
 
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         $id: 'extended',
+        title: 'extended',
         additionalProperties: false,
         properties: {
           foo: {
@@ -595,9 +599,10 @@ describe('ObjectSchema', () => {
         .prop('bol', S.boolean().required())
         .prop('num', S.integer().required())
 
-      const extended = S.extend(base)
-        .prop('bar', S.number())
+      const extended = S.object()
         .id('extended')
+        .prop('bar', S.number())
+        .extend(base)
 
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -650,12 +655,12 @@ describe('ObjectSchema', () => {
         .prop('bol', S.boolean().required())
         .prop('num', S.integer().required())
 
-      const extended = S.extend(base)
+      const extended = S.object()
         .id('extended')
         .definition('def1', S.object().prop('someExtended'))
         .prop('bar', S.number())
+        .extend(base)
 
-      console.log(JSON.stringify(extended.valueOf()))
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         definitions: {
@@ -679,14 +684,15 @@ describe('ObjectSchema', () => {
         required: ['str', 'bol', 'num'],
       })
     })
+
     it('throws an error if a schema is not provided', () => {
       expect(() => {
-        S.extend()
+        S.object().extend()
       }).toThrow("Schema can't be null or undefined")
     })
     it('throws an error if a schema is not provided', () => {
       expect(() => {
-        S.extend('boom!')
+        S.object().extend('boom!')
       }).toThrow("Schema isn't FluentSchema type")
     })
   })

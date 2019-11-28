@@ -114,6 +114,7 @@ export interface ObjectSchema extends BaseSchema<ObjectSchema> {
   patternProperties: (options: PatternPropertiesOptions) => ObjectSchema
   dependencies: (options: DependenciesOptions) => ObjectSchema
   propertyNames: (value: JSONSchema) => ObjectSchema
+  extend: (schema: ObjectSchema) => ObjectSchema
 }
 
 export interface MixedSchema<T> extends BaseSchema<T> {
@@ -145,7 +146,6 @@ export interface S extends BaseSchema<S> {
   array: () => ArraySchema
   object: () => ObjectSchema
   null: () => NullSchema
-  extend: (schema: ObjectSchema) => ObjectSchema
   //FIXME LS we should return only a MixedSchema
   mixed: <T>(types: TYPE[]) => MixedSchema<T> & any
 }

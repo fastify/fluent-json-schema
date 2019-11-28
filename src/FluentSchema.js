@@ -1,4 +1,6 @@
 'use strict'
+const merge = require('deepmerge')
+
 const { FORMATS, TYPES } = require('./utils')
 
 const { BaseSchema } = require('./BaseSchema')
@@ -170,16 +172,6 @@ module.exports = {
   string: () => S().string(),
   mixed: types => S().mixed(types),
   object: () => S().object(),
-  extend: schema => {
-    if (!schema) {
-      throw new Error("Schema can't be null or undefined")
-    }
-    if (!schema.isFluentSchema) {
-      throw new Error("Schema isn't FluentSchema type")
-    }
-    const state = schema._getState()
-    return S().object(state)
-  },
   array: () => S().array(),
   boolean: () => S().boolean(),
   integer: () => S().integer(),

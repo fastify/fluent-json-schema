@@ -365,6 +365,7 @@ const BaseSchema = (
    * @private It returns the internal schema data structure
    * @returns {object}
    */
+  // TODO LS if we implement S.raw() we can drop this hack because from a JSON we can rebuild a fluent-schema
   _getState: () => {
     return schema
   },

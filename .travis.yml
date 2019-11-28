@@ -2,6 +2,6 @@ language: node_js
 
 node_js:
 - "13"
-- "11.10.1" # tmp workaround https://stackoverflow.com/questions/55059748/travis-jest-typeerror-cannot-assign-to-read-only-property-symbolsymbol-tostr
+- "11"
 - "10"
 - "8"

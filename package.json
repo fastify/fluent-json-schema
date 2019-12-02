@@ -62,5 +62,8 @@
     "lodash.merge": "^4.6.2",
     "prettier": "^1.14.3",
     "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "deepmerge": "^4.2.2"
   }
 }

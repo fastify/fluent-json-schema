@@ -113,10 +113,11 @@ const userBaseSchema = S.object()
   .prop('username', S.string())
   .prop('password', S.string())
 
-const userSchema = S.extend(userBaseSchema)
+const userSchema = S.object()
   .prop('id', S.string().format('uuid'))
   .prop('createdAt', S.string().format('time'))
   .prop('updatedAt', S.string().format('time'))
+  .extend(userBaseSchema)
   .valueOf()
 
 console.log(userSchema.valueOf())

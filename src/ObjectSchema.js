@@ -1,4 +1,5 @@
 'use strict'
+const merge = require('deepmerge')
 const { BaseSchema } = require('./BaseSchema')
 const {
   omit,
@@ -244,6 +245,19 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         },
         ...options,
       })
+    },
+
+    extend: base => {
+      if (!base) {
+        throw new Error("Schema can't be null or undefined")
+      }
+      if (!base.isFluentSchema) {
+        throw new Error("Schema isn't FluentSchema type")
+      }
+      const state = base._getState()
+      const extended = merge(state, schema)
+
+      return ObjectSchema({ schema: extended, ...options })
     },
 
     /**

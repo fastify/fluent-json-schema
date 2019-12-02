@@ -12,7 +12,6 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser.
 - Runtime errors for invalid options or keywords misuse
 - Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
 - Typescript definitions
-- Zero dependencies
 - Coverage 99%
 
 ## Install
@@ -289,10 +288,11 @@ const userBaseSchema = S.object()
   .prop('username', S.string())
   .prop('password', S.string())
 
-const userSchema = S.extend(userBaseSchema)
+const userSchema = S.object()
   .prop('id', S.string().format('uuid'))
   .prop('createdAt', S.string().format('time'))
   .prop('updatedAt', S.string().format('time'))
+  .extend(userBaseSchema)
 
 console.log(userSchema)
 ```

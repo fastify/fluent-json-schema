@@ -1,7 +1,7 @@
 'use strict'
 const merge = require('deepmerge')
 
-const { FORMATS, TYPES } = require('./utils')
+const { FORMATS, TYPES, toArray } = require('./utils')
 
 const { BaseSchema } = require('./BaseSchema')
 const { NullSchema } = require('./NullSchema')
@@ -177,5 +177,32 @@ module.exports = {
   integer: () => S().integer(),
   number: () => S().number(),
   null: () => S().null(),
+  raw: json => {
+    switch (json.type) {
+      case 'string': {
+        const { type, ...props } = json
+        const schema = {
+          type,
+          ...props,
+        }
+        return StringSchema({ schema, factory: StringSchema })
+      }
+
+      case 'object': {
+        const { type, definitions, properties, required, ...props } = json
+        const schema = {
+          type,
+          definitions: toArray(definitions) || [],
+          properties: toArray(properties) || [],
+          required: required || [],
+          ...props,
+        }
+        return ObjectSchema({ schema, factory: ObjectSchema })
+      }
+
+      default:
+        return BaseSchema()
+    }
+  },
   ...BaseSchema(),
 }

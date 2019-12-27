@@ -148,6 +148,7 @@ export interface S extends BaseSchema<S> {
   null: () => NullSchema
   //FIXME LS we should return only a MixedSchema
   mixed: <T>(types: TYPE[]) => MixedSchema<T> & any
+  raw: (any) => JSONSchema
 }
 
 declare var s: S

@@ -4,7 +4,7 @@ const { last, FORMATS, setAttribute } = require('./utils')
 
 const initialState = {
   type: 'string',
-  properties: [],
+  // properties: [], //FIXME it shouldn't be set for a string because it has only attributes
   required: [],
 }
 

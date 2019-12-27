@@ -6,6 +6,7 @@ const hasCombiningKeywords = attributes =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
 
 const last = array => {
+  if (!array) return
   const [prop] = [...array].reverse()
   return prop
 }
@@ -27,6 +28,9 @@ const flat = array =>
       [name]: rest,
     }
   }, {})
+
+const toArray = obj =>
+  obj && Object.entries(obj).map(([key, value]) => ({ name: key, ...value }))
 
 const REQUIRED = Symbol('required')
 const FLUENT_SCHEMA = Symbol.for('fluent-schema-object')
@@ -170,6 +174,7 @@ module.exports = {
   hasCombiningKeywords,
   last,
   flat,
+  toArray,
   omit,
   REQUIRED,
   patchIdsWithParentId,

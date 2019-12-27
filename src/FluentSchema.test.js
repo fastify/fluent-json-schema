@@ -1,9 +1,9 @@
 const S = require('./FluentSchema')
 
 describe('S', () => {
-  it('defined', () => {
-    expect(S).toBeDefined()
-  })
+  // it('defined', () => {
+  //   expect(S).toBeDefined()
+  // })
 
   describe('factory', () => {
     it('without params', () => {
@@ -327,6 +327,91 @@ describe('S', () => {
           },
         },
       },
+    })
+  })
+
+  describe('raw', () => {
+    describe('string', () => {
+      it('parses type', () => {
+        const input = S.string().valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+
+      it('adds an attribute', () => {
+        const input = S.string().valueOf()
+        const schema = S.raw(input)
+        const modified = schema.minLength(3)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(modified.valueOf()).toEqual({
+          minLength: 3,
+          ...input,
+        })
+      })
+
+      it('parses a prop', () => {
+        const input = S.string()
+          .minLength(5)
+          .valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+    })
+
+    describe('object', () => {
+      it('parses type', () => {
+        const input = S.object().valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+
+      it('parses properties', () => {
+        const input = S.object()
+          .prop('foo')
+          .prop('bar', S.string())
+          .valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+
+      it('parses nested properties', () => {
+        const input = S.object()
+          .prop('foo', S.object().prop('bar', S.string().minLength(3)))
+          .valueOf()
+        const schema = S.raw(input)
+        const modified = schema.prop('boom')
+        expect(modified.isFluentSchema).toBeTruthy()
+        expect(modified.valueOf()).toEqual({
+          ...input,
+          properties: {
+            ...input.properties,
+            boom: {},
+          },
+        })
+      })
+
+      it('parses definitions', () => {
+        const input = S.object()
+          .definition('foo', S.string())
+          .valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
     })
   })
 })

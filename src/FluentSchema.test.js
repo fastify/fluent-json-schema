@@ -1,9 +1,9 @@
 const S = require('./FluentSchema')
 
 describe('S', () => {
-  // it('defined', () => {
-  //   expect(S).toBeDefined()
-  // })
+  it('defined', () => {
+    expect(S).toBeDefined()
+  })
 
   describe('factory', () => {
     it('without params', () => {

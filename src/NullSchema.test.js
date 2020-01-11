@@ -31,4 +31,17 @@ describe('NullSchema', () => {
         .valueOf().properties.prop.type
     ).toEqual('null')
   })
+
+  describe('raw', () => {
+    it('allows to add a custom attribute', () => {
+      const schema = NullSchema()
+        .raw({ customKeyword: true })
+        .valueOf()
+
+      expect(schema).toEqual({
+        type: 'null',
+        customKeyword: true,
+      })
+    })
+  })
 })

@@ -482,4 +482,82 @@ describe('S', () => {
       ).toEqual(step.schema)
     })
   })
+
+  describe.only('raw', () => {
+    describe('swaggger', () => {
+      describe('nullable', () => {
+        it('allows nullable', () => {
+          const ajv = new Ajv({ nullable: true })
+          const schema = S.object()
+            .prop('foo', S.raw({ nullable: true, type: 'string' }))
+            .valueOf()
+          const validate = ajv.compile(schema)
+          var valid = validate({
+            test: null,
+          })
+          expect(validate.errors).toEqual(null)
+          expect(valid).toBeTruthy()
+        })
+        it('allows nullable false', () => {
+          const ajv = new Ajv({ nullable: true })
+          const schema = S.object()
+            .prop('nullableKey', S.raw({ nullable: false, type: 'number' }))
+            .valueOf()
+          const validate = ajv.compile(schema)
+          var valid = validate({
+            nullableKey: null,
+          })
+          expect(validate.errors).toEqual([
+            {
+              dataPath: '.nullableKey',
+              keyword: 'type',
+              message: 'should be number',
+              params: { type: 'number' },
+              schemaPath: '#/properties/nullableKey/type',
+            },
+          ])
+          expect(valid).toBeFalsy()
+        })
+      })
+      describe('formatMaximum', () => {
+        it('checks custom keyword formatMaximum', () => {
+          const ajv = new Ajv()
+          require('ajv-keywords/keywords/formatMaximum')(ajv)
+          /*        const schema = S.string()
+            .raw({ nullable: false })
+            .valueOf()*/
+          // { type: 'number', nullable: true }
+          const schema = S.object()
+            .prop(
+              'birthday',
+              S.raw({
+                format: 'date',
+                formatMaximum: '2020-01-01',
+                type: 'string',
+              })
+            )
+            .valueOf()
+
+          const validate = ajv.compile(schema)
+          var valid = validate({
+            birthday: '2030-01-01',
+          })
+          expect(validate.errors).toEqual([
+            {
+              dataPath: '.birthday',
+              keyword: 'formatMaximum',
+              message: 'should be <= "2020-01-01"',
+              params: {
+                comparison: '<=',
+                exclusive: false,
+                limit: '2020-01-01',
+              },
+              schemaPath: '#/properties/birthday/formatMaximum',
+            },
+          ])
+          expect(valid).toBeFalsy()
+        })
+      })
+    })
+  })
 })

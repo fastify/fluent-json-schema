@@ -153,6 +153,18 @@ const setAttribute = ({ schema, ...options }, attribute) => {
   }
   return options.factory({ schema: { ...schema, [key]: value }, ...options })
 }
+
+const setRaw = ({ schema, ...options }, raw) => {
+  const currentProp = last(schema.properties)
+  if (currentProp) {
+    const { name, ...props } = currentProp
+    return options.factory({ schema, ...options }).prop(name, {
+      ...raw,
+      ...props,
+    })
+  }
+  return options.factory({ schema: { ...schema, ...raw }, ...options })
+}
 // TODO LS maybe we can just use setAttribute and remove this one
 const setComposeType = ({ prop, schemas, schema, options }) => {
   if (!(Array.isArray(schemas) && schemas.every(v => isFluentSchema(v)))) {
@@ -179,6 +191,7 @@ module.exports = {
   REQUIRED,
   patchIdsWithParentId,
   appendRequired,
+  setRaw,
   setAttribute,
   setComposeType,
   FORMATS,

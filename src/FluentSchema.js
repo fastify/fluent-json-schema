@@ -166,6 +166,7 @@ const S = (
 })
 
 module.exports = {
+  ...BaseSchema(),
   FORMATS,
   TYPES,
   withOptions: S,
@@ -204,5 +205,4 @@ module.exports = {
         return BaseSchema()
     }
   },
-  ...BaseSchema(),
 }

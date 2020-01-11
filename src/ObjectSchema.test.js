@@ -696,4 +696,17 @@ describe('ObjectSchema', () => {
       }).toThrow("Schema isn't FluentSchema type")
     })
   })
+
+  describe('raw', () => {
+    it('allows to add a custom attribute', () => {
+      const schema = ObjectSchema()
+        .raw({ customKeyword: true })
+        .valueOf()
+
+      expect(schema).toEqual({
+        type: 'object',
+        customKeyword: true,
+      })
+    })
+  })
 })

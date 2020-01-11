@@ -165,5 +165,18 @@ describe('ArraySchema', () => {
         ).toThrow("'maxItems' must be a integer")
       })
     })
+
+    describe('raw', () => {
+      it('allows to add a custom attribute', () => {
+        const schema = ArraySchema()
+          .raw({ customKeyword: true })
+          .valueOf()
+
+        expect(schema).toEqual({
+          type: 'array',
+          customKeyword: true,
+        })
+      })
+    })
   })
 })

@@ -331,6 +331,29 @@ describe('S', () => {
   })
 
   describe('raw', () => {
+    describe('base', () => {
+      it('parses type', () => {
+        const input = S.enum(['foo']).valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+
+      it('adds an attribute', () => {
+        const input = S.enum(['foo']).valueOf()
+        const schema = S.raw(input)
+        const attribute = 'title'
+        const modified = schema.title(attribute)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(modified.valueOf()).toEqual({
+          ...input,
+          title: attribute,
+        })
+      })
+    })
+
     describe('string', () => {
       it('parses type', () => {
         const input = S.string().valueOf()

@@ -34,6 +34,10 @@
       "pre-commit": "lint-staged"
     }
   },
+  "jest": {
+    "coverageReporters": ["text", "lcovonly"]
+  },
+
   "lint-staged": {
     "linters": {
       "*.{json,md,js,ts}": [

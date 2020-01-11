@@ -66,6 +66,16 @@ There are no restrictions placed on the values within the array.</p>
 <dd><p>There are no restrictions placed on the value of this keyword.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.2</a></p>
 </dd>
+<dt><a href="#readOnly">readOnly(isReadOnly)</a> ⇒ <code><a href="#BaseSchema">BaseSchema</a></code></dt>
+<dd><p>The value of readOnly can be left empty to indicate the property is readOnly.
+It takes an optional boolean which can be used to explicitly set readOnly true/false</p>
+<p><a href="#readOnly">https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3</a></p>
+</dd>
+<dt><a href="#writeOnly">writeOnly(isWriteOnly)</a> ⇒ <code><a href="#BaseSchema">BaseSchema</a></code></dt>
+<dd><p>The value of writeOnly can be left empty to indicate the property is writeOnly.
+It takes an optional boolean which can be used to explicitly set writeOnly true/false</p>
+<p><a href="#writeOnly">https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3</a></p>
+</dd>
 <dt><a href="#required">required()</a> ⇒ <code>FluentSchema</code></dt>
 <dd><p>Required has to be chained to a property:
 Examples:</p>
@@ -96,6 +106,15 @@ validation succeeds against this keyword if the instance also successfully valid
 <dt><a href="#ifThenElse">ifThenElse(ifClause, thenClause, elseClause)</a> ⇒ <code><a href="#BaseSchema">BaseSchema</a></code></dt>
 <dd><p>When &quot;if&quot; is present, and the instance fails to validate against its subschema,
 then validation succeeds against this keyword if the instance successfully validates against this keyword&#39;s subschema.</p>
+</dd>
+<dt><a href="#raw">raw(fragment)</a> ⇒ <code><a href="#BaseSchema">BaseSchema</a></code></dt>
+<dd><p>Because the differences between JSON Schemas and Open API (Swagger)
+it can be handy to arbitrary modify the schema injecting a fragment</p>
+<ul>
+<li>Examples:</li>
+<li>S.number().raw({ nullable:true })</li>
+<li>S.string().format(&#39;date&#39;).raw({ formatMaximum: &#39;2020-01-01&#39; })</li>
+</ul>
 </dd>
 <dt><a href="#valueOf">valueOf()</a> ⇒ <code><a href="#object">object</a></code></dt>
 <dd><p>It returns all the schema values</p>
@@ -464,6 +483,36 @@ There are no restrictions placed on the value of this keyword.
 | -------- |
 | defaults |
 
+<a name="readOnly"></a>
+
+## readOnly(isReadOnly) ⇒ [<code>BaseSchema</code>](#BaseSchema)
+
+The value of readOnly can be left empty to indicate the property is readOnly.
+It takes an optional boolean which can be used to explicitly set readOnly true/false
+
+[https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3](#readOnly)
+
+**Kind**: global function
+
+| Param      | Type                                                       |
+| ---------- | ---------------------------------------------------------- |
+| isReadOnly | [<code>boolean</code>](#boolean) \| <code>undefined</code> |
+
+<a name="writeOnly"></a>
+
+## writeOnly(isWriteOnly) ⇒ [<code>BaseSchema</code>](#BaseSchema)
+
+The value of writeOnly can be left empty to indicate the property is writeOnly.
+It takes an optional boolean which can be used to explicitly set writeOnly true/false
+
+[https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3](#writeOnly)
+
+**Kind**: global function
+
+| Param       | Type                                                       |
+| ----------- | ---------------------------------------------------------- |
+| isWriteOnly | [<code>boolean</code>](#boolean) \| <code>undefined</code> |
+
 <a name="required"></a>
 
 ## required() ⇒ <code>FluentSchema</code>
@@ -548,6 +597,24 @@ then validation succeeds against this keyword if the instance successfully valid
 | ifClause   | [<code>BaseSchema</code>](#BaseSchema) |                                                                                           |
 | thenClause | [<code>BaseSchema</code>](#BaseSchema) |                                                                                           |
 | elseClause | [<code>BaseSchema</code>](#BaseSchema) | [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.6.1](reference) |
+
+<a name="raw"></a>
+
+## raw(fragment) ⇒ [<code>BaseSchema</code>](#BaseSchema)
+
+Because the differences between JSON Schemas and Open API (Swagger)
+it can be handy to arbitrary modify the schema injecting a fragment
+
+- Examples:
+
+* S.number().raw({ nullable:true })
+* S.string().format('date').raw({ formatMaximum: '2020-01-01' })
+
+**Kind**: global function
+
+| Param    | Type                           | Description                                                                                                                  |
+| -------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| fragment | [<code>string</code>](#string) | an arbitrary JSON Schema to inject [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.3](reference) |
 
 <a name="valueOf"></a>
 

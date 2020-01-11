@@ -483,7 +483,7 @@ describe('S', () => {
     })
   })
 
-  describe.only('raw', () => {
+  describe('raw', () => {
     describe('swaggger', () => {
       describe('nullable', () => {
         it('allows nullable', () => {

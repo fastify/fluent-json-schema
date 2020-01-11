@@ -86,7 +86,7 @@ describe('MixedSchema', () => {
   })
 
   describe('raw', () => {
-    it.only('allows to add a custom attribute', () => {
+    it('allows to add a custom attribute', () => {
       const types = [S.TYPES.STRING, S.TYPES.NUMBER]
 
       const schema = S.mixed(types)

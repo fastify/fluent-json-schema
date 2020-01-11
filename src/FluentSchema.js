@@ -201,8 +201,17 @@ module.exports = {
         return ObjectSchema({ schema, factory: ObjectSchema })
       }
 
-      default:
-        return BaseSchema()
+      default: {
+        const { type, ...props } = json
+        const schema = {
+          ...props,
+        }
+
+        return BaseSchema({
+          schema,
+          factory: BaseSchema,
+        })
+      }
     }
   },
 }

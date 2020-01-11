@@ -54,6 +54,10 @@ const schema = S.object()
       .enum(Object.values(ROLES))
       .default(ROLES.USER)
   )
+  .prop(
+    'birthday',
+    S.raw({ type: 'string', format: 'date', formatMaximum: '2020-01-01' }) // formatMaximum is an AJV custom keywords
+  )
   .definition(
     'address',
     S.object()
@@ -119,6 +123,11 @@ Schema generated:
     "password": {
       "type": "string",
       "minLength": 8
+    },
+    "birthday": {
+      "type": "string",
+      "format": "date",
+      "formatMaximum": "2020-01-01"
     },
     "role": {
       "type": "string",

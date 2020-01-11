@@ -156,6 +156,15 @@ it can be handy to arbitrary modify the schema injecting a fragment</p>
 <dt><a href="#mixed">mixed(types)</a> ⇒ <code><a href="#MixedSchema">MixedSchema</a></code></dt>
 <dd><p>A mixed schema is the union of multiple types (e.g. [&#39;string&#39;, &#39;integer&#39;]</p>
 </dd>
+<dt><a href="#raw">raw(fragment)</a> ⇒ <code><a href="#BaseSchema">BaseSchema</a></code></dt>
+<dd><p>Because the differences between JSON Schemas and Open API (Swagger)
+it can be handy to arbitrary modify the schema injecting a fragment</p>
+<ul>
+<li>Examples:</li>
+<li>S.raw({ nullable:true, format: &#39;date&#39;, formatMaximum: &#39;2020-01-01&#39; })</li>
+<li>S.string().format(&#39;date&#39;).raw({ formatMaximum: &#39;2020-01-01&#39; })</li>
+</ul>
+</dd>
 <dt><a href="#IntegerSchema">IntegerSchema([options])</a> ⇒ <code><a href="#NumberSchema">NumberSchema</a></code></dt>
 <dd><p>Represents a NumberSchema.</p>
 </dd>
@@ -233,6 +242,9 @@ Note the property name that the schema is testing will always be a string.</p>
 <dd><p>The &quot;definitions&quot; keywords provides a standardized location for schema authors to inline re-usable JSON Schemas into a more general schema.
 There are no restrictions placed on the values within the array.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.9</a></p>
+</dd>
+<dt><a href="#RawSchema">RawSchema(schema)</a> ⇒ <code>FluentSchema</code></dt>
+<dd><p>Represents a raw JSON Schema that will be parsed</p>
 </dd>
 <dt><a href="#StringSchema">StringSchema([options])</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Represents a StringSchema.</p>
@@ -726,6 +738,24 @@ A mixed schema is the union of multiple types (e.g. ['string', 'integer']
 | ----- | -------------------------------------------- |
 | types | [<code>Array.&lt;string&gt;</code>](#string) |
 
+<a name="raw"></a>
+
+## raw(fragment) ⇒ [<code>BaseSchema</code>](#BaseSchema)
+
+Because the differences between JSON Schemas and Open API (Swagger)
+it can be handy to arbitrary modify the schema injecting a fragment
+
+- Examples:
+
+* S.raw({ nullable:true, format: 'date', formatMaximum: '2020-01-01' })
+* S.string().format('date').raw({ formatMaximum: '2020-01-01' })
+
+**Kind**: global function
+
+| Param    | Type                           | Description                                                                                                                  |
+| -------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| fragment | [<code>string</code>](#string) | an arbitrary JSON Schema to inject [https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.3](reference) |
+
 <a name="IntegerSchema"></a>
 
 ## IntegerSchema([options]) ⇒ [<code>NumberSchema</code>](#NumberSchema)
@@ -973,6 +1003,18 @@ There are no restrictions placed on the values within the array.
 | ----- | ------------------------------ |
 | name  | [<code>string</code>](#string) |
 | props | <code>FluentSchema</code>      |
+
+<a name="RawSchema"></a>
+
+## RawSchema(schema) ⇒ <code>FluentSchema</code>
+
+Represents a raw JSON Schema that will be parsed
+
+**Kind**: global function
+
+| Param  | Type                |
+| ------ | ------------------- |
+| schema | <code>Object</code> |
 
 <a name="StringSchema"></a>
 

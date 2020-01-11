@@ -21,6 +21,7 @@ export interface BaseSchema<T> {
   readOnly: (isReadOnly?: boolean) => T
   writeOnly: (isWriteOnly?: boolean) => T
   isFluentSchema: boolean
+  raw: (fragment: any) => JSONSchema
 }
 
 export type TYPE =
@@ -148,7 +149,7 @@ export interface S extends BaseSchema<S> {
   null: () => NullSchema
   //FIXME LS we should return only a MixedSchema
   mixed: <T>(types: TYPE[]) => MixedSchema<T> & any
-  raw: (json: any) => JSONSchema
+  raw: (fragment: any) => JSONSchema
 }
 
 declare var s: S

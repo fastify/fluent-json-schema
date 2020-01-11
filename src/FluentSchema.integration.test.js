@@ -498,27 +498,10 @@ describe('S', () => {
           expect(validate.errors).toEqual(null)
           expect(valid).toBeTruthy()
         })
-        it('allows nullable false', () => {
-          const ajv = new Ajv({ nullable: true })
-          const schema = S.object()
-            .prop('nullableKey', S.raw({ nullable: false, type: 'number' }))
-            .valueOf()
-          const validate = ajv.compile(schema)
-          var valid = validate({
-            nullableKey: null,
-          })
-          expect(validate.errors).toEqual([
-            {
-              dataPath: '.nullableKey',
-              keyword: 'type',
-              message: 'should be number',
-              params: { type: 'number' },
-              schemaPath: '#/properties/nullableKey/type',
-            },
-          ])
-          expect(valid).toBeFalsy()
-        })
       })
+    })
+
+    describe('ajv', () => {
       describe('formatMaximum', () => {
         it('checks custom keyword formatMaximum', () => {
           const ajv = new Ajv()

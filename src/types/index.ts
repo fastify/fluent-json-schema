@@ -11,8 +11,8 @@ const schema = S.object()
     'address',
     S.object()
       .id('#address')
-      .prop('line1')
-      .prop('line2', S.anyOf([S.string(), S.null()]))
+      .prop('line1', S.anyOf([S.string(), S.null()])) // JSON Schema nullable
+      .prop('line2', S.string().raw({ nullable: true })) // Open API / Swagger  nullable
       .prop('country')
       .allOf([S.string()])
       .prop('city')

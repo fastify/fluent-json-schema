@@ -387,6 +387,83 @@ describe('S', () => {
       })
     })
 
+    describe('number', () => {
+      it('parses type', () => {
+        const input = S.number().valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+
+      it('adds an attribute', () => {
+        const input = S.number().valueOf()
+        const schema = S.raw(input)
+        const modified = schema.maximum(3)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(modified.valueOf()).toEqual({
+          maximum: 3,
+          ...input,
+        })
+      })
+
+      it('parses a prop', () => {
+        const input = S.number()
+          .maximum(5)
+          .valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+    })
+
+    describe('integer', () => {
+      it('parses type', () => {
+        const input = S.integer().valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+
+      it('adds an attribute', () => {
+        const input = S.integer().valueOf()
+        const schema = S.raw(input)
+        const modified = schema.maximum(3)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(modified.valueOf()).toEqual({
+          maximum: 3,
+          ...input,
+        })
+      })
+
+      it('parses a prop', () => {
+        const input = S.integer()
+          .maximum(5)
+          .valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+    })
+
+    describe('boolean', () => {
+      it('parses type', () => {
+        const input = S.boolean().valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+    })
+
     describe('object', () => {
       it('parses type', () => {
         const input = S.object().valueOf()
@@ -422,6 +499,61 @@ describe('S', () => {
             ...input.properties,
             boom: {},
           },
+        })
+      })
+
+      it('parses definitions', () => {
+        const input = S.object()
+          .definition('foo', S.string())
+          .valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+    })
+
+    describe('array', () => {
+      it('parses type', () => {
+        const input = S.array()
+          .items(S.string())
+          .valueOf()
+        const schema = S.raw(input)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+        })
+      })
+
+      it('parses properties', () => {
+        const input = S.array()
+          .items(S.string())
+          .valueOf()
+
+        const schema = S.raw(input).maxItems(1)
+        expect(schema.isFluentSchema).toBeTruthy()
+        expect(schema.valueOf()).toEqual({
+          ...input,
+          maxItems: 1,
+        })
+      })
+
+      it('parses nested properties', () => {
+        const input = S.array()
+          .items(
+            S.object().prop(
+              'foo',
+              S.object().prop('bar', S.string().minLength(3))
+            )
+          )
+          .valueOf()
+        const schema = S.raw(input)
+        const modified = schema.maxItems(1)
+        expect(modified.isFluentSchema).toBeTruthy()
+        expect(modified.valueOf()).toEqual({
+          ...input,
+          maxItems: 1,
         })
       })
 

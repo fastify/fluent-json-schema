@@ -103,7 +103,7 @@ export interface ArraySchema extends BaseSchema<ArraySchema> {
   contains: (value: JSONSchema | boolean) => ArraySchema
   uniqueItems: (boolean: boolean) => ArraySchema
   minItems: (min: number) => ArraySchema
-  maxItems: (min: number) => ArraySchema
+  maxItems: (max: number) => ArraySchema
 }
 
 export interface ObjectSchema extends BaseSchema<ObjectSchema> {

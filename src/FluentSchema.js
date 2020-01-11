@@ -189,6 +189,32 @@ module.exports = {
         return StringSchema({ schema, factory: StringSchema })
       }
 
+      case 'integer': {
+        const { type, ...props } = json
+        const schema = {
+          type,
+          ...props,
+        }
+        return IntegerSchema({ schema, factory: NumberSchema })
+      }
+      case 'number': {
+        const { type, ...props } = json
+        const schema = {
+          type,
+          ...props,
+        }
+        return NumberSchema({ schema, factory: NumberSchema })
+      }
+
+      case 'boolean': {
+        const { type, ...props } = json
+        const schema = {
+          type,
+          ...props,
+        }
+        return BooleanSchema({ schema, factory: BooleanSchema })
+      }
+
       case 'object': {
         const { type, definitions, properties, required, ...props } = json
         const schema = {
@@ -199,6 +225,15 @@ module.exports = {
           ...props,
         }
         return ObjectSchema({ schema, factory: ObjectSchema })
+      }
+
+      case 'array': {
+        const { type, ...props } = json
+        const schema = {
+          type,
+          ...props,
+        }
+        return ArraySchema({ schema, factory: ArraySchema })
       }
 
       default: {

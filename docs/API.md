@@ -1,7 +1,7 @@
 ## Functions
 
 <dl>
-<dt><a href="#ArraySchema">ArraySchema([options])</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
+<dt><a href="#ArraySchema">ArraySchema([options])</a> ⇒ <code><a href="#ArraySchema">ArraySchema</a></code></dt>
 <dd><p>Represents a ArraySchema.</p>
 </dd>
 <dt><a href="#items">items(items)</a> ⇒ <code>FluentSchema</code></dt>
@@ -65,6 +65,16 @@ There are no restrictions placed on the values within the array.</p>
 <dt><a href="#default">default(defaults)</a> ⇒ <code><a href="#BaseSchema">BaseSchema</a></code></dt>
 <dd><p>There are no restrictions placed on the value of this keyword.</p>
 <p><a href="reference">https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.2</a></p>
+</dd>
+<dt><a href="#readOnly">readOnly(isReadOnly)</a> ⇒ <code><a href="#BaseSchema">BaseSchema</a></code></dt>
+<dd><p>The value of readOnly can be left empty to indicate the property is readOnly.
+It takes an optional boolean which can be used to explicitly set readOnly true/false</p>
+<p><a href="#readOnly">https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3</a></p>
+</dd>
+<dt><a href="#writeOnly">writeOnly(isWriteOnly)</a> ⇒ <code><a href="#BaseSchema">BaseSchema</a></code></dt>
+<dd><p>The value of writeOnly can be left empty to indicate the property is writeOnly.
+It takes an optional boolean which can be used to explicitly set writeOnly true/false</p>
+<p><a href="#writeOnly">https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3</a></p>
 </dd>
 <dt><a href="#required">required()</a> ⇒ <code>FluentSchema</code></dt>
 <dd><p>Required has to be chained to a property:
@@ -246,7 +256,7 @@ The length of a string instance is defined as the number of its characters as de
 
 <a name="ArraySchema"></a>
 
-## ArraySchema([options]) ⇒ [<code>StringSchema</code>](#StringSchema)
+## ArraySchema([options]) ⇒ [<code>ArraySchema</code>](#ArraySchema)
 
 Represents a ArraySchema.
 
@@ -464,6 +474,36 @@ There are no restrictions placed on the value of this keyword.
 | -------- |
 | defaults |
 
+<a name="readOnly"></a>
+
+## readOnly(isReadOnly) ⇒ [<code>BaseSchema</code>](#BaseSchema)
+
+The value of readOnly can be left empty to indicate the property is readOnly.
+It takes an optional boolean which can be used to explicitly set readOnly true/false
+
+[https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3](#readOnly)
+
+**Kind**: global function
+
+| Param      | Type                                                       |
+| ---------- | ---------------------------------------------------------- |
+| isReadOnly | [<code>boolean</code>](#boolean) \| <code>undefined</code> |
+
+<a name="writeOnly"></a>
+
+## writeOnly(isWriteOnly) ⇒ [<code>BaseSchema</code>](#BaseSchema)
+
+The value of writeOnly can be left empty to indicate the property is writeOnly.
+It takes an optional boolean which can be used to explicitly set writeOnly true/false
+
+[https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3](#writeOnly)
+
+**Kind**: global function
+
+| Param       | Type                                                       |
+| ----------- | ---------------------------------------------------------- |
+| isWriteOnly | [<code>boolean</code>](#boolean) \| <code>undefined</code> |
+
 <a name="required"></a>
 
 ## required() ⇒ <code>FluentSchema</code>
@@ -655,9 +695,9 @@ A mixed schema is the union of multiple types (e.g. ['string', 'integer']
 
 **Kind**: global function
 
-| Param | Type                                         |
-| ----- | -------------------------------------------- |
-| types | [<code>Array.&lt;string&gt;</code>](#string) |
+| Param | Type                                                         |
+| ----- | ------------------------------------------------------------ |
+| types | [<code>[ &#x27;Array&#x27; ].&lt;string&gt;</code>](#string) |
 
 <a name="IntegerSchema"></a>
 

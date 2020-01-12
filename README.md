@@ -311,8 +311,8 @@ console.log(schema.isFluentSchema) // true
 
 ## Documentation
 
-[API Doc](./docs/API.md).
-[JSON schema reference](https://json-schema.org/latest/json-schema-validation.html):
+- [Full API Documentation](./docs/API.md).
+- [JSON schema reference](https://json-schema.org/latest/json-schema-validation.html).
 
 ## Acknowledgments
 

@@ -15,7 +15,7 @@ const initialState = {
  * @param {Object} [options] - Options
  * @param {StringSchema} [options.schema] - Default schema
  * @param {boolean} [options.generateIds = false] - generate the id automatically e.g. #properties.foo
- * @returns {StringSchema}
+ * @returns {ArraySchema}
  */
 // https://medium.com/javascript-scene/javascript-factory-functions-with-es6-4d224591a8b1
 // Factory Functions for Mixin Composition withBaseSchema

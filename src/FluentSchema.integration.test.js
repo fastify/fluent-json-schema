@@ -540,6 +540,38 @@ describe('S', () => {
           ])
           expect(valid).toBeFalsy()
         })
+        it('checks custom keyword larger with $data', () => {
+          const ajv = new Ajv({ $data: true })
+          require('ajv-keywords/keywords/formatMaximum')(ajv)
+          /*        const schema = S.string()
+            .raw({ nullable: false })
+            .valueOf()*/
+          // { type: 'number', nullable: true }
+          const schema = S.object()
+            .prop('smaller', S.number().raw({ maximum: { $data: '1/larger' } }))
+            .prop('larger', S.number())
+            .valueOf()
+
+          const validate = ajv.compile(schema)
+          var valid = validate({
+            smaller: 10,
+            larger: 7,
+          })
+          expect(validate.errors).toEqual([
+            {
+              dataPath: '.smaller',
+              keyword: 'maximum',
+              message: 'should be <= 7',
+              params: {
+                comparison: '<=',
+                exclusive: false,
+                limit: 7,
+              },
+              schemaPath: '#/properties/smaller/maximum',
+            },
+          ])
+          expect(valid).toBeFalsy()
+        })
       })
     })
 

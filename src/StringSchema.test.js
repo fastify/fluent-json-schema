@@ -155,6 +155,31 @@ describe('StringSchema', () => {
         )
       })
     })
+
+    describe('raw', () => {
+      it('allows to add a custom attribute', () => {
+        const schema = StringSchema()
+          .raw({ customKeyword: true })
+          .valueOf()
+
+        expect(schema).toEqual({
+          type: 'string',
+          customKeyword: true,
+        })
+      })
+      it('allows to mix custom attibutes with regular one', () => {
+        const schema = StringSchema()
+          .format('date')
+          .raw({ formatMaximum: '2020-01-01' })
+          .valueOf()
+
+        expect(schema).toEqual({
+          type: 'string',
+          formatMaximum: '2020-01-01',
+          format: 'date',
+        })
+      })
+    })
   })
 
   it('works', () => {

@@ -31,4 +31,17 @@ describe('BooleanSchema', () => {
         .valueOf().properties.prop.type
     ).toEqual('boolean')
   })
+
+  describe('raw', () => {
+    it('allows to add a custom attribute', () => {
+      const schema = BooleanSchema()
+        .raw({ customKeyword: true })
+        .valueOf()
+
+      expect(schema).toEqual({
+        type: 'boolean',
+        customKeyword: true,
+      })
+    })
+  })
 })

@@ -84,4 +84,20 @@ describe('MixedSchema', () => {
       type: 'object',
     })
   })
+
+  describe('raw', () => {
+    it('allows to add a custom attribute', () => {
+      const types = [S.TYPES.STRING, S.TYPES.NUMBER]
+
+      const schema = S.mixed(types)
+        .raw({ customKeyword: true })
+        .valueOf()
+
+      expect(schema).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: ['string', 'number'],
+        customKeyword: true,
+      })
+    })
+  })
 })

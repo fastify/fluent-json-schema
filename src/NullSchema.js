@@ -20,9 +20,10 @@ const NullSchema = ({ schema = initialState, ...options } = {}) => {
     factory: NullSchema,
     ...options,
   }
-  const { valueOf } = BaseSchema({ ...options, schema })
+  const { valueOf, raw } = BaseSchema({ ...options, schema })
   return {
     valueOf,
+    raw,
     [FLUENT_SCHEMA]: true,
     isFluentSchema: true,
 

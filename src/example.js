@@ -29,12 +29,16 @@ const schema = S.object()
       .enum(Object.values(ROLES))
       .default(ROLES.USER)
   )
+  .prop(
+    'birthday',
+    S.raw({ type: 'string', format: 'date', formatMaximum: '2020-01-01' }) // formatMaximum is an AJV custom keywords
+  )
   .definition(
     'address',
     S.object()
       .id('#address')
-      .prop('line1', S.string())
-      .prop('line2', S.anyOf([S.string(), S.null()]))
+      .prop('line1', S.anyOf([S.string(), S.null()])) // JSON Schema nullable
+      .prop('line2', S.string().raw({ nullable: true })) // Open API / Swagger  nullable
       .prop('country', S.string())
       .prop('city', S.string())
       .prop('zipcode', S.string())

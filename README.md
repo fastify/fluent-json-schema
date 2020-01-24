@@ -54,12 +54,16 @@ const schema = S.object()
       .enum(Object.values(ROLES))
       .default(ROLES.USER)
   )
+  .prop(
+    'birthday',
+    S.raw({ type: 'string', format: 'date', formatMaximum: '2020-01-01' }) // formatMaximum is an AJV custom keywords
+  )
   .definition(
     'address',
     S.object()
       .id('#address')
-      .prop('line1', S.string())
-      .prop('line2', S.anyOf([S.string(), S.null()]))
+      .prop('line1', S.anyOf([S.string(), S.null()])) // JSON Schema nullable
+      .prop('line2', S.string().raw({ nullable: true })) // Open API / Swagger  nullable
       .prop('country', S.string())
       .prop('city', S.string())
       .prop('zipcode', S.string())
@@ -81,9 +85,6 @@ Schema generated:
       "$id": "#address",
       "properties": {
         "line1": {
-          "type": "string"
-        },
-        "line2": {
           "anyOf": [
             {
               "type": "string"
@@ -92,6 +93,10 @@ Schema generated:
               "type": "null"
             }
           ]
+        },
+        "line2": {
+          "type": "string",
+          "nullable": true
         },
         "country": {
           "type": "string"
@@ -119,10 +124,15 @@ Schema generated:
       "type": "string",
       "minLength": 8
     },
+    "birthday": {
+      "type": "string",
+      "format": "date",
+      "formatMaximum": "2020-01-01"
+    },
     "role": {
+      "type": "string",
       "enum": ["ADMIN", "USER"],
-      "default": "USER",
-      "type": "string"
+      "default": "USER"
     },
     "address": {
       "$ref": "#address"

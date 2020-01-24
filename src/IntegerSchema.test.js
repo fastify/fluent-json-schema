@@ -177,6 +177,19 @@ describe('IntegerSchema', () => {
     })
   })
 
+  describe('raw', () => {
+    it('allows to add a custom attribute', () => {
+      const schema = IntegerSchema()
+        .raw({ customKeyword: true })
+        .valueOf()
+
+      expect(schema).toEqual({
+        type: 'integer',
+        customKeyword: true,
+      })
+    })
+  })
+
   it('works', () => {
     const schema = S.object()
       .id('http://foo.com/user')

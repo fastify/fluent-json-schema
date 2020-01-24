@@ -1,5 +1,4 @@
 'use strict'
-const merge = require('deepmerge')
 
 const { FORMATS, TYPES } = require('./utils')
 
@@ -12,6 +11,7 @@ const { IntegerSchema } = require('./IntegerSchema')
 const { ObjectSchema } = require('./ObjectSchema')
 const { ArraySchema } = require('./ArraySchema')
 const { MixedSchema } = require('./MixedSchema')
+const { RawSchema } = require('./RawSchema')
 
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -163,9 +163,27 @@ const S = (
       factory: MixedSchema,
     })
   },
+
+  /**
+   * Because the differences between JSON Schemas and Open API (Swagger)
+   * it can be handy to arbitrary modify the schema injecting a fragment
+   *
+   * * Examples:
+   * - S.raw({ nullable:true, format: 'date', formatMaximum: '2020-01-01' })
+   * - S.string().format('date').raw({ formatMaximum: '2020-01-01' })
+   *
+   * @param {string} fragment an arbitrary JSON Schema to inject
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.3}
+   * @returns {BaseSchema}
+   */
+
+  raw: fragment => {
+    return RawSchema(fragment)
+  },
 })
 
 module.exports = {
+  ...BaseSchema(),
   FORMATS,
   TYPES,
   withOptions: S,
@@ -177,5 +195,5 @@ module.exports = {
   integer: () => S().integer(),
   number: () => S().number(),
   null: () => S().null(),
-  ...BaseSchema(),
+  raw: fragment => S().raw(fragment),
 }

@@ -570,4 +570,18 @@ describe('BaseSchema', () => {
       })
     })
   })
+
+  describe('raw', () => {
+    it('allows to add a custom attribute', () => {
+      const schema = BaseSchema()
+        .title('foo')
+        .raw({ customKeyword: true })
+        .valueOf()
+
+      expect(schema).toEqual({
+        title: 'foo',
+        customKeyword: true,
+      })
+    })
+  })
 })

@@ -7,6 +7,7 @@ const {
   patchIdsWithParentId,
   REQUIRED,
   setAttribute,
+  setRaw,
   setComposeType,
   FLUENT_SCHEMA,
 } = require('./utils')
@@ -359,6 +360,22 @@ const BaseSchema = (
       },
       ...options,
     })
+  },
+
+  /**
+   * Because the differences between JSON Schemas and Open API (Swagger)
+   * it can be handy to arbitrary modify the schema injecting a fragment
+   *
+   * * Examples:
+   * - S.number().raw({ nullable:true })
+   * - S.string().format('date').raw({ formatMaximum: '2020-01-01' })
+   *
+   * @param {string} fragment an arbitrary JSON Schema to inject
+   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.3}
+   * @returns {BaseSchema}
+   */
+  raw: fragment => {
+    return setRaw({ schema, ...options }, fragment)
   },
 
   /**

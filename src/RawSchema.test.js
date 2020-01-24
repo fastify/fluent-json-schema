@@ -31,6 +31,12 @@ describe('RawSchema', () => {
         title: attribute,
       })
     })
+
+    it("throws an exception if the input isn't an object", () => {
+      expect(() => RawSchema('boom!')).toThrow(
+        'A fragment must be a JSON object'
+      )
+    })
   })
 
   describe('string', () => {

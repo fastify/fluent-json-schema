@@ -18,6 +18,9 @@ const { toArray } = require('./utils')
  */
 
 const RawSchema = (schema = {}) => {
+  if (typeof schema !== 'object') {
+    throw new Error('A fragment must be a JSON object')
+  }
   const { type, definitions, properties, required, ...props } = schema
   switch (schema.type) {
     case 'string': {

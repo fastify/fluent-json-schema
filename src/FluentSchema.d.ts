@@ -153,4 +153,4 @@ export interface S extends BaseSchema<S> {
 }
 
 declare var s: S
-export = s
+export default s

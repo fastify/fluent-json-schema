@@ -1,4 +1,4 @@
-const S = require('..')
+const S = require('./FluentSchema')
 
 describe('S', () => {
   it('defined', () => {

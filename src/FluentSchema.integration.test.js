@@ -1,5 +1,5 @@
 const basic = require('./schemas/basic')
-const S = require('..')
+const S = require('./FluentSchema')
 const Ajv = require('ajv')
 
 // TODO pick some ideas from here:https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/master/tests/draft7

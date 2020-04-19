@@ -47,7 +47,10 @@ const schema = S.object()
       .prop('permissions')
   )
   .required()
-  .prop('age', S.mixed<NumberSchema & StringSchema>(['string', 'integer']))
+  .prop(
+    'age',
+    S.mixed<NumberSchema & StringSchema>(['string', 'integer'])
+  )
   .ifThen(S.object().prop('age', S.string()), S.required(['age']))
   .readOnly()
   .writeOnly(true)

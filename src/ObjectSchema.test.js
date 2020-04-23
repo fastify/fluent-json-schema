@@ -289,6 +289,31 @@ describe('ObjectSchema', () => {
           })
         })
       })
+      describe('invalid', () => {
+        it('throws an error passing a string as value', () => {
+          expect(() => {
+            ObjectSchema().prop('prop', 'invalid')
+          }).toThrow(
+            "'prop' doesn't support value '\"invalid\"'. Pass a FluentSchema object"
+          )
+        })
+
+        it('throws an error passing a number as value', () => {
+          expect(() => {
+            ObjectSchema().prop('prop', 555)
+          }).toThrow(
+            "'prop' doesn't support value '555'. Pass a FluentSchema object"
+          )
+        })
+
+        it('throws an error passing an array as value', () => {
+          expect(() => {
+            ObjectSchema().prop('prop', [])
+          }).toThrow(
+            "'prop' doesn't support value '[]'. Pass a FluentSchema object"
+          )
+        })
+      })
     })
 
     describe('additionalProperties', () => {

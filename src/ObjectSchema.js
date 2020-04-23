@@ -192,6 +192,12 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     prop: (name, props = {}) => {
+      if (Array.isArray(props) || typeof props !== 'object')
+        throw new Error(
+          `'${name}' doesn't support value '${JSON.stringify(
+            props
+          )}'. Pass a FluentSchema object`
+        )
       const target = props.def ? 'definitions' : 'properties'
       let attributes = props.valueOf()
       const $id =

@@ -1,6 +1,6 @@
 'use strict'
 const { BaseSchema } = require('./BaseSchema')
-const { last, FORMATS, setAttribute } = require('./utils')
+const { FORMATS, setAttribute } = require('./utils')
 
 const initialState = {
   type: 'string',

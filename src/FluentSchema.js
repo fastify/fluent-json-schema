@@ -182,7 +182,7 @@ const S = (
   },
 })
 
-module.exports = {
+const fluentSchema = {
   ...BaseSchema(),
   FORMATS,
   TYPES,
@@ -197,3 +197,5 @@ module.exports = {
   null: () => S().null(),
   raw: fragment => S().raw(fragment),
 }
+module.exports = fluentSchema
+module.exports.default = fluentSchema

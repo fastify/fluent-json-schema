@@ -59,6 +59,10 @@ export type JSONSchema =
   | BooleanSchema
   | NullSchema
 
+export class FluentSchemaError extends Error {
+  name: string
+}
+
 export interface SchemaOptions {
   schema: object
   generateIds: boolean

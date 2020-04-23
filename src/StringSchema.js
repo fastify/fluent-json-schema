@@ -1,6 +1,6 @@
 'use strict'
 const { BaseSchema } = require('./BaseSchema')
-const { FORMATS, setAttribute } = require('./utils')
+const { FORMATS, setAttribute, FluentSchemaError } = require('./utils')
 
 const initialState = {
   type: 'string',
@@ -45,7 +45,7 @@ const StringSchema = (
 
   minLength: min => {
     if (!Number.isInteger(min))
-      throw new Error("'minLength' must be an Integer")
+      throw new FluentSchemaError("'minLength' must be an Integer")
     return setAttribute({ schema, ...options }, ['minLength', min, 'string'])
   },
 
@@ -60,7 +60,7 @@ const StringSchema = (
 
   maxLength: max => {
     if (!Number.isInteger(max))
-      throw new Error("'maxLength' must be an Integer")
+      throw new FluentSchemaError("'maxLength' must be an Integer")
     return setAttribute({ schema, ...options }, ['maxLength', max, 'string'])
   },
 
@@ -74,7 +74,7 @@ const StringSchema = (
 
   format: format => {
     if (!Object.values(FORMATS).includes(format))
-      throw new Error(
+      throw new FluentSchemaError(
         `'format' must be one of ${Object.values(FORMATS).join(', ')}`
       )
     return setAttribute({ schema, ...options }, ['format', format, 'string'])
@@ -90,7 +90,9 @@ const StringSchema = (
    */
   pattern: pattern => {
     if (!(typeof pattern === 'string') && !(pattern instanceof RegExp))
-      throw new Error(`'pattern' must be a string or a RegEx (e.g. /.*/)`)
+      throw new FluentSchemaError(
+        `'pattern' must be a string or a RegEx (e.g. /.*/)`
+      )
 
     if (pattern instanceof RegExp) {
       const flags = new RegExp(pattern).flags
@@ -115,7 +117,7 @@ const StringSchema = (
 
   contentEncoding: encoding => {
     if (!(typeof encoding === 'string'))
-      throw new Error(`'contentEncoding' must be a string`)
+      throw new FluentSchemaError(`'contentEncoding' must be a string`)
     return setAttribute({ schema, ...options }, [
       'contentEncoding',
       encoding,
@@ -134,7 +136,7 @@ const StringSchema = (
 
   contentMediaType: mediaType => {
     if (!(typeof mediaType === 'string'))
-      throw new Error(`'contentMediaType' must be a string`)
+      throw new FluentSchemaError(`'contentMediaType' must be a string`)
     return setAttribute({ schema, ...options }, [
       'contentMediaType',
       mediaType,

@@ -51,8 +51,10 @@ describe('MixedSchema', () => {
       const types = ''
       expect(() => {
         S.mixed(types)
-      }).toThrow(
-        "Invalid 'types'. It must be an array of types. Valid types are string | number | boolean | integer | object | array | null"
+      }).toThrowError(
+        new S.FluentSchemaError(
+          "Invalid 'types'. It must be an array of types. Valid types are string | number | boolean | integer | object | array | null"
+        )
       )
     })
 
@@ -60,8 +62,10 @@ describe('MixedSchema', () => {
       const types = ['string', 'invalid']
       expect(() => {
         S.mixed(types)
-      }).toThrow(
-        "Invalid 'types'. It must be an array of types. Valid types are string | number | boolean | integer | object | array | null"
+      }).toThrowError(
+        new S.FluentSchemaError(
+          "Invalid 'types'. It must be an array of types. Valid types are string | number | boolean | integer | object | array | null"
+        )
       )
     })
   })

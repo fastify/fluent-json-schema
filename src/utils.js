@@ -5,6 +5,13 @@ const isFluentSchema = obj => obj && obj.isFluentSchema
 const hasCombiningKeywords = attributes =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
 
+class FluentSchemaError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'FluentSchemaError'
+  }
+}
+
 const last = array => {
   if (!array) return
   const [prop] = [...array].reverse()
@@ -168,7 +175,7 @@ const setRaw = ({ schema, ...options }, raw) => {
 // TODO LS maybe we can just use setAttribute and remove this one
 const setComposeType = ({ prop, schemas, schema, options }) => {
   if (!(Array.isArray(schemas) && schemas.every(v => isFluentSchema(v)))) {
-    throw new Error(
+    throw new FluentSchemaError(
       `'${prop}' must be a an array of FluentSchema rather than a '${typeof schemas}'`
     )
   }
@@ -184,6 +191,7 @@ const setComposeType = ({ prop, schemas, schema, options }) => {
 module.exports = {
   isFluentSchema,
   hasCombiningKeywords,
+  FluentSchemaError,
   last,
   flat,
   toArray,

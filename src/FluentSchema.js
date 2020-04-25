@@ -1,6 +1,6 @@
 'use strict'
 
-const { FORMATS, TYPES } = require('./utils')
+const { FORMATS, TYPES, FluentSchemaError } = require('./utils')
 
 const { BaseSchema } = require('./BaseSchema')
 const { NullSchema } = require('./NullSchema')
@@ -147,7 +147,7 @@ const S = (
       (Array.isArray(types) &&
         types.filter(t => !Object.values(TYPES).includes(t)).length > 0)
     ) {
-      throw new Error(
+      throw new FluentSchemaError(
         `Invalid 'types'. It must be an array of types. Valid types are ${Object.values(
           TYPES
         ).join(' | ')}`
@@ -186,6 +186,7 @@ const fluentSchema = {
   ...BaseSchema(),
   FORMATS,
   TYPES,
+  FluentSchemaError,
   withOptions: S,
   string: () => S().string(),
   mixed: types => S().mixed(types),

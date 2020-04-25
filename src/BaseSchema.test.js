@@ -71,8 +71,10 @@ describe('BaseSchema', () => {
       it('invalid', () => {
         expect(() => {
           BaseSchema().id('')
-        }).toThrow(
-          'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
+        }).toThrowError(
+          new S.FluentSchemaError(
+            'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
+          )
         )
       })
     })
@@ -116,7 +118,11 @@ describe('BaseSchema', () => {
             BaseSchema()
               .examples(value)
               .valueOf().examples
-        ).toThrow("'examples' must be an array e.g. ['1', 'one', 'foo']")
+        ).toThrowError(
+          new S.FluentSchemaError(
+            "'examples' must be an array e.g. ['1', 'one', 'foo']"
+          )
+        )
       })
     })
 
@@ -185,8 +191,10 @@ describe('BaseSchema', () => {
             BaseSchema()
               .enum(value)
               .valueOf().examples
-        ).toThrow(
-          "'enums' must be an array with at least an element e.g. ['1', 'one', 'foo']"
+        ).toThrowError(
+          new S.FluentSchemaError(
+            "'enums' must be an array with at least an element e.g. ['1', 'one', 'foo']"
+          )
         )
       })
     })
@@ -300,15 +308,19 @@ describe('BaseSchema', () => {
         it('not an array', () => {
           expect(() => {
             return BaseSchema().allOf('test')
-          }).toThrow(
-            "'allOf' must be a an array of FluentSchema rather than a 'string'"
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'allOf' must be a an array of FluentSchema rather than a 'string'"
+            )
           )
         })
         it('not an array of FluentSchema', () => {
           expect(() => {
             return BaseSchema().allOf(['test'])
-          }).toThrow(
-            "'allOf' must be a an array of FluentSchema rather than a 'object'"
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'allOf' must be a an array of FluentSchema rather than a 'object'"
+            )
           )
         })
       })
@@ -355,15 +367,19 @@ describe('BaseSchema', () => {
         it('not an array', () => {
           expect(() => {
             return BaseSchema().anyOf('test')
-          }).toThrow(
-            "'anyOf' must be a an array of FluentSchema rather than a 'string'"
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'anyOf' must be a an array of FluentSchema rather than a 'string'"
+            )
           )
         })
         it('not an array of FluentSchema', () => {
           expect(() => {
             return BaseSchema().anyOf(['test'])
-          }).toThrow(
-            "'anyOf' must be a an array of FluentSchema rather than a 'object'"
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'anyOf' must be a an array of FluentSchema rather than a 'object'"
+            )
           )
         })
       })
@@ -383,15 +399,19 @@ describe('BaseSchema', () => {
         it('not an array', () => {
           expect(() => {
             return BaseSchema().oneOf('test')
-          }).toThrow(
-            "'oneOf' must be a an array of FluentSchema rather than a 'string'"
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'oneOf' must be a an array of FluentSchema rather than a 'string'"
+            )
           )
         })
         it('not an array of FluentSchema', () => {
           expect(() => {
             return BaseSchema().oneOf(['test'])
-          }).toThrow(
-            "'oneOf' must be a an array of FluentSchema rather than a 'object'"
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'oneOf' must be a an array of FluentSchema rather than a 'object'"
+            )
           )
         })
       })
@@ -425,7 +445,7 @@ describe('BaseSchema', () => {
       it('invalid', () => {
         expect(() => {
           BaseSchema().not(undefined)
-        }).toThrow("'not' must be a BaseSchema")
+        }).toThrowError(new S.FluentSchemaError("'not' must be a BaseSchema"))
       })
     })
   })
@@ -480,12 +500,16 @@ describe('BaseSchema', () => {
             undefined,
             BaseSchema().description('A User desc')
           )
-        }).toThrow("'ifClause' must be a BaseSchema")
+        }).toThrowError(
+          new S.FluentSchemaError("'ifClause' must be a BaseSchema")
+        )
       })
       it('thenClause', () => {
         expect(() => {
           BaseSchema().ifThen(BaseSchema().id('id'), undefined)
-        }).toThrow("'thenClause' must be a BaseSchema")
+        }).toThrowError(
+          new S.FluentSchemaError("'thenClause' must be a BaseSchema")
+        )
       })
     })
   })
@@ -547,7 +571,9 @@ describe('BaseSchema', () => {
               BaseSchema().description('then'),
               BaseSchema().description('else')
             )
-          }).toThrow("'ifClause' must be a BaseSchema")
+          }).toThrowError(
+            new S.FluentSchemaError("'ifClause' must be a BaseSchema")
+          )
         })
         it('thenClause', () => {
           expect(() => {
@@ -556,7 +582,9 @@ describe('BaseSchema', () => {
               undefined,
               BaseSchema().description('else')
             )
-          }).toThrow("'thenClause' must be a BaseSchema")
+          }).toThrowError(
+            new S.FluentSchemaError("'thenClause' must be a BaseSchema")
+          )
         })
         it('elseClause', () => {
           expect(() => {
@@ -565,7 +593,11 @@ describe('BaseSchema', () => {
               BaseSchema().description('then'),
               undefined
             )
-          }).toThrow("'elseClause' must be a BaseSchema")
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'elseClause' must be a BaseSchema or a false boolean value"
+            )
+          )
         })
       })
     })

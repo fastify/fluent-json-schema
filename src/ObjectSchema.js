@@ -8,6 +8,7 @@ const {
   hasCombiningKeywords,
   patchIdsWithParentId,
   appendRequired,
+  FluentSchemaError,
 } = require('./utils')
 
 const initialState = {
@@ -64,7 +65,9 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         ])
       }
 
-      throw new Error("'additionalProperties' must be a boolean or a S")
+      throw new FluentSchemaError(
+        "'additionalProperties' must be a boolean or a S"
+      )
     },
 
     /**
@@ -77,7 +80,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
     maxProperties: max => {
       if (!Number.isInteger(max))
-        throw new Error("'maxProperties' must be a Integer")
+        throw new FluentSchemaError("'maxProperties' must be a Integer")
       return setAttribute({ schema, ...options }, [
         'maxProperties',
         max,
@@ -95,7 +98,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
     minProperties: min => {
       if (!Number.isInteger(min))
-        throw new Error("'minProperties' must be a Integer")
+        throw new FluentSchemaError("'minProperties' must be a Integer")
       return setAttribute({ schema, ...options }, [
         'minProperties',
         min,
@@ -118,7 +121,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     patternProperties: opts => {
       const values = Object.entries(opts).reduce((memo, [pattern, schema]) => {
         if (!isFluentSchema(schema))
-          throw new Error(
+          throw new FluentSchemaError(
             "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': S.string() }"
           )
         return {
@@ -147,7 +150,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     dependencies: opts => {
       const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
         if (!isFluentSchema(schema) && !Array.isArray(schema))
-          throw new Error(
+          throw new FluentSchemaError(
             "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': S.string() }"
           )
         return {
@@ -174,7 +177,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     propertyNames: value => {
-      if (!isFluentSchema(value)) throw new Error("'propertyNames' must be a S")
+      if (!isFluentSchema(value))
+        throw new FluentSchemaError("'propertyNames' must be a S")
       return setAttribute({ schema, ...options }, [
         'propertyNames',
         omit(value.valueOf(), ['$schema']),
@@ -192,6 +196,12 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     prop: (name, props = {}) => {
+      if (Array.isArray(props) || typeof props !== 'object')
+        throw new FluentSchemaError(
+          `'${name}' doesn't support value '${JSON.stringify(
+            props
+          )}'. Pass a FluentSchema object`
+        )
       const target = props.def ? 'definitions' : 'properties'
       let attributes = props.valueOf()
       const $id =
@@ -249,10 +259,10 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
     extend: base => {
       if (!base) {
-        throw new Error("Schema can't be null or undefined")
+        throw new FluentSchemaError("Schema can't be null or undefined")
       }
       if (!base.isFluentSchema) {
-        throw new Error("Schema isn't FluentSchema type")
+        throw new FluentSchemaError("Schema isn't FluentSchema type")
       }
       const state = base._getState()
       const extended = merge(state, schema)

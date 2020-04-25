@@ -48,8 +48,8 @@ describe('ArraySchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => ArraySchema().items('')).toThrow(
-          "'items' must be a S or an array of S"
+        expect(() => ArraySchema().items('')).toThrowError(
+          new S.FluentSchemaError("'items' must be a S or an array of S")
         )
       })
     })
@@ -80,8 +80,8 @@ describe('ArraySchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => ArraySchema().additionalItems('')).toThrow(
-          "'additionalItems' must be a boolean or a S"
+        expect(() => ArraySchema().additionalItems('')).toThrowError(
+          new S.FluentSchemaError("'additionalItems' must be a boolean or a S")
         )
       })
     })
@@ -102,7 +102,7 @@ describe('ArraySchema', () => {
           ArraySchema()
             .contains('')
             .valueOf()
-        ).toThrow("'contains' must be a S")
+        ).toThrowError(new S.FluentSchemaError("'contains' must be a S"))
       })
     })
 
@@ -122,7 +122,9 @@ describe('ArraySchema', () => {
           ArraySchema()
             .uniqueItems('invalid')
             .valueOf()
-        ).toThrow("'uniqueItems' must be a boolean")
+        ).toThrowError(
+          new S.FluentSchemaError("'uniqueItems' must be a boolean")
+        )
       })
     })
 
@@ -142,7 +144,7 @@ describe('ArraySchema', () => {
           ArraySchema()
             .minItems('3')
             .valueOf()
-        ).toThrow("'minItems' must be a integer")
+        ).toThrowError(new S.FluentSchemaError("'minItems' must be a integer"))
       })
     })
 
@@ -162,7 +164,7 @@ describe('ArraySchema', () => {
           ArraySchema()
             .maxItems('5')
             .valueOf()
-        ).toThrow("'maxItems' must be a integer")
+        ).toThrowError(new S.FluentSchemaError("'maxItems' must be a integer"))
       })
     })
 

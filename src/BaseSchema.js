@@ -9,6 +9,7 @@ const {
   setAttribute,
   setRaw,
   setComposeType,
+  FluentSchemaError,
   FLUENT_SCHEMA,
 } = require('./utils')
 
@@ -44,7 +45,7 @@ const BaseSchema = (
 
   id: id => {
     if (!id)
-      throw new Error(
+      throw new FluentSchemaError(
         `id should not be an empty fragment <#> or an empty string <> (e.g. #myId)`
       )
     return setAttribute({ schema, ...options }, ['$id', id, 'any'])
@@ -90,7 +91,9 @@ const BaseSchema = (
 
   examples: examples => {
     if (!Array.isArray(examples))
-      throw new Error("'examples' must be an array e.g. ['1', 'one', 'foo']")
+      throw new FluentSchemaError(
+        "'examples' must be an array e.g. ['1', 'one', 'foo']"
+      )
     return setAttribute({ schema, ...options }, ['examples', examples, 'any'])
   },
 
@@ -115,7 +118,7 @@ const BaseSchema = (
 
   enum: values => {
     if (!Array.isArray(values))
-      throw new Error(
+      throw new FluentSchemaError(
         "'enums' must be an array with at least an element e.g. ['1', 'one', 'foo']"
       )
     return setAttribute({ schema, ...options }, ['enum', values, 'any'])
@@ -197,7 +200,8 @@ const BaseSchema = (
   },
 
   not: not => {
-    if (!isFluentSchema(not)) throw new Error("'not' must be a BaseSchema")
+    if (!isFluentSchema(not))
+      throw new FluentSchemaError("'not' must be a BaseSchema")
     const notSchema = omit(not.valueOf(), ['$schema', 'definitions'])
 
     return BaseSchema({
@@ -270,9 +274,9 @@ const BaseSchema = (
 
   ifThen: (ifClause, thenClause) => {
     if (!isFluentSchema(ifClause))
-      throw new Error("'ifClause' must be a BaseSchema")
+      throw new FluentSchemaError("'ifClause' must be a BaseSchema")
     if (!isFluentSchema(thenClause))
-      throw new Error("'thenClause' must be a BaseSchema")
+      throw new FluentSchemaError("'thenClause' must be a BaseSchema")
 
     const ifClauseSchema = omit(ifClause.valueOf(), [
       '$schema',
@@ -316,11 +320,11 @@ const BaseSchema = (
 
   ifThenElse: (ifClause, thenClause, elseClause) => {
     if (!isFluentSchema(ifClause))
-      throw new Error("'ifClause' must be a BaseSchema")
+      throw new FluentSchemaError("'ifClause' must be a BaseSchema")
     if (!isFluentSchema(thenClause))
-      throw new Error("'thenClause' must be a BaseSchema")
+      throw new FluentSchemaError("'thenClause' must be a BaseSchema")
     if (!isFluentSchema(elseClause))
-      throw new Error(
+      throw new FluentSchemaError(
         "'elseClause' must be a BaseSchema or a false boolean value"
       )
     const ifClauseSchema = omit(ifClause.valueOf(), [

@@ -43,8 +43,8 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().minLength('5.1')).toThrow(
-          "'minLength' must be an Integer"
+        expect(() => StringSchema().minLength('5.1')).toThrowError(
+          new S.FluentSchemaError("'minLength' must be an Integer")
         )
       })
     })
@@ -59,8 +59,8 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().maxLength('5.1')).toThrow(
-          "'maxLength' must be an Integer"
+        expect(() => StringSchema().maxLength('5.1')).toThrowError(
+          new S.FluentSchemaError("'maxLength' must be an Integer")
         )
       })
     })
@@ -86,8 +86,10 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().format('invalid')).toThrow(
-          "'format' must be one of relative-json-pointer, json-pointer, uuid, regex, ipv6, ipv4, hostname, email, url, uri-template, uri-reference, uri, time, date"
+        expect(() => StringSchema().format('invalid')).toThrowError(
+          new S.FluentSchemaError(
+            "'format' must be one of relative-json-pointer, json-pointer, uuid, regex, ipv6, ipv4, hostname, email, url, uri-template, uri-reference, uri, time, date, date-time"
+          )
         )
       })
     })
@@ -115,8 +117,10 @@ describe('StringSchema', () => {
       })
 
       it('invalid value', () => {
-        expect(() => StringSchema().pattern(1111)).toThrow(
-          "'pattern' must be a string or a RegEx (e.g. /.*/)"
+        expect(() => StringSchema().pattern(1111)).toThrowError(
+          new S.FluentSchemaError(
+            "'pattern' must be a string or a RegEx (e.g. /.*/)"
+          )
         )
       })
     })
@@ -132,8 +136,8 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().contentEncoding(1000)).toThrow(
-          "'contentEncoding' must be a string"
+        expect(() => StringSchema().contentEncoding(1000)).toThrowError(
+          new S.FluentSchemaError("'contentEncoding' must be a string")
         )
       })
     })
@@ -150,8 +154,8 @@ describe('StringSchema', () => {
       })
       it('invalid', () => {
         const prop = 'prop'
-        expect(() => StringSchema().contentMediaType(1000)).toThrow(
-          "'contentMediaType' must be a string"
+        expect(() => StringSchema().contentMediaType(1000)).toThrowError(
+          new S.FluentSchemaError("'contentMediaType' must be a string")
         )
       })
     })

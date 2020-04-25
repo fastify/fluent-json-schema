@@ -289,6 +289,37 @@ describe('ObjectSchema', () => {
           })
         })
       })
+      describe('invalid', () => {
+        it('throws an error passing a string as value', () => {
+          expect(() => {
+            ObjectSchema().prop('prop', 'invalid')
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'prop' doesn't support value '\"invalid\"'. Pass a FluentSchema object"
+            )
+          )
+        })
+
+        it('throws an error passing a number as value', () => {
+          expect(() => {
+            ObjectSchema().prop('prop', 555)
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'prop' doesn't support value '555'. Pass a FluentSchema object"
+            )
+          )
+        })
+
+        it('throws an error passing an array as value', () => {
+          expect(() => {
+            ObjectSchema().prop('prop', [])
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'prop' doesn't support value '[]'. Pass a FluentSchema object"
+            )
+          )
+        })
+      })
     })
 
     describe('additionalProperties', () => {
@@ -329,7 +360,11 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .additionalProperties(value)
           ).toEqual(value)
-        ).toThrow("'additionalProperties' must be a boolean or a S")
+        ).toThrowError(
+          new S.FluentSchemaError(
+            "'additionalProperties' must be a boolean or a S"
+          )
+        )
       })
     })
 
@@ -352,7 +387,9 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .maxProperties(value)
           ).toEqual(value)
-        ).toThrow("'maxProperties' must be a Integer")
+        ).toThrowError(
+          new S.FluentSchemaError("'maxProperties' must be a Integer")
+        )
       })
     })
 
@@ -375,7 +412,9 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .minProperties(value)
           ).toEqual(value)
-        ).toThrow("'minProperties' must be a Integer")
+        ).toThrowError(
+          new S.FluentSchemaError("'minProperties' must be a Integer")
+        )
       })
     })
 
@@ -403,8 +442,10 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .patternProperties(value)
           ).toEqual(value)
-        ).toThrow(
-          "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': S.string() }"
+        ).toThrowError(
+          new S.FluentSchemaError(
+            "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': S.string() }"
+          )
         )
       })
     })
@@ -458,8 +499,10 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .dependencies(value)
           ).toEqual(value)
-        ).toThrow(
-          "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': S.string() }"
+        ).toThrowError(
+          new S.FluentSchemaError(
+            "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': S.string() }"
+          )
         )
       })
     })
@@ -485,7 +528,7 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .propertyNames(value)
           ).toEqual(value)
-        ).toThrow("'propertyNames' must be a S")
+        ).toThrowError(new S.FluentSchemaError("'propertyNames' must be a S"))
       })
     })
   })
@@ -688,12 +731,14 @@ describe('ObjectSchema', () => {
     it('throws an error if a schema is not provided', () => {
       expect(() => {
         S.object().extend()
-      }).toThrow("Schema can't be null or undefined")
+      }).toThrowError(
+        new S.FluentSchemaError("Schema can't be null or undefined")
+      )
     })
     it('throws an error if a schema is not provided', () => {
       expect(() => {
         S.object().extend('boom!')
-      }).toThrow("Schema isn't FluentSchema type")
+      }).toThrowError(new S.FluentSchemaError("Schema isn't FluentSchema type"))
     })
   })
 

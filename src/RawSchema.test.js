@@ -33,8 +33,8 @@ describe('RawSchema', () => {
     })
 
     it("throws an exception if the input isn't an object", () => {
-      expect(() => RawSchema('boom!')).toThrow(
-        'A fragment must be a JSON object'
+      expect(() => RawSchema('boom!')).toThrowError(
+        new S.FluentSchemaError('A fragment must be a JSON object')
       )
     })
   })

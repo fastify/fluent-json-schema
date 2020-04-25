@@ -1,6 +1,6 @@
 'use strict'
 const { BaseSchema } = require('./BaseSchema')
-const { setAttribute, isFluentSchema } = require('./utils')
+const { setAttribute, isFluentSchema, FluentSchemaError } = require('./utils')
 
 const initialState = {
   // $schema: 'http://json-schema.org/draft-07/schema#',
@@ -47,7 +47,7 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
           items.filter(v => isFluentSchema(v)).length > 0
         )
       )
-        throw new Error("'items' must be a S or an array of S")
+        throw new FluentSchemaError("'items' must be a S or an array of S")
       if (Array.isArray(items)) {
         const values = items.map(v => {
           const { $schema, ...rest } = v.valueOf()
@@ -73,7 +73,9 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
 
     additionalItems: items => {
       if (typeof items !== 'boolean' && !isFluentSchema(items))
-        throw new Error("'additionalItems' must be a boolean or a S")
+        throw new FluentSchemaError(
+          "'additionalItems' must be a boolean or a S"
+        )
       if (items === false) {
         return setAttribute({ schema, ...options }, [
           'additionalItems',
@@ -98,7 +100,8 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     contains: value => {
-      if (!isFluentSchema(value)) throw new Error("'contains' must be a S")
+      if (!isFluentSchema(value))
+        throw new FluentSchemaError("'contains' must be a S")
       const {
         $schema,
         definitions,
@@ -125,7 +128,7 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
 
     uniqueItems: boolean => {
       if (typeof boolean !== 'boolean')
-        throw new Error("'uniqueItems' must be a boolean")
+        throw new FluentSchemaError("'uniqueItems' must be a boolean")
       return setAttribute({ schema, ...options }, [
         'uniqueItems',
         boolean,
@@ -144,7 +147,7 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
 
     minItems: min => {
       if (!Number.isInteger(min))
-        throw new Error("'minItems' must be a integer")
+        throw new FluentSchemaError("'minItems' must be a integer")
       return setAttribute({ schema, ...options }, ['minItems', min, 'array'])
     },
 
@@ -159,7 +162,7 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
 
     maxItems: max => {
       if (!Number.isInteger(max))
-        throw new Error("'maxItems' must be a integer")
+        throw new FluentSchemaError("'maxItems' must be a integer")
       return setAttribute({ schema, ...options }, ['maxItems', max, 'array'])
     },
   }

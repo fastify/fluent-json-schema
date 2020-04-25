@@ -1,15 +1,12 @@
 'use strict'
-const merge = require('deepmerge')
 const { BaseSchema } = require('./BaseSchema')
-const { NullSchema } = require('./NullSchema')
 const { BooleanSchema } = require('./BooleanSchema')
 const { StringSchema } = require('./StringSchema')
 const { NumberSchema } = require('./NumberSchema')
 const { IntegerSchema } = require('./IntegerSchema')
 const { ObjectSchema } = require('./ObjectSchema')
 const { ArraySchema } = require('./ArraySchema')
-const { MixedSchema } = require('./MixedSchema')
-const { toArray } = require('./utils')
+const { toArray, FluentSchemaError } = require('./utils')
 
 /**
  * Represents a raw JSON Schema that will be parsed
@@ -19,7 +16,7 @@ const { toArray } = require('./utils')
 
 const RawSchema = (schema = {}) => {
   if (typeof schema !== 'object') {
-    throw new Error('A fragment must be a JSON object')
+    throw new FluentSchemaError('A fragment must be a JSON object')
   }
   const { type, definitions, properties, required, ...props } = schema
   switch (schema.type) {

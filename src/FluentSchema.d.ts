@@ -33,22 +33,23 @@ export type TYPE =
   | 'array'
   | 'null'
 
-export type FORMATS =
-  | 'relative-json-pointer'
-  | 'json-pointer'
-  | 'uuid'
-  | 'regex'
-  | 'ipv6'
-  | 'ipv4'
-  | 'hostname'
-  | 'email'
-  | 'url'
-  | 'uri-template'
-  | 'uri-reference'
-  | 'uri'
-  | 'time'
-  | 'date'
-  | 'date-time'
+type FORMATS = {
+  RELATIVE_JSON_POINTER: 'relative-json-pointer'
+  JSON_POINTER: 'json-pointer'
+  UUID: 'uuid'
+  REGEX: 'regex'
+  IPV6: 'ipv6'
+  IPV4: 'ipv4'
+  HOSTNAME: 'hostname'
+  EMAIL: 'email'
+  URL: 'url'
+  URI_TEMPLATE: 'uri-template'
+  URI_REFERENCE: 'uri-reference'
+  URI: 'uri'
+  TIME: 'time'
+  DATE: 'date'
+  DATE_TIME: 'date-time'
+}
 
 export type JSONSchema =
   | ObjectSchema
@@ -71,7 +72,7 @@ export interface SchemaOptions {
 export interface StringSchema extends BaseSchema<StringSchema> {
   minLength: (min: number) => StringSchema
   maxLength: (min: number) => StringSchema
-  format: (format: FORMATS) => StringSchema
+  format: (format: FORMATS[keyof FORMATS]) => StringSchema
   pattern: (pattern: string | RegExp) => StringSchema
   contentEncoding: (encoding: string) => StringSchema
   contentMediaType: (mediaType: string) => StringSchema
@@ -154,6 +155,7 @@ export interface S extends BaseSchema<S> {
   //FIXME LS we should return only a MixedSchema
   mixed: <T>(types: TYPE[]) => MixedSchema<T> & any
   raw: (fragment: any) => JSONSchema
+  FORMATS: FORMATS
 }
 
 declare var s: S

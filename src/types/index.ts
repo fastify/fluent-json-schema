@@ -24,6 +24,7 @@ const schema = S.object()
   )
   .prop('username', S.string().pattern(/[a-z]*/g))
   .prop('email', S.string().format('email'))
+  .prop('email2', S.string().format(S.FORMATS.EMAIL))
   .prop(
     'avatar',
     S.string()
@@ -51,7 +52,10 @@ const schema = S.object()
       .prop('permissions')
   )
   .required()
-  .prop('age', S.mixed<NumberSchema & StringSchema>(['string', 'integer']))
+  .prop(
+    'age',
+    S.mixed<NumberSchema & StringSchema>(['string', 'integer'])
+  )
   .ifThen(S.object().prop('age', S.string()), S.required(['age']))
   .readOnly()
   .writeOnly(true)

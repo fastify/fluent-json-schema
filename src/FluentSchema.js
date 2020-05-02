@@ -39,7 +39,7 @@ const S = (
   /**
    * Set a property to type string
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3|reference}
    * @returns {StringSchema}
    */
 
@@ -53,7 +53,7 @@ const S = (
   /**
    * Set a property to type number
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#numeric}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#numeric|reference}
    * @returns {NumberSchema}
    */
 
@@ -67,7 +67,7 @@ const S = (
   /**
    * Set a property to type integer
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#numeric}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#numeric|reference}
    * @returns {IntegerSchema}
    */
 
@@ -81,7 +81,7 @@ const S = (
   /**
    * Set a property to type boolean
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#general}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.7|reference}
    * @returns {BooleanSchema}
    */
 
@@ -95,7 +95,7 @@ const S = (
   /**
    * Set a property to type array
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4|reference}
    * @returns {ArraySchema}
    */
 
@@ -109,7 +109,7 @@ const S = (
   /**
    * Set a property to type object
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5|reference}
    * @returns {ObjectSchema}
    */
 
@@ -123,7 +123,7 @@ const S = (
   /**
    * Set a property to type null
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#general}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#general|reference}
    * @returns {NullSchema}
    */
 
@@ -173,7 +173,6 @@ const S = (
    * - S.string().format('date').raw({ formatMaximum: '2020-01-01' })
    *
    * @param {string} fragment an arbitrary JSON Schema to inject
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.3}
    * @returns {BaseSchema}
    */
 

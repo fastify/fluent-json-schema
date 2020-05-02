@@ -38,7 +38,7 @@ const BaseSchema = (
   /**
    * It defines a URI for the schema, and the base URI that other URI references within the schema are resolved against.
    *
-   * {@link https://json-schema.org/latest/json-schema-core.html#id-keyword|reference}
+   * {@link https://tools.ietf.org/html/draft-handrews-json-schema-01#section-8.2|reference}
    * @param {string} id - an #id
    * @returns {BaseSchema}
    */
@@ -54,7 +54,7 @@ const BaseSchema = (
   /**
    * It can be used to decorate a user interface with information about the data produced by this user interface. A title will preferably be short.
    *
-   * {@link https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.1|reference}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.1|reference}
    * @param {string} title
    * @returns {BaseSchema}
    */
@@ -68,7 +68,7 @@ const BaseSchema = (
    * produced by this user interface. A description provides explanation about
    * the purpose of the instance described by the schema.
    *
-   * {@link https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.1|reference}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.1|reference}
    * @param {string} description
    * @returns {BaseSchema}
    */
@@ -84,7 +84,7 @@ const BaseSchema = (
    * The value of this keyword MUST be an array.
    * There are no restrictions placed on the values within the array.
    *
-   * {@link https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.4|reference}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.4|reference}
    * @param {string} examples
    * @returns {BaseSchema}
    */
@@ -111,7 +111,7 @@ const BaseSchema = (
   /**
    * The value of this keyword MUST be an array. This array SHOULD have at least one element. Elements in the array SHOULD be unique.
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.2}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.1.2|reference}
    * @param {array} values
    * @returns {BaseSchema}
    */
@@ -127,7 +127,7 @@ const BaseSchema = (
   /**
    * The value of this keyword MAY be of any type, including null.
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.3}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.1.3|reference}
    * @param value
    * @returns {BaseSchema}
    */
@@ -139,7 +139,7 @@ const BaseSchema = (
   /**
    * There are no restrictions placed on the value of this keyword.
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.2}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.2|reference}
    * @param defaults
    * @returns {BaseSchema}
    */
@@ -150,9 +150,9 @@ const BaseSchema = (
 
   /**
    * The value of readOnly can be left empty to indicate the property is readOnly.
-   * It takes an optional boolean which can be used to explicitly set readOnly true/false
+   * It takes an optional boolean which can be used to explicitly set readOnly true/false.
    *
-   * {@link readOnly|https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.3|reference}
    * @param {boolean|undefined} isReadOnly
    * @returns {BaseSchema}
    */
@@ -164,9 +164,9 @@ const BaseSchema = (
 
   /**
    * The value of writeOnly can be left empty to indicate the property is writeOnly.
-   * It takes an optional boolean which can be used to explicitly set writeOnly true/false
+   * It takes an optional boolean which can be used to explicitly set writeOnly true/false.
    *
-   * {@link writeOnly|https://json-schema.org/latest/json-schema-validation.html#rfc.section.10.3}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.3|reference}
    * @param {boolean|undefined} isWriteOnly
    * @returns {BaseSchema}
    */
@@ -183,7 +183,7 @@ const BaseSchema = (
    * - S.prop('prop', S.number()).required()
    * - S.required(['foo', 'bar'])
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.3}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.3|reference}
    * @returns {FluentSchema}
    */
   required: props => {
@@ -199,6 +199,14 @@ const BaseSchema = (
     })
   },
 
+  /**
+   * This keyword's value MUST be a valid JSON Schema.
+   * An instance is valid against this keyword if it fails to validate successfully against the schema defined by this keyword.
+   *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.7.4|reference}
+   * @param {FluentSchema} not
+   * @returns {BaseSchema}
+   */
   not: not => {
     if (!isFluentSchema(not))
       throw new FluentSchemaError("'not' must be a BaseSchema")
@@ -219,9 +227,9 @@ const BaseSchema = (
   // return setAttribute({ schema, ...options }, ['defaults', defaults, 'any'])
 
   /**
-   * It  MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
+   * It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.3}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.7.2|reference}
    * @param {array} schemas
    * @returns {BaseSchema}
    */
@@ -231,7 +239,7 @@ const BaseSchema = (
   /**
    * It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
    *
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.1}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.7.1|reference}
    * @param {array} schemas
    * @returns {BaseSchema}
    */
@@ -241,18 +249,12 @@ const BaseSchema = (
   /**
    * It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema.
    *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.7.3|reference}
    * @param {array} schemas
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.7.2}
    * @returns {BaseSchema}
    */
 
   oneOf: schemas => setComposeType({ prop: 'oneOf', schemas, schema, options }),
-
-  /**
-   * Set a property to type string
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
-   * @returns {BaseSchema}
-   */
 
   /**
    * @private set a property to a type. Use string number etc.
@@ -267,8 +269,9 @@ const BaseSchema = (
    * validation succeeds against this keyword if the instance also successfully validates against this keyword's subschema.
    *
    * @param {BaseSchema} ifClause
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.6.1|reference}
    * @param {BaseSchema} thenClause
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.6.1}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.6.2|reference}
    * @returns {BaseSchema}
    */
 
@@ -312,9 +315,11 @@ const BaseSchema = (
    * then validation succeeds against this keyword if the instance successfully validates against this keyword's subschema.
    *
    * @param {BaseSchema} ifClause
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.6.1|reference}
    * @param {BaseSchema} thenClause
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.6.2|reference}
    * @param {BaseSchema} elseClause
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.6.1}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.6.3|reference}
    * @returns {BaseSchema}
    */
 
@@ -375,7 +380,7 @@ const BaseSchema = (
    * - S.string().format('date').raw({ formatMaximum: '2020-01-01' })
    *
    * @param {string} fragment an arbitrary JSON Schema to inject
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.3}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3.3|reference}
    * @returns {BaseSchema}
    */
   raw: fragment => {

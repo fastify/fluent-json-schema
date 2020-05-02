@@ -34,8 +34,8 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
      * If "items" is an array of schemas, validation succeeds if each element of the instance validates against the schema at the same position, if any.
      * Omitting this keyword has the same behavior as an empty schema.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.1|reference}
      * @param {FluentSchema|FluentSchema[]} items
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.1}
      * @returns {FluentSchema}
      */
 
@@ -66,8 +66,8 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
     /**
      * This keyword determines how child instances validate for arrays, and does not directly validate the immediate instance itself.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.2|reference}
      * @param {FluentSchema|boolean} items
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.2}
      * @returns {FluentSchema}
      */
 
@@ -94,8 +94,8 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
     /**
      * An array instance is valid against "contains" if at least one of its elements is valid against the given schema.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.6|reference}
      * @param {FluentSchema} value
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.2}
      * @returns {FluentSchema}
      */
 
@@ -121,8 +121,8 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
      * If it has boolean value true, the instance validates successfully if all of its elements are unique.
      * Omitting this keyword has the same behavior as a value of false.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.5|reference}
      * @param {boolean} boolean
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.5}
      * @returns {FluentSchema}
      */
 
@@ -140,8 +140,8 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
      * An array instance is valid against "minItems" if its size is greater than, or equal to, the value of this keyword.
      * Omitting this keyword has the same behavior as a value of 0.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.4|reference}
      * @param {number} min
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.4}
      * @returns {FluentSchema}
      */
 
@@ -155,8 +155,8 @@ const ArraySchema = ({ schema = initialState, ...options } = {}) => {
      * An array instance is valid against "minItems" if its size is greater than, or equal to, the value of this keyword.
      * Omitting this keyword has the same behavior as a value of 0.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.3|reference}
      * @param {number} max
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.4.3}
      * @returns {FluentSchema}
      */
 

@@ -27,8 +27,8 @@ const NumberSchema = (
   /**
    * It represents  an inclusive lower limit for a numeric instance.
    *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.2.4|reference}
    * @param {number} min
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.4}
    * @returns {FluentSchema}
    */
 
@@ -43,8 +43,8 @@ const NumberSchema = (
   /**
    * It represents an exclusive lower limit for a numeric instance.
    *
-   * * @param {number} min
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.5}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.2.5|reference}
+   * @param {number} min
    * @returns {FluentSchema}
    */
 
@@ -62,7 +62,9 @@ const NumberSchema = (
 
   /**
    * It represents  an inclusive upper limit for a numeric instance.
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.2}
+   *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.2.2|reference}
+   * @param {number} max
    * @returns {FluentSchema}
    */
 
@@ -77,8 +79,8 @@ const NumberSchema = (
   /**
    * It represents an exclusive upper limit for a numeric instance.
    *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.2.3|reference}
    * @param {number} max
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.3}
    * @returns {FluentSchema}
    */
 
@@ -97,8 +99,8 @@ const NumberSchema = (
   /**
    * It's strictly greater than 0.
    *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.2.1|reference}
    * @param {number} multiple
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.2.1}
    * @returns {FluentSchema}
    */
 

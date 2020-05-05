@@ -30,7 +30,7 @@ const NullSchema = ({ schema = initialState, ...options } = {}) => {
     /**
      * Set a property to type null
      *
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.1.1|reference}
      * @returns {FluentSchema}
      */
     null: () => setAttribute({ schema, ...options }, ['type', 'null']),

@@ -27,7 +27,7 @@ const StringSchema = (
   ...BaseSchema({ ...options, schema }),
   /*/!**
    * Set a property to type string
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.1.1}
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3|reference}
    * @returns {StringSchema}
    *!/
 
@@ -38,8 +38,8 @@ const StringSchema = (
    * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
    * The length of a string instance is defined as the number of its characters as defined by RFC 7159 [RFC7159].
    *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3.2|reference}
    * @param {number} min
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.2}
    * @returns {StringSchema}
    */
 
@@ -53,8 +53,8 @@ const StringSchema = (
    * A string instance is valid against this keyword if its length is less than, or equal to, the value of this keyword.
    * The length of a string instance is defined as the number of its characters as defined by RFC 7159 [RFC7159].
    *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3.1|reference}
    * @param {number} max
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.2}
    * @returns {StringSchema}
    */
 
@@ -67,8 +67,8 @@ const StringSchema = (
   /**
    * A string value can be RELATIVE_JSON_POINTER, JSON_POINTER, UUID, REGEX, IPV6, IPV4, HOSTNAME, EMAIL, URL, URI_TEMPLATE, URI_REFERENCE, URI, TIME, DATE,
    *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.7.3|reference}
    * @param {string} format
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.7.3}
    * @returns {StringSchema}
    */
 
@@ -84,8 +84,8 @@ const StringSchema = (
    *  This string SHOULD be a valid regular expression, according to the ECMA 262 regular expression dialect.
    *  A string instance is considered valid if the regular expression matches the instance successfully.
    *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3.3|reference}
    * @param {string} pattern
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.3.3}
    * @returns {StringSchema}
    */
   pattern: pattern => {
@@ -110,8 +110,8 @@ const StringSchema = (
    *  be interpreted as binary data and decoded using the encoding named by this property.
    *  RFC 2045, Sec 6.1 [RFC2045] lists the possible values for this property.
    *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.8.3|reference}
    * @param {string} encoding
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.8.3}
    * @returns {StringSchema}
    */
 
@@ -129,8 +129,8 @@ const StringSchema = (
    *  The value of this property must be a media type, as defined by RFC 2046 [RFC2046].
    *  This property defines the media type of instances which this schema defines.
    *
+   * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.8.4|reference}
    * @param {string} mediaType
-   * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.8.3}
    * @returns {StringSchema}
    */
 

@@ -43,8 +43,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * For all such properties, validation succeeds if the child instance validates against the "additionalProperties" schema.
      * Omitting this keyword has the same behavior as an empty schema.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.6|reference}
      * @param {FluentSchema|boolean} value
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.6}
      * @returns {FluentSchema}
      */
 
@@ -73,8 +73,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     /**
      * An object instance is valid against "maxProperties" if its number of properties is less than, or equal to, the value of this keyword.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.1|reference}
      * @param {number} max
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.1}
      * @returns {FluentSchema}
      */
 
@@ -91,8 +91,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     /**
      * An object instance is valid against "minProperties" if its number of properties is greater than, or equal to, the value of this keyword.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.2|reference}
      * @param {number} min
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.2}
      * @returns {FluentSchema}
      */
 
@@ -113,8 +113,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * Validation of the primitive instance type against this keyword always succeeds.
      * Validation succeeds if, for each instance name that matches any regular expressions that appear as a property name in this keyword's value, the child instance for that name successfully validates against each schema that corresponds to a matching regular expression.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.5|reference}
      * @param {object} opts
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.5}
      * @returns {FluentSchema}
      */
 
@@ -142,8 +142,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * If the dependency value is a subschema, and the dependency key is a property in the instance, the entire instance must validate against the dependency value.
      * If the dependency value is an array, each element in the array, if any, MUST be a string, and MUST be unique. If the dependency key is a property in the instance, each of the items in the dependency value must be a property that exists in the instance.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.7|reference}
      * @param {object} opts
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.7}
      * @returns {FluentSchema}
      */
 
@@ -171,8 +171,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * If the instance is an object, this keyword validates if every property name in the instance validates against the provided schema.
      * Note the property name that the schema is testing will always be a string.
      *
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.8|reference}
      * @param {FluentSchema} value
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.7}
      * @returns {FluentSchema}
      */
 
@@ -187,9 +187,9 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     },
 
     /**
-     * The value of "properties" MUST be an object. Each value of this object MUST be a valid JSON Schema
+     * The value of "properties" MUST be an object. Each value of this object MUST be a valid JSON Schema.
      *
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.6.5.4}
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.4|reference}
      * @param {string} name
      * @param {FluentSchema} props
      * @returns {FluentSchema}
@@ -274,7 +274,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * The "definitions" keywords provides a standardized location for schema authors to inline re-usable JSON Schemas into a more general schema.
      * There are no restrictions placed on the values within the array.
      *
-     * {@link reference|https://json-schema.org/latest/json-schema-validation.html#rfc.section.9}
+     * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.9|reference}
      * @param {string} name
      * @param {FluentSchema} props
      * @returns {FluentSchema}

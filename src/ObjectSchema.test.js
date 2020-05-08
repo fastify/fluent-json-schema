@@ -730,6 +730,7 @@ describe('ObjectSchema', () => {
       const base = S.object().prop('reason', S.string().title('title'))
 
       const extended = S.object()
+        .prop('other')
         .prop('reason', S.string().minLength(1))
         .extend(base)
 
@@ -737,6 +738,7 @@ describe('ObjectSchema', () => {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',
         properties: {
+          other: {},
           reason: { title: 'title', type: 'string', minLength: 1 },
         },
       })

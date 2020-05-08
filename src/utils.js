@@ -36,16 +36,16 @@ const flat = array =>
     }
   }, {})
 
-// https://github.com/TehShrike/deepmerge#arraymerge-example-combine-arrays
-// This was the default array merging algorithm pre-version-2.0.0.
 const combineMerge = (target, source, options) => {
   const destination = target.slice()
 
   source.forEach((item, index) => {
+    const prop = target.find(prop => prop.name === item.name)
     if (typeof destination[index] === 'undefined') {
       destination[index] = options.cloneUnlessOtherwiseSpecified(item, options)
-    } else if (item.name === target[index].name) {
-      destination[index] = merge(target[index], item, options)
+    } else if (prop) {
+      const propIndex = target.findIndex(prop => prop.name === item.name)
+      destination[propIndex] = merge(prop, item, options)
     } else if (target.indexOf(item) === -1) {
       destination.push(item)
     }

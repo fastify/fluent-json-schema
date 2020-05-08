@@ -267,8 +267,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       }
       const src = base._getState()
       const extended = merge(src, schema, { arrayMerge: combineMerge })
-
-      return BaseSchema({ schema: extended, ...options })
+      const { valueOf, ...rest } = BaseSchema({ schema: extended, ...options })
+      return { valueOf }
     },
 
     /**

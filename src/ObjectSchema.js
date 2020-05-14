@@ -238,7 +238,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
           return key === '$schema' ||
             key === 'def' ||
             value === undefined ||
-            (Array.isArray(value) && value.length === 0)
+            (Array.isArray(value) && value.length === 0 && key !== 'default')
             ? memo
             : { ...memo, [key]: value }
         },

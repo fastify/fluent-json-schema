@@ -180,5 +180,17 @@ describe('ArraySchema', () => {
         })
       })
     })
+
+    describe('default array in an object', () => {
+      it('valid', () => {
+        const value = []
+        expect(
+          S.object()
+            .prop('p1', ArraySchema().default(value))
+            .valueOf()
+            .properties.p1.default
+        ).toBe(value)
+      })
+    })
   })
 })

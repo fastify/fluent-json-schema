@@ -9,6 +9,7 @@ const {
   patchIdsWithParentId,
   appendRequired,
   FluentSchemaError,
+  combineMerge,
 } = require('./utils')
 
 const initialState = {
@@ -264,10 +265,10 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       if (!base.isFluentSchema) {
         throw new FluentSchemaError("Schema isn't FluentSchema type")
       }
-      const state = base._getState()
-      const extended = merge(state, schema)
-
-      return ObjectSchema({ schema: extended, ...options })
+      const src = base._getState()
+      const extended = merge(src, schema, { arrayMerge: combineMerge })
+      const { valueOf, ...rest } = BaseSchema({ schema: extended, ...options })
+      return { valueOf }
     },
 
     /**

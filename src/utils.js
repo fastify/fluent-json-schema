@@ -1,5 +1,5 @@
 'use strict'
-
+const merge = require('deepmerge')
 const isFluentSchema = obj => obj && obj.isFluentSchema
 
 const hasCombiningKeywords = attributes =>
@@ -35,6 +35,23 @@ const flat = array =>
       [name]: rest,
     }
   }, {})
+
+const combineMerge = (target, source, options) => {
+  const destination = target.slice()
+
+  source.forEach((item, index) => {
+    const prop = target.find(prop => prop.name === item.name)
+    if (typeof destination[index] === 'undefined') {
+      destination[index] = options.cloneUnlessOtherwiseSpecified(item, options)
+    } else if (prop) {
+      const propIndex = target.findIndex(prop => prop.name === item.name)
+      destination[propIndex] = merge(prop, item, options)
+    } else if (target.indexOf(item) === -1) {
+      destination.push(item)
+    }
+  })
+  return destination
+}
 
 const toArray = obj =>
   obj && Object.entries(obj).map(([key, value]) => ({ name: key, ...value }))
@@ -202,6 +219,7 @@ module.exports = {
   setRaw,
   setAttribute,
   setComposeType,
+  combineMerge,
   FORMATS,
   TYPES,
   FLUENT_SCHEMA,

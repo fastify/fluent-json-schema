@@ -607,7 +607,6 @@ describe('ObjectSchema', () => {
         .title('extended')
         .prop('bar', S.number())
         .extend(base)
-
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         $id: 'extended',
@@ -707,7 +706,7 @@ describe('ObjectSchema', () => {
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         definitions: {
-          def1: { type: 'object', properties: { someExtended: {} } },
+          def1: { type: 'object', properties: { some: {}, someExtended: {} } },
           def2: { type: 'object', properties: { somethingElse: {} } },
         },
         type: 'object',
@@ -727,6 +726,23 @@ describe('ObjectSchema', () => {
         required: ['str', 'bol', 'num'],
       })
     })
+    it('extends a schema overriding the props', () => {
+      const base = S.object().prop('reason', S.string().title('title'))
+
+      const extended = S.object()
+        .prop('other')
+        .prop('reason', S.string().minLength(1))
+        .extend(base)
+
+      expect(extended.valueOf()).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          other: {},
+          reason: { title: 'title', type: 'string', minLength: 1 },
+        },
+      })
+    })
 
     it('throws an error if a schema is not provided', () => {
       expect(() => {
@@ -735,10 +751,24 @@ describe('ObjectSchema', () => {
         new S.FluentSchemaError("Schema can't be null or undefined")
       )
     })
-    it('throws an error if a schema is not provided', () => {
+
+    it('throws an error if a schema is invalid', () => {
       expect(() => {
         S.object().extend('boom!')
       }).toThrowError(new S.FluentSchemaError("Schema isn't FluentSchema type"))
+    })
+
+    it('throws an error if you append a new prop after extend', () => {
+      expect(() => {
+        const base = S.object()
+        S.object()
+          .extend(base)
+          .prop('foo')
+      }).toThrowError(
+        new S.FluentSchemaError(
+          'S.object(...).extend(...).prop is not a function'
+        )
+      )
     })
   })
 

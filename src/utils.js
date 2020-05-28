@@ -40,10 +40,10 @@ const combineMerge = (target, source, options) => {
   const destination = target.slice()
 
   source.forEach((item, index) => {
-    const prop = target.find(prop => prop.name === item.name)
+    const prop = target.find(attr => attr.name === item.name)
     if (typeof destination[index] === 'undefined') {
       destination[index] = options.cloneUnlessOtherwiseSpecified(item, options)
-    } else if (prop) {
+    } else if (options.isMergeableObject(prop)) {
       const propIndex = target.findIndex(prop => prop.name === item.name)
       destination[propIndex] = merge(prop, item, options)
     } else if (target.indexOf(item) === -1) {

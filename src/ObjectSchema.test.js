@@ -600,12 +600,17 @@ describe('ObjectSchema', () => {
         .id('base')
         .title('base')
         .additionalProperties(false)
-        .prop('foo', S.string().minLength(5))
+        .prop(
+          'foo',
+          S.string()
+            .minLength(5)
+            .required(true)
+        )
 
       const extended = S.object()
         .id('extended')
         .title('extended')
-        .prop('bar', S.number())
+        .prop('bar', S.string().required())
         .extend(base)
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -618,12 +623,14 @@ describe('ObjectSchema', () => {
             minLength: 5,
           },
           bar: {
-            type: 'number',
+            type: 'string',
           },
         },
+        required: ['foo', 'bar'],
         type: 'object',
       })
     })
+
     it('extends a nested schema', () => {
       const base = S.object()
         .id('base')

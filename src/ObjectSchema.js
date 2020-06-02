@@ -267,8 +267,14 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       }
       const src = base._getState()
       const extended = merge(src, schema, { arrayMerge: combineMerge })
-      const { valueOf, ...rest } = BaseSchema({ schema: extended, ...options })
-      return { valueOf }
+      const {
+        valueOf,
+        isFluentSchema,
+        FLUENT_SCHEMA,
+        _getState,
+        ...rest
+      } = BaseSchema({ schema: extended, ...options })
+      return { valueOf, isFluentSchema, FLUENT_SCHEMA, _getState }
     },
 
     /**

@@ -600,12 +600,17 @@ describe('ObjectSchema', () => {
         .id('base')
         .title('base')
         .additionalProperties(false)
-        .prop('foo', S.string().minLength(5))
+        .prop(
+          'foo',
+          S.string()
+            .minLength(5)
+            .required(true)
+        )
 
       const extended = S.object()
         .id('extended')
         .title('extended')
-        .prop('bar', S.number())
+        .prop('bar', S.string().required())
         .extend(base)
       expect(extended.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -618,12 +623,14 @@ describe('ObjectSchema', () => {
             minLength: 5,
           },
           bar: {
-            type: 'number',
+            type: 'string',
           },
         },
+        required: ['foo', 'bar'],
         type: 'object',
       })
     })
+
     it('extends a nested schema', () => {
       const base = S.object()
         .id('base')
@@ -740,6 +747,29 @@ describe('ObjectSchema', () => {
         properties: {
           other: {},
           reason: { title: 'title', type: 'string', minLength: 1 },
+        },
+      })
+    })
+    it('extends a chain of schemas overriding the props', () => {
+      const base = S.object().prop('reason', S.string().title('title'))
+
+      const extended = S.object()
+        .prop('other')
+        .prop('reason', S.string().minLength(1))
+        .extend(base)
+
+      const extendedAgain = S.object()
+        .prop('again')
+        .prop('reason', S.string().minLength(2))
+        .extend(extended)
+
+      expect(extendedAgain.valueOf()).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          other: {},
+          again: {},
+          reason: { title: 'title', type: 'string', minLength: 2 },
         },
       })
     })

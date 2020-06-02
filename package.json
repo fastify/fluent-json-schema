@@ -1,6 +1,6 @@
 {
   "name": "fluent-schema",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "JSON Schema fluent API",
   "main": "src/FluentSchema.js",
   "typings": "src/FluentSchema.d.ts",

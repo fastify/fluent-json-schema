@@ -762,6 +762,7 @@ describe('ObjectSchema', () => {
         .prop('again')
         .prop('reason', S.string().minLength(2))
         .extend(extended)
+        .extend(S.object().prop('multiple'))
 
       expect(extendedAgain.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
@@ -769,6 +770,7 @@ describe('ObjectSchema', () => {
         properties: {
           other: {},
           again: {},
+          multiple: {},
           reason: { title: 'title', type: 'string', minLength: 2 },
         },
       })

@@ -272,9 +272,10 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         isFluentSchema,
         FLUENT_SCHEMA,
         _getState,
+        extend,
         ...rest
-      } = BaseSchema({ schema: extended, ...options })
-      return { valueOf, isFluentSchema, FLUENT_SCHEMA, _getState }
+      } = ObjectSchema({ schema: extended, ...options })
+      return { valueOf, isFluentSchema, FLUENT_SCHEMA, _getState, extend }
     },
 
     /**

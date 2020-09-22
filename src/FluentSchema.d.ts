@@ -120,7 +120,9 @@ export interface ObjectSchema extends BaseSchema<ObjectSchema> {
   patternProperties: (options: PatternPropertiesOptions) => ObjectSchema
   dependencies: (options: DependenciesOptions) => ObjectSchema
   propertyNames: (value: JSONSchema) => ObjectSchema
-  extend: (schema: ObjectSchema) => ObjectSchema
+  extend: (
+    schema: ObjectSchema
+  ) => Pick<ObjectSchema, 'isFluentSchema' | 'extend'>
 }
 
 export interface MixedSchema<T> extends BaseSchema<T> {

@@ -1,10 +1,6 @@
 // This file will be passed to the TypeScript CLI to verify our typings compile
 
-import S, {
-  NumberSchema,
-  StringSchema,
-  FluentSchemaError,
-} from '../FluentSchema'
+import S, { FluentSchemaError } from '../FluentSchema'
 
 console.log('isFluentSchema:', S.object().isFluentSchema)
 const schema = S.object()
@@ -52,10 +48,7 @@ const schema = S.object()
       .prop('permissions')
   )
   .required()
-  .prop(
-    'age',
-    S.mixed<NumberSchema & StringSchema>(['string', 'integer'])
-  )
+  .prop('age', S.mixed(['string', 'array', 'null']))
   .ifThen(S.object().prop('age', S.string()), S.required(['age']))
   .readOnly()
   .writeOnly(true)

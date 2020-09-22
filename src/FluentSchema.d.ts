@@ -120,15 +120,87 @@ export interface ObjectSchema extends BaseSchema<ObjectSchema> {
   patternProperties: (options: PatternPropertiesOptions) => ObjectSchema
   dependencies: (options: DependenciesOptions) => ObjectSchema
   propertyNames: (value: JSONSchema) => ObjectSchema
-  extend: (schema: ObjectSchema) => ObjectSchema
+  extend: (
+    schema: ObjectSchema
+  ) => Pick<ObjectSchema, 'isFluentSchema' | 'extend'>
 }
 
-export interface MixedSchema<T> extends BaseSchema<T> {
-  // [any]: () => any
-  //FIXME LS it should implement all the methods from the generics*/
-  // maxLength(max:number):T
-  // minimum(min:number):T
+type InferSchemaMap = {
+  string: StringSchema
+  number: NumberSchema
+  boolean: BooleanSchema
+  integer: IntegerSchema
+  object: ObjectSchema
+  array: ArraySchema
+  null: NullSchema
 }
+
+type MixedSchema1<T> = T extends [infer U]
+  ? InferSchemaMap[U extends TYPE ? U : never]
+  : never
+type MixedSchema2<T> = T extends [infer U, infer V]
+  ? InferSchemaMap[U extends TYPE ? U : never] &
+      InferSchemaMap[V extends TYPE ? V : never]
+  : never
+type MixedSchema3<T> = T extends [infer U, infer V, infer W]
+  ? InferSchemaMap[U extends TYPE ? U : never] &
+      InferSchemaMap[V extends TYPE ? V : never] &
+      InferSchemaMap[W extends TYPE ? W : never]
+  : never
+type MixedSchema4<T> = T extends [infer U, infer V, infer W, infer X]
+  ? InferSchemaMap[U extends TYPE ? U : never] &
+      InferSchemaMap[V extends TYPE ? V : never] &
+      InferSchemaMap[W extends TYPE ? W : never] &
+      InferSchemaMap[X extends TYPE ? X : never]
+  : never
+type MixedSchema5<T> = T extends [infer U, infer V, infer W, infer X, infer Y]
+  ? InferSchemaMap[U extends TYPE ? U : never] &
+      InferSchemaMap[V extends TYPE ? V : never] &
+      InferSchemaMap[W extends TYPE ? W : never] &
+      InferSchemaMap[X extends TYPE ? X : never] &
+      InferSchemaMap[Y extends TYPE ? Y : never]
+  : never
+type MixedSchema6<T> = T extends [
+  infer U,
+  infer V,
+  infer W,
+  infer X,
+  infer Y,
+  infer Z
+]
+  ? InferSchemaMap[U extends TYPE ? U : never] &
+      InferSchemaMap[V extends TYPE ? V : never] &
+      InferSchemaMap[W extends TYPE ? W : never] &
+      InferSchemaMap[X extends TYPE ? X : never] &
+      InferSchemaMap[Y extends TYPE ? Y : never] &
+      InferSchemaMap[Z extends TYPE ? Z : never]
+  : never
+type MixedSchema7<T> = T extends [
+  infer U,
+  infer V,
+  infer W,
+  infer X,
+  infer Y,
+  infer Z,
+  infer A
+]
+  ? InferSchemaMap[U extends TYPE ? U : never] &
+      InferSchemaMap[V extends TYPE ? V : never] &
+      InferSchemaMap[W extends TYPE ? W : never] &
+      InferSchemaMap[X extends TYPE ? X : never] &
+      InferSchemaMap[Y extends TYPE ? Y : never] &
+      InferSchemaMap[Z extends TYPE ? Z : never] &
+      InferSchemaMap[A extends TYPE ? A : never]
+  : never
+
+export type MixedSchema<T> =
+  | MixedSchema1<T>
+  | MixedSchema2<T>
+  | MixedSchema3<T>
+  | MixedSchema4<T>
+  | MixedSchema5<T>
+  | MixedSchema6<T>
+  | MixedSchema7<T>
 
 interface SchemaOptions {
   schema: object
@@ -152,8 +224,18 @@ export interface S extends BaseSchema<S> {
   array: () => ArraySchema
   object: () => ObjectSchema
   null: () => NullSchema
-  //FIXME LS we should return only a MixedSchema
-  mixed: <T>(types: TYPE[]) => MixedSchema<T> & any
+  mixed: <
+    T extends
+      | [TYPE]
+      | [TYPE, TYPE]
+      | [TYPE, TYPE, TYPE]
+      | [TYPE, TYPE, TYPE, TYPE]
+      | [TYPE, TYPE, TYPE, TYPE, TYPE]
+      | [TYPE, TYPE, TYPE, TYPE, TYPE, TYPE]
+      | [TYPE, TYPE, TYPE, TYPE, TYPE, TYPE, TYPE]
+  >(
+    types: T
+  ) => MixedSchema<T>
   raw: (fragment: any) => JSONSchema
   FORMATS: FORMATS
 }

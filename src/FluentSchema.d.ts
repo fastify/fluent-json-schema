@@ -193,7 +193,7 @@ type MixedSchema7<T> = T extends [
       InferSchemaMap[A extends TYPE ? A : never]
   : never
 
-type MixedSchema<T> =
+export type MixedSchema<T> =
   | MixedSchema1<T>
   | MixedSchema2<T>
   | MixedSchema3<T>

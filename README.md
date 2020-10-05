@@ -332,7 +332,7 @@ Thanks to [Matteo Collina](https://twitter.com/matteocollina) for pushing me to 
 
 - JSON Schema [Draft 7](http://json-schema.org/specification-links.html#draft-7)
 - [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/) (despite is referring to draft 6 the guide still good to grasp the main concepts)
-- [AJV]() JSON Schema validator
+- [AJV](https://ajv.js.org/) JSON Schema validator
 - [jsonschema.net](https://www.jsonschema.net/) an online JSON Schema visual editor (it doesn't support advance features)
 
 ## Licence

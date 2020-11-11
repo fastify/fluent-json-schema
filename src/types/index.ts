@@ -67,9 +67,8 @@ const userSchema = S.object()
   .prop('createdAt', S.string().format('time'))
   .prop('updatedAt', S.string().format('time'))
   .extend(userBaseSchema)
-  .valueOf()
 
-console.log('user:\n', JSON.stringify(userSchema))
+console.log('user:\n', JSON.stringify(userSchema.valueOf()))
 
 try {
   S.object().prop('foo', 'boom!' as any)
@@ -78,3 +77,9 @@ try {
     console.log(e.message)
   }
 }
+
+const arrayExtendedSchema = S.array()
+  .items(userSchema)
+  .valueOf()
+
+console.log('array of user\n', JSON.stringify(arrayExtendedSchema))

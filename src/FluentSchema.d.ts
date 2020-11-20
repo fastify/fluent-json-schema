@@ -59,6 +59,7 @@ export type JSONSchema =
   | IntegerSchema
   | BooleanSchema
   | NullSchema
+  | ExtendedSchema
 
 export class FluentSchemaError extends Error {
   name: string
@@ -120,10 +121,10 @@ export interface ObjectSchema extends BaseSchema<ObjectSchema> {
   patternProperties: (options: PatternPropertiesOptions) => ObjectSchema
   dependencies: (options: DependenciesOptions) => ObjectSchema
   propertyNames: (value: JSONSchema) => ObjectSchema
-  extend: (
-    schema: ObjectSchema
-  ) => Pick<ObjectSchema, 'isFluentSchema' | 'extend'>
+  extend: (schema: ObjectSchema) => ExtendedSchema
 }
+
+export type ExtendedSchema = Pick<ObjectSchema, 'isFluentSchema' | 'extend'>
 
 type InferSchemaMap = {
   string: StringSchema

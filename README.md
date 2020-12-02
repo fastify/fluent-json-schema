@@ -307,6 +307,23 @@ const userSchema = S.object()
 console.log(userSchema)
 ```
 
+## Selecting only certain properties of your schema
+
+In addition to extending schemas, it is also possible to reduce them into smaller schemas. This comes in handy
+when you have a large Fluent Schema, and would like to re-use some of its properties.
+
+```js
+const S = require('fluid-schema')
+const userSchema = S.object()
+  .prop('username', S.string())
+  .prop('password', S.string())
+  .prop('id', S.string().format('uuid'))
+  .prop('createdAt', S.string().format('time'))
+  .prop('updatedAt', S.string().format('time'))
+
+const loginSchema = userSchema.only(['username', 'password'])
+```
+
 ### Detect Fluent Schema objects
 
 Every Fluent Schema objects contains a boolean `isFluentSchema`. In this way you can write your own utilities that understands the Fluent Schema API and improve the user experience of your tool.

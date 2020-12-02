@@ -812,6 +812,12 @@ describe('ObjectSchema', () => {
         .prop('foo', S.string())
         .prop('bar', S.string())
         .prop('baz', S.string())
+        .prop(
+          'children',
+          S.object()
+            .prop('alpha', S.string())
+            .prop('beta', S.string())
+        )
 
       const only = base.only(['foo'])
 

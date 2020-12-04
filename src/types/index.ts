@@ -70,6 +70,17 @@ const userSchema = S.object()
 
 console.log('user:\n', JSON.stringify(userSchema.valueOf()))
 
+const largeUserSchema = S.object()
+  .prop('id', S.string().format('uuid'))
+  .prop('username', S.string())
+  .prop('password', S.string())
+  .prop('createdAt', S.string().format('time'))
+  .prop('updatedAt', S.string().format('time'))
+
+const userSubsetSchema = largeUserSchema.only(['username', 'password'])
+
+console.log('user subset:', JSON.stringify(userSubsetSchema.valueOf()))
+
 try {
   S.object().prop('foo', 'boom!' as any)
 } catch (e) {

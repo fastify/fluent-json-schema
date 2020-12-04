@@ -279,6 +279,24 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     },
 
     /**
+     * Returns an object schema with only a subset of keys provided
+     *
+     * @param properties a list of properties you want to keep
+     * @returns {ObjectSchema}
+     */
+    only: properties => {
+      return ObjectSchema({
+        schema: {
+          ...schema,
+          properties: schema.properties.filter(p =>
+            properties.includes(p.name)
+          ),
+        },
+        ...options,
+      })
+    },
+
+    /**
      * The "definitions" keywords provides a standardized location for schema authors to inline re-usable JSON Schemas into a more general schema.
      * There are no restrictions placed on the values within the array.
      *

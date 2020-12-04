@@ -122,6 +122,7 @@ export interface ObjectSchema extends BaseSchema<ObjectSchema> {
   dependencies: (options: DependenciesOptions) => ObjectSchema
   propertyNames: (value: JSONSchema) => ObjectSchema
   extend: (schema: ObjectSchema) => ExtendedSchema
+  only: (properties: string[]) => ObjectSchema
 }
 
 export type ExtendedSchema = Pick<ObjectSchema, 'isFluentSchema' | 'extend'>

@@ -21,6 +21,7 @@ export interface BaseSchema<T> {
   readOnly: (isReadOnly?: boolean) => T
   writeOnly: (isWriteOnly?: boolean) => T
   isFluentSchema: boolean
+  isFluentJSONSchema: boolean
   raw: (fragment: any) => JSONSchema
 }
 

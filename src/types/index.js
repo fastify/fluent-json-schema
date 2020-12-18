@@ -1,5 +1,5 @@
 // This file will be passed to the TypeScript CLI to verify our typings compile
-const S = require('../FluentSchema').default
+const S = require('../FluentJSONSchema').default
 
 console.log('isFluentSchema:', S.object().isFluentSchema)
 const schema = S.object()

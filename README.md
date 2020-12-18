@@ -1,9 +1,9 @@
-# fluent-schema
+# fluent-json-schema
 
 A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framework agnostic.
 
-[![view on npm](https://img.shields.io/npm/v/fluent-schema.svg)](https://www.npmjs.org/package/fluent-schema)
-[![Build Status](https://travis-ci.com/fastify/fluent-schema.svg?branch=master)](https://travis-ci.com/fastify/fluent-schema?branch=master)
+[![view on npm](https://img.shields.io/npm/v/fluent-json-schema.svg)](https://www.npmjs.org/package/fluent-json-schema)
+[![Build Status](https://travis-ci.com/fastify/fluent-json-schema.svg?branch=master)](https://travis-ci.com/fastify/fluent-json-schema?branch=master)
 
 ## Features
 
@@ -16,16 +16,16 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framew
 
 ## Install
 
-    npm install fluent-schema --save
+    npm install fluent-json-schema --save
 
 or
 
-    yarn add fluent-schema
+    yarn add fluent-json-schema
 
 ## Usage
 
 ```javascript
-const S = require('fluent-schema')
+const S = require('fluent-json-schema')
 
 const ROLES = {
   ADMIN: 'ADMIN',
@@ -147,7 +147,7 @@ Schema generated:
 with `"esModuleInterop": true` activated in the `tsconfig.json`
 
 ```typescript
-import S from 'fluent-schema'
+import S from 'fluent-json-schema'
 
 const schema = S.object()
   .prop('foo', S.string())
@@ -158,7 +158,7 @@ const schema = S.object()
 with `"esModuleInterop": false` in the `tsconfig.json`
 
 ```typescript
-import * as S from 'fluent-schema'
+import * as S from 'fluent-json-schema'
 
 const schema = S.object()
   .prop('foo', S.string())
@@ -292,7 +292,7 @@ For example in a CRUD API `POST /users` could use the `userBaseSchema` rather th
 which contains the `id`, `createdAt` and `updatedAt` generated server side.
 
 ```js
-const S = require('fluent-schema')
+const S = require('fluent-json-schema')
 const userBaseSchema = S.object()
   .additionalProperties(false)
   .prop('username', S.string())
@@ -329,7 +329,7 @@ const loginSchema = userSchema.only(['username', 'password'])
 Every Fluent Schema objects contains a boolean `isFluentSchema`. In this way you can write your own utilities that understands the Fluent Schema API and improve the user experience of your tool.
 
 ```js
-const S = require('fluent-schema')
+const S = require('fluent-json-schema')
 const schema = S.object()
   .prop('foo', S.string())
   .prop('bar', S.number())

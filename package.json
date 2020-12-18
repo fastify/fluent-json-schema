@@ -1,8 +1,8 @@
 {
-  "name": "fluent-schema",
-  "version": "1.1.0",
+  "name": "fluent-json-schema",
+  "version": "2.0.0",
   "description": "JSON Schema fluent API",
-  "main": "src/FluentSchema.js",
+  "main": "src/FluentJSONSchema.js",
   "typings": "src/FluentSchema.d.ts",
   "keywords": [
     "JSON",
@@ -18,13 +18,13 @@
   "contributors": [
     "Matteo Collina <hello@matteocollina.com>"
   ],
-  "homepage": "https://github.com/fastify/fluent-schema#readme",
+  "homepage": "https://github.com/fastify/fluent-json-schema#readme",
   "bugs": {
-    "url": "https://github.com/fastify/fluent-schema/issues"
+    "url": "https://github.com/fastify/fluent-json-schema/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fastify/fluent-schema.git"
+    "url": "https://github.com/fastify/fluent-json-schema.git"
   },
   "engines": {
     "node": ">=8"

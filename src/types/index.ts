@@ -1,6 +1,6 @@
 // This file will be passed to the TypeScript CLI to verify our typings compile
 
-import S, { FluentSchemaError } from '../FluentSchema'
+import S, { FluentSchemaError } from '../FluentJSONSchema'
 
 console.log('isFluentSchema:', S.object().isFluentSchema)
 const schema = S.object()

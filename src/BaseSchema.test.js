@@ -1,5 +1,5 @@
 const { BaseSchema } = require('./BaseSchema')
-const S = require('./FluentSchema')
+const S = require('./FluentJSONSchema')
 
 describe('BaseSchema', () => {
   it('defined', () => {

@@ -1,5 +1,5 @@
 const { RawSchema } = require('./RawSchema')
-const S = require('./FluentSchema')
+const S = require('./FluentJSONSchema')
 
 describe('RawSchema', () => {
   it('defined', () => {

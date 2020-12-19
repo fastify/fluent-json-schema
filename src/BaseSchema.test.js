@@ -1,5 +1,5 @@
 const { BaseSchema } = require('./BaseSchema')
-const S = require('./FluentSchema')
+const S = require('./FluentJSONSchema')
 
 describe('BaseSchema', () => {
   it('defined', () => {
@@ -10,8 +10,12 @@ describe('BaseSchema', () => {
     expect(BaseSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
   })
 
-  it('Expose plain boolean', () => {
+  it('Expose legacy plain boolean', () => {
     expect(BaseSchema().isFluentSchema).toBeDefined()
+  })
+
+  it('Expose plain boolean', () => {
+    expect(BaseSchema().isFluentJSONSchema).toBeDefined()
   })
 
   describe('factory', () => {

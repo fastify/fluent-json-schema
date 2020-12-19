@@ -1,5 +1,5 @@
 const { StringSchema, FORMATS } = require('./StringSchema')
-const S = require('./FluentSchema')
+const S = require('./FluentJSONSchema')
 
 describe('StringSchema', () => {
   it('defined', () => {

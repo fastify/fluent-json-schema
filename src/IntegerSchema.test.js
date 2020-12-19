@@ -1,5 +1,5 @@
 const { IntegerSchema } = require('./IntegerSchema')
-const S = require('./FluentSchema')
+const S = require('./FluentJSONSchema')
 
 describe('IntegerSchema', () => {
   it('defined', () => {

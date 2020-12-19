@@ -1,5 +1,5 @@
 'use strict'
-const S = require('./FluentSchema')
+const S = require('./FluentJSONSchema')
 const Ajv = require('ajv')
 
 const ROLES = {

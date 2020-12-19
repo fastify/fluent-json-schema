@@ -1,5 +1,5 @@
 const { ArraySchema } = require('./ArraySchema')
-const S = require('./FluentSchema')
+const S = require('./FluentJSONSchema')
 
 describe('ArraySchema', () => {
   it('defined', () => {
@@ -187,8 +187,7 @@ describe('ArraySchema', () => {
         expect(
           S.object()
             .prop('p1', ArraySchema().default(value))
-            .valueOf()
-            .properties.p1.default
+            .valueOf().properties.p1.default
         ).toBe(value)
       })
     })

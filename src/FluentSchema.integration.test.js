@@ -190,7 +190,7 @@ describe('S', () => {
     })
   })
 
-  // https://github.com/fastify/fluent-schema/pull/40
+  // https://github.com/fastify/fluent-json-schema/pull/40
   describe('cloning objects retains boolean', () => {
     const ajv = new Ajv()
     const config = {
@@ -198,7 +198,7 @@ describe('S', () => {
     }
     const _config = require('lodash.merge')({}, config)
     expect(config.schema[Symbol.for('fluent-schema-object')]).toBeDefined()
-    expect(_config.schema.isFluentSchema).toBeTruthy()
+    expect(_config.schema.isFluentJSONSchema).toBeTruthy()
     expect(_config.schema[Symbol.for('fluent-schema-object')]).toBeUndefined()
     const schema = _config.schema.valueOf()
     const validate = ajv.compile(schema)

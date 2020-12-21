@@ -2,7 +2,7 @@
 
 import S, { FluentSchemaError } from '../FluentJSONSchema'
 
-console.log('isFluentSchema:', S.object().isFluentSchema)
+console.log('isFluentSchema:', S.object().isFluentJSONSchema)
 const schema = S.object()
   .id('http://foo.com/user')
   .title('A User')

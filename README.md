@@ -3,7 +3,7 @@
 A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framework agnostic.
 
 [![view on npm](https://img.shields.io/npm/v/fluent-json-schema.svg)](https://www.npmjs.org/package/fluent-json-schema)
-![](https://github.com/fastify/fluent-json-schema/workflows/ci/badge.svg)
+[![](https://github.com/fastify/fluent-json-schema/workflows/ci/badge.svg)](https://github.com/fastify/fluent-json-schema/actions?query=workflow%3Aci)
 
 ## Features
 
@@ -313,7 +313,7 @@ In addition to extending schemas, it is also possible to reduce them into smalle
 when you have a large Fluent Schema, and would like to re-use some of its properties.
 
 ```js
-const S = require('fluid-schema')
+const S = require('fluent-json-schema')
 const userSchema = S.object()
   .prop('username', S.string())
   .prop('password', S.string())

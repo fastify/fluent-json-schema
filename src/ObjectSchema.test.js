@@ -833,6 +833,34 @@ describe('ObjectSchema', () => {
         type: 'object',
       })
     })
+
+    it('works correctly with required properties', () => {
+      const base = S.object()
+        .id('base')
+        .title('base')
+        .prop('foo', S.string().required())
+        .prop('bar', S.string())
+        .prop('baz', S.string().required())
+        .prop('qux', S.string())
+
+      const only = base.only(['foo', 'bar'])
+
+      expect(only.valueOf()).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        $id: 'base',
+        title: 'base',
+        properties: {
+          foo: {
+            type: 'string',
+          },
+          bar: {
+            type: 'string',
+          },
+        },
+        required: ['foo'],
+        type: 'object',
+      })
+    })
   })
 
   describe('raw', () => {

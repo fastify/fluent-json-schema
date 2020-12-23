@@ -291,6 +291,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
           properties: schema.properties.filter(p =>
             properties.includes(p.name)
           ),
+          required: schema.required.filter(p => properties.includes(p)),
         },
         ...options,
       })

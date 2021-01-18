@@ -197,12 +197,12 @@ describe('S', () => {
       schema: S.object().prop('foo', S.string().enum(['foo'])),
     }
     const _config = require('lodash.merge')({}, config)
-    expect(config.schema[Symbol.for('fluent-schema-object')]).toBeDefined()
-    expect(_config.schema.isFluentJSONSchema).toBeTruthy()
-    expect(_config.schema[Symbol.for('fluent-schema-object')]).toBeUndefined()
     const schema = _config.schema.valueOf()
     const validate = ajv.compile(schema)
     it('matches', () => {
+      expect(config.schema[Symbol.for('fluent-schema-object')]).toBeDefined()
+      expect(_config.schema.isFluentJSONSchema).toBeTruthy()
+      expect(_config.schema[Symbol.for('fluent-schema-object')]).toBeUndefined()
       expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',

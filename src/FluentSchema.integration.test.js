@@ -574,9 +574,5 @@ describe('S', () => {
         })
       })
     })
-
-    describe('complex', () => {
-      it('works', () => {})
-    })
   })
 })

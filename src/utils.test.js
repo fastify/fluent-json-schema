@@ -3,7 +3,7 @@ const { StringSchema } = require('./StringSchema')
 const { ObjectSchema } = require('./ObjectSchema')
 
 describe('setRaw', () => {
-  it('add an attribute to a prop', () => {
+  it('add an attribute to a prop using ObjectSchema', () => {
     const factory = ObjectSchema
     const schema = setRaw(
       { schema: { properties: [{ name: 'foo', type: 'string' }] }, factory },
@@ -19,7 +19,7 @@ describe('setRaw', () => {
     })
   })
 
-  it('add an attribute to a prop', () => {
+  it('add an attribute to a prop using StringSchema', () => {
     const factory = StringSchema
     const schema = setRaw(
       { schema: { type: 'string', properties: [] }, factory },

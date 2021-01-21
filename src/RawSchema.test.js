@@ -253,29 +253,4 @@ describe('RawSchema', () => {
       })
     })
   })
-
-  /*  describe('constructor', () => {
-    it('without params', () => {
-      expect(RawSchema().valueOf()).toEqual({
-        // $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'object',
-      })
-    })
-
-  })
-
-  it('from S', () => {
-    expect(S.object().valueOf()).toEqual({
-      $schema: 'http://json-schema.org/draft-07/schema#',
-      type: 'object',
-    })
-  })
-
-  it('valueOf', () => {
-    expect(
-      ObjectSchema()
-        .prop('foo', S.string())
-        .valueOf()
-    ).toEqual({ properties: { foo: { type: 'string' } }, type: 'object' })
-  })*/
 })

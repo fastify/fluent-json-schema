@@ -354,7 +354,7 @@ describe('BaseSchema', () => {
         })
       })
 
-      it('S nested', () => {
+      it('S nested required', () => {
         expect(
           S.object()
             .prop('prop', S.anyOf([]).required())

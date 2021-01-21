@@ -67,7 +67,7 @@
     "jsdoc-to-markdown": "^4.0.1",
     "lint-staged": "^8.0.4",
     "lodash.merge": "^4.6.2",
-    "prettier": "^1.14.3",
+    "prettier": "^2.2.1",
     "typescript": "^3.2.2"
   },
   "dependencies": {

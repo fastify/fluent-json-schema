@@ -35,6 +35,11 @@
     }
   },
   "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/example.js",
+      "!src/types/*.js"
+    ],
     "coverageReporters": [
       "text",
       "lcovonly"
@@ -47,8 +52,9 @@
     ]
   },
   "scripts": {
-    "test": "jest src/**.test.js --verbose && yarn typescript",
-    "test:watch": "jest src/**.test.js --verbose --watch",
+    "test": "jest src/*.test.js --verbose && npm run typescript",
+    "test:coverage": "jest --coverage && npm run typescript",
+    "test:watch": "jest src/*.test.js --verbose --watch",
     "typescript": "tsc --project ./src/types/tsconfig.json",
     "format": "prettier --write ./src/**/*.js",
     "coverage": "jest src/**.test.js --coverage",

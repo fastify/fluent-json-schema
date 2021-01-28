@@ -5,6 +5,7 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framew
 [![view on npm](https://img.shields.io/npm/v/fluent-json-schema.svg)](https://www.npmjs.org/package/fluent-json-schema)
 [![](https://github.com/fastify/fluent-json-schema/workflows/ci/badge.svg)](https://github.com/fastify/fluent-json-schema/actions?query=workflow%3Aci)
 [![Known Vulnerabilities](https://snyk.io/test/github/fastify/fluent-json-schema/badge.svg)](https://snyk.io/test/github/fastify/fluent-json-schema)
+[![Coverage Status](https://coveralls.io/repos/github/fastify/fluent-json-schema/badge.svg?branch=master)](https://coveralls.io/github/fastify/fluent-json-schema?branch=master)
 
 ## Features
 
@@ -37,24 +38,9 @@ const schema = S.object()
   .id('http://foo/user')
   .title('My First Fluent JSON Schema')
   .description('A simple user')
-  .prop(
-    'email',
-    S.string()
-      .format(S.FORMATS.EMAIL)
-      .required()
-  )
-  .prop(
-    'password',
-    S.string()
-      .minLength(8)
-      .required()
-  )
-  .prop(
-    'role',
-    S.string()
-      .enum(Object.values(ROLES))
-      .default(ROLES.USER)
-  )
+  .prop('email', S.string().format(S.FORMATS.EMAIL).required())
+  .prop('password', S.string().minLength(8).required())
+  .prop('role', S.string().enum(Object.values(ROLES)).default(ROLES.USER))
   .prop(
     'birthday',
     S.raw({ type: 'string', format: 'date', formatMaximum: '2020-01-01' }) // formatMaximum is an AJV custom keywords
@@ -331,9 +317,7 @@ Every Fluent Schema objects contains a boolean `isFluentSchema`. In this way you
 
 ```js
 const S = require('fluent-json-schema')
-const schema = S.object()
-  .prop('foo', S.string())
-  .prop('bar', S.number())
+const schema = S.object().prop('foo', S.string()).prop('bar', S.number())
 console.log(schema.isFluentSchema) // true
 ```
 

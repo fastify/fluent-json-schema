@@ -16,16 +16,34 @@ jobs:
         uses: actions/setup-node@v2.1.4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install --ignore-scripts
-      - run: npm run build --if-present
-      - run: npm test
+      - run: |
+          npm install --ignore-scripts
+          npm run build --if-present
+          npm run test:coverage
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
+          flag-name: run-${{ matrix.node-version }}-${{ matrix.os }}
+
+  coverage:
+    name: Aggregate Coverage Calculations
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
 
   automerge:
-      name: Automatically merge Dependabot pull requests
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-          - uses: fastify/github-action-merge-dependabot@v1.1.1
-            if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request' }}
-            with:
-                github-token: ${{ secrets.GITHUB_TOKEN }}
+    name: Automatically merge Dependabot pull requests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fastify/github-action-merge-dependabot@v1.1.1
+        if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request' }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

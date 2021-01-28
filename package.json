@@ -35,25 +35,26 @@
     }
   },
   "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/example.js",
+      "!src/types/*.js"
+    ],
     "coverageReporters": [
       "text",
       "lcovonly"
     ]
   },
   "lint-staged": {
-    "linters": {
-      "*.{json,md,js,ts}": [
-        "prettier --write",
-        "git add"
-      ]
-    },
-    "ignore": [
-      "package.json"
+    "*.{json,md,js,ts,yml}": [
+      "prettier --write",
+      "git add"
     ]
   },
   "scripts": {
-    "test": "jest src/**.test.js --verbose && yarn typescript",
-    "test:watch": "jest src/**.test.js --verbose --watch",
+    "test": "jest src/*.test.js --verbose && npm run typescript",
+    "test:coverage": "jest --coverage && npm run typescript",
+    "test:watch": "jest src/*.test.js --verbose --watch",
     "typescript": "tsc --project ./src/types/tsconfig.json",
     "format": "prettier --write ./src/**/*.js",
     "coverage": "jest src/**.test.js --coverage",
@@ -62,6 +63,7 @@
   "devDependencies": {
     "ajv": "^6.10.2",
     "ajv-keywords": "^3.4.1",
+    "coveralls": "^3.1.0",
     "husky": "^4.3.8",
     "jest": "^24.3.1",
     "jsdoc-to-markdown": "^6.0.1",

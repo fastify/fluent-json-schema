@@ -6,6 +6,7 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framew
 [![](https://github.com/fastify/fluent-json-schema/workflows/ci/badge.svg)](https://github.com/fastify/fluent-json-schema/actions?query=workflow%3Aci)
 [![Known Vulnerabilities](https://snyk.io/test/github/fastify/fluent-json-schema/badge.svg)](https://snyk.io/test/github/fastify/fluent-json-schema)
 [![Coverage Status](https://coveralls.io/repos/github/fastify/fluent-json-schema/badge.svg?branch=master)](https://coveralls.io/github/fastify/fluent-json-schema?branch=master)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
 
 ## Features
 

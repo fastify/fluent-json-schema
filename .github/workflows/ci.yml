@@ -16,10 +16,12 @@ jobs:
         uses: actions/setup-node@v2.1.4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: |
+      - name: Install Dependencies
+        run: |
           npm install --ignore-scripts
           npm run build --if-present
-          npm run test:coverage
+      - name: Tests
+        run: npm run test:coverage
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@v1.1.2
         with:

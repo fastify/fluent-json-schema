@@ -52,12 +52,12 @@
     ]
   },
   "scripts": {
-    "test": "jest src/*.test.js --verbose && npm run typescript",
+    "test": "jest --verbose && npm run typescript",
     "test:coverage": "jest --coverage && npm run typescript",
-    "test:watch": "jest src/*.test.js --verbose --watch",
+    "test:watch": "jest --verbose --watch",
     "typescript": "tsc --project ./src/types/tsconfig.json",
     "format": "prettier --write ./src/**/*.js",
-    "coverage": "jest src/**.test.js --coverage",
+    "coverage": "jest --coverage",
     "doc": "jsdoc2md ./src/*.js > docs/API.md"
   },
   "devDependencies": {

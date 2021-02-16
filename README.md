@@ -13,8 +13,8 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framew
 - Fluent schema implements JSON Schema draft-07 standards
 - Faster and shorter way to write a JSON Schema via a [fluent API](https://en.wikipedia.org/wiki/Fluent_interface)
 - Runtime errors for invalid options or keywords misuse
-- Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
-- Typescript definitions
+- JavaScript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
+- TypeScript definitions
 - Coverage 99%
 
 ## Install
@@ -130,9 +130,9 @@ Schema generated:
 }
 ```
 
-## Typescript
+## TypeScript
 
-with `"esModuleInterop": true` activated in the `tsconfig.json`
+With `"esModuleInterop": true` activated in the `tsconfig.json`:
 
 ```typescript
 import S from 'fluent-json-schema'
@@ -143,7 +143,7 @@ const schema = S.object()
   .valueOf()
 ```
 
-with `"esModuleInterop": false` in the `tsconfig.json`
+With `"esModuleInterop": false` in the `tsconfig.json`:
 
 ```typescript
 import * as S from 'fluent-json-schema'
@@ -156,8 +156,8 @@ const schema = S.object()
 
 ## Validation
 
-Fluent schema **doesn't** validate a JSON schema. However there are many libraries that can do that for you.
-Below a few examples using [AJV](https://ajv.js.org/)
+Fluent schema **does not** validate a JSON schema. However, many libraries can do that for you.
+Below a few examples using [AJV](https://ajv.js.org/):
 
     npm install ajv --save
 
@@ -167,7 +167,7 @@ or
 
 ### Validate an empty model
 
-Snippet
+Snippet:
 
 ```javascript
 const ajv = new Ajv({ allErrors: true })
@@ -203,7 +203,7 @@ errors: [
 
 ### Validate a partially filled model
 
-Snippet
+Snippet:
 
 ```javascript
 user = { email: 'test', password: 'password' }
@@ -227,7 +227,7 @@ errors:
 
 ### Validate a model with a wrong format attribute
 
-Snippet
+Snippet:
 
 ```javascript
 user = { email: 'test@foo.com', password: 'password' }
@@ -259,7 +259,7 @@ errors: [ { keyword: 'required',
 
 ### Valid model
 
-Snippet
+Snippet:
 
 ```javascript
 user = { email: 'test@foo.com', password: 'password' }
@@ -275,8 +275,8 @@ Output:
 
 Normally inheritance with JSON Schema is achieved with `allOf`. However when `.additionalProperties(false)` is used the validator won't
 understand which properties come from the base schema. `S.extend` creates a schema merging the base into the new one so
-that the validator knows all the properties because it's evaluating only a single schema.
-For example in a CRUD API `POST /users` could use the `userBaseSchema` rather than `GET /users` or `PATCH /users` use the `userSchema`
+that the validator knows all the properties because it is evaluating only a single schema.
+For example, in a CRUD API `POST /users` could use the `userBaseSchema` rather than `GET /users` or `PATCH /users` use the `userSchema`
 which contains the `id`, `createdAt` and `updatedAt` generated server side.
 
 ```js
@@ -314,7 +314,7 @@ const loginSchema = userSchema.only(['username', 'password'])
 
 ### Detect Fluent Schema objects
 
-Every Fluent Schema objects contains a boolean `isFluentSchema`. In this way you can write your own utilities that understands the Fluent Schema API and improve the user experience of your tool.
+Every Fluent Schema object contains a boolean `isFluentSchema`. In this way, you can write your own utilities that understands the Fluent Schema API and improve the user experience of your tool.
 
 ```js
 const S = require('fluent-json-schema')

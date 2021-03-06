@@ -309,6 +309,27 @@ describe('ObjectSchema', () => {
             )
           )
         })
+        
+        it('empty definitions', () => {
+          expect(
+            ObjectSchema({ generateIds: true })
+              .definition('entity')
+              .prop('prop', S.ref('entity'))
+              .valueOf()
+          ).toEqual({
+            definitions: {
+              entity: {
+                $id: '#definitions/entity',
+              },
+            },
+            properties: {
+              prop: {
+                $ref: 'entity',
+              },
+            },
+            type: 'object',
+          })
+        })
 
         it('throws an error passing an array as value', () => {
           expect(() => {

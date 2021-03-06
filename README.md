@@ -13,8 +13,8 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framew
 - Fluent schema implements JSON Schema draft-07 standards
 - Faster and shorter way to write a JSON Schema via a [fluent API](https://en.wikipedia.org/wiki/Fluent_interface)
 - Runtime errors for invalid options or keywords misuse
-- Javascript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
-- Typescript definitions
+- JavaScript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
+- TypeScript definitions
 - Coverage 100%
 
 ## Install

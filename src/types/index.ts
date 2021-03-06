@@ -23,18 +23,12 @@ const schema = S.object()
   .prop('email2', S.string().format(S.FORMATS.EMAIL))
   .prop(
     'avatar',
-    S.string()
-      .contentEncoding('base64')
-      .contentMediaType('image/png')
+    S.string().contentEncoding('base64').contentMediaType('image/png')
   )
   .required()
   .prop(
     'password',
-    S.string()
-      .default('123456')
-      .minLength(6)
-      .maxLength(12)
-      .pattern('.*')
+    S.string().default('123456').minLength(6).maxLength(12).pattern('.*')
   )
   .required()
   .prop('addresses', S.array().items([S.ref('#address')]))
@@ -89,8 +83,10 @@ try {
   }
 }
 
-const arrayExtendedSchema = S.array()
-  .items(userSchema)
-  .valueOf()
+const arrayExtendedSchema = S.array().items(userSchema).valueOf()
 
 console.log('array of user\n', JSON.stringify(arrayExtendedSchema))
+
+const extendExtendedSchema = S.object().extend(userSchema)
+
+console.log('extend of user\n', JSON.stringify(extendExtendedSchema))

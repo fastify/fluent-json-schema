@@ -122,7 +122,7 @@ export interface ObjectSchema extends BaseSchema<ObjectSchema> {
   patternProperties: (options: PatternPropertiesOptions) => ObjectSchema
   dependencies: (options: DependenciesOptions) => ObjectSchema
   propertyNames: (value: JSONSchema) => ObjectSchema
-  extend: (schema: ObjectSchema) => ExtendedSchema
+  extend: (schema: ObjectSchema | ExtendedSchema) => ExtendedSchema
   only: (properties: string[]) => ObjectSchema
 }
 

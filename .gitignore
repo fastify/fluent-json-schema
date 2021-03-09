@@ -115,6 +115,16 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# Vim swap files
+*.swp
+
+# macOS files
+.DS_Store
+
 # lock files
 package-lock.json
 yarn.lock
+
+# editor files
+.vscode
+.idea

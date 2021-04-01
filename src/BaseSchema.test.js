@@ -154,6 +154,30 @@ describe('BaseSchema', () => {
         ).toEqual([prop])
       })
 
+      describe('unique keys on required', () => {
+        it('repeated calls to required()', () => {
+          expect(() => {
+            return S.object()
+            .prop("A", S.string()).required().required()
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'required' has repeated keys, check your calls to require()"
+            )
+          )
+        })
+        it('repeated props on appendRequired()', () => {
+          expect(() => {
+            return S.object()
+            .prop("A", S.string().required())
+            .prop("A", S.string().required())
+          }).toThrowError(
+            new S.FluentSchemaError(
+              "'required' has repeated keys, check your calls to require()"
+            )
+          )
+        })
+      })
+
       describe('array', () => {
         it('simple', () => {
           const required = ['foo', 'bar']

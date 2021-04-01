@@ -18,6 +18,8 @@ const last = array => {
   return prop
 }
 
+const isUniq = array => array.filter((v, i, a) => a.indexOf(v) === i).length === array.length;
+
 const omit = (obj, props) =>
   Object.entries(obj).reduce((memo, [key, value]) => {
     if (props.includes(key)) return memo
@@ -154,9 +156,14 @@ const appendRequired = ({
     { schemaRequired: [], attributeRequired: [] }
   )
 
+  const patchedRequired = [...schema.required, ...schemaRequired];
+  if(!isUniq(patchedRequired)){
+    throw new FluentSchemaError("'required' has repeated keys, check your calls to require()")
+  }
+
   const schemaPatched = {
     ...schema,
-    required: [...schema.required, ...schemaRequired],
+    required: patchedRequired,
   }
   const attributesPatched = {
     ...attributes,
@@ -210,6 +217,7 @@ module.exports = {
   hasCombiningKeywords,
   FluentSchemaError,
   last,
+  isUniq,
   flat,
   toArray,
   omit,

@@ -4,6 +4,7 @@ const {
   omit,
   isFluentSchema,
   last,
+  isUniq,
   patchIdsWithParentId,
   REQUIRED,
   setAttribute,
@@ -194,6 +195,11 @@ const BaseSchema = (
       : currentProp
       ? [...schema.required, currentProp.name]
       : [REQUIRED]
+    
+    if(!isUniq(required)){
+      throw new FluentSchemaError("'required' has repeated keys, check your calls to require()")
+    }
+
     return options.factory({
       schema: { ...schema, required },
       ...options,

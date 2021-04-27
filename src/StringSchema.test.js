@@ -97,22 +97,34 @@ describe('StringSchema', () => {
       it('as a string', () => {
         expect(
           StringSchema()
-            .pattern('.*')
+            .pattern('\\/.*\\/')
             .valueOf()
         ).toEqual({
           type: 'string',
-          pattern: '.*',
+          pattern: '\\/.*\\/',
         })
       })
-      it('as a regex', () => {
+      it('as a regex without flags', () => {
         const prop = 'prop'
         expect(
           StringSchema()
-            .pattern(/.*/gi)
+            .pattern(/\/.*\//)
             .valueOf()
         ).toEqual({
           type: 'string',
-          pattern: '.*',
+          pattern: '\\/.*\\/',
+        })
+      })
+
+      it('as a regex with flags', () => {
+        const prop = 'prop'
+        expect(
+          StringSchema()
+            .pattern(/\/.*\//gi)
+            .valueOf()
+        ).toEqual({
+          type: 'string',
+          pattern: '\\/.*\\/',
         })
       })
 

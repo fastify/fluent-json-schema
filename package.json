@@ -27,7 +27,7 @@
     "url": "https://github.com/fastify/fluent-json-schema.git"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=12"
   },
   "husky": {
     "hooks": {

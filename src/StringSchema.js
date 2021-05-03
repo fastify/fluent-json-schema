@@ -99,7 +99,7 @@ const StringSchema = (
       pattern = pattern
         .toString()
         .substr(1)
-        .replace(`/${flags}`, '')
+        .replace(new RegExp(`/${flags}$`), '')
     }
 
     return setAttribute({ schema, ...options }, ['pattern', pattern, 'string'])

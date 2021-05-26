@@ -64,7 +64,7 @@
     "ajv": "^6.10.2",
     "ajv-keywords": "^3.4.1",
     "husky": "^6.0.0",
-    "jest": "^26.6.3",
+    "jest": "^27.0.1",
     "jsdoc-to-markdown": "^7.0.0",
     "lint-staged": "^11.0.0",
     "lodash.merge": "^4.6.2",

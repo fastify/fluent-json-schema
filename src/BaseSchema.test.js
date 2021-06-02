@@ -178,6 +178,16 @@ describe('BaseSchema', () => {
         })
       })
 
+      it('root-level required', () => {
+        expect(() => {
+          return S.object().required().valueOf()
+        }).toThrowError(
+          new S.FluentSchemaError(
+            "'required' has called on root-level schema, check your calls to require()"
+          )
+        )
+      })
+
       describe('array', () => {
         it('simple', () => {
           const required = ['foo', 'bar']

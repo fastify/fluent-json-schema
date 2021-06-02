@@ -21,18 +21,12 @@ const schema = S.object()
   .prop('email', S.string().format('email'))
   .prop(
     'avatar',
-    S.string()
-      .contentEncoding('base64')
-      .contentMediaType('image/png')
+    S.string().contentEncoding('base64').contentMediaType('image/png')
   )
   .required()
   .prop(
     'password',
-    S.string()
-      .default('123456')
-      .minLength(6)
-      .maxLength(12)
-      .pattern('.*')
+    S.string().default('123456').minLength(6).maxLength(12).pattern('.*')
   )
   .required()
   .prop('addresses', S.array().items([S.ref('#address')]))

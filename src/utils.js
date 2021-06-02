@@ -205,7 +205,7 @@ const setComposeType = ({ prop, schemas, schema, options }) => {
   }
 
   const values = schemas.map(schema => {
-    const { $schema, ...props } = schema.valueOf()
+    const { $schema, ...props } = schema.valueOf({ isRoot: false })
     return props
   })
 

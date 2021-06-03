@@ -158,7 +158,7 @@ const appendRequired = ({
 
   const patchedRequired = [...schema.required, ...schemaRequired];
   if(!isUniq(patchedRequired)){
-    throw new FluentSchemaError("'required' has repeated keys, check your calls to require()")
+    throw new FluentSchemaError("'required' has repeated keys, check your calls to .required()")
   }
 
   const schemaPatched = {

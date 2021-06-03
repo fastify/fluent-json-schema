@@ -195,8 +195,9 @@ const BaseSchema = (
       : currentProp
       ? [...schema.required, currentProp.name]
       : [REQUIRED]
+
     if(!isUniq(required)){
-      throw new FluentSchemaError("'required' has repeated keys, check your calls to require()")
+      throw new FluentSchemaError("'required' has repeated keys, check your calls to .required()")
     }
 
     return options.factory({
@@ -413,7 +414,7 @@ const BaseSchema = (
     const { properties, definitions, required, $schema, ...rest } = schema
 
     if (isRoot && required && !required.every((v) => typeof v === 'string')) {
-      throw new FluentSchemaError("'required' has called on root-level schema, check your calls to require()")
+      throw new FluentSchemaError("'required' has called on root-level schema, check your calls to .required()")
     }
 
     return Object.assign(

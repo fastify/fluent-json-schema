@@ -161,7 +161,7 @@ describe('BaseSchema', () => {
             .prop("A", S.string()).required().required()
           }).toThrowError(
             new S.FluentSchemaError(
-              "'required' has repeated keys, check your calls to require()"
+              "'required' has repeated keys, check your calls to .required()"
             )
           )
         })
@@ -172,7 +172,7 @@ describe('BaseSchema', () => {
             .prop("A", S.string().required())
           }).toThrowError(
             new S.FluentSchemaError(
-              "'required' has repeated keys, check your calls to require()"
+              "'required' has repeated keys, check your calls to .required()"
             )
           )
         })
@@ -183,7 +183,7 @@ describe('BaseSchema', () => {
           return S.object().required().valueOf()
         }).toThrowError(
           new S.FluentSchemaError(
-            "'required' has called on root-level schema, check your calls to require()"
+            "'required' has called on root-level schema, check your calls to .required()"
           )
         )
       })

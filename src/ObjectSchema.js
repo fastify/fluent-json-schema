@@ -58,7 +58,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         ])
       }
       if (isFluentSchema(value)) {
-        const { $schema, ...rest } = value.valueOf()
+        const { $schema, ...rest } = value.valueOf({ isRoot: false })
         return setAttribute({ schema, ...options }, [
           'additionalProperties',
           { ...rest },
@@ -127,7 +127,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
           )
         return {
           ...memo,
-          [pattern]: omit(schema.valueOf(), ['$schema']),
+          [pattern]: omit(schema.valueOf({ isRoot: false }), ['$schema']),
         }
       }, {})
       return setAttribute({ schema, ...options }, [
@@ -158,7 +158,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
           ...memo,
           [prop]: Array.isArray(schema)
             ? schema
-            : omit(schema.valueOf(), ['$schema', 'type', 'definitions']),
+            : omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions']),
         }
       }, {})
       return setAttribute({ schema, ...options }, [
@@ -182,7 +182,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         throw new FluentSchemaError("'propertyNames' must be a S")
       return setAttribute({ schema, ...options }, [
         'propertyNames',
-        omit(value.valueOf(), ['$schema']),
+        omit(value.valueOf({ isRoot: false }), ['$schema']),
         'object',
       ])
     },
@@ -204,7 +204,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
           )}'. Pass a FluentSchema object`
         )
       const target = props.def ? 'definitions' : 'properties'
-      let attributes = props.valueOf()
+      let attributes = props.valueOf({ isRoot: false })
       const $id =
         attributes.$id ||
         (options.generateIds ? `#${target}/${name}` : undefined)
@@ -310,7 +310,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     // TODO LS Is a definition a proper schema?
     definition: (name, props = {}) =>
       ObjectSchema({ schema, ...options }).prop(name, {
-        ...props.valueOf(),
+        ...props.valueOf({ isRoot: false }),
         def: true,
       }),
   }

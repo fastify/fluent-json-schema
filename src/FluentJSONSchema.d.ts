@@ -22,7 +22,7 @@ export interface BaseSchema<T> {
   writeOnly: (isWriteOnly?: boolean) => T
   isFluentSchema: boolean
   isFluentJSONSchema: boolean
-  raw: (fragment: any) => JSONSchema
+  raw: (fragment: any) => T
 }
 
 export type TYPE =
@@ -239,7 +239,7 @@ export interface S extends BaseSchema<S> {
   >(
     types: T
   ) => MixedSchema<T>
-  raw: (fragment: any) => JSONSchema
+  raw: (fragment: any) => S
   FORMATS: FORMATS
 }
 

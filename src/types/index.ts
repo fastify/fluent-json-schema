@@ -90,3 +90,11 @@ console.log('array of user\n', JSON.stringify(arrayExtendedSchema))
 const extendExtendedSchema = S.object().extend(userSchema)
 
 console.log('extend of user\n', JSON.stringify(extendExtendedSchema))
+
+const rawNullableSchema = S.object()
+  .raw({ nullable: true })
+  .required(['foo', 'hello'])
+  .prop('foo', S.string())
+  .prop('hello', S.string())
+
+console.log('raw schema with nullable props\n', JSON.stringify(rawNullableSchema))

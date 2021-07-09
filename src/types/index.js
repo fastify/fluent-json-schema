@@ -21,18 +21,12 @@ const schema = S.object()
   .prop('email', S.string().format('email'))
   .prop(
     'avatar',
-    S.string()
-      .contentEncoding('base64')
-      .contentMediaType('image/png')
+    S.string().contentEncoding('base64').contentMediaType('image/png')
   )
   .required()
   .prop(
     'password',
-    S.string()
-      .default('123456')
-      .minLength(6)
-      .maxLength(12)
-      .pattern('.*')
+    S.string().default('123456').minLength(6).maxLength(12).pattern('.*')
   )
   .required()
   .prop('addresses', S.array().items([S.ref('#address')]))
@@ -68,3 +62,22 @@ const userSchema = S.object()
   .valueOf()
 
 console.log('user:\n', JSON.stringify(userSchema))
+
+const dependentRequired = S.object()
+  .dependentRequired({
+    foo: ['bar'],
+  })
+  .prop('foo')
+  .prop('bar')
+  .valueOf()
+
+console.log('dependentRequired:\n', JSON.stringify(dependentRequired))
+
+const dependentSchemas = S.object()
+  .dependentSchemas({
+    foo: S.object().prop('bar'),
+  })
+  .prop('foo', S.object().prop('bar'))
+  .valueOf()
+
+console.log('dependentRequired:\n', JSON.stringify(dependentSchemas))

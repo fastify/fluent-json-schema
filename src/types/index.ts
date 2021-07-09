@@ -98,3 +98,22 @@ const rawNullableSchema = S.object()
   .prop('hello', S.string())
 
 console.log('raw schema with nullable props\n', JSON.stringify(rawNullableSchema))
+
+const dependentRequired = S.object()
+  .dependentRequired({
+    foo: ['bar'],
+  })
+  .prop('foo')
+  .prop('bar')
+  .valueOf()
+
+console.log('dependentRequired:\n', JSON.stringify(dependentRequired))
+
+const dependentSchemas = S.object()
+  .dependentSchemas({
+    foo: S.object().prop('bar'),
+  })
+  .prop('foo', S.object().prop('bar'))
+  .valueOf()
+
+console.log('dependentRequired:\n', JSON.stringify(dependentSchemas))

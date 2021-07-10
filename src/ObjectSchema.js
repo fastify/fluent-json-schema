@@ -152,7 +152,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
         if (!isFluentSchema(schema) && !Array.isArray(schema))
           throw new FluentSchemaError(
-            "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': S.string() }"
+            "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['bar'] } or { 'foo': S.string() }"
           )
         return {
           ...memo,
@@ -167,6 +167,62 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         'object',
       ])
     },
+
+    /**
+     * The value of "properties" MUST be an object. Each dependency value MUST be an array.
+     * Each element in the array MUST be a string and MUST be unique. If the dependency key is a property in the instance, each of the items in the dependency value must be a property that exists in the instance.
+     * 
+     * {@link https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.4|reference}
+     * @param {object} opts
+     * @returns {FluentSchema}
+     */
+
+    dependentRequired: opts => {
+    const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
+      if (!Array.isArray(schema))
+        throw new FluentSchemaError(
+          "'dependentRequired' invalid options. Provide a valid array e.g. { 'foo': ['bar'] }"
+        )
+      return {
+        ...memo,
+        [prop]: schema,
+      }
+    }, {})
+
+    return setAttribute({ schema, ...options }, [
+      'dependentRequired',
+      values,
+      'object',
+    ])
+  },
+
+    /**
+     * The value of "properties" MUST be an object. The dependency value MUST be a valid JSON Schema.
+     * Each dependency key is a property in the instance and the entire instance must validate against the dependency value.
+     * 
+     * {@link https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.9.2.2.4|reference}
+     * @param {object} opts
+     * @returns {FluentSchema}
+     */
+  dependentSchemas: opts => {
+    const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
+      if (!isFluentSchema(schema))
+        throw new FluentSchemaError(
+          "'dependentSchemas' invalid options. Provide a valid schema e.g. { 'foo': S.string() }"
+        )
+
+      return {
+        ...memo,
+        [prop]: omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions']),
+      }
+    }, {})
+
+    return setAttribute({ schema, ...options }, [
+      'dependentSchemas',
+      values,
+      'object',
+    ])
+  },
 
     /**
      * If the instance is an object, this keyword validates if every property name in the instance validates against the provided schema.

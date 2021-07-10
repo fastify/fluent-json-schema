@@ -501,7 +501,89 @@ describe('ObjectSchema', () => {
           ).toEqual(value)
         ).toThrowError(
           new S.FluentSchemaError(
-            "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['ba'] } or { 'foo': S.string() }"
+            "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['bar'] } or { 'foo': S.string() }"
+          )
+        )
+      })
+    })
+
+    describe('dependentRequired', () => {
+      it('valid', () => {
+        expect(
+          ObjectSchema()
+            .dependentRequired({
+              foo: ['bar'],
+            })
+            .prop('foo')
+            .prop('bar')
+            .valueOf()
+        ).toEqual({
+          type: 'object',
+          dependentRequired: {
+            foo: [ 'bar' ]
+          },
+          properties: {
+            foo: {},
+            bar: {}
+          }
+        })
+      })
+
+      it('invalid', () => {
+        const value = {
+          foo: ObjectSchema().prop('bar', S.string()),
+        }
+
+        expect(() => {
+          expect(
+            ObjectSchema()
+              .dependentRequired(value)
+              .prop('foo')
+          ).toEqual(value)
+        }).toThrowError(
+          new S.FluentSchemaError(
+            "'dependentRequired' invalid options. Provide a valid array e.g. { 'foo': ['bar'] }"
+          )
+        )
+      })
+    })
+
+    describe('dependentSchemas', () => {
+      it('valid', () => {
+        expect(
+          ObjectSchema()
+            .dependentSchemas({
+              foo: ObjectSchema().prop('bar', S.string())
+            })
+            .prop('foo')
+            .valueOf()
+        ).toEqual({
+          dependentSchemas: {
+            foo: {
+              properties: {
+                bar: { type: 'string' },
+              },
+            },
+          },
+          properties: { foo: {} },
+          type: 'object',
+        })
+      })
+
+      it('invalid', () => {
+        const value = {
+          foo: ['bar']
+        }
+
+        expect(() => {
+          expect(
+            ObjectSchema()
+              .dependentSchemas(value)
+              .prop('foo')
+          ).toEqual(value)
+        }).toThrowError(
+          new S.FluentSchemaError(
+            "'dependentSchemas' invalid options. Provide a valid schema e.g. { 'foo': S.string() }"
           )
         )
       })

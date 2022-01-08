@@ -178,23 +178,23 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     dependentRequired: opts => {
-      const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
-        if (!Array.isArray(schema))
-          throw new FluentSchemaError(
-            "'dependentRequired' invalid options. Provide a valid array e.g. { 'foo': ['bar'] }"
-          )
-        return {
-          ...memo,
-          [prop]: schema,
-        }
-      }, {})
+    const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
+      if (!Array.isArray(schema))
+        throw new FluentSchemaError(
+          "'dependentRequired' invalid options. Provide a valid array e.g. { 'foo': ['bar'] }"
+        )
+      return {
+        ...memo,
+        [prop]: schema,
+      }
+    }, {})
 
-      return setAttribute({ schema, ...options }, [
-        'dependentRequired',
-        values,
-        'object',
-      ])
-    },
+    return setAttribute({ schema, ...options }, [
+      'dependentRequired',
+      values,
+      'object',
+    ])
+  },
 
     /**
      * The value of "properties" MUST be an object. The dependency value MUST be a valid JSON Schema.
@@ -204,25 +204,25 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * @param {object} opts
      * @returns {FluentSchema}
      */
-    dependentSchemas: opts => {
-      const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
-        if (!isFluentSchema(schema))
-          throw new FluentSchemaError(
-            "'dependentSchemas' invalid options. Provide a valid schema e.g. { 'foo': S.string() }"
-          )
+  dependentSchemas: opts => {
+    const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
+      if (!isFluentSchema(schema))
+        throw new FluentSchemaError(
+          "'dependentSchemas' invalid options. Provide a valid schema e.g. { 'foo': S.string() }"
+        )
 
-        return {
-          ...memo,
-          [prop]: omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions']),
-        }
-      }, {})
+      return {
+        ...memo,
+        [prop]: omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions']),
+      }
+    }, {})
 
-      return setAttribute({ schema, ...options }, [
-        'dependentSchemas',
-        values,
-        'object',
-      ])
-    },
+    return setAttribute({ schema, ...options }, [
+      'dependentSchemas',
+      values,
+      'object',
+    ])
+  },
 
     /**
      * If the instance is an object, this keyword validates if every property name in the instance validates against the provided schema.

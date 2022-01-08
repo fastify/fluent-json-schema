@@ -520,7 +520,7 @@ describe('ObjectSchema', () => {
         ).toEqual({
           type: 'object',
           dependentRequired: {
-            foo: ['bar']
+            foo: [ 'bar' ]
           },
           properties: {
             foo: {},

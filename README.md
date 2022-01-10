@@ -295,10 +295,12 @@ const userSchema = S.object()
 console.log(userSchema)
 ```
 
-## Selecting only certain properties of your schema
+## Selecting certain properties of your schema
 
 In addition to extending schemas, it is also possible to reduce them into smaller schemas. This comes in handy
 when you have a large Fluent Schema, and would like to re-use some of its properties.
+
+Select only properties you want to keep.
 
 ```js
 const S = require('fluent-json-schema')
@@ -310,6 +312,20 @@ const userSchema = S.object()
   .prop('updatedAt', S.string().format('time'))
 
 const loginSchema = userSchema.only(['username', 'password'])
+```
+
+Or remove properties you dont want to keep.
+
+```js
+const S = require('fluent-json-schema')
+const personSchema = S.object()
+  .prop('name', S.string())
+  .prop('age', S.number())
+  .prop('id', S.string().format('uuid'))
+  .prop('createdAt', S.string().format('time'))
+  .prop('updatedAt', S.string().format('time'))
+
+const bodySchema = personSchema.without(['createdAt', 'updatedAt'])
 ```
 
 ### Detect Fluent Schema objects

@@ -344,10 +344,25 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       return ObjectSchema({
         schema: {
           ...schema,
-          properties: schema.properties.filter(p =>
-            properties.includes(p.name)
-          ),
+          properties: schema.properties.filter(({ name }) => properties.includes(name)),
           required: schema.required.filter(p => properties.includes(p)),
+        },
+        ...options,
+      })
+    },
+
+    /**
+     * Returns an object schema without a subset of keys provided
+     *
+     * @param properties a list of properties you dont want to keep
+     * @returns {ObjectSchema}
+     */
+    without: properties => {
+      return ObjectSchema({
+        schema: {
+          ...schema,
+          properties: schema.properties.filter(p => !properties.includes(p.name)),
+          required: schema.required.filter(p => !properties.includes(p)),
         },
         ...options,
       })

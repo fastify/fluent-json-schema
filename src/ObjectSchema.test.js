@@ -945,6 +945,68 @@ describe('ObjectSchema', () => {
     })
   })
 
+  describe('without', () => {
+    it('returns a subset of the object', () => {
+      const base = S.object()
+        .id('base')
+        .title('base')
+        .prop('foo', S.string())
+        .prop('bar', S.string())
+        .prop('baz', S.string())
+        .prop(
+          'children',
+          S.object()
+            .prop('alpha', S.string())
+            .prop('beta', S.string())
+        )
+
+      const without = base.without(['foo', 'children'])
+
+      expect(without.valueOf()).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        $id: 'base',
+        title: 'base',
+        properties: {
+          bar: {
+            type: 'string',
+          },
+          baz: {
+            type: 'string',
+          },
+        },
+        type: 'object',
+      })
+    })
+
+    it('works correctly with required properties', () => {
+      const base = S.object()
+        .id('base')
+        .title('base')
+        .prop('foo', S.string().required())
+        .prop('bar', S.string())
+        .prop('baz', S.string().required())
+        .prop('qux', S.string())
+
+      const without = base.without(['foo', 'bar'])
+
+      expect(without.valueOf()).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        $id: 'base',
+        title: 'base',
+        properties: {
+          baz: {
+            type: 'string',
+          },
+          qux: {
+            type: 'string',
+          },
+        },
+        required: ['baz'],
+        type: 'object',
+      })
+    })
+  })
+
   describe('raw', () => {
     it('allows to add a custom attribute', () => {
       const schema = ObjectSchema()

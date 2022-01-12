@@ -212,6 +212,171 @@ describe('BaseSchema', () => {
       })
     })
 
+    describe('deprecated', () => {
+      it('valid', () => {
+        expect(
+          BaseSchema()
+            .deprecated(true)
+            .valueOf().deprecated
+        ).toEqual(true)
+      })
+      it('invalid', () => {
+        expect(
+          () =>
+            BaseSchema()
+              .deprecated('somethingNotBoolean')
+              .valueOf().deprecated
+        ).toThrowError(
+          new S.FluentSchemaError(
+            "'deprecated' must be a boolean value"
+          )
+        )
+      })
+      it('valid with no value', () => {
+        expect(
+          BaseSchema()
+            .deprecated()
+            .valueOf().deprecated
+        ).toEqual(true)
+      })
+      it('can be set to false', () => {
+        expect(
+          BaseSchema()
+            .deprecated(false)
+            .valueOf().deprecated
+        ).toEqual(false)
+      })
+      it('property', () => {
+        expect(
+          S.object()
+            .prop('foo', S.string())
+            .prop('bar', S.string().deprecated())
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            bar: { type: 'string', deprecated: true },
+            foo: { type: 'string' }
+          },
+          type: 'object',
+        })
+      });
+      it('object', () => {
+        expect(
+          S.object()
+            .prop('foo', S.string())
+            .prop('bar', S
+              .object()
+              .deprecated()
+              .prop('raz', S.string())
+              .prop('iah', S.number()))
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            foo: { type: 'string' },
+            bar: {
+              type: 'object',
+              deprecated: true,
+              properties: {
+                raz: { type: 'string' },
+                iah: { type: 'number' }
+              },
+            },
+          },
+          type: 'object',
+        })
+      });
+      it('object property', () => {
+        expect(
+          S.object()
+            .prop('foo', S.string())
+            .prop('bar', S
+              .object()
+              .prop('raz', S.string().deprecated())
+              .prop('iah', S.number())
+            )
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          properties: {
+            foo: { type: 'string' },
+            bar: {
+              type: 'object',
+              properties: {
+                raz: { type: 'string', deprecated: true },
+                iah: { type: 'number' }
+              },
+            },
+          },
+          type: 'object',
+        })
+      });
+      it('array', () => {
+        expect(
+          S.object()
+            .prop('foo', S.string())
+            .prop('bar', S
+              .array()
+              .deprecated()
+              .items(S.number())
+            )
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          type: 'object',
+          properties: {
+            foo: { type: 'string' },
+            bar: {
+              type: 'array',
+              deprecated: true,
+              items: { type: 'number' }
+            }
+          },
+        })
+      });
+      it('array item', () => {
+        expect(
+          S.object()
+            .prop('foo', S.string())
+            .prop('bar', S
+              .array()
+              .items([
+                S.object().prop('zoo', S.string()).prop('biz', S.string()),
+                S.object().deprecated().prop('zal', S.string()).prop('boz', S.string())
+              ])
+            )
+            .valueOf()
+        ).toEqual({
+          $schema: 'http://json-schema.org/draft-07/schema#',
+          type: 'object',
+          properties: {
+            foo: { type: 'string' },
+            bar: {
+              type: 'array',
+              items: [
+                {
+                  type: 'object',
+                  properties: {
+                    zoo: { type: 'string' },
+                    biz: { type: 'string' }
+                  }
+                },
+                {
+                  type: 'object',
+                  deprecated: true,
+                  properties: {
+                    zal: { type: 'string' },
+                    boz: { type: 'string' }
+                  }
+                }
+              ]
+            }
+          },
+        })
+      });
+    })
+
     describe('enum', () => {
       it('valid', () => {
         const value = ['VALUE']

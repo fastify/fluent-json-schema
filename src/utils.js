@@ -20,6 +20,8 @@ const last = array => {
 
 const isUniq = array => array.filter((v, i, a) => a.indexOf(v) === i).length === array.length;
 
+const isBoolean = value => 'boolean' === typeof value;
+
 const omit = (obj, props) =>
   Object.entries(obj).reduce((memo, [key, value]) => {
     if (props.includes(key)) return memo
@@ -218,6 +220,7 @@ module.exports = {
   FluentSchemaError,
   last,
   isUniq,
+  isBoolean,
   flat,
   toArray,
   omit,

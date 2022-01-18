@@ -75,6 +75,17 @@ const userSubsetSchema = largeUserSchema.only(['username', 'password'])
 
 console.log('user subset:', JSON.stringify(userSubsetSchema.valueOf()))
 
+const personSchema = S.object()
+  .prop('name', S.string())
+  .prop('age', S.number())
+  .prop('id', S.string().format('uuid'))
+  .prop('createdAt', S.string().format('time'))
+  .prop('updatedAt', S.string().format('time'))
+
+const bodySchema = personSchema.without(['createdAt', 'updatedAt'])
+
+console.log('person subset:', JSON.stringify(bodySchema.valueOf()))
+
 try {
   S.object().prop('foo', 'boom!' as any)
 } catch (e) {
@@ -117,3 +128,10 @@ const dependentSchemas = S.object()
   .valueOf()
 
 console.log('dependentRequired:\n', JSON.stringify(dependentSchemas))
+
+const deprecatedSchema =  S.object()
+    .deprecated()
+    .prop('foo', S.string().deprecated())
+    .valueOf()
+
+console.log('deprecatedSchema:\n', JSON.stringify(deprecatedSchema))

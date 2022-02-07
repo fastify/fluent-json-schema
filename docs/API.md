@@ -31,7 +31,7 @@ Omitting this keyword has the same behavior as a value of 0.</p>
 <p><a href="https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.4">reference</a></p>
 </dd>
 <dt><a href="#maxItems">maxItems(max)</a> ⇒ <code>FluentSchema</code></dt>
-<dd><p>An array instance is valid against &quot;minItems&quot; if its size is greater than, or equal to, the value of this keyword.
+<dd><p>An array instance is valid against &quot;maxItems&quot; if its size is lower than, or equal to, the value of this keyword.
 Omitting this keyword has the same behavior as a value of 0.</p>
 <p><a href="https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.3">reference</a></p>
 </dd>

@@ -4,6 +4,7 @@ const {
   omit,
   isFluentSchema,
   last,
+  isBoolean,
   isUniq,
   patchIdsWithParentId,
   REQUIRED,
@@ -176,6 +177,20 @@ const BaseSchema = (
   writeOnly: isWriteOnly => {
     const value = isWriteOnly !== undefined ? isWriteOnly : true
     return setAttribute({ schema, ...options }, ['writeOnly', value, 'boolean'])
+  },
+
+  /**
+   * The value of deprecated can be left empty to indicate the property is deprecated.
+   * It takes an optional boolean which can be used to explicitly set deprecated true/false.
+   *
+   * {@link https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.9.3|reference}
+   * @param {Boolean} isDeprecated
+   * @returns {BaseSchema}
+   */
+  deprecated: (isDeprecated) => {
+    if(isDeprecated && !isBoolean(isDeprecated)) throw new FluentSchemaError("'deprecated' must be a boolean value")
+    const value = isDeprecated !== undefined ? isDeprecated : true
+    return setAttribute({ schema, ...options }, ['deprecated', value, 'boolean'])
   },
 
   /**

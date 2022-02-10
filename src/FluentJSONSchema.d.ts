@@ -20,6 +20,7 @@ export interface BaseSchema<T> {
   oneOf: (schema: Array<JSONSchema>) => T
   readOnly: (isReadOnly?: boolean) => T
   writeOnly: (isWriteOnly?: boolean) => T
+  deprecated: (isDeprecated?: boolean) => T
   isFluentSchema: boolean
   isFluentJSONSchema: boolean
   raw: (fragment: any) => T
@@ -124,6 +125,7 @@ export interface ObjectSchema extends BaseSchema<ObjectSchema> {
   propertyNames: (value: JSONSchema) => ObjectSchema
   extend: (schema: ObjectSchema | ExtendedSchema) => ExtendedSchema
   only: (properties: string[]) => ObjectSchema
+  without: (properties: string[]) => ObjectSchema
   dependentRequired: (options: DependentRequiredOptions) => ObjectSchema
   dependentSchemas: (options: DependentSchemaOptions) => ObjectSchema
 }

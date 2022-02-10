@@ -1,5 +1,4 @@
 'use strict'
-const { BaseSchema } = require('./BaseSchema')
 const { NullSchema } = require('./NullSchema')
 const { BooleanSchema } = require('./BooleanSchema')
 const { StringSchema } = require('./StringSchema')

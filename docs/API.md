@@ -31,7 +31,7 @@ Omitting this keyword has the same behavior as a value of 0.</p>
 <p><a href="https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.4">reference</a></p>
 </dd>
 <dt><a href="#maxItems">maxItems(max)</a> ⇒ <code>FluentSchema</code></dt>
-<dd><p>An array instance is valid against &quot;maxItems&quot; if its size is lower than, or equal to, the value of this keyword.
+<dd><p>An array instance is valid against &quot;minItems&quot; if its size is greater than, or equal to, the value of this keyword.
 Omitting this keyword has the same behavior as a value of 0.</p>
 <p><a href="https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.3">reference</a></p>
 </dd>
@@ -81,6 +81,11 @@ It takes an optional boolean which can be used to explicitly set readOnly true/f
 <dd><p>The value of writeOnly can be left empty to indicate the property is writeOnly.
 It takes an optional boolean which can be used to explicitly set writeOnly true/false.</p>
 <p><a href="https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.3">reference</a></p>
+</dd>
+<dt><a href="#deprecated">deprecated(isDeprecated)</a> ⇒ <code><a href="#BaseSchema">BaseSchema</a></code></dt>
+<dd><p>The value of deprecated can be left empty to indicate the property is deprecated.
+It takes an optional boolean which can be used to explicitly set deprecated true/false.</p>
+<p><a href="https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.9.3">reference</a></p>
 </dd>
 <dt><a href="#required">required()</a> ⇒ <code>FluentSchema</code></dt>
 <dd><p>Required has to be chained to a property:
@@ -272,6 +277,9 @@ Note the property name that the schema is testing will always be a string.</p>
 </dd>
 <dt><a href="#only">only(properties)</a> ⇒ <code><a href="#ObjectSchema">ObjectSchema</a></code></dt>
 <dd><p>Returns an object schema with only a subset of keys provided</p>
+</dd>
+<dt><a href="#without">without(properties)</a> ⇒ <code><a href="#ObjectSchema">ObjectSchema</a></code></dt>
+<dd><p>Returns an object schema without a subset of keys provided</p>
 </dd>
 <dt><a href="#definition">definition(name, props)</a> ⇒ <code>FluentSchema</code></dt>
 <dd><p>The &quot;definitions&quot; keywords provides a standardized location for schema authors to inline re-usable JSON Schemas into a more general schema.
@@ -559,6 +567,20 @@ It takes an optional boolean which can be used to explicitly set writeOnly true/
 | Param | Type |
 | --- | --- |
 | isWriteOnly | [<code>boolean</code>](#boolean) \| <code>undefined</code> | 
+
+<a name="deprecated"></a>
+
+## deprecated(isDeprecated) ⇒ [<code>BaseSchema</code>](#BaseSchema)
+The value of deprecated can be left empty to indicate the property is deprecated.
+It takes an optional boolean which can be used to explicitly set deprecated true/false.
+
+[reference](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.9.3)
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| isDeprecated | <code>Boolean</code> | 
 
 <a name="required"></a>
 
@@ -1071,6 +1093,17 @@ Returns an object schema with only a subset of keys provided
 | Param | Description |
 | --- | --- |
 | properties | a list of properties you want to keep |
+
+<a name="without"></a>
+
+## without(properties) ⇒ [<code>ObjectSchema</code>](#ObjectSchema)
+Returns an object schema without a subset of keys provided
+
+**Kind**: global function  
+
+| Param | Description |
+| --- | --- |
+| properties | a list of properties you dont want to keep |
 
 <a name="definition"></a>
 

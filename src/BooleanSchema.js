@@ -1,6 +1,5 @@
 'use strict'
 const { BaseSchema } = require('./BaseSchema')
-const { setAttribute } = require('./utils')
 
 const initialState = {
   type: 'boolean',

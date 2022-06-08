@@ -7,7 +7,7 @@ const { IntegerSchema } = require('./IntegerSchema')
 const { ObjectSchema } = require('./ObjectSchema')
 const { ArraySchema } = require('./ArraySchema')
 
-const { TYPES, setAttribute, FLUENT_SCHEMA } = require('./utils')
+const { TYPES, FLUENT_SCHEMA } = require('./utils')
 
 const initialState = {
   type: [],

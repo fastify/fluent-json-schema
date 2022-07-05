@@ -1,5 +1,4 @@
 'use strict'
-const merge = require('deepmerge')
 const { BaseSchema } = require('./BaseSchema')
 const {
   omit,
@@ -9,7 +8,7 @@ const {
   patchIdsWithParentId,
   appendRequired,
   FluentSchemaError,
-  combineMerge,
+  combineDeepmerge,
 } = require('./utils')
 
 const initialState = {
@@ -322,7 +321,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         throw new FluentSchemaError("Schema isn't FluentSchema type")
       }
       const src = base._getState()
-      const extended = merge(src, schema, { arrayMerge: combineMerge })
+      const extended = combineDeepmerge(src, schema)
       const {
         valueOf,
         isFluentSchema,

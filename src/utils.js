@@ -1,5 +1,4 @@
 'use strict'
-
 const deepmerge = require('@fastify/deepmerge')
 const isFluentSchema = obj => obj && obj.isFluentSchema
 

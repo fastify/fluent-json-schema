@@ -18,7 +18,7 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framew
 
 ## Install
 
-    npm install fluent-json-schema --save
+    npm i fluent-json-schema
 
 or
 
@@ -158,7 +158,7 @@ const schema = S.object()
 Fluent schema **does not** validate a JSON schema. However, many libraries can do that for you.
 Below a few examples using [AJV](https://ajv.js.org/):
 
-    npm install ajv --save
+    npm i ajv
 
 or
 

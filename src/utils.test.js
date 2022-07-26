@@ -1,4 +1,4 @@
-const { setRaw } = require('./utils')
+const { setRaw, combineDeepmerge } = require('./utils')
 const { StringSchema } = require('./StringSchema')
 const { ObjectSchema } = require('./ObjectSchema')
 
@@ -29,5 +29,42 @@ describe('setRaw', () => {
       nullable: true,
       type: 'string',
     })
+  })
+})
+
+describe('combineDeepmerge', () => {
+  it('should merge empty arrays', () => {
+    const result = combineDeepmerge([], []);
+    expect(result).toEqual([])
+  })
+
+  it('should merge array with primitive values', () => {
+    const result = combineDeepmerge([1], [2]);
+    expect(result).toEqual([1, 2])
+  })
+
+  it('should merge arrays with primitive values', () => {
+    const result = combineDeepmerge([], [1, 2]);
+    expect(result).toEqual([1, 2])
+  })
+
+  it('should merge array with simple Schemas', () => {
+    const result = combineDeepmerge([{ type: 'string' }], [{ type: 'string' }]);
+    expect(result).toEqual([{ type: 'string' }])
+  })
+
+  it('should merge array with named Schemas', () => {
+    const result = combineDeepmerge([{ name: 'variant 1', type: 'string' }], [{  name: 'variant 2', type: 'string' }]);
+    expect(result).toEqual([{ name: 'variant 1', type: 'string' }, { name: 'variant 2', type: 'string' }])
+  })
+
+  it('should merge array with same named Schemas', () => {
+    const result = combineDeepmerge([{ name: 'variant 2', type: 'string' }], [{  name: 'variant 2', type: 'number' }]);
+    expect(result).toEqual([{ name: 'variant 2', type: 'number' }])
+  })
+
+  it('should merge array with same named Schemas', () => {
+    const result = combineDeepmerge([{ name: 'variant 2', type: 'string' }], [{  name: 'variant 2', type: 'number' }, { name: 'variant 1', type: 'string' }]);
+    expect(result).toEqual([{ name: 'variant 2', type: 'number' }, { name: 'variant 1', type: 'string' }])
   })
 })

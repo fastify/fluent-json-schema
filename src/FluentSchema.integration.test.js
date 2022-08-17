@@ -36,9 +36,9 @@ describe('S', () => {
       })
       expect(validate.errors).toEqual([
         {
-          dataPath: '.password',
+          instancePath: '/password',
           keyword: 'type',
-          message: 'should be string',
+          message: 'must be string',
           params: { type: 'string' },
           schemaPath: '#/properties/password/type',
         },
@@ -74,9 +74,9 @@ describe('S', () => {
       })
       expect(validate.errors).toEqual([
         {
-          dataPath: '',
+          instancePath: '',
           keyword: 'required',
-          message: "should have required property 'extraProp'",
+          message: "must have required property 'extraProp'",
           params: { missingProperty: 'extraProp' },
           schemaPath: '#/then/required',
         },
@@ -118,9 +118,9 @@ describe('S', () => {
       })
       expect(validate.errors).toEqual([
         {
-          dataPath: '',
+          instancePath: '',
           keyword: 'required',
-          message: "should have required property 'thenProp'",
+          message: "must have required property 'thenProp'",
           params: { missingProperty: 'thenProp' },
           schemaPath: '#/then/required',
         },
@@ -400,9 +400,9 @@ describe('S', () => {
         const valid = validate(data)
         expect(validate.errors).toEqual([
           {
-            dataPath: '',
+            instancePath: '',
             keyword: 'required',
-            message: "should have required property 'password'",
+            message: "must have required property 'password'",
             params: { missingProperty: 'password' },
             schemaPath: '#/required',
           },
@@ -420,9 +420,9 @@ describe('S', () => {
         })
         expect(validate.errors).toEqual([
           {
-            dataPath: '.address.city',
+            instancePath: '/address/city',
             keyword: 'type',
-            message: 'should be string',
+            message: 'must be string',
             params: { type: 'string' },
             schemaPath: '#address/properties/city/type',
           },
@@ -487,7 +487,7 @@ describe('S', () => {
     describe('swaggger', () => {
       describe('nullable', () => {
         it('allows nullable', () => {
-          const ajv = new Ajv({ nullable: true })
+          const ajv = new Ajv()
           const schema = S.object()
             .prop('foo', S.raw({ nullable: true, type: 'string' }))
             .valueOf()
@@ -505,7 +505,7 @@ describe('S', () => {
       describe('formatMaximum', () => {
         it('checks custom keyword formatMaximum', () => {
           const ajv = new Ajv()
-          require('ajv-keywords/keywords/formatMaximum')(ajv)
+          require('ajv-formats')(ajv)
           /*        const schema = S.string()
             .raw({ nullable: false })
             .valueOf()*/
@@ -527,12 +527,11 @@ describe('S', () => {
           })
           expect(validate.errors).toEqual([
             {
-              dataPath: '.birthday',
+              instancePath: '/birthday',
               keyword: 'formatMaximum',
-              message: 'should be <= "2020-01-01"',
+              message: 'should be <= 2020-01-01',
               params: {
                 comparison: '<=',
-                exclusive: false,
                 limit: '2020-01-01',
               },
               schemaPath: '#/properties/birthday/formatMaximum',
@@ -542,7 +541,7 @@ describe('S', () => {
         })
         it('checks custom keyword larger with $data', () => {
           const ajv = new Ajv({ $data: true })
-          require('ajv-keywords/keywords/formatMaximum')(ajv)
+          require('ajv-formats')(ajv)
           /*        const schema = S.string()
             .raw({ nullable: false })
             .valueOf()*/
@@ -559,12 +558,11 @@ describe('S', () => {
           })
           expect(validate.errors).toEqual([
             {
-              dataPath: '.smaller',
+              instancePath: '/smaller',
               keyword: 'maximum',
-              message: 'should be <= 7',
+              message: 'must be <= 7',
               params: {
                 comparison: '<=',
-                exclusive: false,
                 limit: 7,
               },
               schemaPath: '#/properties/smaller/maximum',

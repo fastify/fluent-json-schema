@@ -58,8 +58,8 @@
     "doc": "jsdoc2md ./src/*.js > docs/API.md"
   },
   "devDependencies": {
-    "ajv": "^6.10.2",
-    "ajv-keywords": "^3.4.1",
+    "ajv": "^8.0.0",
+    "ajv-formats": "^2.1.1",
     "husky": "^8.0.1",
     "jest": "^28.0.0",
     "jsdoc-to-markdown": "^7.0.0",

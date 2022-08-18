@@ -3,7 +3,7 @@
   "version": "3.1.0",
   "description": "JSON Schema fluent API",
   "main": "src/FluentJSONSchema.js",
-  "typings": "src/FluentJSONSchema.d.ts",
+  "types": "types/FluentJSONSchema.d.ts",
   "keywords": [
     "JSON",
     "schema",
@@ -49,10 +49,11 @@
     ]
   },
   "scripts": {
-    "test": "jest src/*.test.js --verbose && npm run typescript",
-    "test:coverage": "jest --coverage && npm run typescript",
+    "test": "npm run test:unit && npm run test:typescript",
+    "test:unit": "jest src/*.test.js --verbose",
+    "test:coverage": "jest --coverage && npm run test:typescript",
     "test:watch": "jest src/*.test.js --verbose --watch",
-    "typescript": "tsc --project ./src/types/tsconfig.json",
+    "test:typescript": "tsd",
     "format": "prettier --write ./src/**/*.js",
     "coverage": "jest src/**.test.js --coverage",
     "doc": "jsdoc2md ./src/*.js > docs/API.md"
@@ -66,7 +67,7 @@
     "lint-staged": "^13.0.0",
     "lodash.merge": "^4.6.2",
     "prettier": "^2.2.1",
-    "typescript": "^4.1.3"
+    "tsd": "^0.22.0"
   },
   "dependencies": {
     "deepmerge": "^4.2.2"

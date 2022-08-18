@@ -652,6 +652,16 @@ describe('ObjectSchema', () => {
       })
     })
 
+    it('empty props', () => {
+      expect(
+        ObjectSchema()
+          .definition('foo')
+          .valueOf().definitions
+      ).toEqual({
+        foo: {},
+      })
+    })
+
     it('with id', () => {
       expect(
         ObjectSchema()

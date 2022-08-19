@@ -48,6 +48,11 @@ describe('combineDeepmerge', () => {
     expect(result).toEqual([1, 2])
   })
 
+  it('should merge arrays with primitive values', () => {
+    const result = combineDeepmerge([1, 2], [1, 2, 3]);
+    expect(result).toEqual([1, 2, 3])
+  })
+
   it('should merge array with simple Schemas', () => {
     const result = combineDeepmerge([{ type: 'string' }], [{ type: 'string' }]);
     expect(result).toEqual([{ type: 'string' }])

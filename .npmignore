@@ -1,5 +1,6 @@
 .editorconfig
 .gitignore
+.husky
 .npmignore
 .nvmrc
 .prettierrc

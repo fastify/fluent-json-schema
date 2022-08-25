@@ -34,8 +34,7 @@
   },
   "scripts": {
     "test": "npm run test:unit && npm run test:typescript",
-    "test:unit": "jest",
-    "test:coverage": "jest --coverage && npm run test:typescript",
+    "test:unit": "jest --coverage",
     "test:watch": "jest src/*.test.js --verbose --watch",
     "test:typescript": "tsd",
     "prepare": "husky install",

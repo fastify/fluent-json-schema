@@ -1,5 +1,5 @@
 'use strict'
-const merge = require('deepmerge')
+const deepmerge = require('@fastify/deepmerge')
 const isFluentSchema = obj => obj && obj.isFluentSchema
 
 const hasCombiningKeywords = attributes =>
@@ -40,23 +40,33 @@ const flat = array =>
     }
   }, {})
 
-const combineMerge = (target, source, options) => {
-  const destination = target.slice()
+const combineArray = (options) => {
 
-  source.forEach((item, index) => {
-    const prop = target.find(attr => attr.name === item.name)
-    if (typeof destination[index] === 'undefined') {
-      destination[index] = options.cloneUnlessOtherwiseSpecified(item, options)
-    } else if (options.isMergeableObject(prop)) {
-      const propIndex = target.findIndex(prop => prop.name === item.name)
-      destination[propIndex] = merge(prop, item, options)
-    } else if (target.indexOf(item) === -1) {
-      destination.push(item)
-    }
-  })
-  return destination
+  const {
+    clone,
+    isMergeableObject,
+    deepmerge,
+  } = options
+
+  return (target, source) => {
+    const result = target.slice()
+
+    source.forEach((item, index) => {
+      const prop = target.find(attr => attr.name === item.name)
+      if (typeof result[index] === 'undefined') {
+        result[index] = clone(item)
+      } else if (isMergeableObject(prop)) {
+        const propIndex = target.findIndex(prop => prop.name === item.name)
+        result[propIndex] = deepmerge(prop, item)
+      } else if (target.indexOf(item) === -1) {
+        result.push(item)
+      }
+    })
+    return result
+  }
 }
 
+const combineDeepmerge = deepmerge({ mergeArray: combineArray })
 const toArray = obj =>
   obj && Object.entries(obj).map(([key, value]) => ({ name: key, ...value }))
 
@@ -230,7 +240,7 @@ module.exports = {
   setRaw,
   setAttribute,
   setComposeType,
-  combineMerge,
+  combineDeepmerge,
   FORMATS,
   TYPES,
   FLUENT_SCHEMA,

@@ -37,35 +37,35 @@
       "lcovonly"
     ]
   },
-  "lint-staged": {
-    "*.{json,md,js,ts,yml}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
   "scripts": {
+    "lint": "standard | snazzy",
     "test": "npm run test:unit && npm run test:typescript",
     "test:unit": "jest src/*.test.js --verbose",
     "test:coverage": "jest --coverage && npm run test:typescript",
     "test:watch": "jest src/*.test.js --verbose --watch",
     "test:typescript": "tsd",
-    "prepare": "husky install",
-    "format": "prettier --write ./src/**/*.js",
     "coverage": "jest src/**.test.js --coverage",
     "doc": "jsdoc2md ./src/*.js > docs/API.md"
   },
+  "standard": {
+    "env": [ "jest" ]
+  },
   "devDependencies": {
+    "@fastify/pre-commit": "^2.0.2",
     "ajv": "^8.0.0",
     "ajv-formats": "^2.1.1",
-    "husky": "^8.0.1",
     "jest": "^28.0.0",
     "jsdoc-to-markdown": "^7.0.0",
-    "lint-staged": "^13.0.0",
     "lodash.merge": "^4.6.2",
-    "prettier": "^2.2.1",
+    "snazzy": "^9.0.0",
+    "standard": "^17.0.0",
     "tsd": "^0.22.0"
   },
   "dependencies": {
     "@fastify/deepmerge": "^1.1.0"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
 }

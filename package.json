@@ -63,7 +63,7 @@
     "lint-staged": "^13.0.0",
     "lodash.merge": "^4.6.2",
     "prettier": "^2.2.1",
-    "tsd": "^0.22.0"
+    "tsd": "^0.23.0"
   },
   "dependencies": {
     "@fastify/deepmerge": "^1.1.0"

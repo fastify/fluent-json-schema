@@ -2,7 +2,7 @@
 const { NumberSchema } = require('./NumberSchema')
 
 const initialState = {
-  type: 'integer',
+  type: 'integer'
 }
 
 /**
@@ -18,13 +18,13 @@ const IntegerSchema = (
   { schema, ...options } = {
     schema: initialState,
     generateIds: false,
-    factory: IntegerSchema,
+    factory: IntegerSchema
   }
 ) => ({
-  ...NumberSchema({ ...options, schema }),
+  ...NumberSchema({ ...options, schema })
 })
 
 module.exports = {
   IntegerSchema,
-  default: IntegerSchema,
+  default: IntegerSchema
 }

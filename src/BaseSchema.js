@@ -12,12 +12,12 @@ const {
   setRaw,
   setComposeType,
   FluentSchemaError,
-  FLUENT_SCHEMA,
+  FLUENT_SCHEMA
 } = require('./utils')
 
 const initialState = {
   properties: [],
-  required: [],
+  required: []
 }
 
 /**
@@ -31,7 +31,7 @@ const initialState = {
 const BaseSchema = (
   { schema = initialState, ...options } = {
     generateIds: false,
-    factory: BaseSchema,
+    factory: BaseSchema
   }
 ) => ({
   [FLUENT_SCHEMA]: true,
@@ -47,10 +47,11 @@ const BaseSchema = (
    */
 
   id: id => {
-    if (!id)
+    if (!id) {
       throw new FluentSchemaError(
-        `id should not be an empty fragment <#> or an empty string <> (e.g. #myId)`
+        'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
       )
+    }
     return setAttribute({ schema, ...options }, ['$id', id, 'any'])
   },
 
@@ -79,7 +80,7 @@ const BaseSchema = (
     return setAttribute({ schema, ...options }, [
       'description',
       description,
-      'any',
+      'any'
     ])
   },
 
@@ -93,10 +94,11 @@ const BaseSchema = (
    */
 
   examples: examples => {
-    if (!Array.isArray(examples))
+    if (!Array.isArray(examples)) {
       throw new FluentSchemaError(
         "'examples' must be an array e.g. ['1', 'one', 'foo']"
       )
+    }
     return setAttribute({ schema, ...options }, ['examples', examples, 'any'])
   },
 
@@ -120,10 +122,11 @@ const BaseSchema = (
    */
 
   enum: values => {
-    if (!Array.isArray(values))
+    if (!Array.isArray(values)) {
       throw new FluentSchemaError(
         "'enums' must be an array with at least an element e.g. ['1', 'one', 'foo']"
       )
+    }
     return setAttribute({ schema, ...options }, ['enum', values, 'any'])
   },
 
@@ -188,7 +191,7 @@ const BaseSchema = (
    * @returns {BaseSchema}
    */
   deprecated: (isDeprecated) => {
-    if(isDeprecated && !isBoolean(isDeprecated)) throw new FluentSchemaError("'deprecated' must be a boolean value")
+    if (isDeprecated && !isBoolean(isDeprecated)) throw new FluentSchemaError("'deprecated' must be a boolean value")
     const value = isDeprecated !== undefined ? isDeprecated : true
     return setAttribute({ schema, ...options }, ['deprecated', value, 'boolean'])
   },
@@ -208,16 +211,16 @@ const BaseSchema = (
     const required = Array.isArray(props)
       ? [...schema.required, ...props]
       : currentProp
-      ? [...schema.required, currentProp.name]
-      : [REQUIRED]
+        ? [...schema.required, currentProp.name]
+        : [REQUIRED]
 
-    if(!isUniq(required)){
+    if (!isUniq(required)) {
       throw new FluentSchemaError("'required' has repeated keys, check your calls to .required()")
     }
 
     return options.factory({
       schema: { ...schema, required },
-      ...options,
+      ...options
     })
   },
 
@@ -230,8 +233,7 @@ const BaseSchema = (
    * @returns {BaseSchema}
    */
   not: not => {
-    if (!isFluentSchema(not))
-      throw new FluentSchemaError("'not' must be a BaseSchema")
+    if (!isFluentSchema(not)) { throw new FluentSchemaError("'not' must be a BaseSchema") }
     const notSchema = omit(not.valueOf(), ['$schema', 'definitions'])
 
     return BaseSchema({
@@ -240,10 +242,10 @@ const BaseSchema = (
         not: patchIdsWithParentId({
           schema: notSchema,
           ...options,
-          parentId: '#not',
-        }),
+          parentId: '#not'
+        })
       },
-      ...options,
+      ...options
     })
   },
   // return setAttribute({ schema, ...options }, ['defaults', defaults, 'any'])
@@ -298,20 +300,18 @@ const BaseSchema = (
    */
 
   ifThen: (ifClause, thenClause) => {
-    if (!isFluentSchema(ifClause))
-      throw new FluentSchemaError("'ifClause' must be a BaseSchema")
-    if (!isFluentSchema(thenClause))
-      throw new FluentSchemaError("'thenClause' must be a BaseSchema")
+    if (!isFluentSchema(ifClause)) { throw new FluentSchemaError("'ifClause' must be a BaseSchema") }
+    if (!isFluentSchema(thenClause)) { throw new FluentSchemaError("'thenClause' must be a BaseSchema") }
 
     const ifClauseSchema = omit(ifClause.valueOf(), [
       '$schema',
       'definitions',
-      'type',
+      'type'
     ])
     const thenClauseSchema = omit(thenClause.valueOf(), [
       '$schema',
       'definitions',
-      'type',
+      'type'
     ])
 
     return options.factory({
@@ -320,15 +320,15 @@ const BaseSchema = (
         if: patchIdsWithParentId({
           schema: ifClauseSchema,
           ...options,
-          parentId: '#if',
+          parentId: '#if'
         }),
         then: patchIdsWithParentId({
           schema: thenClauseSchema,
           ...options,
-          parentId: '#then',
-        }),
+          parentId: '#then'
+        })
       },
-      ...options,
+      ...options
     })
   },
 
@@ -346,28 +346,27 @@ const BaseSchema = (
    */
 
   ifThenElse: (ifClause, thenClause, elseClause) => {
-    if (!isFluentSchema(ifClause))
-      throw new FluentSchemaError("'ifClause' must be a BaseSchema")
-    if (!isFluentSchema(thenClause))
-      throw new FluentSchemaError("'thenClause' must be a BaseSchema")
-    if (!isFluentSchema(elseClause))
+    if (!isFluentSchema(ifClause)) { throw new FluentSchemaError("'ifClause' must be a BaseSchema") }
+    if (!isFluentSchema(thenClause)) { throw new FluentSchemaError("'thenClause' must be a BaseSchema") }
+    if (!isFluentSchema(elseClause)) {
       throw new FluentSchemaError(
         "'elseClause' must be a BaseSchema or a false boolean value"
       )
+    }
     const ifClauseSchema = omit(ifClause.valueOf(), [
       '$schema',
       'definitions',
-      'type',
+      'type'
     ])
     const thenClauseSchema = omit(thenClause.valueOf(), [
       '$schema',
       'definitions',
-      'type',
+      'type'
     ])
     const elseClauseSchema = omit(elseClause.valueOf(), [
       '$schema',
       'definitions',
-      'type',
+      'type'
     ])
 
     return options.factory({
@@ -376,20 +375,20 @@ const BaseSchema = (
         if: patchIdsWithParentId({
           schema: ifClauseSchema,
           ...options,
-          parentId: '#if',
+          parentId: '#if'
         }),
         then: patchIdsWithParentId({
           schema: thenClauseSchema,
           ...options,
-          parentId: '#then',
+          parentId: '#then'
         }),
         else: patchIdsWithParentId({
           schema: elseClauseSchema,
           ...options,
-          parentId: '#else',
-        }),
+          parentId: '#else'
+        })
       },
-      ...options,
+      ...options
     })
   },
 
@@ -446,10 +445,10 @@ const BaseSchema = (
       schema.then ? { then: schema.then } : undefined,
       schema.else ? { else: schema.else } : undefined
     )
-  },
+  }
 })
 
 module.exports = {
   BaseSchema,
-  default: BaseSchema,
+  default: BaseSchema
 }

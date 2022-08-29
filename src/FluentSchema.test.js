@@ -9,7 +9,7 @@ describe('S', () => {
     it('without params', () => {
       expect(S.object().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'object',
+        type: 'object'
       })
     })
 
@@ -24,7 +24,7 @@ describe('S', () => {
           ).toEqual({
             $schema: 'http://json-schema.org/draft-07/schema#',
             properties: { prop: { $id: '#properties/prop', type: 'string' } },
-            type: 'object',
+            type: 'object'
           })
         })
 
@@ -36,7 +36,7 @@ describe('S', () => {
           ).toEqual({
             $schema: 'http://json-schema.org/draft-07/schema#',
             properties: { prop: { type: 'string' } },
-            type: 'object',
+            type: 'object'
           })
         })
 
@@ -60,14 +60,14 @@ describe('S', () => {
                   properties: {
                     bar: {
                       $id: '#properties/foo/properties/bar',
-                      type: 'string',
-                    },
+                      type: 'string'
+                    }
                   },
                   required: ['bar'],
-                  type: 'object',
-                },
+                  type: 'object'
+                }
               },
-              type: 'object',
+              type: 'object'
             })
           })
           it('false', () => {
@@ -87,13 +87,13 @@ describe('S', () => {
               properties: {
                 foo: {
                   properties: {
-                    bar: { $id: 'myId', type: 'string' },
+                    bar: { $id: 'myId', type: 'string' }
                   },
                   required: ['bar'],
-                  type: 'object',
-                },
+                  type: 'object'
+                }
               },
-              type: 'object',
+              type: 'object'
             })
           })
         })
@@ -120,21 +120,21 @@ describe('S', () => {
                 $id: '#definitions/entity',
                 properties: {
                   bar: {
-                    type: 'string',
+                    type: 'string'
                   },
                   foo: {
-                    type: 'string',
-                  },
+                    type: 'string'
+                  }
                 },
-                type: 'object',
-              },
+                type: 'object'
+              }
             },
             properties: {
               prop: {
-                $ref: 'entity',
-              },
+                $ref: 'entity'
+              }
             },
-            type: 'object',
+            type: 'object'
           })
         })
 
@@ -157,17 +157,17 @@ describe('S', () => {
               entity: {
                 $id: 'myCustomId',
                 properties: {
-                  foo: { type: 'string' },
+                  foo: { type: 'string' }
                 },
-                type: 'object',
-              },
+                type: 'object'
+              }
             },
             properties: {
               prop: {
-                $ref: 'entity',
-              },
+                $ref: 'entity'
+              }
             },
-            type: 'object',
+            type: 'object'
           })
         })
 
@@ -187,13 +187,13 @@ describe('S', () => {
             properties: {
               foo: {
                 properties: {
-                  bar: { $id: 'myId', type: 'string' },
+                  bar: { $id: 'myId', type: 'string' }
                 },
                 required: ['bar'],
-                type: 'object',
-              },
+                type: 'object'
+              }
             },
-            type: 'object',
+            type: 'object'
           })
         })
       })
@@ -208,7 +208,7 @@ describe('S', () => {
       expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         properties: { foo: { anyOf: [{ type: 'string' }] } },
-        type: 'object',
+        type: 'object'
       })
     })
 
@@ -224,11 +224,11 @@ describe('S', () => {
         $schema: 'http://json-schema.org/draft-07/schema#',
         properties: {
           multipleRestrictedTypesKey: {
-            oneOf: [{ type: 'string' }, { minimum: 10, type: 'number' }],
+            oneOf: [{ type: 'string' }, { minimum: 10, type: 'number' }]
           },
-          notTypeKey: { not: { oneOf: [{ pattern: 'js$', type: 'string' }] } },
+          notTypeKey: { not: { oneOf: [{ pattern: 'js$', type: 'string' }] } }
         },
-        type: 'object',
+        type: 'object'
       })
     })
   })
@@ -241,7 +241,7 @@ describe('S', () => {
     ).toEqual({
       $schema: 'http://json-schema.org/draft-07/schema#',
       properties: { foo: { type: 'string' } },
-      type: 'object',
+      type: 'object'
     })
   })
 
@@ -284,16 +284,16 @@ describe('S', () => {
           $id: '#address',
           properties: {
             country: {
-              type: 'string',
+              type: 'string'
             },
             city: {
-              type: 'string',
+              type: 'string'
             },
             zipcode: {
-              type: 'string',
-            },
-          },
-        },
+              type: 'string'
+            }
+          }
+        }
       },
       $schema: 'http://json-schema.org/draft-07/schema#',
       type: 'object',
@@ -303,30 +303,30 @@ describe('S', () => {
       description: 'A User desc',
       properties: {
         username: {
-          type: 'string',
+          type: 'string'
         },
         password: {
-          type: 'string',
+          type: 'string'
         },
         address: {
-          $ref: '#address',
+          $ref: '#address'
         },
         age: {
-          type: 'number',
+          type: 'number'
         },
         role: {
           type: 'object',
           $id: 'http://foo.com/role',
           properties: {
             name: {
-              type: 'string',
+              type: 'string'
             },
             permissions: {
-              type: 'string',
-            },
-          },
-        },
-      },
+              type: 'string'
+            }
+          }
+        }
+      }
     })
   })
 
@@ -337,7 +337,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
 
@@ -349,7 +349,7 @@ describe('S', () => {
         expect(schema.isFluentSchema).toBeTruthy()
         expect(modified.valueOf()).toEqual({
           ...input,
-          title: attribute,
+          title: attribute
         })
       })
     })
@@ -360,7 +360,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
 
@@ -371,7 +371,7 @@ describe('S', () => {
         expect(schema.isFluentSchema).toBeTruthy()
         expect(modified.valueOf()).toEqual({
           minLength: 3,
-          ...input,
+          ...input
         })
       })
 
@@ -382,7 +382,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
     })
@@ -393,7 +393,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
 
@@ -404,7 +404,7 @@ describe('S', () => {
         expect(schema.isFluentSchema).toBeTruthy()
         expect(modified.valueOf()).toEqual({
           maximum: 3,
-          ...input,
+          ...input
         })
       })
 
@@ -415,7 +415,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
     })
@@ -426,7 +426,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
 
@@ -437,7 +437,7 @@ describe('S', () => {
         expect(schema.isFluentSchema).toBeTruthy()
         expect(modified.valueOf()).toEqual({
           maximum: 3,
-          ...input,
+          ...input
         })
       })
 
@@ -448,7 +448,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
     })
@@ -459,7 +459,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
     })
@@ -470,7 +470,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
 
@@ -482,7 +482,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
 
@@ -497,8 +497,8 @@ describe('S', () => {
           ...input,
           properties: {
             ...input.properties,
-            boom: {},
-          },
+            boom: {}
+          }
         })
       })
 
@@ -509,7 +509,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
     })
@@ -522,7 +522,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
 
@@ -535,7 +535,7 @@ describe('S', () => {
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
           ...input,
-          maxItems: 1,
+          maxItems: 1
         })
       })
 
@@ -553,7 +553,7 @@ describe('S', () => {
         expect(modified.isFluentSchema).toBeTruthy()
         expect(modified.valueOf()).toEqual({
           ...input,
-          maxItems: 1,
+          maxItems: 1
         })
       })
 
@@ -564,7 +564,7 @@ describe('S', () => {
         const schema = S.raw(input)
         expect(schema.isFluentSchema).toBeTruthy()
         expect(schema.valueOf()).toEqual({
-          ...input,
+          ...input
         })
       })
     })

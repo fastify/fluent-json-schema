@@ -17,7 +17,7 @@ const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',
   definitions: [],
   properties: [],
-  required: [],
+  required: []
 }
 
 /**
@@ -31,7 +31,7 @@ const initialState = {
 const S = (
   { schema = initialState, ...options } = {
     generateIds: false,
-    factory: BaseSchema,
+    factory: BaseSchema
   }
 ) => ({
   ...BaseSchema({ ...options, schema }),
@@ -47,7 +47,7 @@ const S = (
     StringSchema({
       ...options,
       schema,
-      factory: StringSchema,
+      factory: StringSchema
     }).as('string'),
 
   /**
@@ -61,7 +61,7 @@ const S = (
     NumberSchema({
       ...options,
       schema,
-      factory: NumberSchema,
+      factory: NumberSchema
     }).as('number'),
 
   /**
@@ -75,7 +75,7 @@ const S = (
     IntegerSchema({
       ...options,
       schema,
-      factory: IntegerSchema,
+      factory: IntegerSchema
     }).as('integer'),
 
   /**
@@ -89,7 +89,7 @@ const S = (
     BooleanSchema({
       ...options,
       schema,
-      factory: BooleanSchema,
+      factory: BooleanSchema
     }).as('boolean'),
 
   /**
@@ -103,7 +103,7 @@ const S = (
     ArraySchema({
       ...options,
       schema,
-      factory: ArraySchema,
+      factory: ArraySchema
     }).as('array'),
 
   /**
@@ -117,7 +117,7 @@ const S = (
     ObjectSchema({
       ...options,
       schema: baseSchema || schema,
-      factory: ObjectSchema,
+      factory: ObjectSchema
     }).as('object'),
 
   /**
@@ -131,7 +131,7 @@ const S = (
     NullSchema({
       ...options,
       schema,
-      factory: NullSchema,
+      factory: NullSchema
     }).null(),
 
   /**
@@ -158,9 +158,9 @@ const S = (
       ...options,
       schema: {
         ...schema,
-        type: types,
+        type: types
       },
-      factory: MixedSchema,
+      factory: MixedSchema
     })
   },
 
@@ -178,7 +178,7 @@ const S = (
 
   raw: fragment => {
     return RawSchema(fragment)
-  },
+  }
 })
 
 const fluentSchema = {
@@ -195,7 +195,7 @@ const fluentSchema = {
   integer: () => S().integer(),
   number: () => S().number(),
   null: () => S().null(),
-  raw: fragment => S().raw(fragment),
+  raw: fragment => S().raw(fragment)
 }
 module.exports = fluentSchema
 module.exports.default = fluentSchema

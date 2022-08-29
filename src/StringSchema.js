@@ -5,7 +5,7 @@ const { FORMATS, setAttribute, FluentSchemaError } = require('./utils')
 const initialState = {
   type: 'string',
   // properties: [], //FIXME it shouldn't be set for a string because it has only attributes
-  required: [],
+  required: []
 }
 
 /**
@@ -21,18 +21,18 @@ const StringSchema = (
   { schema, ...options } = {
     schema: initialState,
     generateIds: false,
-    factory: StringSchema,
+    factory: StringSchema
   }
 ) => ({
   ...BaseSchema({ ...options, schema }),
-  /*/!**
+  /* /!**
    * Set a property to type string
    * {@link https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3|reference}
    * @returns {StringSchema}
    *!/
 
   string: () =>
-    StringSchema({ schema: { ...schema }, ...options }).as('string'),*/
+    StringSchema({ schema: { ...schema }, ...options }).as('string'), */
 
   /**
    * A string instance is valid against this keyword if its length is greater than, or equal to, the value of this keyword.
@@ -44,8 +44,7 @@ const StringSchema = (
    */
 
   minLength: min => {
-    if (!Number.isInteger(min))
-      throw new FluentSchemaError("'minLength' must be an Integer")
+    if (!Number.isInteger(min)) { throw new FluentSchemaError("'minLength' must be an Integer") }
     return setAttribute({ schema, ...options }, ['minLength', min, 'string'])
   },
 
@@ -59,8 +58,7 @@ const StringSchema = (
    */
 
   maxLength: max => {
-    if (!Number.isInteger(max))
-      throw new FluentSchemaError("'maxLength' must be an Integer")
+    if (!Number.isInteger(max)) { throw new FluentSchemaError("'maxLength' must be an Integer") }
     return setAttribute({ schema, ...options }, ['maxLength', max, 'string'])
   },
 
@@ -73,10 +71,11 @@ const StringSchema = (
    */
 
   format: format => {
-    if (!Object.values(FORMATS).includes(format))
+    if (!Object.values(FORMATS).includes(format)) {
       throw new FluentSchemaError(
         `'format' must be one of ${Object.values(FORMATS).join(', ')}`
       )
+    }
     return setAttribute({ schema, ...options }, ['format', format, 'string'])
   },
 
@@ -89,10 +88,11 @@ const StringSchema = (
    * @returns {StringSchema}
    */
   pattern: pattern => {
-    if (!(typeof pattern === 'string') && !(pattern instanceof RegExp))
+    if (!(typeof pattern === 'string') && !(pattern instanceof RegExp)) {
       throw new FluentSchemaError(
-        `'pattern' must be a string or a RegEx (e.g. /.*/)`
+        '\'pattern\' must be a string or a RegEx (e.g. /.*/)'
       )
+    }
 
     if (pattern instanceof RegExp) {
       const flags = new RegExp(pattern).flags
@@ -116,12 +116,11 @@ const StringSchema = (
    */
 
   contentEncoding: encoding => {
-    if (!(typeof encoding === 'string'))
-      throw new FluentSchemaError(`'contentEncoding' must be a string`)
+    if (!(typeof encoding === 'string')) { throw new FluentSchemaError('\'contentEncoding\' must be a string') }
     return setAttribute({ schema, ...options }, [
       'contentEncoding',
       encoding,
-      'string',
+      'string'
     ])
   },
 
@@ -135,18 +134,17 @@ const StringSchema = (
    */
 
   contentMediaType: mediaType => {
-    if (!(typeof mediaType === 'string'))
-      throw new FluentSchemaError(`'contentMediaType' must be a string`)
+    if (!(typeof mediaType === 'string')) { throw new FluentSchemaError('\'contentMediaType\' must be a string') }
     return setAttribute({ schema, ...options }, [
       'contentMediaType',
       mediaType,
-      'string',
+      'string'
     ])
-  },
+  }
 })
 
 module.exports = {
   StringSchema,
   FORMATS,
-  default: StringSchema,
+  default: StringSchema
 }

@@ -16,7 +16,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
 
@@ -28,7 +28,7 @@ describe('RawSchema', () => {
       expect(schema.isFluentSchema).toBeTruthy()
       expect(modified.valueOf()).toEqual({
         ...input,
-        title: attribute,
+        title: attribute
       })
     })
 
@@ -45,7 +45,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
 
@@ -56,7 +56,7 @@ describe('RawSchema', () => {
       expect(schema.isFluentSchema).toBeTruthy()
       expect(modified.valueOf()).toEqual({
         minLength: 3,
-        ...input,
+        ...input
       })
     })
 
@@ -67,7 +67,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
   })
@@ -78,7 +78,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
 
@@ -89,7 +89,7 @@ describe('RawSchema', () => {
       expect(schema.isFluentSchema).toBeTruthy()
       expect(modified.valueOf()).toEqual({
         maximum: 3,
-        ...input,
+        ...input
       })
     })
 
@@ -100,7 +100,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
   })
@@ -111,7 +111,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
 
@@ -122,7 +122,7 @@ describe('RawSchema', () => {
       expect(schema.isFluentSchema).toBeTruthy()
       expect(modified.valueOf()).toEqual({
         maximum: 3,
-        ...input,
+        ...input
       })
     })
 
@@ -133,7 +133,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
   })
@@ -144,7 +144,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
   })
@@ -155,7 +155,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
 
@@ -167,7 +167,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
 
@@ -182,8 +182,8 @@ describe('RawSchema', () => {
         ...input,
         properties: {
           ...input.properties,
-          boom: {},
-        },
+          boom: {}
+        }
       })
     })
 
@@ -194,7 +194,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
   })
@@ -207,7 +207,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
 
@@ -220,7 +220,7 @@ describe('RawSchema', () => {
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
         ...input,
-        maxItems: 1,
+        maxItems: 1
       })
     })
 
@@ -238,7 +238,7 @@ describe('RawSchema', () => {
       expect(modified.isFluentSchema).toBeTruthy()
       expect(modified.valueOf()).toEqual({
         ...input,
-        maxItems: 1,
+        maxItems: 1
       })
     })
 
@@ -249,7 +249,7 @@ describe('RawSchema', () => {
       const schema = RawSchema(input)
       expect(schema.isFluentSchema).toBeTruthy()
       expect(schema.valueOf()).toEqual({
-        ...input,
+        ...input
       })
     })
   })

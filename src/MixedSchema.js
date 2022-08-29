@@ -13,7 +13,7 @@ const initialState = {
   type: [],
   definitions: [],
   properties: [],
-  required: [],
+  required: []
 }
 
 /**
@@ -28,7 +28,7 @@ const MixedSchema = ({ schema = initialState, ...options } = {}) => {
   options = {
     generateIds: false,
     factory: MixedSchema,
-    ...options,
+    ...options
   }
   return {
     [FLUENT_SCHEMA]: true,
@@ -52,11 +52,11 @@ const MixedSchema = ({ schema = initialState, ...options } = {}) => {
       : {}),
     ...(schema.type.includes(TYPES.NULL)
       ? NullSchema({ ...options, schema, factory: MixedSchema })
-      : {}),
+      : {})
   }
 }
 
 module.exports = {
   MixedSchema,
-  default: MixedSchema,
+  default: MixedSchema
 }

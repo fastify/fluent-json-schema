@@ -14,7 +14,7 @@ describe('ObjectSchema', () => {
     it('without params', () => {
       expect(ObjectSchema().valueOf()).toEqual({
         // $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'object',
+        type: 'object'
       })
     })
 
@@ -27,7 +27,7 @@ describe('ObjectSchema', () => {
               .valueOf()
           ).toEqual({
             properties: { prop: { $id: '#properties/prop', type: 'string' } },
-            type: 'object',
+            type: 'object'
           })
         })
 
@@ -38,7 +38,7 @@ describe('ObjectSchema', () => {
               .valueOf()
           ).toEqual({
             properties: { prop: {} },
-            type: 'object',
+            type: 'object'
           })
         })
 
@@ -59,14 +59,14 @@ describe('ObjectSchema', () => {
                   $id: '#properties/foo',
                   properties: {
                     bar: {
-                      $id: '#properties/foo/properties/bar',
-                    },
+                      $id: '#properties/foo/properties/bar'
+                    }
                   },
                   required: ['bar'],
-                  type: 'object',
-                },
+                  type: 'object'
+                }
               },
-              type: 'object',
+              type: 'object'
             })
           })
           it('false', () => {
@@ -84,13 +84,13 @@ describe('ObjectSchema', () => {
               properties: {
                 foo: {
                   properties: {
-                    bar: { $id: 'myId' },
+                    bar: { $id: 'myId' }
                   },
                   required: ['bar'],
-                  type: 'object',
-                },
+                  type: 'object'
+                }
               },
-              type: 'object',
+              type: 'object'
             })
           })
         })
@@ -114,17 +114,17 @@ describe('ObjectSchema', () => {
                 $id: '#definitions/entity',
                 properties: {
                   bar: {},
-                  foo: {},
+                  foo: {}
                 },
-                type: 'object',
-              },
+                type: 'object'
+              }
             },
             properties: {
               prop: {
-                $ref: 'entity',
-              },
+                $ref: 'entity'
+              }
             },
-            type: 'object',
+            type: 'object'
           })
         })
 
@@ -144,17 +144,17 @@ describe('ObjectSchema', () => {
               entity: {
                 $id: 'myCustomId',
                 properties: {
-                  foo: {},
+                  foo: {}
                 },
-                type: 'object',
-              },
+                type: 'object'
+              }
             },
             properties: {
               prop: {
-                $ref: 'entity',
-              },
+                $ref: 'entity'
+              }
             },
-            type: 'object',
+            type: 'object'
           })
         })
 
@@ -173,13 +173,13 @@ describe('ObjectSchema', () => {
             properties: {
               foo: {
                 properties: {
-                  bar: { $id: 'myId', type: 'string' },
+                  bar: { $id: 'myId', type: 'string' }
                 },
                 required: ['bar'],
-                type: 'object',
-              },
+                type: 'object'
+              }
             },
-            type: 'object',
+            type: 'object'
           })
         })
       })
@@ -189,7 +189,7 @@ describe('ObjectSchema', () => {
   it('from S', () => {
     expect(S.object().valueOf()).toEqual({
       $schema: 'http://json-schema.org/draft-07/schema#',
-      type: 'object',
+      type: 'object'
     })
   })
 
@@ -220,7 +220,7 @@ describe('ObjectSchema', () => {
             .id(id)
             .valueOf().properties[prop]
         ).toEqual({
-          $id: id,
+          $id: id
         })
       })
 
@@ -233,7 +233,7 @@ describe('ObjectSchema', () => {
               .valueOf().properties.foo
           ).toEqual({
             type: 'string',
-            $id: id,
+            $id: id
           })
         })
 
@@ -245,8 +245,8 @@ describe('ObjectSchema', () => {
           ).toEqual({
             foo: {
               type: 'string',
-              title: 'Foo',
-            },
+              title: 'Foo'
+            }
           })
         })
       })
@@ -260,8 +260,8 @@ describe('ObjectSchema', () => {
             .valueOf().properties
         ).toEqual({
           prop: {
-            type: 'string',
-          },
+            type: 'string'
+          }
         })
       })
 
@@ -272,7 +272,7 @@ describe('ObjectSchema', () => {
               .prop('foo', ObjectSchema().prop('bar'))
               .valueOf().properties.foo.properties
           ).toEqual({
-            bar: {},
+            bar: {}
           })
         })
 
@@ -284,8 +284,8 @@ describe('ObjectSchema', () => {
           ).toEqual({
             foo: {
               type: 'string',
-              title: 'Foo',
-            },
+              title: 'Foo'
+            }
           })
         })
       })
@@ -423,14 +423,14 @@ describe('ObjectSchema', () => {
         expect(
           ObjectSchema()
             .patternProperties({
-              '^fo.*$': S.string(),
+              '^fo.*$': S.string()
             })
             .prop('foo')
             .valueOf()
         ).toEqual({
           patternProperties: { '^fo.*$': { type: 'string' } },
           properties: { foo: {} },
-          type: 'object',
+          type: 'object'
         })
       })
 
@@ -455,7 +455,7 @@ describe('ObjectSchema', () => {
         expect(
           ObjectSchema()
             .dependencies({
-              foo: ['bar'],
+              foo: ['bar']
             })
             .prop('foo')
             .prop('bar')
@@ -464,9 +464,9 @@ describe('ObjectSchema', () => {
           dependencies: { foo: ['bar'] },
           properties: {
             bar: {},
-            foo: {},
+            foo: {}
           },
-          type: 'object',
+          type: 'object'
         })
       })
 
@@ -474,7 +474,7 @@ describe('ObjectSchema', () => {
         expect(
           ObjectSchema()
             .dependencies({
-              foo: ObjectSchema().prop('bar', S.string()),
+              foo: ObjectSchema().prop('bar', S.string())
             })
             .prop('foo')
             .valueOf()
@@ -482,12 +482,12 @@ describe('ObjectSchema', () => {
           dependencies: {
             foo: {
               properties: {
-                bar: { type: 'string' },
-              },
-            },
+                bar: { type: 'string' }
+              }
+            }
           },
           properties: { foo: {} },
-          type: 'object',
+          type: 'object'
         })
       })
 
@@ -512,7 +512,7 @@ describe('ObjectSchema', () => {
         expect(
           ObjectSchema()
             .dependentRequired({
-              foo: ['bar'],
+              foo: ['bar']
             })
             .prop('foo')
             .prop('bar')
@@ -520,7 +520,7 @@ describe('ObjectSchema', () => {
         ).toEqual({
           type: 'object',
           dependentRequired: {
-            foo: [ 'bar' ]
+            foo: ['bar']
           },
           properties: {
             foo: {},
@@ -531,7 +531,7 @@ describe('ObjectSchema', () => {
 
       it('invalid', () => {
         const value = {
-          foo: ObjectSchema().prop('bar', S.string()),
+          foo: ObjectSchema().prop('bar', S.string())
         }
 
         expect(() => {
@@ -561,12 +561,12 @@ describe('ObjectSchema', () => {
           dependentSchemas: {
             foo: {
               properties: {
-                bar: { type: 'string' },
-              },
-            },
+                bar: { type: 'string' }
+              }
+            }
           },
           properties: { foo: {} },
-          type: 'object',
+          type: 'object'
         })
       })
 
@@ -598,7 +598,7 @@ describe('ObjectSchema', () => {
             .valueOf().propertyNames
         ).toEqual({
           format: 'email',
-          type: 'string',
+          type: 'string'
         })
       })
 
@@ -646,9 +646,9 @@ describe('ObjectSchema', () => {
           type: 'object',
           properties: {
             foo: {},
-            bar: {},
-          },
-        },
+            bar: {}
+          }
+        }
       })
     })
 
@@ -658,7 +658,7 @@ describe('ObjectSchema', () => {
           .definition('foo')
           .valueOf().definitions
       ).toEqual({
-        foo: {},
+        foo: {}
       })
     })
 
@@ -679,9 +679,9 @@ describe('ObjectSchema', () => {
           type: 'object',
           properties: {
             foo: {},
-            bar: {},
-          },
-        },
+            bar: {}
+          }
+        }
       })
     })
   })
@@ -712,14 +712,14 @@ describe('ObjectSchema', () => {
         properties: {
           foo: {
             type: 'string',
-            minLength: 5,
+            minLength: 5
           },
           bar: {
-            type: 'string',
-          },
+            type: 'string'
+          }
         },
         required: ['foo', 'bar'],
-        type: 'object',
+        type: 'object'
       })
     })
 
@@ -755,26 +755,26 @@ describe('ObjectSchema', () => {
             properties: {
               id: {
                 type: 'string',
-                format: 'uuid',
-              },
+                format: 'uuid'
+              }
             },
-            required: ['id'],
+            required: ['id']
           },
           bar: {
-            type: 'number',
+            type: 'number'
           },
           str: {
-            type: 'string',
+            type: 'string'
           },
           bol: {
-            type: 'boolean',
+            type: 'boolean'
           },
           num: {
-            type: 'integer',
-          },
+            type: 'integer'
+          }
         },
         required: ['str', 'bol', 'num'],
-        type: 'object',
+        type: 'object'
       })
     })
     it('extends a schema with definitions', () => {
@@ -806,7 +806,7 @@ describe('ObjectSchema', () => {
         $schema: 'http://json-schema.org/draft-07/schema#',
         definitions: {
           def1: { type: 'object', properties: { some: {}, someExtended: {} } },
-          def2: { type: 'object', properties: { somethingElse: {} } },
+          def2: { type: 'object', properties: { somethingElse: {} } }
         },
         type: 'object',
         $id: 'extended',
@@ -815,14 +815,14 @@ describe('ObjectSchema', () => {
           foo: {
             type: 'object',
             properties: { id: { type: 'string', format: 'uuid' } },
-            required: ['id'],
+            required: ['id']
           },
           str: { type: 'string' },
           bol: { type: 'boolean' },
           num: { type: 'integer' },
-          bar: { type: 'number' },
+          bar: { type: 'number' }
         },
-        required: ['str', 'bol', 'num'],
+        required: ['str', 'bol', 'num']
       })
     })
     it('extends a schema overriding the props', () => {
@@ -838,8 +838,8 @@ describe('ObjectSchema', () => {
         type: 'object',
         properties: {
           other: {},
-          reason: { title: 'title', type: 'string', minLength: 1 },
-        },
+          reason: { title: 'title', type: 'string', minLength: 1 }
+        }
       })
     })
     it('extends a chain of schemas overriding the props', () => {
@@ -863,8 +863,8 @@ describe('ObjectSchema', () => {
           other: {},
           again: {},
           multiple: {},
-          reason: { title: 'title', type: 'string', minLength: 2 },
-        },
+          reason: { title: 'title', type: 'string', minLength: 2 }
+        }
       })
     })
 
@@ -919,10 +919,10 @@ describe('ObjectSchema', () => {
         title: 'base',
         properties: {
           foo: {
-            type: 'string',
-          },
+            type: 'string'
+          }
         },
-        type: 'object',
+        type: 'object'
       })
     })
 
@@ -943,14 +943,14 @@ describe('ObjectSchema', () => {
         title: 'base',
         properties: {
           foo: {
-            type: 'string',
+            type: 'string'
           },
           bar: {
-            type: 'string',
-          },
+            type: 'string'
+          }
         },
         required: ['foo'],
-        type: 'object',
+        type: 'object'
       })
     })
   })
@@ -978,13 +978,13 @@ describe('ObjectSchema', () => {
         title: 'base',
         properties: {
           bar: {
-            type: 'string',
+            type: 'string'
           },
           baz: {
-            type: 'string',
-          },
+            type: 'string'
+          }
         },
-        type: 'object',
+        type: 'object'
       })
     })
 
@@ -1005,14 +1005,14 @@ describe('ObjectSchema', () => {
         title: 'base',
         properties: {
           baz: {
-            type: 'string',
+            type: 'string'
           },
           qux: {
-            type: 'string',
-          },
+            type: 'string'
+          }
         },
         required: ['baz'],
-        type: 'object',
+        type: 'object'
       })
     })
   })
@@ -1025,7 +1025,7 @@ describe('ObjectSchema', () => {
 
       expect(schema).toEqual({
         type: 'object',
-        customKeyword: true,
+        customKeyword: true
       })
     })
   })

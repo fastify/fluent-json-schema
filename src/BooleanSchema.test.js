@@ -13,13 +13,13 @@ describe('BooleanSchema', () => {
   describe('constructor', () => {
     it('without params', () => {
       expect(BooleanSchema().valueOf()).toEqual({
-        type: 'boolean',
+        type: 'boolean'
       })
     })
     it('from S', () => {
       expect(S.boolean().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'boolean',
+        type: 'boolean'
       })
     })
   })
@@ -40,7 +40,7 @@ describe('BooleanSchema', () => {
 
       expect(schema).toEqual({
         type: 'boolean',
-        customKeyword: true,
+        customKeyword: true
       })
     })
   })

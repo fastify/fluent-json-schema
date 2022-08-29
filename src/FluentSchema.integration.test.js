@@ -9,7 +9,7 @@ describe('S', () => {
     const ajv = new Ajv()
     const schema = S.valueOf()
     const validate = ajv.compile(schema)
-    var valid = validate({})
+    const valid = validate({})
     expect(valid).toBeTruthy()
   })
 
@@ -24,15 +24,15 @@ describe('S', () => {
     it('valid', () => {
       const valid = validate({
         username: 'username',
-        password: 'password',
+        password: 'password'
       })
       expect(valid).toBeTruthy()
     })
 
     it('invalid', () => {
-      var valid = validate({
+      const valid = validate({
         username: 'username',
-        password: 1,
+        password: 1
       })
       expect(validate.errors).toEqual([
         {
@@ -40,8 +40,8 @@ describe('S', () => {
           keyword: 'type',
           message: 'must be string',
           params: { type: 'string' },
-          schemaPath: '#/properties/password/type',
-        },
+          schemaPath: '#/properties/password/type'
+        }
       ])
       expect(valid).not.toBeTruthy()
     })
@@ -63,14 +63,14 @@ describe('S', () => {
     it('valid', () => {
       const valid = validate({
         prop: '12345',
-        extraProp: 'foo',
+        extraProp: 'foo'
       })
       expect(valid).toBeTruthy()
     })
 
     it('invalid', () => {
       const valid = validate({
-        prop: '12345',
+        prop: '12345'
       })
       expect(validate.errors).toEqual([
         {
@@ -78,8 +78,8 @@ describe('S', () => {
           keyword: 'required',
           message: "must have required property 'extraProp'",
           params: { missingProperty: 'extraProp' },
-          schemaPath: '#/then/required',
-        },
+          schemaPath: '#/then/required'
+        }
       ])
       expect(valid).not.toBeTruthy()
     })
@@ -107,14 +107,14 @@ describe('S', () => {
     it('then', () => {
       const valid = validate({
         ifProp: 'ONE',
-        thenProp: 'foo',
+        thenProp: 'foo'
       })
       expect(valid).toBeTruthy()
     })
 
     it('else', () => {
       const valid = validate({
-        prop: '123456',
+        prop: '123456'
       })
       expect(validate.errors).toEqual([
         {
@@ -122,8 +122,8 @@ describe('S', () => {
           keyword: 'required',
           message: "must have required property 'thenProp'",
           params: { missingProperty: 'thenProp' },
-          schemaPath: '#/then/required',
-        },
+          schemaPath: '#/then/required'
+        }
       ])
       expect(valid).not.toBeTruthy()
     })
@@ -131,7 +131,7 @@ describe('S', () => {
 
   describe('combine and definition', () => {
     const ajv = new Ajv()
-    const schema = S.object() //FIXME LS it shouldn't be object()
+    const schema = S.object() // FIXME LS it shouldn't be object()
       .definition(
         'address',
         S.object()
@@ -146,7 +146,7 @@ describe('S', () => {
         S.ref('#/definitions/address'),
         S.object()
           .prop('type', S.string())
-          .enum(['residential', 'business']),
+          .enum(['residential', 'business'])
       ])
       .valueOf()
     const validate = ajv.compile(schema)
@@ -161,20 +161,20 @@ describe('S', () => {
             properties: {
               street_address: { type: 'string' },
               city: { type: 'string' },
-              state: { type: 'string' },
+              state: { type: 'string' }
             },
-            required: ['street_address', 'city', 'state'],
-          },
+            required: ['street_address', 'city', 'state']
+          }
         },
         allOf: [
           { $ref: '#/definitions/address' },
           {
             type: 'object',
             properties: {
-              type: { type: 'string', enum: ['residential', 'business'] },
-            },
-          },
-        ],
+              type: { type: 'string', enum: ['residential', 'business'] }
+            }
+          }
+        ]
       })
     })
 
@@ -183,7 +183,7 @@ describe('S', () => {
         street_address: 'via Paolo Rossi',
         city: 'Topolinia',
         state: 'Disney World',
-        type: 'business',
+        type: 'business'
       })
       expect(validate.errors).toEqual(null)
       expect(valid).toBeTruthy()
@@ -194,7 +194,7 @@ describe('S', () => {
   describe('cloning objects retains boolean', () => {
     const ajv = new Ajv()
     const config = {
-      schema: S.object().prop('foo', S.string().enum(['foo'])),
+      schema: S.object().prop('foo', S.string().enum(['foo']))
     }
     const _config = require('lodash.merge')({}, config)
     const schema = _config.schema.valueOf()
@@ -209,9 +209,9 @@ describe('S', () => {
         properties: {
           foo: {
             type: 'string',
-            enum: ['foo'],
-          },
-        },
+            enum: ['foo']
+          }
+        }
       })
     })
 
@@ -237,7 +237,7 @@ describe('S', () => {
     it('valid', () => {
       const valid = validate({
         foo: 'foo',
-        anotherProp: true,
+        anotherProp: true
       })
       expect(valid).toBeTruthy()
     })
@@ -245,7 +245,7 @@ describe('S', () => {
     it('invalid', () => {
       const valid = validate({
         foo: 'foo',
-        bar: 1,
+        bar: 1
       })
       expect(valid).toBeFalsy()
     })
@@ -280,7 +280,7 @@ describe('S', () => {
             .prop('bar', S.string())
             .enum(['BAR']),
           S.required(['thenBarA', 'thenBarB'])
-        ),
+        )
       ])
       .valueOf()
 
@@ -292,28 +292,28 @@ describe('S', () => {
           {
             if: {
               properties: {
-                foo: { $id: undefined, enum: ['foo'], type: 'string' },
-              },
+                foo: { $id: undefined, enum: ['foo'], type: 'string' }
+              }
             },
-            then: { required: ['thenFooA', 'thenFooB'] },
+            then: { required: ['thenFooA', 'thenFooB'] }
           },
           {
             if: {
               properties: {
-                bar: { $id: undefined, enum: ['BAR'], type: 'string' },
-              },
+                bar: { $id: undefined, enum: ['BAR'], type: 'string' }
+              }
             },
-            then: { required: ['thenBarA', 'thenBarB'] },
-          },
+            then: { required: ['thenBarA', 'thenBarB'] }
+          }
         ],
         properties: {
           bar: { default: false, type: 'string' },
           foo: { default: false, type: 'string' },
           thenFooA: { type: 'string' },
-          thenFooB: { type: 'string' },
+          thenFooB: { type: 'string' }
         },
         required: ['foo', 'bar'],
-        type: 'object',
+        type: 'object'
       })
     })
 
@@ -324,7 +324,7 @@ describe('S', () => {
         thenFooB: 'thenFooB',
         bar: 'BAR',
         thenBarA: 'thenBarA',
-        thenBarB: 'thenBarB',
+        thenBarB: 'thenBarB'
       })
       expect(validate.errors).toEqual(null)
       expect(valid).toBeTruthy()
@@ -369,13 +369,13 @@ describe('S', () => {
         address: {
           country: 'Italy',
           city: 'Milan',
-          zipcode: '20100',
+          zipcode: '20100'
         },
         role: {
           name: 'admin',
-          permissions: 'read:write',
+          permissions: 'read:write'
         },
-        age: 30,
+        age: 30
       })
       expect(valid).toBeTruthy()
     })
@@ -387,13 +387,13 @@ describe('S', () => {
         address: {
           country: 'Italy',
           city: 'Milan',
-          zipcode: '20100',
+          zipcode: '20100'
         },
         role: {
           name: 'admin',
-          permissions: 'read:write',
+          permissions: 'read:write'
         },
-        age: 30,
+        age: 30
       }
       it('password', () => {
         const { password, ...data } = model
@@ -404,8 +404,8 @@ describe('S', () => {
             keyword: 'required',
             message: "must have required property 'password'",
             params: { missingProperty: 'password' },
-            schemaPath: '#/required',
-          },
+            schemaPath: '#/required'
+          }
         ])
         expect(valid).not.toBeTruthy()
       })
@@ -415,8 +415,8 @@ describe('S', () => {
           ...data,
           address: {
             ...address,
-            city: 1234,
-          },
+            city: 1234
+          }
         })
         expect(validate.errors).toEqual([
           {
@@ -424,8 +424,8 @@ describe('S', () => {
             keyword: 'type',
             message: 'must be string',
             params: { type: 'string' },
-            schemaPath: '#address/properties/city/type',
-          },
+            schemaPath: '#address/properties/city/type'
+          }
         ])
         expect(valid).not.toBeTruthy()
       })
@@ -492,8 +492,8 @@ describe('S', () => {
             .prop('foo', S.raw({ nullable: true, type: 'string' }))
             .valueOf()
           const validate = ajv.compile(schema)
-          var valid = validate({
-            test: null,
+          const valid = validate({
+            test: null
           })
           expect(validate.errors).toEqual(null)
           expect(valid).toBeTruthy()
@@ -508,7 +508,7 @@ describe('S', () => {
           require('ajv-formats')(ajv)
           /*        const schema = S.string()
             .raw({ nullable: false })
-            .valueOf()*/
+            .valueOf() */
           // { type: 'number', nullable: true }
           const schema = S.object()
             .prop(
@@ -516,14 +516,14 @@ describe('S', () => {
               S.raw({
                 format: 'date',
                 formatMaximum: '2020-01-01',
-                type: 'string',
+                type: 'string'
               })
             )
             .valueOf()
 
           const validate = ajv.compile(schema)
-          var valid = validate({
-            birthday: '2030-01-01',
+          const valid = validate({
+            birthday: '2030-01-01'
           })
           expect(validate.errors).toEqual([
             {
@@ -532,10 +532,10 @@ describe('S', () => {
               message: 'should be <= 2020-01-01',
               params: {
                 comparison: '<=',
-                limit: '2020-01-01',
+                limit: '2020-01-01'
               },
-              schemaPath: '#/properties/birthday/formatMaximum',
-            },
+              schemaPath: '#/properties/birthday/formatMaximum'
+            }
           ])
           expect(valid).toBeFalsy()
         })
@@ -544,7 +544,7 @@ describe('S', () => {
           require('ajv-formats')(ajv)
           /*        const schema = S.string()
             .raw({ nullable: false })
-            .valueOf()*/
+            .valueOf() */
           // { type: 'number', nullable: true }
           const schema = S.object()
             .prop('smaller', S.number().raw({ maximum: { $data: '1/larger' } }))
@@ -552,9 +552,9 @@ describe('S', () => {
             .valueOf()
 
           const validate = ajv.compile(schema)
-          var valid = validate({
+          const valid = validate({
             smaller: 10,
-            larger: 7,
+            larger: 7
           })
           expect(validate.errors).toEqual([
             {
@@ -563,10 +563,10 @@ describe('S', () => {
               message: 'must be <= 7',
               params: {
                 comparison: '<=',
-                limit: 7,
+                limit: 7
               },
-              schemaPath: '#/properties/smaller/maximum',
-            },
+              schemaPath: '#/properties/smaller/maximum'
+            }
           ])
           expect(valid).toBeFalsy()
         })

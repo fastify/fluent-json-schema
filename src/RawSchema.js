@@ -23,7 +23,7 @@ const RawSchema = (schema = {}) => {
     case 'string': {
       const schema = {
         type,
-        ...props,
+        ...props
       }
       return StringSchema({ schema, factory: StringSchema })
     }
@@ -31,14 +31,14 @@ const RawSchema = (schema = {}) => {
     case 'integer': {
       const schema = {
         type,
-        ...props,
+        ...props
       }
       return IntegerSchema({ schema, factory: NumberSchema })
     }
     case 'number': {
       const schema = {
         type,
-        ...props,
+        ...props
       }
       return NumberSchema({ schema, factory: NumberSchema })
     }
@@ -46,7 +46,7 @@ const RawSchema = (schema = {}) => {
     case 'boolean': {
       const schema = {
         type,
-        ...props,
+        ...props
       }
       return BooleanSchema({ schema, factory: BooleanSchema })
     }
@@ -57,7 +57,7 @@ const RawSchema = (schema = {}) => {
         definitions: toArray(definitions) || [],
         properties: toArray(properties) || [],
         required: required || [],
-        ...props,
+        ...props
       }
       return ObjectSchema({ schema, factory: ObjectSchema })
     }
@@ -65,19 +65,19 @@ const RawSchema = (schema = {}) => {
     case 'array': {
       const schema = {
         type,
-        ...props,
+        ...props
       }
       return ArraySchema({ schema, factory: ArraySchema })
     }
 
     default: {
       const schema = {
-        ...props,
+        ...props
       }
 
       return BaseSchema({
         schema,
-        factory: BaseSchema,
+        factory: BaseSchema
       })
     }
   }
@@ -85,5 +85,5 @@ const RawSchema = (schema = {}) => {
 
 module.exports = {
   RawSchema,
-  default: RawSchema,
+  default: RawSchema
 }

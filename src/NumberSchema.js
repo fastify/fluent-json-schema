@@ -3,7 +3,7 @@ const { BaseSchema } = require('./BaseSchema')
 const { setAttribute, FluentSchemaError } = require('./utils')
 
 const initialState = {
-  type: 'number',
+  type: 'number'
 }
 
 /**
@@ -19,7 +19,7 @@ const NumberSchema = (
   { schema, ...options } = {
     schema: initialState,
     generateIds: false,
-    factory: NumberSchema,
+    factory: NumberSchema
   }
 ) => ({
   ...BaseSchema({ ...options, schema }),
@@ -33,10 +33,8 @@ const NumberSchema = (
    */
 
   minimum: min => {
-    if (typeof min !== 'number')
-      throw new FluentSchemaError("'minimum' must be a Number")
-    if (schema.type === 'integer' && !Number.isInteger(min))
-      throw new FluentSchemaError("'minimum' must be an Integer")
+    if (typeof min !== 'number') { throw new FluentSchemaError("'minimum' must be a Number") }
+    if (schema.type === 'integer' && !Number.isInteger(min)) { throw new FluentSchemaError("'minimum' must be an Integer") }
     return setAttribute({ schema, ...options }, ['minimum', min, 'number'])
   },
 
@@ -49,14 +47,12 @@ const NumberSchema = (
    */
 
   exclusiveMinimum: min => {
-    if (typeof min !== 'number')
-      throw new FluentSchemaError("'exclusiveMinimum' must be a Number")
-    if (schema.type === 'integer' && !Number.isInteger(min))
-      throw new FluentSchemaError("'exclusiveMinimum' must be an Integer")
+    if (typeof min !== 'number') { throw new FluentSchemaError("'exclusiveMinimum' must be a Number") }
+    if (schema.type === 'integer' && !Number.isInteger(min)) { throw new FluentSchemaError("'exclusiveMinimum' must be an Integer") }
     return setAttribute({ schema, ...options }, [
       'exclusiveMinimum',
       min,
-      'number',
+      'number'
     ])
   },
 
@@ -69,10 +65,8 @@ const NumberSchema = (
    */
 
   maximum: max => {
-    if (typeof max !== 'number')
-      throw new FluentSchemaError("'maximum' must be a Number")
-    if (schema.type === 'integer' && !Number.isInteger(max))
-      throw new FluentSchemaError("'maximum' must be an Integer")
+    if (typeof max !== 'number') { throw new FluentSchemaError("'maximum' must be a Number") }
+    if (schema.type === 'integer' && !Number.isInteger(max)) { throw new FluentSchemaError("'maximum' must be an Integer") }
     return setAttribute({ schema, ...options }, ['maximum', max, 'number'])
   },
 
@@ -85,14 +79,12 @@ const NumberSchema = (
    */
 
   exclusiveMaximum: max => {
-    if (typeof max !== 'number')
-      throw new FluentSchemaError("'exclusiveMaximum' must be a Number")
-    if (schema.type === 'integer' && !Number.isInteger(max))
-      throw new FluentSchemaError("'exclusiveMaximum' must be an Integer")
+    if (typeof max !== 'number') { throw new FluentSchemaError("'exclusiveMaximum' must be a Number") }
+    if (schema.type === 'integer' && !Number.isInteger(max)) { throw new FluentSchemaError("'exclusiveMaximum' must be an Integer") }
     return setAttribute({ schema, ...options }, [
       'exclusiveMaximum',
       max,
-      'number',
+      'number'
     ])
   },
 
@@ -105,19 +97,17 @@ const NumberSchema = (
    */
 
   multipleOf: multiple => {
-    if (typeof multiple !== 'number')
-      throw new FluentSchemaError("'multipleOf' must be a Number")
-    if (schema.type === 'integer' && !Number.isInteger(multiple))
-      throw new FluentSchemaError("'multipleOf' must be an Integer")
+    if (typeof multiple !== 'number') { throw new FluentSchemaError("'multipleOf' must be a Number") }
+    if (schema.type === 'integer' && !Number.isInteger(multiple)) { throw new FluentSchemaError("'multipleOf' must be an Integer") }
     return setAttribute({ schema, ...options }, [
       'multipleOf',
       multiple,
-      'number',
+      'number'
     ])
-  },
+  }
 })
 
 module.exports = {
   NumberSchema,
-  default: NumberSchema,
+  default: NumberSchema
 }

@@ -1,0 +1,19 @@
+{
+  "collectCoverageFrom": [
+    "src/**/*.js",
+    "!src/example.js",
+    "!src/types/*.js"
+  ],
+  "coverageReporters": [
+    "text",
+    "lcovonly"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 100,
+      "functions": 100,
+      "lines": 100,
+      "statements": 100
+    }
+  }
+}

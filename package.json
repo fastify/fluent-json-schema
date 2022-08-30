@@ -40,8 +40,7 @@
   "scripts": {
     "lint": "standard | snazzy",
     "test": "npm run test:unit && npm run test:typescript",
-    "test:unit": "jest src/*.test.js --verbose",
-    "test:coverage": "jest --coverage && npm run test:typescript",
+    "test:unit": "jest --coverage",
     "test:watch": "jest src/*.test.js --verbose --watch",
     "test:typescript": "tsd",
     "coverage": "jest src/**.test.js --coverage",
@@ -54,12 +53,12 @@
     "@fastify/pre-commit": "^2.0.2",
     "ajv": "^8.0.0",
     "ajv-formats": "^2.1.1",
-    "jest": "^28.0.0",
+    "jest": "^29.0.1",
     "jsdoc-to-markdown": "^7.0.0",
     "lodash.merge": "^4.6.2",
     "snazzy": "^9.0.0",
     "standard": "^17.0.0",
-    "tsd": "^0.22.0"
+    "tsd": "^0.23.0"
   },
   "dependencies": {
     "@fastify/deepmerge": "^1.1.0"

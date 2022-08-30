@@ -130,8 +130,7 @@ const patchIdsWithParentId = ({ schema, generateIds, parentId }) => {
   return {
     ...schema,
     properties: properties.reduce((memo, [key, props]) => {
-      const target = props.def ? 'definitions' : 'properties'
-      const $id = props.$id || (generateIds ? `#${target}/${key}` : undefined)
+      const $id = props.$id || (generateIds ? `#properties/${key}` : undefined)
       return {
         ...memo,
         [key]: {

@@ -26,17 +26,6 @@
     "type": "git",
     "url": "https://github.com/fastify/fluent-json-schema.git"
   },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.js",
-      "!src/example.js",
-      "!src/types/*.js"
-    ],
-    "coverageReporters": [
-      "text",
-      "lcovonly"
-    ]
-  },
   "lint-staged": {
     "*.{json,md,js,ts,yml}": [
       "prettier --write",
@@ -45,8 +34,7 @@
   },
   "scripts": {
     "test": "npm run test:unit && npm run test:typescript",
-    "test:unit": "jest src/*.test.js --verbose",
-    "test:coverage": "jest --coverage && npm run test:typescript",
+    "test:unit": "jest --coverage",
     "test:watch": "jest src/*.test.js --verbose --watch",
     "test:typescript": "tsd",
     "prepare": "husky install",

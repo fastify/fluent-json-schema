@@ -47,7 +47,7 @@
     "lodash.merge": "^4.6.2",
     "snazzy": "^9.0.0",
     "standard": "^17.0.0",
-    "tsd": "^0.23.0"
+    "tsd": "^0.24.1"
   },
   "dependencies": {
     "@fastify/deepmerge": "^1.1.0"

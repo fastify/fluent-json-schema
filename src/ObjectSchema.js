@@ -37,6 +37,21 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     ...BaseSchema({ ...options, schema }),
 
     /**
+     * It defines a URI for the schema, and the base URI that other URI references within the schema are resolved against.
+     * Calling `id`  on an ObjectSchema will alway set the id on the root of the object rather than in its "properties", which
+     * differs from other schema types.
+     *
+     * {@link https://tools.ietf.org/html/draft-handrews-json-schema-01#section-8.2|reference}
+     * @param {string} id - an #id
+     **/
+    id: id => {
+      if (!id)
+        throw new FluentSchemaError(
+          `id should not be an empty fragment <#> or an empty string <> (e.g. #myId)`
+        )
+      return options.factory({ schema: { ...schema, $id: id }, ...options })
+    },
+    /**
      * This keyword determines how child instances validate for objects, and does not directly validate the immediate instance itself.
      * Validation with "additionalProperties" applies only to the child values of instance names that do not match any names in "properties",
      * and do not match any regular expression in "patternProperties".
@@ -335,7 +350,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     },
 
     /**
-     * Returns an object schema with only a subset of keys provided
+     * Returns an object schema with only a subset of keys provided. If called on an ObjectSchema with an
+     * `$id`, it will be removed and the return value will be considered a new schema.
      *
      * @param properties a list of properties you want to keep
      * @returns {ObjectSchema}
@@ -343,7 +359,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     only: properties => {
       return ObjectSchema({
         schema: {
-          ...schema,
+          ...omit(schema, ['$id', 'properties']),
           properties: schema.properties.filter(({ name }) => properties.includes(name)),
           required: schema.required.filter(p => properties.includes(p))
         },
@@ -352,7 +368,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     },
 
     /**
-     * Returns an object schema without a subset of keys provided
+     * Returns an object schema without a subset of keys provided. If called on an ObjectSchema with an
+     * `$id`, it will be removed and the return value will be considered a new schema.
      *
      * @param properties a list of properties you dont want to keep
      * @returns {ObjectSchema}
@@ -360,7 +377,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     without: properties => {
       return ObjectSchema({
         schema: {
-          ...schema,
+          ...omit(schema, ['$id', 'properties']),
           properties: schema.properties.filter(({ name }) => !properties.includes(name)),
           required: schema.required.filter(p => !properties.includes(p))
         },

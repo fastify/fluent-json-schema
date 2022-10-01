@@ -13,13 +13,13 @@ describe('NullSchema', () => {
   describe('constructor', () => {
     it('without params', () => {
       expect(NullSchema().valueOf()).toEqual({
-        type: 'null',
+        type: 'null'
       })
     })
     it('from S', () => {
       expect(S.null().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'null',
+        type: 'null'
       })
     })
   })
@@ -40,7 +40,7 @@ describe('NullSchema', () => {
 
       expect(schema).toEqual({
         type: 'null',
-        customKeyword: true,
+        customKeyword: true
       })
     })
   })

@@ -13,14 +13,14 @@ describe('ArraySchema', () => {
   describe('constructor', () => {
     it('without params', () => {
       expect(ArraySchema().valueOf()).toEqual({
-        type: 'array',
+        type: 'array'
       })
     })
 
     it('from S', () => {
       expect(S.array().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'array',
+        type: 'array'
       })
     })
   })
@@ -34,7 +34,7 @@ describe('ArraySchema', () => {
             .valueOf()
         ).toEqual({
           type: 'array',
-          items: { type: 'number' },
+          items: { type: 'number' }
         })
       })
       it('valid array', () => {
@@ -44,7 +44,7 @@ describe('ArraySchema', () => {
             .valueOf()
         ).toEqual({
           type: 'array',
-          items: [{ type: 'number' }, { type: 'string' }],
+          items: [{ type: 'number' }, { type: 'string' }]
         })
       })
       it('invalid', () => {
@@ -64,7 +64,7 @@ describe('ArraySchema', () => {
         ).toEqual({
           type: 'array',
           items: [{ type: 'number' }, { type: 'string' }],
-          additionalItems: { type: 'string' },
+          additionalItems: { type: 'string' }
         })
       })
       it('false', () => {
@@ -76,7 +76,7 @@ describe('ArraySchema', () => {
         ).toEqual({
           type: 'array',
           items: [{ type: 'number' }, { type: 'string' }],
-          additionalItems: false,
+          additionalItems: false
         })
       })
       it('invalid', () => {
@@ -94,7 +94,7 @@ describe('ArraySchema', () => {
             .valueOf()
         ).toEqual({
           type: 'array',
-          contains: { type: 'string' },
+          contains: { type: 'string' }
         })
       })
       it('invalid', () => {
@@ -114,7 +114,7 @@ describe('ArraySchema', () => {
             .valueOf()
         ).toEqual({
           type: 'array',
-          uniqueItems: true,
+          uniqueItems: true
         })
       })
       it('invalid', () => {
@@ -136,7 +136,7 @@ describe('ArraySchema', () => {
             .valueOf()
         ).toEqual({
           type: 'array',
-          minItems: 3,
+          minItems: 3
         })
       })
       it('invalid', () => {
@@ -156,7 +156,7 @@ describe('ArraySchema', () => {
             .valueOf()
         ).toEqual({
           type: 'array',
-          maxItems: 5,
+          maxItems: 5
         })
       })
       it('invalid', () => {
@@ -176,7 +176,7 @@ describe('ArraySchema', () => {
 
         expect(schema).toEqual({
           type: 'array',
-          customKeyword: true,
+          customKeyword: true
         })
       })
     })

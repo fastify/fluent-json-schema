@@ -8,14 +8,14 @@ const {
   patchIdsWithParentId,
   appendRequired,
   FluentSchemaError,
-  combineDeepmerge,
+  combineDeepmerge
 } = require('./utils')
 
 const initialState = {
   type: 'object',
   definitions: [],
   properties: [],
-  required: [],
+  required: []
 }
 
 /**
@@ -31,7 +31,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
   options = {
     generateIds: false,
     factory: ObjectSchema,
-    ...options,
+    ...options
   }
   return {
     ...BaseSchema({ ...options, schema }),
@@ -53,7 +53,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         return setAttribute({ schema, ...options }, [
           'additionalProperties',
           value,
-          'object',
+          'object'
         ])
       }
       if (isFluentSchema(value)) {
@@ -61,7 +61,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         return setAttribute({ schema, ...options }, [
           'additionalProperties',
           { ...rest },
-          'array',
+          'array'
         ])
       }
 
@@ -79,12 +79,11 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     maxProperties: max => {
-      if (!Number.isInteger(max))
-        throw new FluentSchemaError("'maxProperties' must be a Integer")
+      if (!Number.isInteger(max)) { throw new FluentSchemaError("'maxProperties' must be a Integer") }
       return setAttribute({ schema, ...options }, [
         'maxProperties',
         max,
-        'object',
+        'object'
       ])
     },
 
@@ -97,12 +96,11 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     minProperties: min => {
-      if (!Number.isInteger(min))
-        throw new FluentSchemaError("'minProperties' must be a Integer")
+      if (!Number.isInteger(min)) { throw new FluentSchemaError("'minProperties' must be a Integer") }
       return setAttribute({ schema, ...options }, [
         'minProperties',
         min,
-        'object',
+        'object'
       ])
     },
 
@@ -120,19 +118,20 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
     patternProperties: opts => {
       const values = Object.entries(opts).reduce((memo, [pattern, schema]) => {
-        if (!isFluentSchema(schema))
+        if (!isFluentSchema(schema)) {
           throw new FluentSchemaError(
             "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': S.string() }"
           )
+        }
         return {
           ...memo,
-          [pattern]: omit(schema.valueOf({ isRoot: false }), ['$schema']),
+          [pattern]: omit(schema.valueOf({ isRoot: false }), ['$schema'])
         }
       }, {})
       return setAttribute({ schema, ...options }, [
         'patternProperties',
         values,
-        'object',
+        'object'
       ])
     },
 
@@ -149,79 +148,82 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
 
     dependencies: opts => {
       const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
-        if (!isFluentSchema(schema) && !Array.isArray(schema))
+        if (!isFluentSchema(schema) && !Array.isArray(schema)) {
           throw new FluentSchemaError(
             "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['bar'] } or { 'foo': S.string() }"
           )
+        }
         return {
           ...memo,
           [prop]: Array.isArray(schema)
             ? schema
-            : omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions']),
+            : omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions'])
         }
       }, {})
       return setAttribute({ schema, ...options }, [
         'dependencies',
         values,
-        'object',
+        'object'
       ])
     },
 
     /**
      * The value of "properties" MUST be an object. Each dependency value MUST be an array.
      * Each element in the array MUST be a string and MUST be unique. If the dependency key is a property in the instance, each of the items in the dependency value must be a property that exists in the instance.
-     * 
+     *
      * {@link https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.4|reference}
      * @param {object} opts
      * @returns {FluentSchema}
      */
 
     dependentRequired: opts => {
-    const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
-      if (!Array.isArray(schema))
-        throw new FluentSchemaError(
-          "'dependentRequired' invalid options. Provide a valid array e.g. { 'foo': ['bar'] }"
-        )
-      return {
-        ...memo,
-        [prop]: schema,
-      }
-    }, {})
+      const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
+        if (!Array.isArray(schema)) {
+          throw new FluentSchemaError(
+            "'dependentRequired' invalid options. Provide a valid array e.g. { 'foo': ['bar'] }"
+          )
+        }
+        return {
+          ...memo,
+          [prop]: schema
+        }
+      }, {})
 
-    return setAttribute({ schema, ...options }, [
-      'dependentRequired',
-      values,
-      'object',
-    ])
-  },
+      return setAttribute({ schema, ...options }, [
+        'dependentRequired',
+        values,
+        'object'
+      ])
+    },
 
     /**
      * The value of "properties" MUST be an object. The dependency value MUST be a valid JSON Schema.
      * Each dependency key is a property in the instance and the entire instance must validate against the dependency value.
-     * 
+     *
      * {@link https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.9.2.2.4|reference}
      * @param {object} opts
      * @returns {FluentSchema}
      */
-  dependentSchemas: opts => {
-    const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
-      if (!isFluentSchema(schema))
-        throw new FluentSchemaError(
-          "'dependentSchemas' invalid options. Provide a valid schema e.g. { 'foo': S.string() }"
-        )
+    dependentSchemas: opts => {
+      const values = Object.entries(opts).reduce((memo, [prop, schema]) => {
+        if (!isFluentSchema(schema)) {
+          throw new FluentSchemaError(
+            "'dependentSchemas' invalid options. Provide a valid schema e.g. { 'foo': S.string() }"
+          )
+        }
 
-      return {
-        ...memo,
-        [prop]: omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions']),
-      }
-    }, {})
+        return {
+          ...memo,
+          [prop]: omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions'])
+        }
+      }, {})
 
-    return setAttribute({ schema, ...options }, [
-      'dependentSchemas',
-      values,
-      'object',
-    ])
-  },
+      return setAttribute({ schema, ...options }, [
+        'dependentSchemas',
+        values,
+        'object'
+      ])
+    },
 
     /**
      * If the instance is an object, this keyword validates if every property name in the instance validates against the provided schema.
@@ -233,12 +235,11 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     propertyNames: value => {
-      if (!isFluentSchema(value))
-        throw new FluentSchemaError("'propertyNames' must be a S")
+      if (!isFluentSchema(value)) { throw new FluentSchemaError("'propertyNames' must be a S") }
       return setAttribute({ schema, ...options }, [
         'propertyNames',
         omit(value.valueOf({ isRoot: false }), ['$schema']),
-        'object',
+        'object'
       ])
     },
 
@@ -252,12 +253,13 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      */
 
     prop: (name, props = {}) => {
-      if (Array.isArray(props) || typeof props !== 'object')
+      if (Array.isArray(props) || typeof props !== 'object') {
         throw new FluentSchemaError(
           `'${name}' doesn't support value '${JSON.stringify(
             props
           )}'. Pass a FluentSchema object`
         )
+      }
       const target = props.def ? 'definitions' : 'properties'
       let attributes = props.valueOf({ isRoot: false })
       const $id =
@@ -267,15 +269,15 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         attributes = patchIdsWithParentId({
           schema: attributes,
           parentId: $id,
-          ...options,
+          ...options
         })
 
         const [schemaPatched, attributesPatched] = appendRequired({
           schema,
           attributes: {
             ...attributes,
-            name,
-          },
+            name
+          }
         })
 
         schema = schemaPatched
@@ -306,10 +308,10 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
           ...schema,
           [target]: [
             ...schema[target],
-            $ref ? { name, $ref } : Object.assign({}, { name }, attributes),
-          ],
+            $ref ? { name, $ref } : Object.assign({}, { name }, attributes)
+          ]
         },
-        ...options,
+        ...options
       })
     },
 
@@ -343,9 +345,9 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         schema: {
           ...schema,
           properties: schema.properties.filter(({ name }) => properties.includes(name)),
-          required: schema.required.filter(p => properties.includes(p)),
+          required: schema.required.filter(p => properties.includes(p))
         },
-        ...options,
+        ...options
       })
     },
 
@@ -360,9 +362,9 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         schema: {
           ...schema,
           properties: schema.properties.filter(({ name }) => !properties.includes(name)),
-          required: schema.required.filter(p => !properties.includes(p)),
+          required: schema.required.filter(p => !properties.includes(p))
         },
-        ...options,
+        ...options
       })
     },
 
@@ -380,12 +382,12 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
     definition: (name, props = {}) =>
       ObjectSchema({ schema, ...options }).prop(name, {
         ...props.valueOf({ isRoot: false }),
-        def: true,
-      }),
+        def: true
+      })
   }
 }
 
 module.exports = {
   ObjectSchema,
-  default: ObjectSchema,
+  default: ObjectSchema
 }

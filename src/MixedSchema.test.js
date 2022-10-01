@@ -18,7 +18,7 @@ describe('MixedSchema', () => {
       S.TYPES.INTEGER,
       S.TYPES.OBJECT,
       S.TYPES.ARRAY,
-      S.TYPES.NULL,
+      S.TYPES.NULL
     ]
     expect(MixedSchema(types)[Symbol.for('fluent-schema-object')]).toBeDefined()
   })
@@ -26,7 +26,7 @@ describe('MixedSchema', () => {
   describe('factory', () => {
     it('without params', () => {
       expect(MixedSchema().valueOf()).toEqual({
-        [Symbol.for('fluent-schema-object')]: true,
+        [Symbol.for('fluent-schema-object')]: true
       })
     })
   })
@@ -40,11 +40,11 @@ describe('MixedSchema', () => {
         S.TYPES.INTEGER,
         S.TYPES.OBJECT,
         S.TYPES.ARRAY,
-        S.TYPES.NULL,
+        S.TYPES.NULL
       ]
       expect(S.mixed(types).valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: types,
+        type: types
       })
     })
     it('invalid param', () => {
@@ -83,9 +83,9 @@ describe('MixedSchema', () => {
     ).toEqual({
       $schema: 'http://json-schema.org/draft-07/schema#',
       properties: {
-        prop: { maxLength: 5, minimum: 10, type: ['string', 'number'] },
+        prop: { maxLength: 5, minimum: 10, type: ['string', 'number'] }
       },
-      type: 'object',
+      type: 'object'
     })
   })
 
@@ -100,7 +100,7 @@ describe('MixedSchema', () => {
       expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: ['string', 'number'],
-        customKeyword: true,
+        customKeyword: true
       })
     })
   })

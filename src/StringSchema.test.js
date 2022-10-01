@@ -13,14 +13,14 @@ describe('StringSchema', () => {
   describe('constructor', () => {
     it('without params', () => {
       expect(StringSchema().valueOf()).toEqual({
-        type: 'string',
+        type: 'string'
       })
     })
 
     it('from S', () => {
       expect(S.string().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'string',
+        type: 'string'
       })
     })
   })
@@ -36,10 +36,10 @@ describe('StringSchema', () => {
           properties: {
             prop: {
               type: 'string',
-              minLength: 5,
-            },
+              minLength: 5
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid', () => {
@@ -55,7 +55,7 @@ describe('StringSchema', () => {
           .valueOf()
         expect(schema).toEqual({
           type: 'string',
-          maxLength: 10,
+          maxLength: 10
         })
       })
       it('invalid', () => {
@@ -72,7 +72,7 @@ describe('StringSchema', () => {
             .valueOf()
         ).toEqual({
           type: 'string',
-          format: FORMATS.DATE,
+          format: FORMATS.DATE
         })
       })
       it('valid FORMATS.DATE_TIME', () => {
@@ -82,7 +82,7 @@ describe('StringSchema', () => {
             .valueOf()
         ).toEqual({
           type: 'string',
-          format: 'date-time',
+          format: 'date-time'
         })
       })
       it('invalid', () => {
@@ -101,30 +101,28 @@ describe('StringSchema', () => {
             .valueOf()
         ).toEqual({
           type: 'string',
-          pattern: '\\/.*\\/',
+          pattern: '\\/.*\\/'
         })
       })
       it('as a regex without flags', () => {
-        const prop = 'prop'
         expect(
           StringSchema()
             .pattern(/\/.*\//)
             .valueOf()
         ).toEqual({
           type: 'string',
-          pattern: '\\/.*\\/',
+          pattern: '\\/.*\\/'
         })
       })
 
       it('as a regex with flags', () => {
-        const prop = 'prop'
         expect(
           StringSchema()
             .pattern(/\/.*\//gi)
             .valueOf()
         ).toEqual({
           type: 'string',
-          pattern: '\\/.*\\/',
+          pattern: '\\/.*\\/'
         })
       })
 
@@ -144,7 +142,7 @@ describe('StringSchema', () => {
             .valueOf()
         ).toEqual({
           type: 'string',
-          contentEncoding: 'base64',
+          contentEncoding: 'base64'
         })
       })
       it('invalid', () => {
@@ -161,11 +159,10 @@ describe('StringSchema', () => {
             .valueOf()
         ).toEqual({
           type: 'string',
-          contentMediaType: 'image/png',
+          contentMediaType: 'image/png'
         })
       })
       it('invalid', () => {
-        const prop = 'prop'
         expect(() => StringSchema().contentMediaType(1000)).toThrowError(
           new S.FluentSchemaError("'contentMediaType' must be a string")
         )
@@ -180,7 +177,7 @@ describe('StringSchema', () => {
 
         expect(schema).toEqual({
           type: 'string',
-          customKeyword: true,
+          customKeyword: true
         })
       })
       it('allows to mix custom attibutes with regular one', () => {
@@ -192,7 +189,7 @@ describe('StringSchema', () => {
         expect(schema).toEqual({
           type: 'string',
           formatMaximum: '2020-01-01',
-          format: 'date',
+          format: 'date'
         })
       })
     })
@@ -225,11 +222,11 @@ describe('StringSchema', () => {
           title: 'A string',
           type: 'string',
           format: 'date-time',
-          pattern: '.*',
-        },
+          pattern: '.*'
+        }
       },
       title: 'A object',
-      type: 'object',
+      type: 'object'
     })
   })
 })

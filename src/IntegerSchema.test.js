@@ -13,14 +13,14 @@ describe('IntegerSchema', () => {
   describe('constructor', () => {
     it('without params', () => {
       expect(IntegerSchema().valueOf()).toEqual({
-        type: 'integer',
+        type: 'integer'
       })
     })
 
     it('from S', () => {
       expect(S.integer().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'integer',
+        type: 'integer'
       })
     })
   })
@@ -38,10 +38,10 @@ describe('IntegerSchema', () => {
           properties: {
             prop: {
               type: 'integer',
-              minimum: 5,
-            },
+              minimum: 5
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid number', () => {
@@ -67,10 +67,10 @@ describe('IntegerSchema', () => {
           properties: {
             prop: {
               type: 'integer',
-              maximum: 5,
-            },
+              maximum: 5
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid number', () => {
@@ -97,10 +97,10 @@ describe('IntegerSchema', () => {
           properties: {
             prop: {
               type: 'integer',
-              multipleOf: 5,
-            },
+              multipleOf: 5
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid value', () => {
@@ -128,10 +128,10 @@ describe('IntegerSchema', () => {
           properties: {
             prop: {
               type: 'integer',
-              exclusiveMinimum: 5,
-            },
+              exclusiveMinimum: 5
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid number', () => {
@@ -158,10 +158,10 @@ describe('IntegerSchema', () => {
           properties: {
             prop: {
               type: 'integer',
-              exclusiveMaximum: 5,
-            },
+              exclusiveMaximum: 5
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid number', () => {
@@ -185,7 +185,7 @@ describe('IntegerSchema', () => {
 
       expect(schema).toEqual({
         type: 'integer',
-        customKeyword: true,
+        customKeyword: true
       })
     })
   })
@@ -204,7 +204,7 @@ describe('IntegerSchema', () => {
       description: 'A User desc',
       properties: { age: { maximum: 10, type: 'integer' } },
       title: 'A User',
-      type: 'object',
+      type: 'object'
     })
   })
 })

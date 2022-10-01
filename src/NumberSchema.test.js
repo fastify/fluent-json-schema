@@ -13,14 +13,14 @@ describe('NumberSchema', () => {
   describe('constructor', () => {
     it('without params', () => {
       expect(NumberSchema().valueOf()).toEqual({
-        type: 'number',
+        type: 'number'
       })
     })
 
     it('from S', () => {
       expect(S.number().valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        type: 'number',
+        type: 'number'
       })
     })
   })
@@ -38,10 +38,10 @@ describe('NumberSchema', () => {
           properties: {
             prop: {
               type: 'number',
-              minimum: 5.1,
-            },
+              minimum: 5.1
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid value', () => {
@@ -62,10 +62,10 @@ describe('NumberSchema', () => {
           properties: {
             prop: {
               type: 'number',
-              maximum: 5.1,
-            },
+              maximum: 5.1
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid value', () => {
@@ -87,10 +87,10 @@ describe('NumberSchema', () => {
           properties: {
             prop: {
               type: 'number',
-              multipleOf: 5.1,
-            },
+              multipleOf: 5.1
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid value', () => {
@@ -113,10 +113,10 @@ describe('NumberSchema', () => {
           properties: {
             prop: {
               type: 'number',
-              exclusiveMinimum: 5.1,
-            },
+              exclusiveMinimum: 5.1
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid value', () => {
@@ -138,10 +138,10 @@ describe('NumberSchema', () => {
           properties: {
             prop: {
               type: 'number',
-              exclusiveMaximum: 5.1,
-            },
+              exclusiveMaximum: 5.1
+            }
           },
-          type: 'object',
+          type: 'object'
         })
       })
       it('invalid value', () => {
@@ -159,7 +159,7 @@ describe('NumberSchema', () => {
 
         expect(schema).toEqual({
           type: 'number',
-          customKeyword: true,
+          customKeyword: true
         })
       })
     })
@@ -179,7 +179,7 @@ describe('NumberSchema', () => {
       description: 'A User desc',
       properties: { age: { maximum: 10, type: 'number' } },
       title: 'A User',
-      type: 'object',
+      type: 'object'
     })
   })
 })

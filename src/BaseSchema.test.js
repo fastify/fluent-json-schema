@@ -31,7 +31,7 @@ describe('BaseSchema', () => {
             .title(title)
             .valueOf()
         ).toEqual({
-          title,
+          title
         })
       })
 
@@ -42,7 +42,7 @@ describe('BaseSchema', () => {
             .title(title)
             .valueOf()
         ).toEqual({
-          title,
+          title
         })
       })
     })
@@ -158,7 +158,7 @@ describe('BaseSchema', () => {
         it('repeated calls to required()', () => {
           expect(() => {
             return S.object()
-            .prop("A", S.string()).required().required()
+              .prop('A', S.string()).required().required()
           }).toThrowError(
             new S.FluentSchemaError(
               "'required' has repeated keys, check your calls to .required()"
@@ -168,8 +168,8 @@ describe('BaseSchema', () => {
         it('repeated props on appendRequired()', () => {
           expect(() => {
             return S.object()
-            .prop("A", S.string().required())
-            .prop("A", S.string().required())
+              .prop('A', S.string().required())
+              .prop('A', S.string().required())
           }).toThrowError(
             new S.FluentSchemaError(
               "'required' has repeated keys, check your calls to .required()"
@@ -192,7 +192,7 @@ describe('BaseSchema', () => {
         it('simple', () => {
           const required = ['foo', 'bar']
           expect(S.required(required).valueOf()).toEqual({
-            required,
+            required
           })
         })
         it('nested', () => {
@@ -206,7 +206,7 @@ describe('BaseSchema', () => {
             $schema: 'http://json-schema.org/draft-07/schema#',
             properties: { bar: { type: 'string' }, foo: { type: 'string' } },
             required: ['bar', 'foo'],
-            type: 'object',
+            type: 'object'
           })
         })
       })
@@ -258,9 +258,9 @@ describe('BaseSchema', () => {
             bar: { type: 'string', deprecated: true },
             foo: { type: 'string' }
           },
-          type: 'object',
+          type: 'object'
         })
-      });
+      })
       it('object', () => {
         expect(
           S.object()
@@ -281,12 +281,12 @@ describe('BaseSchema', () => {
               properties: {
                 raz: { type: 'string' },
                 iah: { type: 'number' }
-              },
-            },
+              }
+            }
           },
-          type: 'object',
+          type: 'object'
         })
-      });
+      })
       it('object property', () => {
         expect(
           S.object()
@@ -306,12 +306,12 @@ describe('BaseSchema', () => {
               properties: {
                 raz: { type: 'string', deprecated: true },
                 iah: { type: 'number' }
-              },
-            },
+              }
+            }
           },
-          type: 'object',
+          type: 'object'
         })
-      });
+      })
       it('array', () => {
         expect(
           S.object()
@@ -332,9 +332,9 @@ describe('BaseSchema', () => {
               deprecated: true,
               items: { type: 'number' }
             }
-          },
+          }
         })
-      });
+      })
       it('array item', () => {
         expect(
           S.object()
@@ -372,9 +372,9 @@ describe('BaseSchema', () => {
                 }
               ]
             }
-          },
+          }
         })
-      });
+      })
     })
 
     describe('enum', () => {
@@ -485,7 +485,7 @@ describe('BaseSchema', () => {
       it('S', () => {
         const ref = 'myRef'
         expect(S.ref(ref).valueOf()).toEqual({
-          $ref: ref,
+          $ref: ref
         })
       })
     })
@@ -499,12 +499,12 @@ describe('BaseSchema', () => {
             .allOf([BaseSchema().id('foo')])
             .valueOf()
         ).toEqual({
-          allOf: [{ $id: 'foo' }],
+          allOf: [{ $id: 'foo' }]
         })
       })
       it('S', () => {
         expect(S.allOf([S.id('foo')]).valueOf()).toEqual({
-          allOf: [{ $id: 'foo' }],
+          allOf: [{ $id: 'foo' }]
         })
       })
       describe('invalid', () => {
@@ -536,7 +536,7 @@ describe('BaseSchema', () => {
             .anyOf([BaseSchema().id('foo')])
             .valueOf()
         ).toEqual({
-          anyOf: [{ $id: 'foo' }],
+          anyOf: [{ $id: 'foo' }]
         })
       })
       it('S nested', () => {
@@ -547,9 +547,9 @@ describe('BaseSchema', () => {
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
-            prop: { anyOf: [{ type: 'string' }, { type: 'null' }] },
+            prop: { anyOf: [{ type: 'string' }, { type: 'null' }] }
           },
-          type: 'object',
+          type: 'object'
         })
       })
 
@@ -562,7 +562,7 @@ describe('BaseSchema', () => {
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: { prop: {} },
           required: ['prop'],
-          type: 'object',
+          type: 'object'
         })
       })
 
@@ -595,7 +595,7 @@ describe('BaseSchema', () => {
             .oneOf([BaseSchema().id('foo')])
             .valueOf()
         ).toEqual({
-          oneOf: [{ $id: 'foo' }],
+          oneOf: [{ $id: 'foo' }]
         })
       })
       describe('invalid', () => {
@@ -628,7 +628,7 @@ describe('BaseSchema', () => {
               .not(S.string().maxLength(10))
               .valueOf()
           ).toEqual({
-            not: { type: 'string', maxLength: 10 },
+            not: { type: 'string', maxLength: 10 }
           })
         })
 
@@ -638,7 +638,7 @@ describe('BaseSchema', () => {
               .not(BaseSchema().anyOf([BaseSchema().id('foo')]))
               .valueOf()
           ).toEqual({
-            not: { anyOf: [{ $id: 'foo' }] },
+            not: { anyOf: [{ $id: 'foo' }] }
           })
         })
 
@@ -667,7 +667,7 @@ describe('BaseSchema', () => {
           $id: 'http://foo.com/user',
           title: 'A User',
           if: { $id: 'http://foo.com/user' },
-          then: { description: 'A User desc' },
+          then: { description: 'A User desc' }
         })
       })
 
@@ -691,7 +691,7 @@ describe('BaseSchema', () => {
           title: 'A User',
           properties: { bar: {}, foo: {} },
           if: { properties: { foo: { type: 'null' } } },
-          then: { properties: { bar: { type: 'string' } }, required: ['bar'] },
+          then: { properties: { bar: { type: 'string' } }, required: ['bar'] }
         })
       })
     })
@@ -736,7 +736,7 @@ describe('BaseSchema', () => {
           title: 'A User',
           if: { $id: 'http://foo.com/user' },
           then: { description: 'then' },
-          else: { description: 'else' },
+          else: { description: 'else' }
         })
       })
 
@@ -762,7 +762,7 @@ describe('BaseSchema', () => {
           properties: { bar: {}, foo: {} },
           if: { properties: { foo: { type: 'null' } } },
           then: { properties: { bar: { type: 'string' } }, required: ['bar'] },
-          else: { properties: { bar: { type: 'string' } } },
+          else: { properties: { bar: { type: 'string' } } }
         })
       })
 
@@ -815,7 +815,7 @@ describe('BaseSchema', () => {
 
       expect(schema).toEqual({
         title: 'foo',
-        customKeyword: true,
+        customKeyword: true
       })
     })
   })

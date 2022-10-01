@@ -2,7 +2,7 @@
 const { BaseSchema } = require('./BaseSchema')
 
 const initialState = {
-  type: 'boolean',
+  type: 'boolean'
 }
 
 /**
@@ -17,14 +17,14 @@ const BooleanSchema = ({ schema = initialState, ...options } = {}) => {
   options = {
     generateIds: false,
     factory: BaseSchema,
-    ...options,
+    ...options
   }
   return {
-    ...BaseSchema({ ...options, schema }),
+    ...BaseSchema({ ...options, schema })
   }
 }
 
 module.exports = {
   BooleanSchema,
-  default: BooleanSchema,
+  default: BooleanSchema
 }

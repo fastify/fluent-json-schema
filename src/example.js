@@ -4,7 +4,7 @@ const Ajv = require('ajv')
 
 const ROLES = {
   ADMIN: 'ADMIN',
-  USER: 'USER',
+  USER: 'USER'
 }
 
 const schema = S.object()
@@ -52,7 +52,7 @@ const ajv = new Ajv({ allErrors: true })
 const validate = ajv.compile(schema.valueOf())
 let user = {}
 let valid = validate(user)
-console.log({ valid }) //=> {valid: false}
+console.log({ valid }) //= > {valid: false}
 console.log(validate.errors)
 /* [
   {
@@ -69,11 +69,11 @@ console.log(validate.errors)
     params: { missingProperty: 'password' },
     message: "should have required property 'password'",
   },
-]*/
+] */
 
 user = { email: 'test', password: 'password' }
 valid = validate(user)
-console.log({ valid }) //=> {valid: false}
+console.log({ valid }) //= > {valid: false}
 console.log(validate.errors)
 /*
 [ { keyword: 'format',
@@ -85,12 +85,12 @@ console.log(validate.errors)
 
 user = { email: 'test@foo.com', password: 'password' }
 valid = validate(user)
-console.log({ valid }) //=> {valid: true}
+console.log({ valid }) //= > {valid: true}
 console.log(validate.errors) // => null
 
 user = { email: 'test@foo.com', password: 'password', address: { line1: '' } }
 valid = validate(user)
-console.log({ valid }) //=> {valid: false}
+console.log({ valid }) //= > {valid: false}
 console.log(validate.errors)
 
 /*

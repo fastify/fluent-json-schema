@@ -6,7 +6,7 @@ const hasCombiningKeywords = attributes =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
 
 class FluentSchemaError extends Error {
-  constructor(message) {
+  constructor (message) {
     super(message)
     this.name = 'FluentSchemaError'
   }
@@ -18,16 +18,16 @@ const last = array => {
   return prop
 }
 
-const isUniq = array => array.filter((v, i, a) => a.indexOf(v) === i).length === array.length;
+const isUniq = array => array.filter((v, i, a) => a.indexOf(v) === i).length === array.length
 
-const isBoolean = value => 'boolean' === typeof value;
+const isBoolean = value => typeof value === 'boolean'
 
 const omit = (obj, props) =>
   Object.entries(obj).reduce((memo, [key, value]) => {
     if (props.includes(key)) return memo
     return {
       ...memo,
-      [key]: value,
+      [key]: value
     }
   }, {})
 
@@ -36,16 +36,15 @@ const flat = array =>
     const { name, ...rest } = prop
     return {
       ...memo,
-      [name]: rest,
+      [name]: rest
     }
   }, {})
 
 const combineArray = (options) => {
-
   const {
     clone,
     isMergeableObject,
-    deepmerge,
+    deepmerge
   } = options
 
   return (target, source) => {
@@ -104,7 +103,7 @@ const FORMATS = {
   URI,
   TIME,
   DATE,
-  DATE_TIME,
+  DATE_TIME
 }
 
 const STRING = 'string'
@@ -122,7 +121,7 @@ const TYPES = {
   INTEGER,
   OBJECT,
   ARRAY,
-  NULL,
+  NULL
 }
 
 const patchIdsWithParentId = ({ schema, generateIds, parentId }) => {
@@ -139,16 +138,16 @@ const patchIdsWithParentId = ({ schema, generateIds, parentId }) => {
           $id:
             generateIds && parentId
               ? `${parentId}/${$id.replace('#', '')}`
-              : $id, // e.g. #properties/foo/properties/bar
-        },
+              : $id // e.g. #properties/foo/properties/bar
+        }
       }
-    }, {}),
+    }, {})
   }
 }
 
 const appendRequired = ({
   attributes: { name, required, ...attributes },
-  schema,
+  schema
 }) => {
   const { schemaRequired, attributeRequired } = (required || []).reduce(
     (memo, item) => {
@@ -156,29 +155,29 @@ const appendRequired = ({
         ? {
             ...memo,
             // append prop name to the schema.required
-            schemaRequired: [...memo.schemaRequired, name],
+            schemaRequired: [...memo.schemaRequired, name]
           }
         : {
             ...memo,
             // propagate required attributes
-            attributeRequired: [...memo.attributeRequired, item],
+            attributeRequired: [...memo.attributeRequired, item]
           }
     },
     { schemaRequired: [], attributeRequired: [] }
   )
 
-  const patchedRequired = [...schema.required, ...schemaRequired];
-  if(!isUniq(patchedRequired)){
+  const patchedRequired = [...schema.required, ...schemaRequired]
+  if (!isUniq(patchedRequired)) {
     throw new FluentSchemaError("'required' has repeated keys, check your calls to .required()")
   }
 
   const schemaPatched = {
     ...schema,
-    required: patchedRequired,
+    required: patchedRequired
   }
   const attributesPatched = {
     ...attributes,
-    required: attributeRequired,
+    required: attributeRequired
   }
   return [schemaPatched, attributesPatched]
 }
@@ -190,7 +189,7 @@ const setAttribute = ({ schema, ...options }, attribute) => {
     const { name, ...props } = currentProp
     return options.factory({ schema, ...options }).prop(name, {
       [key]: value,
-      ...props,
+      ...props
     })
   }
   return options.factory({ schema: { ...schema, [key]: value }, ...options })
@@ -202,7 +201,7 @@ const setRaw = ({ schema, ...options }, raw) => {
     const { name, ...props } = currentProp
     return options.factory({ schema, ...options }).prop(name, {
       ...raw,
-      ...props,
+      ...props
     })
   }
   return options.factory({ schema: { ...schema, ...raw }, ...options })
@@ -242,5 +241,5 @@ module.exports = {
   combineDeepmerge,
   FORMATS,
   TYPES,
-  FLUENT_SCHEMA,
+  FLUENT_SCHEMA
 }

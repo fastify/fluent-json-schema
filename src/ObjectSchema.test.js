@@ -93,6 +93,15 @@ describe('ObjectSchema', () => {
               type: 'object'
             })
           })
+          it('invalid', () => {
+            expect(() => {
+              ObjectSchema().id('')
+            }).toThrowError(
+              new S.FluentSchemaError(
+                'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
+              )
+            )
+          })
         })
       })
 
@@ -213,14 +222,15 @@ describe('ObjectSchema', () => {
     describe('id', () => {
       it('valid', () => {
         const id = 'myId'
-        const prop = 'prop'
         expect(
           ObjectSchema()
             .prop('prop')
             .id(id)
-            .valueOf().properties[prop]
+            .valueOf()
         ).toEqual({
-          $id: id
+          $id: id,
+          properties: {'prop': {}},
+          type: 'object'
         })
       })
 
@@ -915,7 +925,6 @@ describe('ObjectSchema', () => {
 
       expect(only.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        $id: 'base',
         title: 'base',
         properties: {
           foo: {
@@ -939,7 +948,6 @@ describe('ObjectSchema', () => {
 
       expect(only.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        $id: 'base',
         title: 'base',
         properties: {
           foo: {
@@ -974,7 +982,6 @@ describe('ObjectSchema', () => {
 
       expect(without.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        $id: 'base',
         title: 'base',
         properties: {
           bar: {
@@ -1001,7 +1008,6 @@ describe('ObjectSchema', () => {
 
       expect(without.valueOf()).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        $id: 'base',
         title: 'base',
         properties: {
           baz: {

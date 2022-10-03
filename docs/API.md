@@ -225,6 +225,12 @@ it can be handy to arbitrary modify the schema injecting a fragment</p>
 <dt><a href="#ObjectSchema">ObjectSchema([options])</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
 <dd><p>Represents a ObjectSchema.</p>
 </dd>
+<dt><a href="#id">id(id)</a></dt>
+<dd><p>It defines a URI for the schema, and the base URI that other URI references within the schema are resolved against.
+Calling <code>id</code>  on an ObjectSchema will alway set the id on the root of the object rather than in its &quot;properties&quot;, which
+differs from other schema types.</p>
+<p><a href="https://tools.ietf.org/html/draft-handrews-json-schema-01#section-8.2">reference</a></p>
+</dd>
 <dt><a href="#additionalProperties">additionalProperties(value)</a> ⇒ <code>FluentSchema</code></dt>
 <dd><p>This keyword determines how child instances validate for objects, and does not directly validate the immediate instance itself.
 Validation with &quot;additionalProperties&quot; applies only to the child values of instance names that do not match any names in &quot;properties&quot;,
@@ -276,10 +282,12 @@ Note the property name that the schema is testing will always be a string.</p>
 <p><a href="https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.4">reference</a></p>
 </dd>
 <dt><a href="#only">only(properties)</a> ⇒ <code><a href="#ObjectSchema">ObjectSchema</a></code></dt>
-<dd><p>Returns an object schema with only a subset of keys provided</p>
+<dd><p>Returns an object schema with only a subset of keys provided. If called on an ObjectSchema with an
+<code>$id</code>, it will be removed and the return value will be considered a new schema.</p>
 </dd>
 <dt><a href="#without">without(properties)</a> ⇒ <code><a href="#ObjectSchema">ObjectSchema</a></code></dt>
-<dd><p>Returns an object schema without a subset of keys provided</p>
+<dd><p>Returns an object schema without a subset of keys provided. If called on an ObjectSchema with an
+<code>$id</code>, it will be removed and the return value will be considered a new schema.</p>
 </dd>
 <dt><a href="#definition">definition(name, props)</a> ⇒ <code>FluentSchema</code></dt>
 <dd><p>The &quot;definitions&quot; keywords provides a standardized location for schema authors to inline re-usable JSON Schemas into a more general schema.
@@ -951,6 +959,21 @@ Represents a ObjectSchema.
 | [options.schema] | [<code>StringSchema</code>](#StringSchema) |  | Default schema |
 | [options.generateIds] | [<code>boolean</code>](#boolean) | <code>false</code> | generate the id automatically e.g. #properties.foo |
 
+<a name="id"></a>
+
+## id(id)
+It defines a URI for the schema, and the base URI that other URI references within the schema are resolved against.
+Calling `id`  on an ObjectSchema will alway set the id on the root of the object rather than in its "properties", which
+differs from other schema types.
+
+[reference](https://tools.ietf.org/html/draft-handrews-json-schema-01#section-8.2)
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | [<code>string</code>](#string) | an #id |
+
 <a name="additionalProperties"></a>
 
 ## additionalProperties(value) ⇒ <code>FluentSchema</code>
@@ -1086,7 +1109,8 @@ The value of "properties" MUST be an object. Each value of this object MUST be a
 <a name="only"></a>
 
 ## only(properties) ⇒ [<code>ObjectSchema</code>](#ObjectSchema)
-Returns an object schema with only a subset of keys provided
+Returns an object schema with only a subset of keys provided. If called on an ObjectSchema with an
+`$id`, it will be removed and the return value will be considered a new schema.
 
 **Kind**: global function  
 
@@ -1097,7 +1121,8 @@ Returns an object schema with only a subset of keys provided
 <a name="without"></a>
 
 ## without(properties) ⇒ [<code>ObjectSchema</code>](#ObjectSchema)
-Returns an object schema without a subset of keys provided
+Returns an object schema without a subset of keys provided. If called on an ObjectSchema with an
+`$id`, it will be removed and the return value will be considered a new schema.
 
 **Kind**: global function  
 

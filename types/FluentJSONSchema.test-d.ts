@@ -110,12 +110,7 @@ const rawNullableSchema = S.object()
 
 console.log('raw schema with nullable props\n', JSON.stringify(rawNullableSchema))
 
-type Foo = {
-  foo: string
-  bar: string
-}
-
-const dependentRequired = S.object<Foo>()
+const dependentRequired = S.object()
   .dependentRequired({
     foo: ['bar'],
   })
@@ -125,7 +120,7 @@ const dependentRequired = S.object<Foo>()
 
 console.log('dependentRequired:\n', JSON.stringify(dependentRequired))
 
-const dependentSchemas = S.object<Foo>()
+const dependentSchemas = S.object()
   .dependentSchemas({
     foo: S.object().prop('bar'),
   })
@@ -140,6 +135,37 @@ const deprecatedSchema =  S.object()
     .valueOf()
 
 console.log('deprecatedSchema:\n', JSON.stringify(deprecatedSchema))
+
+type Foo = {
+  foo: string
+  bar: string
+}
+
+const dependentRequiredWithType = S.object<Foo>()
+  .dependentRequired({
+    foo: ['bar'],
+  })
+  .prop('foo')
+  .prop('bar')
+  .valueOf()
+
+console.log('dependentRequired:\n', JSON.stringify(dependentRequiredWithType))
+
+const dependentSchemasWithType = S.object<Foo>()
+  .dependentSchemas({
+    foo: S.object().prop('bar'),
+  })
+  .prop('bar', S.object().prop('bar'))
+  .valueOf()
+
+console.log('dependentSchemasWithType:\n', JSON.stringify(dependentSchemasWithType))
+
+const deprecatedSchemaWithType =  S.object<Foo>()
+    .deprecated()
+    .prop('foo', S.string().deprecated())
+    .valueOf()
+
+console.log('deprecatedSchemaWithType:\n', JSON.stringify(deprecatedSchemaWithType))
 
 type ReallyLongType = {
   foo: string

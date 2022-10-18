@@ -114,8 +114,7 @@ export interface ArraySchema extends BaseSchema<ArraySchema> {
   maxItems: (max: number) => ArraySchema
 }
 
-
-export interface ObjectSchema<T extends Record<string, never> = Record<string, never>> extends BaseSchema<ObjectSchema<T>> {
+export interface ObjectSchema<T extends Record<string, any> = Record<string, any>> extends BaseSchema<ObjectSchema<T>> {
   definition: (name: Key<T>, props?: JSONSchema) => ObjectSchema<T>
   prop: (name: Key<T>, props?: JSONSchema) => ObjectSchema<T>
   additionalProperties: (value: JSONSchema | boolean) => ObjectSchema<T>
@@ -231,13 +230,15 @@ type DependentRequiredOptions<T extends Partial<Record<string, string[]>>> = Par
 
 export function withOptions<T>(options: SchemaOptions): T
 
+type ObjectPlaceholder = Record<string | number | symbol, any>;
+
 export interface S extends BaseSchema<S> {
   string: () => StringSchema
   number: () => NumberSchema
   integer: () => IntegerSchema
   boolean: () => BooleanSchema
   array: () => ArraySchema
-  object: <T extends {} = {}>() => ObjectSchema<T>
+  object: <T extends ObjectPlaceholder = ObjectPlaceholder>() => ObjectSchema<T>
   null: () => NullSchema
   mixed: <
     T extends

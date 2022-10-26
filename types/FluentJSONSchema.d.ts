@@ -114,20 +114,20 @@ export interface ArraySchema extends BaseSchema<ArraySchema> {
   maxItems: (max: number) => ArraySchema
 }
 
-export interface ObjectSchema extends BaseSchema<ObjectSchema> {
-  definition: (name: string, props?: JSONSchema) => ObjectSchema
-  prop: (name: string, props?: JSONSchema) => ObjectSchema
-  additionalProperties: (value: JSONSchema | boolean) => ObjectSchema
-  maxProperties: (max: number) => ObjectSchema
-  minProperties: (min: number) => ObjectSchema
-  patternProperties: (options: PatternPropertiesOptions) => ObjectSchema
-  dependencies: (options: DependenciesOptions) => ObjectSchema
-  propertyNames: (value: JSONSchema) => ObjectSchema
-  extend: (schema: ObjectSchema | ExtendedSchema) => ExtendedSchema
-  only: (properties: string[]) => ObjectSchema
-  without: (properties: string[]) => ObjectSchema
-  dependentRequired: (options: DependentRequiredOptions) => ObjectSchema
-  dependentSchemas: (options: DependentSchemaOptions) => ObjectSchema
+export interface ObjectSchema<T extends Record<string, any> = Record<string, any>> extends BaseSchema<ObjectSchema<T>> {
+  definition: (name: Key<T>, props?: JSONSchema) => ObjectSchema<T>
+  prop: (name: Key<T>, props?: JSONSchema) => ObjectSchema<T>
+  additionalProperties: (value: JSONSchema | boolean) => ObjectSchema<T>
+  maxProperties: (max: number) => ObjectSchema<T>
+  minProperties: (min: number) => ObjectSchema<T>
+  patternProperties: (options: PatternPropertiesOptions) => ObjectSchema<T>
+  dependencies: (options: DependenciesOptions) => ObjectSchema<T>
+  propertyNames: (value: JSONSchema) => ObjectSchema<T>
+  extend: (schema: ObjectSchema<T> | ExtendedSchema) => ExtendedSchema
+  only: (properties: string[]) => ObjectSchema<T>
+  without: (properties: string[]) => ObjectSchema<T>
+  dependentRequired: (options: DependentRequiredOptions<T>) => ObjectSchema<T>
+  dependentSchemas: (options: DependentSchemaOptions<T>) => ObjectSchema<T>
 }
 
 export type ExtendedSchema = Pick<ObjectSchema, 'isFluentSchema' | 'extend'>
@@ -222,15 +222,15 @@ interface DependenciesOptions {
   [key: string]: JSONSchema[]
 }
 
-interface DependentSchemaOptions {
-  [key: string]: JSONSchema
-}
+type Key<T> = keyof T | (string & {})
 
-interface DependentRequiredOptions {
-  [key: string]: string[]
-}
+type DependentSchemaOptions<T extends Partial<Record<string, JSONSchema>>> = Partial<Record<keyof T, JSONSchema>>
+
+type DependentRequiredOptions<T extends Partial<Record<string, string[]>>> = Partial<Record<keyof T, string[]>>
 
 export function withOptions<T>(options: SchemaOptions): T
+
+type ObjectPlaceholder = Record<string | number | symbol, any>;
 
 export interface S extends BaseSchema<S> {
   string: () => StringSchema
@@ -238,7 +238,7 @@ export interface S extends BaseSchema<S> {
   integer: () => IntegerSchema
   boolean: () => BooleanSchema
   array: () => ArraySchema
-  object: () => ObjectSchema
+  object: <T extends ObjectPlaceholder = ObjectPlaceholder>() => ObjectSchema<T>
   null: () => NullSchema
   mixed: <
     T extends

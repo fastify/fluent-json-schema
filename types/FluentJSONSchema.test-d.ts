@@ -124,7 +124,7 @@ const dependentSchemas = S.object()
   .dependentSchemas({
     foo: S.object().prop('bar'),
   })
-  .prop('foo', S.object().prop('bar'))
+  .prop('bar', S.object().prop('bar'))
   .valueOf()
 
 console.log('dependentRequired:\n', JSON.stringify(dependentSchemas))
@@ -135,3 +135,56 @@ const deprecatedSchema =  S.object()
     .valueOf()
 
 console.log('deprecatedSchema:\n', JSON.stringify(deprecatedSchema))
+
+type Foo = {
+  foo: string
+  bar: string
+}
+
+const dependentRequiredWithType = S.object<Foo>()
+  .dependentRequired({
+    foo: ['bar'],
+  })
+  .prop('foo')
+  .prop('bar')
+  .valueOf()
+
+console.log('dependentRequired:\n', JSON.stringify(dependentRequiredWithType))
+
+const dependentSchemasWithType = S.object<Foo>()
+  .dependentSchemas({
+    foo: S.object().prop('bar'),
+  })
+  .prop('bar', S.object().prop('bar'))
+  .valueOf()
+
+console.log('dependentSchemasWithType:\n', JSON.stringify(dependentSchemasWithType))
+
+const deprecatedSchemaWithType =  S.object<Foo>()
+    .deprecated()
+    .prop('foo', S.string().deprecated())
+    .valueOf()
+
+console.log('deprecatedSchemaWithType:\n', JSON.stringify(deprecatedSchemaWithType))
+
+type ReallyLongType = {
+  foo: string
+  bar: string
+  baz: string
+  xpto: string
+  abcd: number
+  kct: {
+    a: string
+    b: number
+    d: null
+  }
+}
+
+const deepTestOnTypes = S.object<ReallyLongType>()
+  .prop('bar', S.object().prop('bar'))
+  // you can provide any string, to avoid breaking changes
+  .prop('aaaa', S.anyOf([S.string()]))
+  .definition('abcd', S.number())
+  .valueOf()
+
+console.log('deepTestOnTypes:\n', JSON.stringify(deepTestOnTypes))

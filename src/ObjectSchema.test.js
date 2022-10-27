@@ -229,7 +229,7 @@ describe('ObjectSchema', () => {
             .valueOf()
         ).toEqual({
           $id: id,
-          properties: {'prop': {}},
+          properties: { prop: {} },
           type: 'object'
         })
       })

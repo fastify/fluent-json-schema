@@ -45,10 +45,11 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * @param {string} id - an #id
      **/
     id: id => {
-      if (!id)
+      if (!id) {
         throw new FluentSchemaError(
-          `id should not be an empty fragment <#> or an empty string <> (e.g. #myId)`
+          'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
         )
+      }
       return options.factory({ schema: { ...schema, $id: id }, ...options })
     },
     /**

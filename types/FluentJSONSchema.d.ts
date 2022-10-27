@@ -26,89 +26,27 @@ type FORMATS = {
 };
 
 type JSONSchema =
-  | ObjectSchema
-  | StringSchema
-  | NumberSchema
-  | ArraySchema
-  | IntegerSchema
-  | BooleanSchema
-  | NullSchema
+  | s.ObjectSchema
+  | s.StringSchema
+  | s.NumberSchema
+  | s.ArraySchema
+  | s.IntegerSchema
+  | s.BooleanSchema
+  | s.NullSchema
   | ExtendedSchema;
 
-interface SchemaOptions {
-  schema: object;
-  generateIds: boolean;
-}
 
-interface StringSchema extends s.BaseSchema<StringSchema> {
-  minLength: (min: number) => StringSchema;
-  maxLength: (min: number) => StringSchema;
-  format: (format: FORMATS[keyof FORMATS]) => StringSchema;
-  pattern: (pattern: string | RegExp) => StringSchema;
-  contentEncoding: (encoding: string) => StringSchema;
-  contentMediaType: (mediaType: string) => StringSchema;
-}
 
-interface NullSchema {
-  null: () => StringSchema;
-}
-
-interface BooleanSchema extends s.BaseSchema<BooleanSchema> {
-  boolean: () => BooleanSchema;
-}
-
-interface NumberSchema extends s.BaseSchema<NumberSchema> {
-  minimum: (min: number) => NumberSchema;
-  exclusiveMinimum: (min: number) => NumberSchema;
-  maximum: (max: number) => NumberSchema;
-  exclusiveMaximum: (max: number) => NumberSchema;
-  multipleOf: (multiple: number) => NumberSchema;
-}
-
-interface IntegerSchema extends s.BaseSchema<IntegerSchema> {
-  minimum: (min: number) => IntegerSchema;
-  exclusiveMinimum: (min: number) => IntegerSchema;
-  maximum: (max: number) => IntegerSchema;
-  exclusiveMaximum: (max: number) => IntegerSchema;
-  multipleOf: (multiple: number) => IntegerSchema;
-}
-
-interface ArraySchema extends s.BaseSchema<ArraySchema> {
-  items: (items: JSONSchema | Array<JSONSchema>) => ArraySchema;
-  additionalItems: (items: Array<JSONSchema> | boolean) => ArraySchema;
-  contains: (value: JSONSchema | boolean) => ArraySchema;
-  uniqueItems: (boolean: boolean) => ArraySchema;
-  minItems: (min: number) => ArraySchema;
-  maxItems: (max: number) => ArraySchema;
-}
-
-interface ObjectSchema<T extends Record<string, any> = Record<string, any>>
-  extends s.BaseSchema<ObjectSchema<T>> {
-  definition: (name: Key<T>, props?: JSONSchema) => ObjectSchema<T>;
-  prop: (name: Key<T>, props?: JSONSchema) => ObjectSchema<T>;
-  additionalProperties: (value: JSONSchema | boolean) => ObjectSchema<T>;
-  maxProperties: (max: number) => ObjectSchema<T>;
-  minProperties: (min: number) => ObjectSchema<T>;
-  patternProperties: (options: PatternPropertiesOptions) => ObjectSchema<T>;
-  dependencies: (options: DependenciesOptions) => ObjectSchema<T>;
-  propertyNames: (value: JSONSchema) => ObjectSchema<T>;
-  extend: (schema: ObjectSchema<T> | ExtendedSchema) => ExtendedSchema;
-  only: (properties: string[]) => ObjectSchema<T>;
-  without: (properties: string[]) => ObjectSchema<T>;
-  dependentRequired: (options: DependentRequiredOptions<T>) => ObjectSchema<T>;
-  dependentSchemas: (options: DependentSchemaOptions<T>) => ObjectSchema<T>;
-}
-
-type ExtendedSchema = Pick<ObjectSchema, "isFluentSchema" | "extend">;
+type ExtendedSchema = Pick<s.ObjectSchema, "isFluentSchema" | "extend">;
 
 type InferSchemaMap = {
-  string: StringSchema;
-  number: NumberSchema;
-  boolean: BooleanSchema;
-  integer: IntegerSchema;
-  object: ObjectSchema;
-  array: ArraySchema;
-  null: NullSchema;
+  string: s.StringSchema;
+  number: s.NumberSchema;
+  boolean: s.BooleanSchema;
+  integer: s.IntegerSchema;
+  object: s.ObjectSchema;
+  array: s.ArraySchema;
+  null: s.NullSchema;
 };
 
 type MixedSchema1<T> = T extends [infer U]
@@ -178,19 +116,6 @@ type MixedSchema<T> =
   | MixedSchema6<T>
   | MixedSchema7<T>;
 
-interface SchemaOptions {
-  schema: object;
-  generateIds: boolean;
-}
-
-interface PatternPropertiesOptions {
-  [key: string]: JSONSchema;
-}
-
-interface DependenciesOptions {
-  [key: string]: JSONSchema[];
-}
-
 type Key<T> = keyof T | (string & {});
 
 type DependentSchemaOptions<T extends Partial<Record<string, JSONSchema>>> =
@@ -233,8 +158,86 @@ declare namespace s {
     isFluentJSONSchema: boolean;
     raw: (fragment: any) => T;
   }
+
+  export interface SchemaOptions {
+    schema: object;
+    generateIds: boolean;
+  }
   
-  interface S extends BaseSchema<S> {
+  export interface PatternPropertiesOptions {
+    [key: string]: JSONSchema;
+  }
+  
+  export interface DependenciesOptions {
+    [key: string]: JSONSchema[];
+  }
+  
+
+  export interface SchemaOptions {
+    schema: object;
+    generateIds: boolean;
+  }
+  
+  export interface StringSchema extends s.BaseSchema<StringSchema> {
+    minLength: (min: number) => StringSchema;
+    maxLength: (min: number) => StringSchema;
+    format: (format: FORMATS[keyof FORMATS]) => StringSchema;
+    pattern: (pattern: string | RegExp) => StringSchema;
+    contentEncoding: (encoding: string) => StringSchema;
+    contentMediaType: (mediaType: string) => StringSchema;
+  }
+  
+  export interface NullSchema {
+    null: () => StringSchema;
+  }
+  
+  export interface BooleanSchema extends s.BaseSchema<BooleanSchema> {
+    boolean: () => BooleanSchema;
+  }
+  
+  export interface NumberSchema extends s.BaseSchema<NumberSchema> {
+    minimum: (min: number) => NumberSchema;
+    exclusiveMinimum: (min: number) => NumberSchema;
+    maximum: (max: number) => NumberSchema;
+    exclusiveMaximum: (max: number) => NumberSchema;
+    multipleOf: (multiple: number) => NumberSchema;
+  }
+  
+  export interface IntegerSchema extends s.BaseSchema<IntegerSchema> {
+    minimum: (min: number) => IntegerSchema;
+    exclusiveMinimum: (min: number) => IntegerSchema;
+    maximum: (max: number) => IntegerSchema;
+    exclusiveMaximum: (max: number) => IntegerSchema;
+    multipleOf: (multiple: number) => IntegerSchema;
+  }
+  
+  export interface ArraySchema extends s.BaseSchema<ArraySchema> {
+    items: (items: JSONSchema | Array<JSONSchema>) => ArraySchema;
+    additionalItems: (items: Array<JSONSchema> | boolean) => ArraySchema;
+    contains: (value: JSONSchema | boolean) => ArraySchema;
+    uniqueItems: (boolean: boolean) => ArraySchema;
+    minItems: (min: number) => ArraySchema;
+    maxItems: (max: number) => ArraySchema;
+  }
+  
+  export interface ObjectSchema<T extends Record<string, any> = Record<string, any>>
+    extends s.BaseSchema<ObjectSchema<T>> {
+    definition: (name: Key<T>, props?: JSONSchema) => ObjectSchema<T>;
+    prop: (name: Key<T>, props?: JSONSchema) => ObjectSchema<T>;
+    additionalProperties: (value: JSONSchema | boolean) => ObjectSchema<T>;
+    maxProperties: (max: number) => ObjectSchema<T>;
+    minProperties: (min: number) => ObjectSchema<T>;
+    patternProperties: (options: PatternPropertiesOptions) => ObjectSchema<T>;
+    dependencies: (options: DependenciesOptions) => ObjectSchema<T>;
+    propertyNames: (value: JSONSchema) => ObjectSchema<T>;
+    extend: (schema: ObjectSchema<T> | ExtendedSchema) => ExtendedSchema;
+    only: (properties: string[]) => ObjectSchema<T>;
+    without: (properties: string[]) => ObjectSchema<T>;
+    dependentRequired: (options: DependentRequiredOptions<T>) => ObjectSchema<T>;
+    dependentSchemas: (options: DependentSchemaOptions<T>) => ObjectSchema<T>;
+  }
+  
+  export interface S extends BaseSchema<S> {
     string: () => StringSchema;
     number: () => NumberSchema;
     integer: () => IntegerSchema;

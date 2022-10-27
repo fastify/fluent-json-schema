@@ -1,31 +1,3 @@
-interface BaseSchema<T> {
-  id: (id: string) => T;
-  title: (title: string) => T;
-  description: (description: string) => T;
-  examples: (examples: Array<any>) => T;
-  ref: (ref: string) => T;
-  enum: (values: Array<any>) => T;
-  const: (value: any) => T;
-  default: (value: any) => T;
-  required: (fields?: string[]) => T;
-  ifThen: (ifClause: JSONSchema, thenClause: JSONSchema) => T;
-  ifThenElse: (
-    ifClause: JSONSchema,
-    thenClause: JSONSchema,
-    elseClause: JSONSchema
-  ) => T;
-  not: (schema: JSONSchema) => T;
-  anyOf: (schema: Array<JSONSchema>) => T;
-  allOf: (schema: Array<JSONSchema>) => T;
-  oneOf: (schema: Array<JSONSchema>) => T;
-  readOnly: (isReadOnly?: boolean) => T;
-  writeOnly: (isWriteOnly?: boolean) => T;
-  deprecated: (isDeprecated?: boolean) => T;
-  isFluentSchema: boolean;
-  isFluentJSONSchema: boolean;
-  raw: (fragment: any) => T;
-}
-
 type TYPE =
   | "string"
   | "number"
@@ -68,7 +40,7 @@ interface SchemaOptions {
   generateIds: boolean;
 }
 
-interface StringSchema extends BaseSchema<StringSchema> {
+interface StringSchema extends s.BaseSchema<StringSchema> {
   minLength: (min: number) => StringSchema;
   maxLength: (min: number) => StringSchema;
   format: (format: FORMATS[keyof FORMATS]) => StringSchema;
@@ -81,11 +53,11 @@ interface NullSchema {
   null: () => StringSchema;
 }
 
-interface BooleanSchema extends BaseSchema<BooleanSchema> {
+interface BooleanSchema extends s.BaseSchema<BooleanSchema> {
   boolean: () => BooleanSchema;
 }
 
-interface NumberSchema extends BaseSchema<NumberSchema> {
+interface NumberSchema extends s.BaseSchema<NumberSchema> {
   minimum: (min: number) => NumberSchema;
   exclusiveMinimum: (min: number) => NumberSchema;
   maximum: (max: number) => NumberSchema;
@@ -93,7 +65,7 @@ interface NumberSchema extends BaseSchema<NumberSchema> {
   multipleOf: (multiple: number) => NumberSchema;
 }
 
-interface IntegerSchema extends BaseSchema<IntegerSchema> {
+interface IntegerSchema extends s.BaseSchema<IntegerSchema> {
   minimum: (min: number) => IntegerSchema;
   exclusiveMinimum: (min: number) => IntegerSchema;
   maximum: (max: number) => IntegerSchema;
@@ -101,7 +73,7 @@ interface IntegerSchema extends BaseSchema<IntegerSchema> {
   multipleOf: (multiple: number) => IntegerSchema;
 }
 
-interface ArraySchema extends BaseSchema<ArraySchema> {
+interface ArraySchema extends s.BaseSchema<ArraySchema> {
   items: (items: JSONSchema | Array<JSONSchema>) => ArraySchema;
   additionalItems: (items: Array<JSONSchema> | boolean) => ArraySchema;
   contains: (value: JSONSchema | boolean) => ArraySchema;
@@ -111,7 +83,7 @@ interface ArraySchema extends BaseSchema<ArraySchema> {
 }
 
 interface ObjectSchema<T extends Record<string, any> = Record<string, any>>
-  extends BaseSchema<ObjectSchema<T>> {
+  extends s.BaseSchema<ObjectSchema<T>> {
   definition: (name: Key<T>, props?: JSONSchema) => ObjectSchema<T>;
   prop: (name: Key<T>, props?: JSONSchema) => ObjectSchema<T>;
   additionalProperties: (value: JSONSchema | boolean) => ObjectSchema<T>;
@@ -234,6 +206,34 @@ declare namespace s {
     name: string;
   }
 
+  export interface BaseSchema<T> {
+    id: (id: string) => T;
+    title: (title: string) => T;
+    description: (description: string) => T;
+    examples: (examples: Array<any>) => T;
+    ref: (ref: string) => T;
+    enum: (values: Array<any>) => T;
+    const: (value: any) => T;
+    default: (value: any) => T;
+    required: (fields?: string[]) => T;
+    ifThen: (ifClause: JSONSchema, thenClause: JSONSchema) => T;
+    ifThenElse: (
+      ifClause: JSONSchema,
+      thenClause: JSONSchema,
+      elseClause: JSONSchema
+    ) => T;
+    not: (schema: JSONSchema) => T;
+    anyOf: (schema: Array<JSONSchema>) => T;
+    allOf: (schema: Array<JSONSchema>) => T;
+    oneOf: (schema: Array<JSONSchema>) => T;
+    readOnly: (isReadOnly?: boolean) => T;
+    writeOnly: (isWriteOnly?: boolean) => T;
+    deprecated: (isDeprecated?: boolean) => T;
+    isFluentSchema: boolean;
+    isFluentJSONSchema: boolean;
+    raw: (fragment: any) => T;
+  }
+  
   interface S extends BaseSchema<S> {
     string: () => StringSchema;
     number: () => NumberSchema;

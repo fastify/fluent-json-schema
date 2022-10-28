@@ -25,18 +25,6 @@ type FORMATS = {
   DATE_TIME: "date-time";
 };
 
-type JSONSchema =
-  | s.ObjectSchema
-  | s.StringSchema
-  | s.NumberSchema
-  | s.ArraySchema
-  | s.IntegerSchema
-  | s.BooleanSchema
-  | s.NullSchema
-  | ExtendedSchema;
-
-
-
 type ExtendedSchema = Pick<s.ObjectSchema, "isFluentSchema" | "extend">;
 
 type InferSchemaMap = {
@@ -118,8 +106,8 @@ type MixedSchema<T> =
 
 type Key<T> = keyof T | (string & {});
 
-type DependentSchemaOptions<T extends Partial<Record<string, JSONSchema>>> =
-  Partial<Record<keyof T, JSONSchema>>;
+type DependentSchemaOptions<T extends Partial<Record<string, s.JSONSchema>>> =
+  Partial<Record<keyof T, s.JSONSchema>>;
 
 type DependentRequiredOptions<T extends Partial<Record<string, string[]>>> =
   Partial<Record<keyof T, string[]>>;
@@ -130,6 +118,16 @@ declare namespace s {
   export class FluentSchemaError extends Error {
     name: string;
   }
+
+  export type JSONSchema =
+  | ObjectSchema
+  | StringSchema
+  | NumberSchema
+  | ArraySchema
+  | IntegerSchema
+  | BooleanSchema
+  | NullSchema
+  | ExtendedSchema;
 
   export interface BaseSchema<T> {
     id: (id: string) => T;

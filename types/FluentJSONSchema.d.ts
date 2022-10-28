@@ -25,8 +25,6 @@ type FORMATS = {
   DATE_TIME: "date-time";
 };
 
-type ExtendedSchema = Pick<s.ObjectSchema, "isFluentSchema" | "extend">;
-
 type InferSchemaMap = {
   string: s.StringSchema;
   number: s.NumberSchema;
@@ -260,6 +258,8 @@ declare namespace s {
     raw: (fragment: any) => S;
     FORMATS: FORMATS;
   }
+
+  export type ExtendedSchema = Pick<ObjectSchema, "isFluentSchema" | "extend">;
 
   export function withOptions<T>(options: SchemaOptions): T;
 

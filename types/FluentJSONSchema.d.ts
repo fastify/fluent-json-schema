@@ -1,4 +1,4 @@
-type TYPE =
+export type TYPE =
   | "string"
   | "number"
   | "boolean"
@@ -93,7 +93,7 @@ type MixedSchema7<T> = T extends [
       InferSchemaMap[A extends TYPE ? A : never]
   : never;
 
-type MixedSchema<T> =
+export type MixedSchema<T> =
   | MixedSchema1<T>
   | MixedSchema2<T>
   | MixedSchema3<T>
@@ -263,7 +263,7 @@ declare namespace s {
 
   export function withOptions<T>(options: SchemaOptions): T;
 
-  export const FluentSchema: S;
+  const FluentSchema: S;
   export { FluentSchema as default };
 }
 

@@ -218,7 +218,7 @@ describe('BaseSchema', () => {
           BaseSchema()
             .deprecated(true)
             .valueOf().deprecated
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('invalid', () => {
         expect(
@@ -237,14 +237,14 @@ describe('BaseSchema', () => {
           BaseSchema()
             .deprecated()
             .valueOf().deprecated
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('can be set to false', () => {
         expect(
           BaseSchema()
             .deprecated(false)
             .valueOf().deprecated
-        ).toEqual(false)
+        ).toBe(false)
       })
       it('property', () => {
         expect(
@@ -430,21 +430,21 @@ describe('BaseSchema', () => {
           BaseSchema()
             .readOnly(true)
             .valueOf().readOnly
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('valid with no value', () => {
         expect(
           BaseSchema()
             .readOnly()
             .valueOf().readOnly
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('can be set to false', () => {
         expect(
           BaseSchema()
             .readOnly(false)
             .valueOf().readOnly
-        ).toEqual(false)
+        ).toBe(false)
       })
     })
 
@@ -454,21 +454,21 @@ describe('BaseSchema', () => {
           BaseSchema()
             .writeOnly(true)
             .valueOf().writeOnly
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('valid with no value', () => {
         expect(
           BaseSchema()
             .writeOnly()
             .valueOf().writeOnly
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('can be set to false', () => {
         expect(
           BaseSchema()
             .writeOnly(false)
             .valueOf().writeOnly
-        ).toEqual(false)
+        ).toBe(false)
       })
     })
 

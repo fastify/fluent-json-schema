@@ -29,7 +29,7 @@ describe('BooleanSchema', () => {
       S.object()
         .prop('prop', S.boolean())
         .valueOf().properties.prop.type
-    ).toEqual('boolean')
+    ).toBe('boolean')
   })
 
   describe('raw', () => {

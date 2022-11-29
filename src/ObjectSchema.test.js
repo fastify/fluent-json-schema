@@ -207,7 +207,7 @@ describe('ObjectSchema', () => {
       ObjectSchema()
         .prop('prop', S.object())
         .valueOf().properties.prop.type
-    ).toEqual('object')
+    ).toBe('object')
   })
 
   it('valueOf', () => {
@@ -627,7 +627,7 @@ describe('ObjectSchema', () => {
 
   describe('null', () => {
     it('sets a type object from the root', () => {
-      expect(S.null().valueOf().type).toEqual('null')
+      expect(S.null().valueOf().type).toBe('null')
     })
 
     it('sets a type object from the prop', () => {
@@ -636,7 +636,7 @@ describe('ObjectSchema', () => {
           .prop('value', S.null())
 
           .valueOf().properties.value.type
-      ).toEqual('null')
+      ).toBe('null')
     })
   })
 

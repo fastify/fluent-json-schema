@@ -45,12 +45,12 @@ describe('IntegerSchema', () => {
         })
       })
       it('invalid number', () => {
-        expect(() => S.integer().minimum('5.1')).toThrowError(
+        expect(() => S.integer().minimum('5.1')).toThrow(
           new S.FluentSchemaError("'minimum' must be a Number")
         )
       })
       it('invalid integer', () => {
-        expect(() => S.integer().minimum(5.1)).toThrowError(
+        expect(() => S.integer().minimum(5.1)).toThrow(
           new S.FluentSchemaError("'minimum' must be an Integer")
         )
       })
@@ -74,12 +74,12 @@ describe('IntegerSchema', () => {
         })
       })
       it('invalid number', () => {
-        expect(() => S.integer().maximum('5.1')).toThrowError(
+        expect(() => S.integer().maximum('5.1')).toThrow(
           new S.FluentSchemaError("'maximum' must be a Number")
         )
       })
       it('invalid float', () => {
-        expect(() => S.integer().maximum(5.1)).toThrowError(
+        expect(() => S.integer().maximum(5.1)).toThrow(
           new S.FluentSchemaError("'maximum' must be an Integer")
         )
       })
@@ -104,12 +104,12 @@ describe('IntegerSchema', () => {
         })
       })
       it('invalid value', () => {
-        expect(() => S.integer().multipleOf('5.1')).toThrowError(
+        expect(() => S.integer().multipleOf('5.1')).toThrow(
           new S.FluentSchemaError("'multipleOf' must be a Number")
         )
       })
       it('invalid integer', () => {
-        expect(() => S.integer().multipleOf(5.1)).toThrowError(
+        expect(() => S.integer().multipleOf(5.1)).toThrow(
           new S.FluentSchemaError("'multipleOf' must be an Integer")
         )
       })
@@ -135,12 +135,12 @@ describe('IntegerSchema', () => {
         })
       })
       it('invalid number', () => {
-        expect(() => S.integer().exclusiveMinimum('5.1')).toThrowError(
+        expect(() => S.integer().exclusiveMinimum('5.1')).toThrow(
           new S.FluentSchemaError("'exclusiveMinimum' must be a Number")
         )
       })
       it('invalid integer', () => {
-        expect(() => S.integer().exclusiveMinimum(5.1)).toThrowError(
+        expect(() => S.integer().exclusiveMinimum(5.1)).toThrow(
           new S.FluentSchemaError("'exclusiveMinimum' must be an Integer")
         )
       })
@@ -165,12 +165,12 @@ describe('IntegerSchema', () => {
         })
       })
       it('invalid number', () => {
-        expect(() => S.integer().exclusiveMaximum('5.1')).toThrowError(
+        expect(() => S.integer().exclusiveMaximum('5.1')).toThrow(
           new S.FluentSchemaError("'exclusiveMaximum' must be a Number")
         )
       })
       it('invalid integer', () => {
-        expect(() => S.integer().exclusiveMaximum(5.1)).toThrowError(
+        expect(() => S.integer().exclusiveMaximum(5.1)).toThrow(
           new S.FluentSchemaError("'exclusiveMaximum' must be an Integer")
         )
       })

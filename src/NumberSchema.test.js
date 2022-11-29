@@ -45,7 +45,7 @@ describe('NumberSchema', () => {
         })
       })
       it('invalid value', () => {
-        expect(() => S.number().minimum('5.1')).toThrowError(
+        expect(() => S.number().minimum('5.1')).toThrow(
           new S.FluentSchemaError("'minimum' must be a Number")
         )
       })
@@ -69,7 +69,7 @@ describe('NumberSchema', () => {
         })
       })
       it('invalid value', () => {
-        expect(() => S.number().maximum('5.1')).toThrowError(
+        expect(() => S.number().maximum('5.1')).toThrow(
           new S.FluentSchemaError("'maximum' must be a Number")
         )
       })
@@ -94,7 +94,7 @@ describe('NumberSchema', () => {
         })
       })
       it('invalid value', () => {
-        expect(() => S.number().multipleOf('5.1')).toThrowError(
+        expect(() => S.number().multipleOf('5.1')).toThrow(
           new S.FluentSchemaError("'multipleOf' must be a Number")
         )
       })
@@ -120,7 +120,7 @@ describe('NumberSchema', () => {
         })
       })
       it('invalid value', () => {
-        expect(() => S.number().exclusiveMinimum('5.1')).toThrowError(
+        expect(() => S.number().exclusiveMinimum('5.1')).toThrow(
           new S.FluentSchemaError("'exclusiveMinimum' must be a Number")
         )
       })
@@ -145,7 +145,7 @@ describe('NumberSchema', () => {
         })
       })
       it('invalid value', () => {
-        expect(() => S.number().exclusiveMaximum('5.1')).toThrowError(
+        expect(() => S.number().exclusiveMaximum('5.1')).toThrow(
           new S.FluentSchemaError("'exclusiveMaximum' must be a Number")
         )
       })

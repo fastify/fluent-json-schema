@@ -185,7 +185,7 @@ describe('S', () => {
         state: 'Disney World',
         type: 'business'
       })
-      expect(validate.errors).toEqual(null)
+      expect(validate.errors).toBeNull()
       expect(valid).toBeTruthy()
     })
   })
@@ -217,7 +217,7 @@ describe('S', () => {
 
     it('valid', () => {
       const valid = validate({ foo: 'foo' })
-      expect(validate.errors).toEqual(null)
+      expect(validate.errors).toBeNull()
       expect(valid).toBeTruthy()
     })
   })
@@ -326,7 +326,7 @@ describe('S', () => {
         thenBarA: 'thenBarA',
         thenBarB: 'thenBarB'
       })
-      expect(validate.errors).toEqual(null)
+      expect(validate.errors).toBeNull()
       expect(valid).toBeTruthy()
     })
   })
@@ -495,7 +495,7 @@ describe('S', () => {
           const valid = validate({
             test: null
           })
-          expect(validate.errors).toEqual(null)
+          expect(validate.errors).toBeNull()
           expect(valid).toBeTruthy()
         })
       })

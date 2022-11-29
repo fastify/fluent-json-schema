@@ -29,7 +29,7 @@ describe('NullSchema', () => {
       S.object()
         .prop('prop', S.null())
         .valueOf().properties.prop.type
-    ).toEqual('null')
+    ).toBe('null')
   })
 
   describe('raw', () => {

@@ -43,7 +43,7 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().minLength('5.1')).toThrowError(
+        expect(() => StringSchema().minLength('5.1')).toThrow(
           new S.FluentSchemaError("'minLength' must be an Integer")
         )
       })
@@ -59,7 +59,7 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().maxLength('5.1')).toThrowError(
+        expect(() => StringSchema().maxLength('5.1')).toThrow(
           new S.FluentSchemaError("'maxLength' must be an Integer")
         )
       })
@@ -86,7 +86,7 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().format('invalid')).toThrowError(
+        expect(() => StringSchema().format('invalid')).toThrow(
           new S.FluentSchemaError(
             "'format' must be one of relative-json-pointer, json-pointer, uuid, regex, ipv6, ipv4, hostname, email, url, uri-template, uri-reference, uri, time, date, date-time"
           )
@@ -127,7 +127,7 @@ describe('StringSchema', () => {
       })
 
       it('invalid value', () => {
-        expect(() => StringSchema().pattern(1111)).toThrowError(
+        expect(() => StringSchema().pattern(1111)).toThrow(
           new S.FluentSchemaError(
             "'pattern' must be a string or a RegEx (e.g. /.*/)"
           )
@@ -146,7 +146,7 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().contentEncoding(1000)).toThrowError(
+        expect(() => StringSchema().contentEncoding(1000)).toThrow(
           new S.FluentSchemaError("'contentEncoding' must be a string")
         )
       })
@@ -163,7 +163,7 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().contentMediaType(1000)).toThrowError(
+        expect(() => StringSchema().contentMediaType(1000)).toThrow(
           new S.FluentSchemaError("'contentMediaType' must be a string")
         )
       })

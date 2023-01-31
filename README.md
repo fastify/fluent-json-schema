@@ -157,7 +157,7 @@ const schema = S.object()
 
 ### ESM
 
-A named export is also aviable to work with native ESM modules (aka `Node16` or `NodeNext`):
+A named export is also available to work with native ESM modules:
 
 ```typescript
 import { S } from 'fluent-json-schema'

@@ -131,6 +131,8 @@ Schema generated:
 
 ## TypeScript
 
+### CommonJS
+
 With `"esModuleInterop": true` activated in the `tsconfig.json`:
 
 ```typescript
@@ -146,6 +148,19 @@ With `"esModuleInterop": false` in the `tsconfig.json`:
 
 ```typescript
 import * as S from 'fluent-json-schema'
+
+const schema = S.object()
+  .prop('foo', S.string())
+  .prop('bar', S.number())
+  .valueOf()
+```
+
+### ESM
+
+A named export is also available to work with native ESM modules:
+
+```typescript
+import { S } from 'fluent-json-schema'
 
 const schema = S.object()
   .prop('foo', S.string())

@@ -96,7 +96,7 @@ describe('ObjectSchema', () => {
           it('invalid', () => {
             expect(() => {
               ObjectSchema().id('')
-            }).toThrowError(
+            }).toThrow(
               new S.FluentSchemaError(
                 'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
               )
@@ -207,7 +207,7 @@ describe('ObjectSchema', () => {
       ObjectSchema()
         .prop('prop', S.object())
         .valueOf().properties.prop.type
-    ).toEqual('object')
+    ).toBe('object')
   })
 
   it('valueOf', () => {
@@ -303,7 +303,7 @@ describe('ObjectSchema', () => {
         it('throws an error passing a string as value', () => {
           expect(() => {
             ObjectSchema().prop('prop', 'invalid')
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'prop' doesn't support value '\"invalid\"'. Pass a FluentSchema object"
             )
@@ -313,7 +313,7 @@ describe('ObjectSchema', () => {
         it('throws an error passing a number as value', () => {
           expect(() => {
             ObjectSchema().prop('prop', 555)
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'prop' doesn't support value '555'. Pass a FluentSchema object"
             )
@@ -323,7 +323,7 @@ describe('ObjectSchema', () => {
         it('throws an error passing an array as value', () => {
           expect(() => {
             ObjectSchema().prop('prop', [])
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'prop' doesn't support value '[]'. Pass a FluentSchema object"
             )
@@ -370,7 +370,7 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .additionalProperties(value)
           ).toEqual(value)
-        ).toThrowError(
+        ).toThrow(
           new S.FluentSchemaError(
             "'additionalProperties' must be a boolean or a S"
           )
@@ -397,7 +397,7 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .maxProperties(value)
           ).toEqual(value)
-        ).toThrowError(
+        ).toThrow(
           new S.FluentSchemaError("'maxProperties' must be a Integer")
         )
       })
@@ -422,7 +422,7 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .minProperties(value)
           ).toEqual(value)
-        ).toThrowError(
+        ).toThrow(
           new S.FluentSchemaError("'minProperties' must be a Integer")
         )
       })
@@ -452,7 +452,7 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .patternProperties(value)
           ).toEqual(value)
-        ).toThrowError(
+        ).toThrow(
           new S.FluentSchemaError(
             "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': S.string() }"
           )
@@ -509,7 +509,7 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .dependencies(value)
           ).toEqual(value)
-        ).toThrowError(
+        ).toThrow(
           new S.FluentSchemaError(
             "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['bar'] } or { 'foo': S.string() }"
           )
@@ -550,7 +550,7 @@ describe('ObjectSchema', () => {
               .dependentRequired(value)
               .prop('foo')
           ).toEqual(value)
-        }).toThrowError(
+        }).toThrow(
           new S.FluentSchemaError(
             "'dependentRequired' invalid options. Provide a valid array e.g. { 'foo': ['bar'] }"
           )
@@ -591,7 +591,7 @@ describe('ObjectSchema', () => {
               .dependentSchemas(value)
               .prop('foo')
           ).toEqual(value)
-        }).toThrowError(
+        }).toThrow(
           new S.FluentSchemaError(
             "'dependentSchemas' invalid options. Provide a valid schema e.g. { 'foo': S.string() }"
           )
@@ -620,14 +620,14 @@ describe('ObjectSchema', () => {
               .prop('prop')
               .propertyNames(value)
           ).toEqual(value)
-        ).toThrowError(new S.FluentSchemaError("'propertyNames' must be a S"))
+        ).toThrow(new S.FluentSchemaError("'propertyNames' must be a S"))
       })
     })
   })
 
   describe('null', () => {
     it('sets a type object from the root', () => {
-      expect(S.null().valueOf().type).toEqual('null')
+      expect(S.null().valueOf().type).toBe('null')
     })
 
     it('sets a type object from the prop', () => {
@@ -636,7 +636,7 @@ describe('ObjectSchema', () => {
           .prop('value', S.null())
 
           .valueOf().properties.value.type
-      ).toEqual('null')
+      ).toBe('null')
     })
   })
 
@@ -881,7 +881,7 @@ describe('ObjectSchema', () => {
     it('throws an error if a schema is not provided', () => {
       expect(() => {
         S.object().extend()
-      }).toThrowError(
+      }).toThrow(
         new S.FluentSchemaError("Schema can't be null or undefined")
       )
     })
@@ -889,7 +889,7 @@ describe('ObjectSchema', () => {
     it('throws an error if a schema is invalid', () => {
       expect(() => {
         S.object().extend('boom!')
-      }).toThrowError(new S.FluentSchemaError("Schema isn't FluentSchema type"))
+      }).toThrow(new S.FluentSchemaError("Schema isn't FluentSchema type"))
     })
 
     it('throws an error if you append a new prop after extend', () => {
@@ -898,7 +898,7 @@ describe('ObjectSchema', () => {
         S.object()
           .extend(base)
           .prop('foo')
-      }).toThrowError(
+      }).toThrow(
         new S.FluentSchemaError(
           'S.object(...).extend(...).prop is not a function'
         )

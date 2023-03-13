@@ -199,3 +199,4 @@ const fluentSchema = {
 }
 module.exports = fluentSchema
 module.exports.default = fluentSchema
+module.exports.S = fluentSchema

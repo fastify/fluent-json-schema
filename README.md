@@ -5,7 +5,7 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framew
 [![view on npm](https://img.shields.io/npm/v/fluent-json-schema.svg)](https://www.npmjs.org/package/fluent-json-schema)
 [![](https://github.com/fastify/fluent-json-schema/workflows/ci/badge.svg)](https://github.com/fastify/fluent-json-schema/actions?query=workflow%3Aci)
 [![Coverage Status](https://coveralls.io/repos/github/fastify/fluent-json-schema/badge.svg?branch=master)](https://coveralls.io/github/fastify/fluent-json-schema?branch=master)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Features
 
@@ -131,6 +131,8 @@ Schema generated:
 
 ## TypeScript
 
+### CommonJS
+
 With `"esModuleInterop": true` activated in the `tsconfig.json`:
 
 ```typescript
@@ -146,6 +148,19 @@ With `"esModuleInterop": false` in the `tsconfig.json`:
 
 ```typescript
 import * as S from 'fluent-json-schema'
+
+const schema = S.object()
+  .prop('foo', S.string())
+  .prop('bar', S.number())
+  .valueOf()
+```
+
+### ESM
+
+A named export is also available to work with native ESM modules:
+
+```typescript
+import { S } from 'fluent-json-schema'
 
 const schema = S.object()
   .prop('foo', S.string())

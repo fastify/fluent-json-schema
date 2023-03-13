@@ -75,7 +75,7 @@ describe('BaseSchema', () => {
       it('invalid', () => {
         expect(() => {
           BaseSchema().id('')
-        }).toThrowError(
+        }).toThrow(
           new S.FluentSchemaError(
             'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
           )
@@ -122,7 +122,7 @@ describe('BaseSchema', () => {
             BaseSchema()
               .examples(value)
               .valueOf().examples
-        ).toThrowError(
+        ).toThrow(
           new S.FluentSchemaError(
             "'examples' must be an array e.g. ['1', 'one', 'foo']"
           )
@@ -159,7 +159,7 @@ describe('BaseSchema', () => {
           expect(() => {
             return S.object()
               .prop('A', S.string()).required().required()
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'required' has repeated keys, check your calls to .required()"
             )
@@ -170,7 +170,7 @@ describe('BaseSchema', () => {
             return S.object()
               .prop('A', S.string().required())
               .prop('A', S.string().required())
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'required' has repeated keys, check your calls to .required()"
             )
@@ -181,7 +181,7 @@ describe('BaseSchema', () => {
       it('root-level required', () => {
         expect(() => {
           return S.object().required().valueOf()
-        }).toThrowError(
+        }).toThrow(
           new S.FluentSchemaError(
             "'required' has called on root-level schema, check your calls to .required()"
           )
@@ -218,7 +218,7 @@ describe('BaseSchema', () => {
           BaseSchema()
             .deprecated(true)
             .valueOf().deprecated
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('invalid', () => {
         expect(
@@ -226,7 +226,7 @@ describe('BaseSchema', () => {
             BaseSchema()
               .deprecated('somethingNotBoolean')
               .valueOf().deprecated
-        ).toThrowError(
+        ).toThrow(
           new S.FluentSchemaError(
             "'deprecated' must be a boolean value"
           )
@@ -237,14 +237,14 @@ describe('BaseSchema', () => {
           BaseSchema()
             .deprecated()
             .valueOf().deprecated
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('can be set to false', () => {
         expect(
           BaseSchema()
             .deprecated(false)
             .valueOf().deprecated
-        ).toEqual(false)
+        ).toBe(false)
       })
       it('property', () => {
         expect(
@@ -394,7 +394,7 @@ describe('BaseSchema', () => {
             BaseSchema()
               .enum(value)
               .valueOf().examples
-        ).toThrowError(
+        ).toThrow(
           new S.FluentSchemaError(
             "'enums' must be an array with at least an element e.g. ['1', 'one', 'foo']"
           )
@@ -430,21 +430,21 @@ describe('BaseSchema', () => {
           BaseSchema()
             .readOnly(true)
             .valueOf().readOnly
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('valid with no value', () => {
         expect(
           BaseSchema()
             .readOnly()
             .valueOf().readOnly
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('can be set to false', () => {
         expect(
           BaseSchema()
             .readOnly(false)
             .valueOf().readOnly
-        ).toEqual(false)
+        ).toBe(false)
       })
     })
 
@@ -454,21 +454,21 @@ describe('BaseSchema', () => {
           BaseSchema()
             .writeOnly(true)
             .valueOf().writeOnly
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('valid with no value', () => {
         expect(
           BaseSchema()
             .writeOnly()
             .valueOf().writeOnly
-        ).toEqual(true)
+        ).toBe(true)
       })
       it('can be set to false', () => {
         expect(
           BaseSchema()
             .writeOnly(false)
             .valueOf().writeOnly
-        ).toEqual(false)
+        ).toBe(false)
       })
     })
 
@@ -511,7 +511,7 @@ describe('BaseSchema', () => {
         it('not an array', () => {
           expect(() => {
             return BaseSchema().allOf('test')
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'allOf' must be a an array of FluentSchema rather than a 'string'"
             )
@@ -520,7 +520,7 @@ describe('BaseSchema', () => {
         it('not an array of FluentSchema', () => {
           expect(() => {
             return BaseSchema().allOf(['test'])
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'allOf' must be a an array of FluentSchema rather than a 'object'"
             )
@@ -570,7 +570,7 @@ describe('BaseSchema', () => {
         it('not an array', () => {
           expect(() => {
             return BaseSchema().anyOf('test')
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'anyOf' must be a an array of FluentSchema rather than a 'string'"
             )
@@ -579,7 +579,7 @@ describe('BaseSchema', () => {
         it('not an array of FluentSchema', () => {
           expect(() => {
             return BaseSchema().anyOf(['test'])
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'anyOf' must be a an array of FluentSchema rather than a 'object'"
             )
@@ -602,7 +602,7 @@ describe('BaseSchema', () => {
         it('not an array', () => {
           expect(() => {
             return BaseSchema().oneOf('test')
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'oneOf' must be a an array of FluentSchema rather than a 'string'"
             )
@@ -611,7 +611,7 @@ describe('BaseSchema', () => {
         it('not an array of FluentSchema', () => {
           expect(() => {
             return BaseSchema().oneOf(['test'])
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'oneOf' must be a an array of FluentSchema rather than a 'object'"
             )
@@ -648,7 +648,7 @@ describe('BaseSchema', () => {
       it('invalid', () => {
         expect(() => {
           BaseSchema().not(undefined)
-        }).toThrowError(new S.FluentSchemaError("'not' must be a BaseSchema"))
+        }).toThrow(new S.FluentSchemaError("'not' must be a BaseSchema"))
       })
     })
   })
@@ -703,14 +703,14 @@ describe('BaseSchema', () => {
             undefined,
             BaseSchema().description('A User desc')
           )
-        }).toThrowError(
+        }).toThrow(
           new S.FluentSchemaError("'ifClause' must be a BaseSchema")
         )
       })
       it('thenClause', () => {
         expect(() => {
           BaseSchema().ifThen(BaseSchema().id('id'), undefined)
-        }).toThrowError(
+        }).toThrow(
           new S.FluentSchemaError("'thenClause' must be a BaseSchema")
         )
       })
@@ -774,7 +774,7 @@ describe('BaseSchema', () => {
               BaseSchema().description('then'),
               BaseSchema().description('else')
             )
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError("'ifClause' must be a BaseSchema")
           )
         })
@@ -785,7 +785,7 @@ describe('BaseSchema', () => {
               undefined,
               BaseSchema().description('else')
             )
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError("'thenClause' must be a BaseSchema")
           )
         })
@@ -796,7 +796,7 @@ describe('BaseSchema', () => {
               BaseSchema().description('then'),
               undefined
             )
-          }).toThrowError(
+          }).toThrow(
             new S.FluentSchemaError(
               "'elseClause' must be a BaseSchema or a false boolean value"
             )

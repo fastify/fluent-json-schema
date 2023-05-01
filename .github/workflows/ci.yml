@@ -60,7 +60,7 @@ jobs:
           npm run build --if-present
           npm run test
       - name: Coveralls Parallel
-        uses: coverallsapp/github-action@v2.0.0
+        uses: coverallsapp/github-action@v2.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel: true
@@ -74,7 +74,7 @@ jobs:
       contents: read
     steps:
       - name: Coveralls Finished
-        uses: coverallsapp/github-action@v2.0.0
+        uses: coverallsapp/github-action@v2.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true

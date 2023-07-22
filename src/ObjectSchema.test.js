@@ -229,7 +229,7 @@ describe('ObjectSchema', () => {
             .valueOf()
         ).toEqual({
           $id: id,
-          properties: {'prop': {}},
+          properties: { prop: {} },
           type: 'object'
         })
       })
@@ -1032,6 +1032,29 @@ describe('ObjectSchema', () => {
       expect(schema).toEqual({
         type: 'object',
         customKeyword: true
+      })
+    })
+
+    it('Carry raw properties', () => {
+      const schema = S.object()
+        .prop('test', S.ref('foo').raw({ test: true }))
+        .valueOf()
+      expect(schema).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: { test: { $ref: 'foo', test: true } }
+      })
+    })
+
+    it('Carry raw properties multiple props', () => {
+      const schema = S.object()
+        .prop('a', S.string())
+        .prop('test', S.ref('foo').raw({ test: true }))
+        .valueOf()
+      expect(schema).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: { a: { type: 'string' }, test: { $ref: 'foo', test: true } }
       })
     })
   })

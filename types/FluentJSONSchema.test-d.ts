@@ -86,6 +86,15 @@ const bodySchema = personSchema.without(['createdAt', 'updatedAt'])
 
 console.log('person subset:', JSON.stringify(bodySchema.valueOf()))
 
+const personSchemaAllowsUnix = S.object()
+  .prop('name', S.string())
+  .prop('age', S.number())
+  .prop('id', S.string().format('uuid'))
+  .prop('createdAt', S.mixed(['string', 'integer']).format('time'))
+  .prop('updatedAt', S.mixed(['string', 'integer']).minimum(0))
+
+console.log('person schema allows unix:', JSON.stringify(personSchemaAllowsUnix.valueOf()))
+
 try {
   S.object().prop('foo', 'boom!' as any)
 } catch (e) {

@@ -324,7 +324,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
           ...schema,
           [target]: [
             ...schema[target],
-            $ref ? { name, $ref, ...restAttributes } : Object.assign({ name }, attributes)
+            $ref ? { name, $ref, ...restAttributes } : { name, ...attributes }
           ]
         },
         ...options

@@ -45,10 +45,11 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
      * @param {string} id - an #id
      **/
     id: id => {
-      if (!id)
+      if (!id) {
         throw new FluentSchemaError(
-          `id should not be an empty fragment <#> or an empty string <> (e.g. #myId)`
+          'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
         )
+      }
       return options.factory({ schema: { ...schema, $id: id }, ...options })
     },
     /**
@@ -277,8 +278,10 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       }
       const target = props.def ? 'definitions' : 'properties'
       let attributes = props.valueOf({ isRoot: false })
+
+      const { $ref, $id: attributeId, required, ...restAttributes } = attributes
       const $id =
-        attributes.$id ||
+        attributeId ||
         (options.generateIds ? `#${target}/${name}` : undefined)
       if (isFluentSchema(props)) {
         attributes = patchIdsWithParentId({
@@ -303,8 +306,6 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         ? undefined
         : attributes.type
 
-      const $ref = attributes.$ref
-
       // strip undefined values or empty arrays or internals
       attributes = Object.entries({ ...attributes, $id, type }).reduce(
         (memo, [key, value]) => {
@@ -323,7 +324,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
           ...schema,
           [target]: [
             ...schema[target],
-            $ref ? { name, $ref } : Object.assign({}, { name }, attributes)
+            $ref ? { name, $ref, ...restAttributes } : { name, ...attributes }
           ]
         },
         ...options

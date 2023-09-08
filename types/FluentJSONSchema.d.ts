@@ -209,10 +209,6 @@ export type MixedSchema<T> =
   | MixedSchema6<T>
   | MixedSchema7<T>
 
-interface SchemaOptions {
-  schema: object
-  generateIds: boolean
-}
 
 interface PatternPropertiesOptions {
   [key: string]: JSONSchema

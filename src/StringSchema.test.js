@@ -1,3 +1,4 @@
+'use strict'
 const { StringSchema, FORMATS } = require('./StringSchema')
 const S = require('./FluentJSONSchema')
 

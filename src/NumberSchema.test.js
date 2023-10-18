@@ -1,3 +1,4 @@
+'use strict'
 const { NumberSchema } = require('./NumberSchema')
 const S = require('./FluentJSONSchema')
 

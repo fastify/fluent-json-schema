@@ -1,3 +1,4 @@
+'use strict'
 const basic = require('./schemas/basic')
 const S = require('./FluentJSONSchema')
 const Ajv = require('ajv')

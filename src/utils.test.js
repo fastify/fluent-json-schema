@@ -1,3 +1,4 @@
+'use strict'
 const { setRaw, combineDeepmerge } = require('./utils')
 const { StringSchema } = require('./StringSchema')
 const { ObjectSchema } = require('./ObjectSchema')

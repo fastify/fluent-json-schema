@@ -1,3 +1,4 @@
+'use strict'
 const S = require('./FluentJSONSchema')
 
 describe('S', () => {

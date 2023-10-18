@@ -1,3 +1,4 @@
+'use strict'
 const { BooleanSchema } = require('./BooleanSchema')
 const S = require('./FluentJSONSchema')
 

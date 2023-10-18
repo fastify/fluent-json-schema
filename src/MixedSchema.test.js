@@ -1,3 +1,4 @@
+'use strict'
 const { MixedSchema } = require('./MixedSchema')
 const S = require('./FluentJSONSchema')
 

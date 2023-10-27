@@ -3,6 +3,7 @@
   "version": "4.1.2",
   "description": "JSON Schema fluent API",
   "main": "src/FluentJSONSchema.js",
+  "type": "commonjs",
   "types": "types/FluentJSONSchema.d.ts",
   "keywords": [
     "JSON",

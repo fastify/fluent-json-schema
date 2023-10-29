@@ -52,7 +52,7 @@ const combineArray = (options) => {
 
     source.forEach((item, index) => {
       const prop = target.find(attr => attr.name === item.name)
-      if (typeof result[index] === 'undefined') {
+      if (result[index] === undefined) {
         result[index] = clone(item)
       } else if (isMergeableObject(prop)) {
         const propIndex = target.findIndex(prop => prop.name === item.name)

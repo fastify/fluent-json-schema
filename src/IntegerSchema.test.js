@@ -1,3 +1,4 @@
+'use strict'
 const { IntegerSchema } = require('./IntegerSchema')
 const S = require('./FluentJSONSchema')
 

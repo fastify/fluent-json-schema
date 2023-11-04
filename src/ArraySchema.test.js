@@ -1,3 +1,4 @@
+'use strict'
 const { ArraySchema } = require('./ArraySchema')
 const S = require('./FluentJSONSchema')
 

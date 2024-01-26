@@ -548,7 +548,10 @@ describe('BaseSchema', () => {
         ).toEqual({
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
-            prop: { anyOf: [{ type: 'string' }, { type: 'null' }] }
+            prop: {
+              type: ['string', 'null'],
+              anyOf: [{ type: 'string' }, { type: 'null' }]
+            }
           },
           type: 'object'
         })

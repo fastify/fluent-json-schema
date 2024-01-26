@@ -204,11 +204,22 @@ describe('S', () => {
   describe('composition', () => {
     it('anyOf', () => {
       const schema = S.object()
+        .prop('foo', S.string().anyOf([S.string()]))
+        .valueOf()
+      expect(schema).toEqual({
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        properties: { foo: { type: 'string', anyOf: [{ type: 'string' }] } },
+        type: 'object'
+      })
+    })
+
+    it('anyOf', () => {
+      const schema = S.object()
         .prop('foo', S.anyOf([S.string()]))
         .valueOf()
       expect(schema).toEqual({
         $schema: 'http://json-schema.org/draft-07/schema#',
-        properties: { foo: { anyOf: [{ type: 'string' }] } },
+        properties: { foo: { type: 'string', anyOf: [{ type: 'string' }] } },
         type: 'object'
       })
     })
@@ -225,6 +236,7 @@ describe('S', () => {
         $schema: 'http://json-schema.org/draft-07/schema#',
         properties: {
           multipleRestrictedTypesKey: {
+            type: ['string', 'number'],
             oneOf: [{ type: 'string' }, { minimum: 10, type: 'number' }]
           },
           notTypeKey: { not: { oneOf: [{ pattern: 'js$', type: 'string' }] } }

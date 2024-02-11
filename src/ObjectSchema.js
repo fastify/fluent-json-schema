@@ -8,7 +8,8 @@ const {
   patchIdsWithParentId,
   appendRequired,
   FluentSchemaError,
-  combineDeepmerge
+  combineDeepmerge,
+  getCombinedType
 } = require('./utils')
 
 const initialState = {
@@ -303,7 +304,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       }
 
       const type = hasCombiningKeywords(attributes)
-        ? undefined
+        ? getCombinedType(attributes)
         : attributes.type
 
       // strip undefined values or empty arrays or internals

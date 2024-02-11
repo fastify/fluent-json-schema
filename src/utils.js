@@ -5,6 +5,38 @@ const isFluentSchema = obj => obj && obj.isFluentSchema
 const hasCombiningKeywords = attributes =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
 
+const getCombinedType = (attributes) => {
+  const resultSet = new Set()
+
+  if (attributes.type) {
+    resultSet.add(attributes.type)
+  }
+
+  if (attributes.allOf) {
+    for (const item of attributes.allOf) {
+      resultSet.add(item.type)
+    }
+  }
+
+  if (attributes.anyOf) {
+    for (const item of attributes.anyOf) {
+      resultSet.add(item.type)
+    }
+  }
+
+  if (attributes.oneOf) {
+    for (const item of attributes.oneOf) {
+      resultSet.add(item.type)
+    }
+  }
+
+  if (resultSet.size === 1) {
+    return [...resultSet][0]
+  }
+
+  return [...resultSet]
+}
+
 class FluentSchemaError extends Error {
   constructor (message) {
     super(message)
@@ -224,6 +256,7 @@ const setComposeType = ({ prop, schemas, schema, options }) => {
 
 module.exports = {
   isFluentSchema,
+  getCombinedType,
   hasCombiningKeywords,
   FluentSchemaError,
   last,

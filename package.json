@@ -29,6 +29,7 @@
   },
   "scripts": {
     "lint": "standard | snazzy",
+    "lint:fix": "standard --fix",
     "test": "npm run test:unit && npm run test:typescript",
     "test:unit": "jest --coverage",
     "test:watch": "jest src/*.test.js --verbose --watch",

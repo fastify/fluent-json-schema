@@ -224,7 +224,9 @@ describe('S', () => {
   })
 
   describe('compose keywords', () => {
-    const ajv = new Ajv()
+    const ajv = new Ajv({
+      allowUnionTypes: true
+    })
     const schema = S.object()
       .prop('foo', S.anyOf([S.string()]))
       .prop('bar', S.not(S.anyOf([S.integer()])))

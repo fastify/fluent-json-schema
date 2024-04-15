@@ -1,4 +1,4 @@
-name: ci
+name: CI
 
 on:
   push:
@@ -15,84 +15,9 @@ on:
       - 'docs/**'
       - '*.md'
 
-# This allows a subsequently queued workflow run to interrupt previous runs
-concurrency:
-  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
-  cancel-in-progress: true
-
 jobs:
-  dependency-review:
-      name: Dependency Review
-      if: github.event_name == 'pull_request'
-      runs-on: ubuntu-latest
-      permissions:
-        contents: read
-      steps:
-          - name: Check out repo
-            uses: actions/checkout@v4
-            with:
-              persist-credentials: false
-
-          - name: Dependency review
-            uses: actions/dependency-review-action@v4
-
-  build:
-    runs-on: ${{ matrix.os }}
-
-    permissions:
-      contents: read
-
-    strategy:
-      matrix:
-        node-version: [14, 16, 18, 20]
-        os: [macos-latest, ubuntu-latest, windows-latest]
-        exclude:
-          - os: windows-latest
-            node-version: 14
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: |
-          npm install --ignore-scripts
-          npm run build --if-present
-          npm run test
-      - name: Coveralls Parallel
-        uses: coverallsapp/github-action@v2.2.3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel: true
-          flag-name: run-${{ matrix.node-version }}-${{ matrix.os }}
-
-  coverage:
-    name: Aggregate Coverage Calculations
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@v2.2.3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
-
-  automerge:
-    name: Automatically merge Dependabot pull requests
-    if: >
-        github.event_name == 'pull_request' &&
-        github.event.pull_request.user.login == 'dependabot[bot]'
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      contents: write
-    steps:
-      - uses: fastify/github-action-merge-dependabot@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+  test:
+    uses: fastify/workflows/.github/workflows/plugins-ci.yml@v4.1.0
+    with:
+      license-check: true
+      lint: true

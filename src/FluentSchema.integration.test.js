@@ -1,7 +1,12 @@
 'use strict'
+
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
+
+const Ajv = require('ajv')
+
 const basic = require('./schemas/basic')
 const S = require('./FluentJSONSchema')
-const Ajv = require('ajv')
 
 // TODO pick some ideas from here:https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/master/tests/draft7
 
@@ -11,7 +16,7 @@ describe('S', () => {
     const schema = S.valueOf()
     const validate = ajv.compile(schema)
     const valid = validate({})
-    expect(valid).toBeTruthy()
+    assert.ok(valid)
   })
 
   describe('basic', () => {
@@ -27,7 +32,7 @@ describe('S', () => {
         username: 'username',
         password: 'password'
       })
-      expect(valid).toBeTruthy()
+      assert.ok(valid)
     })
 
     it('invalid', () => {
@@ -35,7 +40,7 @@ describe('S', () => {
         username: 'username',
         password: 1
       })
-      expect(validate.errors).toEqual([
+      assert.deepStrictEqual(validate.errors, [
         {
           instancePath: '/password',
           keyword: 'type',
@@ -44,7 +49,7 @@ describe('S', () => {
           schemaPath: '#/properties/password/type'
         }
       ])
-      expect(valid).not.toBeTruthy()
+      assert.ok(!valid)
     })
   })
 
@@ -54,9 +59,7 @@ describe('S', () => {
       .prop('prop', S.string().maxLength(5))
       .ifThen(
         S.object().prop('prop', S.string().maxLength(5)),
-        S.object()
-          .prop('extraProp', S.string())
-          .required()
+        S.object().prop('extraProp', S.string()).required()
       )
       .valueOf()
     const validate = ajv.compile(schema)
@@ -66,14 +69,14 @@ describe('S', () => {
         prop: '12345',
         extraProp: 'foo'
       })
-      expect(valid).toBeTruthy()
+      assert.ok(valid)
     })
 
     it('invalid', () => {
       const valid = validate({
         prop: '12345'
       })
-      expect(validate.errors).toEqual([
+      assert.deepStrictEqual(validate.errors, [
         {
           instancePath: '',
           keyword: 'required',
@@ -82,7 +85,7 @@ describe('S', () => {
           schemaPath: '#/then/required'
         }
       ])
-      expect(valid).not.toBeTruthy()
+      assert.ok(!valid)
     })
   })
 
@@ -94,12 +97,8 @@ describe('S', () => {
       .prop('ifProp')
       .ifThenElse(
         S.object().prop('ifProp', S.string().enum([VALUES[0]])),
-        S.object()
-          .prop('thenProp', S.string())
-          .required(),
-        S.object()
-          .prop('elseProp', S.string())
-          .required()
+        S.object().prop('thenProp', S.string()).required(),
+        S.object().prop('elseProp', S.string()).required()
       )
       .valueOf()
 
@@ -110,14 +109,14 @@ describe('S', () => {
         ifProp: 'ONE',
         thenProp: 'foo'
       })
-      expect(valid).toBeTruthy()
+      assert.ok(valid)
     })
 
     it('else', () => {
       const valid = validate({
         prop: '123456'
       })
-      expect(validate.errors).toEqual([
+      assert.deepStrictEqual(validate.errors, [
         {
           instancePath: '',
           keyword: 'required',
@@ -126,7 +125,7 @@ describe('S', () => {
           schemaPath: '#/then/required'
         }
       ])
-      expect(valid).not.toBeTruthy()
+      assert.ok(!valid)
     })
   })
 
@@ -145,14 +144,12 @@ describe('S', () => {
       )
       .allOf([
         S.ref('#/definitions/address'),
-        S.object()
-          .prop('type', S.string())
-          .enum(['residential', 'business'])
+        S.object().prop('type', S.string()).enum(['residential', 'business'])
       ])
       .valueOf()
     const validate = ajv.compile(schema)
     it('matches', () => {
-      expect(schema).toEqual({
+      assert.deepStrictEqual(schema, {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',
         definitions: {
@@ -186,8 +183,8 @@ describe('S', () => {
         state: 'Disney World',
         type: 'business'
       })
-      expect(validate.errors).toBeNull()
-      expect(valid).toBeTruthy()
+      assert.strictEqual(validate.errors, null)
+      assert.ok(valid)
     })
   })
 
@@ -201,10 +198,16 @@ describe('S', () => {
     const schema = _config.schema.valueOf()
     const validate = ajv.compile(schema)
     it('matches', () => {
-      expect(config.schema[Symbol.for('fluent-schema-object')]).toBeDefined()
-      expect(_config.schema.isFluentJSONSchema).toBeTruthy()
-      expect(_config.schema[Symbol.for('fluent-schema-object')]).toBeUndefined()
-      expect(schema).toEqual({
+      assert.notStrictEqual(
+        config.schema[Symbol.for('fluent-schema-object')],
+        undefined
+      )
+      assert.ok(_config.schema.isFluentJSONSchema)
+      assert.strictEqual(
+        _config.schema[Symbol.for('fluent-schema-object')],
+        undefined
+      )
+      assert.deepStrictEqual(schema, {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',
         properties: {
@@ -218,8 +221,8 @@ describe('S', () => {
 
     it('valid', () => {
       const valid = validate({ foo: 'foo' })
-      expect(validate.errors).toBeNull()
-      expect(valid).toBeTruthy()
+      assert.strictEqual(validate.errors, null)
+      assert.ok(valid)
     })
   })
 
@@ -240,7 +243,7 @@ describe('S', () => {
         foo: 'foo',
         anotherProp: true
       })
-      expect(valid).toBeTruthy()
+      assert.ok(valid)
     })
 
     it('invalid', () => {
@@ -248,38 +251,24 @@ describe('S', () => {
         foo: 'foo',
         bar: 1
       })
-      expect(valid).toBeFalsy()
+      assert.ok(!valid)
     })
   })
 
   describe('compose ifThen', () => {
     const ajv = new Ajv()
     const schema = S.object()
-      .prop(
-        'foo',
-        S.string()
-          .default(false)
-          .required()
-      )
-      .prop(
-        'bar',
-        S.string()
-          .default(false)
-          .required()
-      )
+      .prop('foo', S.string().default(false).required())
+      .prop('bar', S.string().default(false).required())
       .prop('thenFooA', S.string())
       .prop('thenFooB', S.string())
       .allOf([
         S.ifThen(
-          S.object()
-            .prop('foo', S.string())
-            .enum(['foo']),
+          S.object().prop('foo', S.string()).enum(['foo']),
           S.required(['thenFooA', 'thenFooB'])
         ),
         S.ifThen(
-          S.object()
-            .prop('bar', S.string())
-            .enum(['BAR']),
+          S.object().prop('bar', S.string()).enum(['BAR']),
           S.required(['thenBarA', 'thenBarB'])
         )
       ])
@@ -287,7 +276,7 @@ describe('S', () => {
 
     const validate = ajv.compile(schema)
     it('matches', () => {
-      expect(schema).toEqual({
+      assert.deepStrictEqual(schema, {
         $schema: 'http://json-schema.org/draft-07/schema#',
         allOf: [
           {
@@ -327,8 +316,8 @@ describe('S', () => {
         thenBarA: 'thenBarA',
         thenBarB: 'thenBarB'
       })
-      expect(validate.errors).toBeNull()
-      expect(valid).toBeTruthy()
+      assert.strictEqual(validate.errors, null)
+      assert.ok(valid)
     })
   })
 
@@ -378,7 +367,7 @@ describe('S', () => {
         },
         age: 30
       })
-      expect(valid).toBeTruthy()
+      assert.ok(valid)
     })
 
     describe('invalid', () => {
@@ -399,7 +388,7 @@ describe('S', () => {
       it('password', () => {
         const { password, ...data } = model
         const valid = validate(data)
-        expect(validate.errors).toEqual([
+        assert.deepStrictEqual(validate.errors, [
           {
             instancePath: '',
             keyword: 'required',
@@ -408,7 +397,7 @@ describe('S', () => {
             schemaPath: '#/required'
           }
         ])
-        expect(valid).not.toBeTruthy()
+        assert.ok(!valid)
       })
       it('address', () => {
         const { address, ...data } = model
@@ -419,7 +408,7 @@ describe('S', () => {
             city: 1234
           }
         })
-        expect(validate.errors).toEqual([
+        assert.deepStrictEqual(validate.errors, [
           {
             instancePath: '/address/city',
             keyword: 'type',
@@ -428,7 +417,7 @@ describe('S', () => {
             schemaPath: '#address/properties/city/type'
           }
         ])
-        expect(valid).not.toBeTruthy()
+        assert.ok(!valid)
       })
     })
   })
@@ -436,7 +425,7 @@ describe('S', () => {
   describe('basic.json', () => {
     it('generate', () => {
       const [step] = basic
-      expect(
+      assert.deepStrictEqual(
         S.array()
           .title('Product set')
           .items(
@@ -450,25 +439,15 @@ describe('S', () => {
               )
               .prop('name', S.string())
               .required()
-              .prop(
-                'price',
-                S.number()
-                  .exclusiveMinimum(0)
-                  .required()
-              )
+              .prop('price', S.number().exclusiveMinimum(0).required())
               .prop(
                 'tags',
-                S.array()
-                  .items(S.string())
-                  .minItems(1)
-                  .uniqueItems(true)
+                S.array().items(S.string()).minItems(1).uniqueItems(true)
               )
-
               .prop(
                 'dimensions',
                 S.object()
                   .prop('length', S.number().required())
-
                   .prop('width', S.number().required())
                   .prop('height', S.number().required())
               )
@@ -479,8 +458,25 @@ describe('S', () => {
                 )
               )
           )
-          .valueOf()
-      ).toEqual(step.schema)
+          .valueOf(),
+        {
+          ...step.schema,
+          items: {
+            ...step.schema.items,
+            properties: {
+              ...step.schema.items.properties,
+              dimensions: {
+                ...step.schema.items.properties.dimensions,
+                properties: {
+                  length: { $id: undefined, type: 'number' },
+                  width: { $id: undefined, type: 'number' },
+                  height: { $id: undefined, type: 'number' }
+                }
+              }
+            }
+          }
+        }
+      )
     })
   })
 
@@ -496,8 +492,8 @@ describe('S', () => {
           const valid = validate({
             test: null
           })
-          expect(validate.errors).toBeNull()
-          expect(valid).toBeTruthy()
+          assert.strictEqual(validate.errors, null)
+          assert.ok(valid)
         })
       })
     })
@@ -526,7 +522,7 @@ describe('S', () => {
           const valid = validate({
             birthday: '2030-01-01'
           })
-          expect(validate.errors).toEqual([
+          assert.deepStrictEqual(validate.errors, [
             {
               instancePath: '/birthday',
               keyword: 'formatMaximum',
@@ -538,7 +534,7 @@ describe('S', () => {
               schemaPath: '#/properties/birthday/formatMaximum'
             }
           ])
-          expect(valid).toBeFalsy()
+          assert.ok(!valid)
         })
         it('checks custom keyword larger with $data', () => {
           const ajv = new Ajv({ $data: true })
@@ -557,7 +553,7 @@ describe('S', () => {
             smaller: 10,
             larger: 7
           })
-          expect(validate.errors).toEqual([
+          assert.deepStrictEqual(validate.errors, [
             {
               instancePath: '/smaller',
               keyword: 'maximum',
@@ -569,7 +565,7 @@ describe('S', () => {
               schemaPath: '#/properties/smaller/maximum'
             }
           ])
-          expect(valid).toBeFalsy()
+          assert.ok(!valid)
         })
       })
     })

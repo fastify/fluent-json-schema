@@ -1,25 +1,32 @@
 'use strict'
+
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
+
 const { ArraySchema } = require('./ArraySchema')
 const S = require('./FluentJSONSchema')
 
 describe('ArraySchema', () => {
   it('defined', () => {
-    expect(ArraySchema).toBeDefined()
+    assert.notStrictEqual(ArraySchema, undefined)
   })
 
   it('Expose symbol', () => {
-    expect(ArraySchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+    assert.notStrictEqual(
+      ArraySchema()[Symbol.for('fluent-schema-object')],
+      undefined
+    )
   })
 
   describe('constructor', () => {
     it('without params', () => {
-      expect(ArraySchema().valueOf()).toEqual({
+      assert.deepStrictEqual(ArraySchema().valueOf(), {
         type: 'array'
       })
     })
 
     it('from S', () => {
-      expect(S.array().valueOf()).toEqual({
+      assert.deepStrictEqual(S.array().valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'array'
       })
@@ -29,153 +36,140 @@ describe('ArraySchema', () => {
   describe('keywords:', () => {
     describe('items', () => {
       it('valid object', () => {
-        expect(
-          ArraySchema()
-            .items(S.number())
-            .valueOf()
-        ).toEqual({
+        assert.deepStrictEqual(ArraySchema().items(S.number()).valueOf(), {
           type: 'array',
           items: { type: 'number' }
         })
       })
       it('valid array', () => {
-        expect(
-          ArraySchema()
-            .items([S.number(), S.string()])
-            .valueOf()
-        ).toEqual({
-          type: 'array',
-          items: [{ type: 'number' }, { type: 'string' }]
-        })
+        assert.deepStrictEqual(
+          ArraySchema().items([S.number(), S.string()]).valueOf(),
+          {
+            type: 'array',
+            items: [{ type: 'number' }, { type: 'string' }]
+          }
+        )
       })
       it('invalid', () => {
-        expect(() => ArraySchema().items('')).toThrow(
-          new S.FluentSchemaError("'items' must be a S or an array of S")
+        assert.throws(
+          () => ArraySchema().items(''),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'items' must be a S or an array of S"
         )
       })
     })
 
     describe('additionalItems', () => {
       it('valid', () => {
-        expect(
+        assert.deepStrictEqual(
           ArraySchema()
             .items([S.number(), S.string()])
             .additionalItems(S.string())
-            .valueOf()
-        ).toEqual({
-          type: 'array',
-          items: [{ type: 'number' }, { type: 'string' }],
-          additionalItems: { type: 'string' }
-        })
+            .valueOf(),
+          {
+            type: 'array',
+            items: [{ type: 'number' }, { type: 'string' }],
+            additionalItems: { type: 'string' }
+          }
+        )
       })
       it('false', () => {
-        expect(
+        assert.deepStrictEqual(
           ArraySchema()
             .items([S.number(), S.string()])
             .additionalItems(false)
-            .valueOf()
-        ).toEqual({
-          type: 'array',
-          items: [{ type: 'number' }, { type: 'string' }],
-          additionalItems: false
-        })
+            .valueOf(),
+          {
+            type: 'array',
+            items: [{ type: 'number' }, { type: 'string' }],
+            additionalItems: false
+          }
+        )
       })
       it('invalid', () => {
-        expect(() => ArraySchema().additionalItems('')).toThrow(
-          new S.FluentSchemaError("'additionalItems' must be a boolean or a S")
+        assert.throws(
+          () => ArraySchema().additionalItems(''),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'additionalItems' must be a boolean or a S"
         )
       })
     })
 
     describe('contains', () => {
       it('valid', () => {
-        expect(
-          ArraySchema()
-            .contains(S.string())
-            .valueOf()
-        ).toEqual({
+        assert.deepStrictEqual(ArraySchema().contains(S.string()).valueOf(), {
           type: 'array',
           contains: { type: 'string' }
         })
       })
       it('invalid', () => {
-        expect(() =>
-          ArraySchema()
-            .contains('')
-            .valueOf()
-        ).toThrow(new S.FluentSchemaError("'contains' must be a S"))
+        assert.throws(
+          () => ArraySchema().contains('').valueOf(),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'contains' must be a S"
+        )
       })
     })
 
     describe('uniqueItems', () => {
       it('valid', () => {
-        expect(
-          ArraySchema()
-            .uniqueItems(true)
-            .valueOf()
-        ).toEqual({
+        assert.deepStrictEqual(ArraySchema().uniqueItems(true).valueOf(), {
           type: 'array',
           uniqueItems: true
         })
       })
       it('invalid', () => {
-        expect(() =>
-          ArraySchema()
-            .uniqueItems('invalid')
-            .valueOf()
-        ).toThrow(
-          new S.FluentSchemaError("'uniqueItems' must be a boolean")
+        assert.throws(
+          () => ArraySchema().uniqueItems('invalid').valueOf(),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'uniqueItems' must be a boolean"
         )
       })
     })
 
     describe('minItems', () => {
       it('valid', () => {
-        expect(
-          ArraySchema()
-            .minItems(3)
-            .valueOf()
-        ).toEqual({
+        assert.deepStrictEqual(ArraySchema().minItems(3).valueOf(), {
           type: 'array',
           minItems: 3
         })
       })
       it('invalid', () => {
-        expect(() =>
-          ArraySchema()
-            .minItems('3')
-            .valueOf()
-        ).toThrow(new S.FluentSchemaError("'minItems' must be a integer"))
+        assert.throws(
+          () => ArraySchema().minItems('3').valueOf(),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'minItems' must be a integer"
+        )
       })
     })
 
     describe('maxItems', () => {
       it('valid', () => {
-        expect(
-          ArraySchema()
-            .maxItems(5)
-            .valueOf()
-        ).toEqual({
+        assert.deepStrictEqual(ArraySchema().maxItems(5).valueOf(), {
           type: 'array',
           maxItems: 5
         })
       })
       it('invalid', () => {
-        expect(() =>
-          ArraySchema()
-            .maxItems('5')
-            .valueOf()
-        ).toThrow(new S.FluentSchemaError("'maxItems' must be a integer"))
+        assert.throws(
+          () => ArraySchema().maxItems('5').valueOf(),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'maxItems' must be a integer"
+        )
       })
     })
 
     describe('raw', () => {
       it('allows to add a custom attribute', () => {
-        const schema = ArraySchema()
-          .raw({ customKeyword: true })
-          .valueOf()
+        const schema = ArraySchema().raw({ customKeyword: true }).valueOf()
 
-        expect(schema).toEqual({
+        assert.deepStrictEqual(schema, {
           type: 'array',
           customKeyword: true
         })
@@ -185,11 +179,11 @@ describe('ArraySchema', () => {
     describe('default array in an object', () => {
       it('valid', () => {
         const value = []
-        expect(
-          S.object()
-            .prop('p1', ArraySchema().default(value))
-            .valueOf().properties.p1.default
-        ).toBe(value)
+        assert.deepStrictEqual(
+          S.object().prop('p1', ArraySchema().default(value)).valueOf()
+            .properties.p1.default,
+          value
+        )
       })
     })
   })

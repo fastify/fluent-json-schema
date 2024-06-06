@@ -1,24 +1,31 @@
 'use strict'
+
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
+
 const { BooleanSchema } = require('./BooleanSchema')
 const S = require('./FluentJSONSchema')
 
 describe('BooleanSchema', () => {
   it('defined', () => {
-    expect(BooleanSchema).toBeDefined()
+    assert.notStrictEqual(BooleanSchema, undefined)
   })
 
   it('Expose symbol', () => {
-    expect(BooleanSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+    assert.notStrictEqual(
+      BooleanSchema()[Symbol.for('fluent-schema-object')],
+      undefined
+    )
   })
 
   describe('constructor', () => {
     it('without params', () => {
-      expect(BooleanSchema().valueOf()).toEqual({
+      assert.deepStrictEqual(BooleanSchema().valueOf(), {
         type: 'boolean'
       })
     })
     it('from S', () => {
-      expect(S.boolean().valueOf()).toEqual({
+      assert.deepStrictEqual(S.boolean().valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'boolean'
       })
@@ -26,20 +33,17 @@ describe('BooleanSchema', () => {
   })
 
   it('sets a null type to the prop', () => {
-    expect(
-      S.object()
-        .prop('prop', S.boolean())
-        .valueOf().properties.prop.type
-    ).toBe('boolean')
+    assert.strictEqual(
+      S.object().prop('prop', S.boolean()).valueOf().properties.prop.type,
+      'boolean'
+    )
   })
 
   describe('raw', () => {
     it('allows to add a custom attribute', () => {
-      const schema = BooleanSchema()
-        .raw({ customKeyword: true })
-        .valueOf()
+      const schema = BooleanSchema().raw({ customKeyword: true }).valueOf()
 
-      expect(schema).toEqual({
+      assert.deepStrictEqual(schema, {
         type: 'boolean',
         customKeyword: true
       })

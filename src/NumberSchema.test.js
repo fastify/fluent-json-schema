@@ -1,25 +1,32 @@
 'use strict'
+
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
+
 const { NumberSchema } = require('./NumberSchema')
 const S = require('./FluentJSONSchema')
 
 describe('NumberSchema', () => {
   it('defined', () => {
-    expect(NumberSchema).toBeDefined()
+    assert.notStrictEqual(NumberSchema, undefined)
   })
 
   it('Expose symbol', () => {
-    expect(NumberSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+    assert.notStrictEqual(
+      NumberSchema()[Symbol.for('fluent-schema-object')],
+      undefined
+    )
   })
 
   describe('constructor', () => {
     it('without params', () => {
-      expect(NumberSchema().valueOf()).toEqual({
+      assert.deepStrictEqual(NumberSchema().valueOf(), {
         type: 'number'
       })
     })
 
     it('from S', () => {
-      expect(S.number().valueOf()).toEqual({
+      assert.deepStrictEqual(S.number().valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'number'
       })
@@ -30,73 +37,78 @@ describe('NumberSchema', () => {
     describe('minimum', () => {
       it('valid', () => {
         const prop = 'prop'
-        expect(
-          S.object()
-            .prop(prop, S.number().minimum(5.1))
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'number',
-              minimum: 5.1
-            }
-          },
-          type: 'object'
-        })
+        assert.deepStrictEqual(
+          S.object().prop(prop, S.number().minimum(5.1)).valueOf(),
+          {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              prop: {
+                type: 'number',
+                minimum: 5.1
+              }
+            },
+            type: 'object'
+          }
+        )
       })
       it('invalid value', () => {
-        expect(() => S.number().minimum('5.1')).toThrow(
-          new S.FluentSchemaError("'minimum' must be a Number")
+        assert.throws(
+          () => S.number().minimum('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'minimum' must be a Number"
         )
       })
     })
     describe('maximum', () => {
       it('valid', () => {
         const prop = 'prop'
-        expect(
-          S.object()
-            .prop(prop, S.number().maximum(5.1))
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'number',
-              maximum: 5.1
-            }
-          },
-          type: 'object'
-        })
+        assert.deepStrictEqual(
+          S.object().prop(prop, S.number().maximum(5.1)).valueOf(),
+          {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              prop: {
+                type: 'number',
+                maximum: 5.1
+              }
+            },
+            type: 'object'
+          }
+        )
       })
       it('invalid value', () => {
-        expect(() => S.number().maximum('5.1')).toThrow(
-          new S.FluentSchemaError("'maximum' must be a Number")
+        assert.throws(
+          () => S.number().maximum('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'maximum' must be a Number"
         )
       })
     })
     describe('multipleOf', () => {
       it('valid', () => {
         const prop = 'prop'
-        expect(
-          S.object()
-            .prop(prop, S.number().multipleOf(5.1))
-
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'number',
-              multipleOf: 5.1
-            }
-          },
-          type: 'object'
-        })
+        assert.deepStrictEqual(
+          S.object().prop(prop, S.number().multipleOf(5.1)).valueOf(),
+          {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              prop: {
+                type: 'number',
+                multipleOf: 5.1
+              }
+            },
+            type: 'object'
+          }
+        )
       })
       it('invalid value', () => {
-        expect(() => S.number().multipleOf('5.1')).toThrow(
-          new S.FluentSchemaError("'multipleOf' must be a Number")
+        assert.throws(
+          () => S.number().multipleOf('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'multipleOf' must be a Number"
         )
       })
     })
@@ -104,61 +116,61 @@ describe('NumberSchema', () => {
     describe('exclusiveMinimum', () => {
       it('valid', () => {
         const prop = 'prop'
-        expect(
-          S.object()
-            .prop(prop, S.number().exclusiveMinimum(5.1))
-
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'number',
-              exclusiveMinimum: 5.1
-            }
-          },
-          type: 'object'
-        })
+        assert.deepStrictEqual(
+          S.object().prop(prop, S.number().exclusiveMinimum(5.1)).valueOf(),
+          {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              prop: {
+                type: 'number',
+                exclusiveMinimum: 5.1
+              }
+            },
+            type: 'object'
+          }
+        )
       })
       it('invalid value', () => {
-        expect(() => S.number().exclusiveMinimum('5.1')).toThrow(
-          new S.FluentSchemaError("'exclusiveMinimum' must be a Number")
+        assert.throws(
+          () => S.number().exclusiveMinimum('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'exclusiveMinimum' must be a Number"
         )
       })
     })
     describe('exclusiveMaximum', () => {
       it('valid', () => {
         const prop = 'prop'
-        expect(
-          S.object()
-            .prop(prop, S.number().exclusiveMaximum(5.1))
-
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'number',
-              exclusiveMaximum: 5.1
-            }
-          },
-          type: 'object'
-        })
+        assert.deepStrictEqual(
+          S.object().prop(prop, S.number().exclusiveMaximum(5.1)).valueOf(),
+          {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              prop: {
+                type: 'number',
+                exclusiveMaximum: 5.1
+              }
+            },
+            type: 'object'
+          }
+        )
       })
       it('invalid value', () => {
-        expect(() => S.number().exclusiveMaximum('5.1')).toThrow(
-          new S.FluentSchemaError("'exclusiveMaximum' must be a Number")
+        assert.throws(
+          () => S.number().exclusiveMaximum('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'exclusiveMaximum' must be a Number"
         )
       })
     })
 
     describe('raw', () => {
       it('allows to add a custom attribute', () => {
-        const schema = NumberSchema()
-          .raw({ customKeyword: true })
-          .valueOf()
+        const schema = NumberSchema().raw({ customKeyword: true }).valueOf()
 
-        expect(schema).toEqual({
+        assert.deepStrictEqual(schema, {
           type: 'number',
           customKeyword: true
         })
@@ -174,7 +186,7 @@ describe('NumberSchema', () => {
       .prop('age', S.number().maximum(10))
       .valueOf()
 
-    expect(schema).toEqual({
+    assert.deepStrictEqual(schema, {
       $id: 'http://foo.com/user',
       $schema: 'http://json-schema.org/draft-07/schema#',
       description: 'A User desc',

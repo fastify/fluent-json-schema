@@ -30,22 +30,15 @@
   "scripts": {
     "lint": "standard | snazzy",
     "test": "npm run test:unit && npm run test:typescript",
-    "test:unit": "jest --coverage",
-    "test:watch": "jest src/*.test.js --verbose --watch",
+    "test:unit": "c8 --100 node --test",
     "test:typescript": "tsd",
-    "coverage": "jest src/**.test.js --coverage",
     "doc": "jsdoc2md ./src/*.js > docs/API.md"
-  },
-  "standard": {
-    "env": [
-      "jest"
-    ]
   },
   "devDependencies": {
     "@fastify/pre-commit": "^2.1.0",
     "ajv": "^8.12.0",
     "ajv-formats": "^3.0.1",
-    "jest": "^29.7.0",
+    "c8": "^9.1.0",
     "jsdoc-to-markdown": "^8.0.1",
     "lodash.merge": "^4.6.2",
     "snazzy": "^9.0.0",

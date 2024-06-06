@@ -1,14 +1,18 @@
 'use strict'
+
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
+
 const S = require('./FluentJSONSchema')
 
 describe('S', () => {
   it('defined', () => {
-    expect(S).toBeDefined()
+    assert.notStrictEqual(S, undefined)
   })
 
   describe('factory', () => {
     it('without params', () => {
-      expect(S.object().valueOf()).toEqual({
+      assert.deepStrictEqual(S.object().valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object'
       })
@@ -17,63 +21,59 @@ describe('S', () => {
     describe('generatedIds', () => {
       describe('properties', () => {
         it('true', () => {
-          expect(
+          assert.deepStrictEqual(
             S.withOptions({ generateIds: true })
               .object()
               .prop('prop', S.string())
-              .valueOf()
-          ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
-            properties: { prop: { $id: '#properties/prop', type: 'string' } },
-            type: 'object'
-          })
+              .valueOf(),
+            {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              properties: { prop: { $id: '#properties/prop', type: 'string' } },
+              type: 'object'
+            }
+          )
         })
 
         it('false', () => {
-          expect(
-            S.object()
-              .prop('prop', S.string())
-              .valueOf()
-          ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
-            properties: { prop: { type: 'string' } },
-            type: 'object'
-          })
+          assert.deepStrictEqual(
+            S.object().prop('prop', S.string()).valueOf(),
+            {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              properties: { prop: { type: 'string' } },
+              type: 'object'
+            }
+          )
         })
 
         describe('nested', () => {
           it('true', () => {
-            expect(
+            assert.deepStrictEqual(
               S.withOptions({ generateIds: true })
                 .object()
-                .prop(
-                  'foo',
-                  S.object()
-                    .prop('bar', S.string())
-                    .required()
-                )
-                .valueOf()
-            ).toEqual({
-              $schema: 'http://json-schema.org/draft-07/schema#',
-              properties: {
-                foo: {
-                  $id: '#properties/foo',
-                  properties: {
-                    bar: {
-                      $id: '#properties/foo/properties/bar',
-                      type: 'string'
-                    }
-                  },
-                  required: ['bar'],
-                  type: 'object'
-                }
-              },
-              type: 'object'
-            })
+                .prop('foo', S.object().prop('bar', S.string()).required())
+                .valueOf(),
+              {
+                $schema: 'http://json-schema.org/draft-07/schema#',
+                properties: {
+                  foo: {
+                    $id: '#properties/foo',
+                    properties: {
+                      bar: {
+                        $id: '#properties/foo/properties/bar',
+                        type: 'string'
+                      }
+                    },
+                    required: ['bar'],
+                    type: 'object'
+                  }
+                },
+                type: 'object'
+              }
+            )
           })
           it('false', () => {
             const id = 'myId'
-            expect(
+            assert.deepStrictEqual(
               S.object()
                 .prop(
                   'foo',
@@ -82,8 +82,102 @@ describe('S', () => {
 
                     .required()
                 )
-                .valueOf()
-            ).toEqual({
+                .valueOf(),
+              {
+                $schema: 'http://json-schema.org/draft-07/schema#',
+                properties: {
+                  foo: {
+                    properties: {
+                      bar: { $id: 'myId', type: 'string' }
+                    },
+                    required: ['bar'],
+                    type: 'object'
+                  }
+                },
+                type: 'object'
+              }
+            )
+          })
+        })
+      })
+      // TODO LS not sure the test makes sense
+      describe('definitions', () => {
+        it('true', () => {
+          assert.deepStrictEqual(
+            S.withOptions({ generateIds: true })
+              .object()
+              .definition(
+                'entity',
+                S.object().prop('foo', S.string()).prop('bar', S.string())
+              )
+              .prop('prop')
+              .ref('entity')
+              .valueOf(),
+            {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {
+                entity: {
+                  $id: '#definitions/entity',
+                  properties: {
+                    bar: {
+                      type: 'string'
+                    },
+                    foo: {
+                      type: 'string'
+                    }
+                  },
+                  type: 'object'
+                }
+              },
+              properties: {
+                prop: {
+                  $ref: 'entity'
+                }
+              },
+              type: 'object'
+            }
+          )
+        })
+
+        it('false', () => {
+          assert.deepStrictEqual(
+            S.withOptions({ generateIds: false })
+              .object()
+              .definition(
+                'entity',
+                S.object().id('myCustomId').prop('foo', S.string())
+              )
+              .prop('prop')
+              .ref('entity')
+              .valueOf(),
+            {
+              $schema: 'http://json-schema.org/draft-07/schema#',
+              definitions: {
+                entity: {
+                  $id: 'myCustomId',
+                  properties: {
+                    foo: { type: 'string' }
+                  },
+                  type: 'object'
+                }
+              },
+              properties: {
+                prop: {
+                  $ref: 'entity'
+                }
+              },
+              type: 'object'
+            }
+          )
+        })
+
+        it('nested', () => {
+          const id = 'myId'
+          assert.deepStrictEqual(
+            S.object()
+              .prop('foo', S.object().prop('bar', S.string().id(id)).required())
+              .valueOf(),
+            {
               $schema: 'http://json-schema.org/draft-07/schema#',
               properties: {
                 foo: {
@@ -95,107 +189,8 @@ describe('S', () => {
                 }
               },
               type: 'object'
-            })
-          })
-        })
-      })
-      // TODO LS not sure the test makes sense
-      describe('definitions', () => {
-        it('true', () => {
-          expect(
-            S.withOptions({ generateIds: true })
-              .object()
-              .definition(
-                'entity',
-                S.object()
-                  .prop('foo', S.string())
-                  .prop('bar', S.string())
-              )
-              .prop('prop')
-              .ref('entity')
-              .valueOf()
-          ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
-            definitions: {
-              entity: {
-                $id: '#definitions/entity',
-                properties: {
-                  bar: {
-                    type: 'string'
-                  },
-                  foo: {
-                    type: 'string'
-                  }
-                },
-                type: 'object'
-              }
-            },
-            properties: {
-              prop: {
-                $ref: 'entity'
-              }
-            },
-            type: 'object'
-          })
-        })
-
-        it('false', () => {
-          expect(
-            S.withOptions({ generateIds: false })
-              .object()
-              .definition(
-                'entity',
-                S.object()
-                  .id('myCustomId')
-                  .prop('foo', S.string())
-              )
-              .prop('prop')
-              .ref('entity')
-              .valueOf()
-          ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
-            definitions: {
-              entity: {
-                $id: 'myCustomId',
-                properties: {
-                  foo: { type: 'string' }
-                },
-                type: 'object'
-              }
-            },
-            properties: {
-              prop: {
-                $ref: 'entity'
-              }
-            },
-            type: 'object'
-          })
-        })
-
-        it('nested', () => {
-          const id = 'myId'
-          expect(
-            S.object()
-              .prop(
-                'foo',
-                S.object()
-                  .prop('bar', S.string().id(id))
-                  .required()
-              )
-              .valueOf()
-          ).toEqual({
-            $schema: 'http://json-schema.org/draft-07/schema#',
-            properties: {
-              foo: {
-                properties: {
-                  bar: { $id: 'myId', type: 'string' }
-                },
-                required: ['bar'],
-                type: 'object'
-              }
-            },
-            type: 'object'
-          })
+            }
+          )
         })
       })
     })
@@ -206,7 +201,7 @@ describe('S', () => {
       const schema = S.object()
         .prop('foo', S.anyOf([S.string()]))
         .valueOf()
-      expect(schema).toEqual({
+      assert.deepStrictEqual(schema, {
         $schema: 'http://json-schema.org/draft-07/schema#',
         properties: { foo: { anyOf: [{ type: 'string' }] } },
         type: 'object'
@@ -221,7 +216,7 @@ describe('S', () => {
         )
         .prop('notTypeKey', S.not(S.oneOf([S.string().pattern('js$')])))
         .valueOf()
-      expect(schema).toEqual({
+      assert.deepStrictEqual(schema, {
         $schema: 'http://json-schema.org/draft-07/schema#',
         properties: {
           multipleRestrictedTypesKey: {
@@ -235,11 +230,7 @@ describe('S', () => {
   })
 
   it('valueOf', () => {
-    expect(
-      S.object()
-        .prop('foo', S.string())
-        .valueOf()
-    ).toEqual({
+    assert.deepStrictEqual(S.object().prop('foo', S.string()).valueOf(), {
       $schema: 'http://json-schema.org/draft-07/schema#',
       properties: { foo: { type: 'string' } },
       type: 'object'
@@ -278,7 +269,7 @@ describe('S', () => {
 
       .valueOf()
 
-    expect(schema).toEqual({
+    assert.deepStrictEqual(schema, {
       definitions: {
         address: {
           type: 'object',
@@ -320,9 +311,11 @@ describe('S', () => {
           $id: 'http://foo.com/role',
           properties: {
             name: {
+              $id: undefined,
               type: 'string'
             },
             permissions: {
+              $id: undefined,
               type: 'string'
             }
           }
@@ -336,8 +329,8 @@ describe('S', () => {
       it('parses type', () => {
         const input = S.enum(['foo']).valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
@@ -347,8 +340,8 @@ describe('S', () => {
         const schema = S.raw(input)
         const attribute = 'title'
         const modified = schema.title(attribute)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(modified.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(modified.valueOf(), {
           ...input,
           title: attribute
         })
@@ -359,8 +352,8 @@ describe('S', () => {
       it('parses type', () => {
         const input = S.string().valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
@@ -369,20 +362,18 @@ describe('S', () => {
         const input = S.string().valueOf()
         const schema = S.raw(input)
         const modified = schema.minLength(3)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(modified.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(modified.valueOf(), {
           minLength: 3,
           ...input
         })
       })
 
       it('parses a prop', () => {
-        const input = S.string()
-          .minLength(5)
-          .valueOf()
+        const input = S.string().minLength(5).valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
@@ -392,8 +383,8 @@ describe('S', () => {
       it('parses type', () => {
         const input = S.number().valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
@@ -402,20 +393,18 @@ describe('S', () => {
         const input = S.number().valueOf()
         const schema = S.raw(input)
         const modified = schema.maximum(3)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(modified.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(modified.valueOf(), {
           maximum: 3,
           ...input
         })
       })
 
       it('parses a prop', () => {
-        const input = S.number()
-          .maximum(5)
-          .valueOf()
+        const input = S.number().maximum(5).valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
@@ -425,8 +414,8 @@ describe('S', () => {
       it('parses type', () => {
         const input = S.integer().valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
@@ -435,20 +424,18 @@ describe('S', () => {
         const input = S.integer().valueOf()
         const schema = S.raw(input)
         const modified = schema.maximum(3)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(modified.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(modified.valueOf(), {
           maximum: 3,
           ...input
         })
       })
 
       it('parses a prop', () => {
-        const input = S.integer()
-          .maximum(5)
-          .valueOf()
+        const input = S.integer().maximum(5).valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
@@ -458,8 +445,8 @@ describe('S', () => {
       it('parses type', () => {
         const input = S.boolean().valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
@@ -469,20 +456,17 @@ describe('S', () => {
       it('parses type', () => {
         const input = S.object().valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
 
       it('parses properties', () => {
-        const input = S.object()
-          .prop('foo')
-          .prop('bar', S.string())
-          .valueOf()
+        const input = S.object().prop('foo').prop('bar', S.string()).valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
@@ -493,8 +477,8 @@ describe('S', () => {
           .valueOf()
         const schema = S.raw(input)
         const modified = schema.prop('boom')
-        expect(modified.isFluentSchema).toBeTruthy()
-        expect(modified.valueOf()).toEqual({
+        assert.ok(modified.isFluentSchema)
+        assert.deepStrictEqual(modified.valueOf(), {
           ...input,
           properties: {
             ...input.properties,
@@ -504,12 +488,10 @@ describe('S', () => {
       })
 
       it('parses definitions', () => {
-        const input = S.object()
-          .definition('foo', S.string())
-          .valueOf()
+        const input = S.object().definition('foo', S.string()).valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
@@ -517,24 +499,20 @@ describe('S', () => {
 
     describe('array', () => {
       it('parses type', () => {
-        const input = S.array()
-          .items(S.string())
-          .valueOf()
+        const input = S.array().items(S.string()).valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })
 
       it('parses properties', () => {
-        const input = S.array()
-          .items(S.string())
-          .valueOf()
+        const input = S.array().items(S.string()).valueOf()
 
         const schema = S.raw(input).maxItems(1)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input,
           maxItems: 1
         })
@@ -551,20 +529,18 @@ describe('S', () => {
           .valueOf()
         const schema = S.raw(input)
         const modified = schema.maxItems(1)
-        expect(modified.isFluentSchema).toBeTruthy()
-        expect(modified.valueOf()).toEqual({
+        assert.ok(modified.isFluentSchema)
+        assert.deepStrictEqual(modified.valueOf(), {
           ...input,
           maxItems: 1
         })
       })
 
       it('parses definitions', () => {
-        const input = S.object()
-          .definition('foo', S.string())
-          .valueOf()
+        const input = S.object().definition('foo', S.string()).valueOf()
         const schema = S.raw(input)
-        expect(schema.isFluentSchema).toBeTruthy()
-        expect(schema.valueOf()).toEqual({
+        assert.ok(schema.isFluentSchema)
+        assert.deepStrictEqual(schema.valueOf(), {
           ...input
         })
       })

@@ -1,19 +1,26 @@
 'use strict'
+
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
+
 const { ObjectSchema } = require('./ObjectSchema')
 const S = require('./FluentJSONSchema')
 
 describe('ObjectSchema', () => {
   it('defined', () => {
-    expect(ObjectSchema).toBeDefined()
+    assert.notStrictEqual(ObjectSchema, undefined)
   })
 
   it('Expose symbol', () => {
-    expect(ObjectSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+    assert.notStrictEqual(
+      ObjectSchema()[Symbol.for('fluent-schema-object')],
+      undefined
+    )
   })
 
   describe('constructor', () => {
     it('without params', () => {
-      expect(ObjectSchema().valueOf()).toEqual({
+      assert.deepStrictEqual(ObjectSchema().valueOf(), {
         // $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object'
       })
@@ -22,22 +29,19 @@ describe('ObjectSchema', () => {
     describe('generatedIds', () => {
       describe('properties', () => {
         it('true', () => {
-          expect(
+          assert.deepStrictEqual(
             ObjectSchema({ generateIds: true })
               .prop('prop', S.string())
-              .valueOf()
-          ).toEqual({
-            properties: { prop: { $id: '#properties/prop', type: 'string' } },
-            type: 'object'
-          })
+              .valueOf(),
+            {
+              properties: { prop: { $id: '#properties/prop', type: 'string' } },
+              type: 'object'
+            }
+          )
         })
 
         it('false', () => {
-          expect(
-            ObjectSchema()
-              .prop('prop')
-              .valueOf()
-          ).toEqual({
+          assert.deepStrictEqual(ObjectSchema().prop('prop').valueOf(), {
             properties: { prop: {} },
             type: 'object'
           })
@@ -45,62 +49,54 @@ describe('ObjectSchema', () => {
 
         describe('nested', () => {
           it('true', () => {
-            expect(
+            assert.deepStrictEqual(
               ObjectSchema({ generateIds: true })
-                .prop(
-                  'foo',
-                  ObjectSchema()
-                    .prop('bar')
-                    .required()
-                )
-                .valueOf()
-            ).toEqual({
-              properties: {
-                foo: {
-                  $id: '#properties/foo',
-                  properties: {
-                    bar: {
-                      $id: '#properties/foo/properties/bar'
-                    }
-                  },
-                  required: ['bar'],
-                  type: 'object'
-                }
-              },
-              type: 'object'
-            })
+                .prop('foo', ObjectSchema().prop('bar').required())
+                .valueOf(),
+              {
+                properties: {
+                  foo: {
+                    $id: '#properties/foo',
+                    properties: {
+                      bar: {
+                        $id: '#properties/foo/properties/bar'
+                      }
+                    },
+                    required: ['bar'],
+                    type: 'object'
+                  }
+                },
+                type: 'object'
+              }
+            )
           })
           it('false', () => {
             const id = 'myId'
-            expect(
+            assert.deepStrictEqual(
               ObjectSchema()
-                .prop(
-                  'foo',
-                  ObjectSchema()
-                    .prop('bar', S.id(id))
-                    .required()
-                )
-                .valueOf()
-            ).toEqual({
-              properties: {
-                foo: {
-                  properties: {
-                    bar: { $id: 'myId' }
-                  },
-                  required: ['bar'],
-                  type: 'object'
-                }
-              },
-              type: 'object'
-            })
+                .prop('foo', ObjectSchema().prop('bar', S.id(id)).required())
+                .valueOf(),
+              {
+                properties: {
+                  foo: {
+                    properties: {
+                      bar: { $id: 'myId' }
+                    },
+                    required: ['bar'],
+                    type: 'object'
+                  }
+                },
+                type: 'object'
+              }
+            )
           })
           it('invalid', () => {
-            expect(() => {
-              ObjectSchema().id('')
-            }).toThrow(
-              new S.FluentSchemaError(
-                'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
-              )
+            assert.throws(
+              () => ObjectSchema().id(''),
+              (err) =>
+                err instanceof S.FluentSchemaError &&
+                err.message ===
+                  'id should not be an empty fragment <#> or an empty string <> (e.g. #myId)'
             )
           })
         })
@@ -108,127 +104,111 @@ describe('ObjectSchema', () => {
 
       describe('definitions', () => {
         it('true', () => {
-          expect(
+          assert.deepStrictEqual(
             ObjectSchema({ generateIds: true })
-              .definition(
-                'entity',
-                ObjectSchema()
-                  .prop('foo')
-                  .prop('bar')
-              )
+              .definition('entity', ObjectSchema().prop('foo').prop('bar'))
               .prop('prop', S.ref('entity'))
-              .valueOf()
-          ).toEqual({
-            definitions: {
-              entity: {
-                $id: '#definitions/entity',
-                properties: {
-                  bar: {},
-                  foo: {}
-                },
-                type: 'object'
-              }
-            },
-            properties: {
-              prop: {
-                $ref: 'entity'
-              }
-            },
-            type: 'object'
-          })
+              .valueOf(),
+            {
+              definitions: {
+                entity: {
+                  $id: '#definitions/entity',
+                  properties: {
+                    bar: {},
+                    foo: {}
+                  },
+                  type: 'object'
+                }
+              },
+              properties: {
+                prop: {
+                  $ref: 'entity'
+                }
+              },
+              type: 'object'
+            }
+          )
         })
 
         it('false', () => {
-          expect(
+          assert.deepStrictEqual(
             ObjectSchema({ generateIds: false })
-              .definition(
-                'entity',
-                ObjectSchema()
-                  .id('myCustomId')
-                  .prop('foo')
-              )
+              .definition('entity', ObjectSchema().id('myCustomId').prop('foo'))
               .prop('prop', S.ref('entity'))
-              .valueOf()
-          ).toEqual({
-            definitions: {
-              entity: {
-                $id: 'myCustomId',
-                properties: {
-                  foo: {}
-                },
-                type: 'object'
-              }
-            },
-            properties: {
-              prop: {
-                $ref: 'entity'
-              }
-            },
-            type: 'object'
-          })
+              .valueOf(),
+            {
+              definitions: {
+                entity: {
+                  $id: 'myCustomId',
+                  properties: {
+                    foo: {}
+                  },
+                  type: 'object'
+                }
+              },
+              properties: {
+                prop: {
+                  $ref: 'entity'
+                }
+              },
+              type: 'object'
+            }
+          )
         })
 
         it('nested', () => {
           const id = 'myId'
-          expect(
+          assert.deepStrictEqual(
             ObjectSchema()
               .prop(
                 'foo',
-                ObjectSchema()
-                  .prop('bar', S.string().id(id))
-                  .required()
+                ObjectSchema().prop('bar', S.string().id(id)).required()
               )
-              .valueOf()
-          ).toEqual({
-            properties: {
-              foo: {
-                properties: {
-                  bar: { $id: 'myId', type: 'string' }
-                },
-                required: ['bar'],
-                type: 'object'
-              }
-            },
-            type: 'object'
-          })
+              .valueOf(),
+            {
+              properties: {
+                foo: {
+                  properties: {
+                    bar: { $id: 'myId', type: 'string' }
+                  },
+                  required: ['bar'],
+                  type: 'object'
+                }
+              },
+              type: 'object'
+            }
+          )
         })
       })
     })
   })
 
   it('from S', () => {
-    expect(S.object().valueOf()).toEqual({
+    assert.deepStrictEqual(S.object().valueOf(), {
       $schema: 'http://json-schema.org/draft-07/schema#',
       type: 'object'
     })
   })
 
   it('sets a type object to the prop', () => {
-    expect(
-      ObjectSchema()
-        .prop('prop', S.object())
-        .valueOf().properties.prop.type
-    ).toBe('object')
+    assert.strictEqual(
+      ObjectSchema().prop('prop', S.object()).valueOf().properties.prop.type,
+      'object'
+    )
   })
 
   it('valueOf', () => {
-    expect(
-      ObjectSchema()
-        .prop('foo', S.string())
-        .valueOf()
-    ).toEqual({ properties: { foo: { type: 'string' } }, type: 'object' })
+    assert.deepStrictEqual(ObjectSchema().prop('foo', S.string()).valueOf(), {
+      properties: { foo: { type: 'string' } },
+      type: 'object'
+    })
   })
 
   describe('keywords:', () => {
     describe('id', () => {
       it('valid', () => {
         const id = 'myId'
-        expect(
-          ObjectSchema()
-            .prop('prop')
-            .id(id)
-            .valueOf()
-        ).toEqual({
+        assert.deepStrictEqual(ObjectSchema().prop('prop').id(id).valueOf(), {
           $id: id,
           properties: { prop: {} },
           type: 'object'
@@ -238,96 +218,95 @@ describe('ObjectSchema', () => {
       describe('nested', () => {
         it('object', () => {
           const id = 'myId'
-          expect(
-            ObjectSchema()
-              .prop('foo', S.string().id(id))
-              .valueOf().properties.foo
-          ).toEqual({
-            type: 'string',
-            $id: id
-          })
+          assert.deepStrictEqual(
+            ObjectSchema().prop('foo', S.string().id(id)).valueOf().properties
+              .foo,
+            {
+              type: 'string',
+              $id: id
+            }
+          )
         })
 
         it('string', () => {
-          expect(
-            ObjectSchema()
-              .prop('foo', S.string().title('Foo'))
-              .valueOf().properties
-          ).toEqual({
-            foo: {
-              type: 'string',
-              title: 'Foo'
+          assert.deepStrictEqual(
+            ObjectSchema().prop('foo', S.string().title('Foo')).valueOf()
+              .properties,
+            {
+              foo: {
+                type: 'string',
+                title: 'Foo'
+              }
             }
-          })
+          )
         })
       })
     })
 
     describe('properties', () => {
       it('string', () => {
-        expect(
-          ObjectSchema()
-            .prop('prop', S.string())
-            .valueOf().properties
-        ).toEqual({
-          prop: {
-            type: 'string'
+        assert.deepStrictEqual(
+          ObjectSchema().prop('prop', S.string()).valueOf().properties,
+          {
+            prop: {
+              type: 'string'
+            }
           }
-        })
+        )
       })
 
       describe('nested', () => {
         it('object', () => {
-          expect(
-            ObjectSchema()
-              .prop('foo', ObjectSchema().prop('bar'))
-              .valueOf().properties.foo.properties
-          ).toEqual({
-            bar: {}
-          })
+          assert.deepStrictEqual(
+            ObjectSchema().prop('foo', ObjectSchema().prop('bar')).valueOf()
+              .properties.foo.properties,
+            {
+              bar: { $id: undefined }
+            }
+          )
         })
 
         it('string', () => {
-          expect(
-            ObjectSchema()
-              .prop('foo', S.string().title('Foo'))
-              .valueOf().properties
-          ).toEqual({
-            foo: {
-              type: 'string',
-              title: 'Foo'
+          assert.deepStrictEqual(
+            ObjectSchema().prop('foo', S.string().title('Foo')).valueOf()
+              .properties,
+            {
+              foo: {
+                type: 'string',
+                title: 'Foo'
+              }
             }
-          })
+          )
         })
       })
       describe('invalid', () => {
         it('throws an error passing a string as value', () => {
-          expect(() => {
-            ObjectSchema().prop('prop', 'invalid')
-          }).toThrow(
-            new S.FluentSchemaError(
-              "'prop' doesn't support value '\"invalid\"'. Pass a FluentSchema object"
-            )
+          assert.throws(
+            () => ObjectSchema().prop('prop', 'invalid'),
+            (err) =>
+              err instanceof S.FluentSchemaError &&
+              err.message ===
+                "'prop' doesn't support value '\"invalid\"'. Pass a FluentSchema object"
           )
         })
 
         it('throws an error passing a number as value', () => {
-          expect(() => {
-            ObjectSchema().prop('prop', 555)
-          }).toThrow(
-            new S.FluentSchemaError(
-              "'prop' doesn't support value '555'. Pass a FluentSchema object"
-            )
+          assert.throws(
+            () => ObjectSchema().prop('prop', 555),
+            (err) =>
+              err instanceof S.FluentSchemaError &&
+              err.message ===
+                "'prop' doesn't support value '555'. Pass a FluentSchema object"
           )
         })
 
         it('throws an error passing an array as value', () => {
-          expect(() => {
-            ObjectSchema().prop('prop', [])
-          }).toThrow(
-            new S.FluentSchemaError(
-              "'prop' doesn't support value '[]'. Pass a FluentSchema object"
-            )
+          assert.throws(
+            () => ObjectSchema().prop('prop', []),
+            (err) =>
+              err instanceof S.FluentSchemaError &&
+              err.message ===
+                "'prop' doesn't support value '[]'. Pass a FluentSchema object"
           )
         })
       })
@@ -336,45 +315,41 @@ describe('ObjectSchema', () => {
     describe('additionalProperties', () => {
       it('true', () => {
         const value = true
-        expect(
-          ObjectSchema()
-            .additionalProperties(value)
-            .prop('prop')
-            .valueOf().additionalProperties
-        ).toEqual(value)
+        assert.deepStrictEqual(
+          ObjectSchema().additionalProperties(value).prop('prop').valueOf()
+            .additionalProperties,
+          value
+        )
       })
 
       it('false', () => {
         const value = false
-        expect(
-          ObjectSchema()
-            .additionalProperties(value)
-            .prop('prop')
-            .valueOf().additionalProperties
-        ).toEqual(value)
+        assert.deepStrictEqual(
+          ObjectSchema().additionalProperties(value).prop('prop').valueOf()
+            .additionalProperties,
+          value
+        )
       })
 
       it('object', () => {
-        expect(
-          ObjectSchema()
-            .additionalProperties(S.string())
-            .prop('prop')
-            .valueOf().additionalProperties
-        ).toEqual({ type: 'string' })
+        assert.deepStrictEqual(
+          ObjectSchema().additionalProperties(S.string()).prop('prop').valueOf()
+            .additionalProperties,
+          { type: 'string' }
+        )
       })
 
       it('invalid', () => {
         const value = 'invalid'
-        expect(() =>
-          expect(
-            ObjectSchema()
-              .prop('prop')
-              .additionalProperties(value)
-          ).toEqual(value)
-        ).toThrow(
-          new S.FluentSchemaError(
-            "'additionalProperties' must be a boolean or a S"
-          )
+        assert.throws(
+          () =>
+            assert.strictEqual(
+              ObjectSchema().prop('prop').additionalProperties(value),
+              value
+            ),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'additionalProperties' must be a boolean or a S"
         )
       })
     })
@@ -382,24 +357,24 @@ describe('ObjectSchema', () => {
     describe('maxProperties', () => {
       it('valid', () => {
         const value = 2
-        expect(
-          ObjectSchema()
-            .maxProperties(value)
-            .prop('prop')
-            .valueOf().maxProperties
-        ).toEqual(value)
+        assert.deepStrictEqual(
+          ObjectSchema().maxProperties(value).prop('prop').valueOf()
+            .maxProperties,
+          value
+        )
       })
 
       it('invalid', () => {
         const value = 'invalid'
-        expect(() =>
-          expect(
-            ObjectSchema()
-              .prop('prop')
-              .maxProperties(value)
-          ).toEqual(value)
-        ).toThrow(
-          new S.FluentSchemaError("'maxProperties' must be a Integer")
+        assert.throws(
+          () =>
+            assert.strictEqual(
+              ObjectSchema().prop('prop').maxProperties(value),
+              value
+            ),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'maxProperties' must be a Integer"
         )
       })
     })
@@ -407,137 +382,141 @@ describe('ObjectSchema', () => {
     describe('minProperties', () => {
       it('valid', () => {
         const value = 2
-        expect(
-          ObjectSchema()
-            .minProperties(value)
-            .prop('prop')
-            .valueOf().minProperties
-        ).toEqual(value)
+        assert.deepStrictEqual(
+          ObjectSchema().minProperties(value).prop('prop').valueOf()
+            .minProperties,
+          value
+        )
       })
 
       it('invalid', () => {
         const value = 'invalid'
-        expect(() =>
-          expect(
-            ObjectSchema()
-              .prop('prop')
-              .minProperties(value)
-          ).toEqual(value)
-        ).toThrow(
-          new S.FluentSchemaError("'minProperties' must be a Integer")
+        assert.throws(
+          () =>
+            assert.strictEqual(
+              ObjectSchema().prop('prop').minProperties(value),
+              value
+            ),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'minProperties' must be a Integer"
         )
       })
     })
 
     describe('patternProperties', () => {
       it('valid', () => {
-        expect(
+        assert.deepStrictEqual(
           ObjectSchema()
             .patternProperties({
               '^fo.*$': S.string()
             })
             .prop('foo')
-            .valueOf()
-        ).toEqual({
-          patternProperties: { '^fo.*$': { type: 'string' } },
-          properties: { foo: {} },
-          type: 'object'
-        })
+            .valueOf(),
+          {
+            patternProperties: { '^fo.*$': { type: 'string' } },
+            properties: { foo: {} },
+            type: 'object'
+          }
+        )
       })
 
       it('invalid', () => {
         const value = 'invalid'
-        expect(() =>
-          expect(
-            ObjectSchema()
-              .prop('prop')
-              .patternProperties(value)
-          ).toEqual(value)
-        ).toThrow(
-          new S.FluentSchemaError(
-            "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': S.string() }"
-          )
+        assert.throws(
+          () =>
+            assert.strictEqual(
+              ObjectSchema().prop('prop').patternProperties(value),
+              value
+            ),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message ===
+              "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': S.string() }"
         )
       })
     })
 
     describe('dependencies', () => {
       it('map of array', () => {
-        expect(
+        assert.deepStrictEqual(
           ObjectSchema()
             .dependencies({
               foo: ['bar']
             })
             .prop('foo')
             .prop('bar')
-            .valueOf()
-        ).toEqual({
-          dependencies: { foo: ['bar'] },
-          properties: {
-            bar: {},
-            foo: {}
-          },
-          type: 'object'
-        })
+            .valueOf(),
+          {
+            dependencies: { foo: ['bar'] },
+            properties: {
+              bar: {},
+              foo: {}
+            },
+            type: 'object'
+          }
+        )
       })
 
       it('object', () => {
-        expect(
+        assert.deepStrictEqual(
           ObjectSchema()
             .dependencies({
               foo: ObjectSchema().prop('bar', S.string())
             })
             .prop('foo')
-            .valueOf()
-        ).toEqual({
-          dependencies: {
-            foo: {
-              properties: {
-                bar: { type: 'string' }
+            .valueOf(),
+          {
+            dependencies: {
+              foo: {
+                properties: {
+                  bar: { type: 'string' }
+                }
               }
-            }
-          },
-          properties: { foo: {} },
-          type: 'object'
-        })
+            },
+            properties: { foo: {} },
+            type: 'object'
+          }
+        )
       })
 
       it('invalid', () => {
         const value = 'invalid'
-        expect(() =>
-          expect(
-            ObjectSchema()
-              .prop('prop')
-              .dependencies(value)
-          ).toEqual(value)
-        ).toThrow(
-          new S.FluentSchemaError(
-            "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['bar'] } or { 'foo': S.string() }"
-          )
+        assert.throws(
+          () =>
+            assert.strictEqual(
+              ObjectSchema().prop('prop').dependencies(value),
+              value
+            ),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message ===
+              "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['bar'] } or { 'foo': S.string() }"
         )
       })
     })
 
     describe('dependentRequired', () => {
       it('valid', () => {
-        expect(
+        assert.deepStrictEqual(
           ObjectSchema()
             .dependentRequired({
               foo: ['bar']
             })
             .prop('foo')
             .prop('bar')
-            .valueOf()
-        ).toEqual({
-          type: 'object',
-          dependentRequired: {
-            foo: ['bar']
-          },
-          properties: {
-            foo: {},
-            bar: {}
+            .valueOf(),
+          {
+            type: 'object',
+            dependentRequired: {
+              foo: ['bar']
+            },
+            properties: {
+              foo: {},
+              bar: {}
+            }
           }
-        })
+        )
       })
 
       it('invalid', () => {
@@ -545,40 +524,42 @@ describe('ObjectSchema', () => {
           foo: ObjectSchema().prop('bar', S.string())
         }
 
-        expect(() => {
-          expect(
-            ObjectSchema()
-              .dependentRequired(value)
-              .prop('foo')
-          ).toEqual(value)
-        }).toThrow(
-          new S.FluentSchemaError(
-            "'dependentRequired' invalid options. Provide a valid array e.g. { 'foo': ['bar'] }"
-          )
+        assert.throws(
+          () => {
+            assert.deepStrictEqual(
+              ObjectSchema().dependentRequired(value).prop('foo'),
+              value
+            )
+          },
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message ===
+              "'dependentRequired' invalid options. Provide a valid array e.g. { 'foo': ['bar'] }"
         )
       })
     })
 
     describe('dependentSchemas', () => {
       it('valid', () => {
-        expect(
+        assert.deepStrictEqual(
           ObjectSchema()
             .dependentSchemas({
               foo: ObjectSchema().prop('bar', S.string())
             })
             .prop('foo')
-            .valueOf()
-        ).toEqual({
-          dependentSchemas: {
-            foo: {
-              properties: {
-                bar: { type: 'string' }
+            .valueOf(),
+          {
+            dependentSchemas: {
+              foo: {
+                properties: {
+                  bar: { type: 'string' }
+                }
               }
-            }
-          },
-          properties: { foo: {} },
-          type: 'object'
-        })
+            },
+            properties: { foo: {} },
+            type: 'object'
+          }
+        )
       })
 
       it('invalid', () => {
@@ -586,114 +567,110 @@ describe('ObjectSchema', () => {
           foo: ['bar']
         }
 
-        expect(() => {
-          expect(
-            ObjectSchema()
-              .dependentSchemas(value)
-              .prop('foo')
-          ).toEqual(value)
-        }).toThrow(
-          new S.FluentSchemaError(
-            "'dependentSchemas' invalid options. Provide a valid schema e.g. { 'foo': S.string() }"
-          )
+        assert.throws(
+          () => {
+            assert.deepStrictEqual(
+              ObjectSchema().dependentSchemas(value).prop('foo'),
+              value
+            )
+          },
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message ===
+              "'dependentSchemas' invalid options. Provide a valid schema e.g. { 'foo': S.string() }"
         )
       })
     })
 
     describe('propertyNames', () => {
       it('valid', () => {
-        expect(
+        assert.deepStrictEqual(
           ObjectSchema()
             .propertyNames(S.string().format(S.FORMATS.EMAIL))
             .prop('foo@bar.com')
-            .valueOf().propertyNames
-        ).toEqual({
-          format: 'email',
-          type: 'string'
-        })
+            .valueOf().propertyNames,
+          {
+            format: 'email',
+            type: 'string'
+          }
+        )
       })
 
       it('invalid', () => {
         const value = 'invalid'
-        expect(() =>
-          expect(
-            ObjectSchema()
-              .prop('prop')
-              .propertyNames(value)
-          ).toEqual(value)
-        ).toThrow(new S.FluentSchemaError("'propertyNames' must be a S"))
+        assert.throws(
+          () =>
+            assert.strictEqual(
+              ObjectSchema().prop('prop').propertyNames(value),
+              value
+            ),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'propertyNames' must be a S"
+        )
       })
     })
   })
 
   describe('null', () => {
     it('sets a type object from the root', () => {
-      expect(S.null().valueOf().type).toBe('null')
+      assert.strictEqual(S.null().valueOf().type, 'null')
     })
 
     it('sets a type object from the prop', () => {
-      expect(
-        ObjectSchema()
-          .prop('value', S.null())
-
-          .valueOf().properties.value.type
-      ).toBe('null')
+      assert.strictEqual(
+        ObjectSchema().prop('value', S.null()).valueOf().properties.value.type,
+        'null'
+      )
     })
   })
 
   describe('definition', () => {
     it('add', () => {
-      expect(
+      assert.deepStrictEqual(
         ObjectSchema()
-          .definition(
-            'foo',
-            ObjectSchema()
-              .prop('foo')
-              .prop('bar')
-          )
-          .valueOf().definitions
-      ).toEqual({
-        foo: {
-          type: 'object',
-          properties: {
-            foo: {},
-            bar: {}
+          .definition('foo', ObjectSchema().prop('foo').prop('bar'))
+          .valueOf().definitions,
+        {
+          foo: {
+            type: 'object',
+            properties: {
+              foo: {},
+              bar: {}
+            }
           }
         }
-      })
+      )
     })
 
     it('empty props', () => {
-      expect(
-        ObjectSchema()
-          .definition('foo')
-          .valueOf().definitions
-      ).toEqual({
-        foo: {}
-      })
+      assert.deepStrictEqual(
+        ObjectSchema().definition('foo').valueOf().definitions,
+        {
+          foo: {}
+        }
+      )
     })
 
     it('with id', () => {
-      expect(
+      assert.deepStrictEqual(
         ObjectSchema()
           .definition(
             'foo',
-            ObjectSchema()
-              .id('myDefId')
-              .prop('foo')
-              .prop('bar')
+            ObjectSchema().id('myDefId').prop('foo').prop('bar')
           )
-          .valueOf().definitions
-      ).toEqual({
-        foo: {
-          $id: 'myDefId',
-          type: 'object',
-          properties: {
-            foo: {},
-            bar: {}
+          .valueOf().definitions,
+        {
+          foo: {
+            $id: 'myDefId',
+            type: 'object',
+            properties: {
+              foo: {},
+              bar: {}
+            }
           }
         }
-      })
+      )
     })
   })
 
@@ -703,19 +680,14 @@ describe('ObjectSchema', () => {
         .id('base')
         .title('base')
         .additionalProperties(false)
-        .prop(
-          'foo',
-          S.string()
-            .minLength(5)
-            .required(true)
-        )
+        .prop('foo', S.string().minLength(5).required(true))
 
       const extended = S.object()
         .id('extended')
         .title('extended')
         .prop('bar', S.string().required())
         .extend(base)
-      expect(extended.valueOf()).toEqual({
+      assert.deepStrictEqual(extended.valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         $id: 'extended',
         title: 'extended',
@@ -740,12 +712,7 @@ describe('ObjectSchema', () => {
         .additionalProperties(false)
         .prop(
           'foo',
-          S.object().prop(
-            'id',
-            S.string()
-              .format('uuid')
-              .required()
-          )
+          S.object().prop('id', S.string().format('uuid').required())
         )
         .prop('str', S.string().required())
         .prop('bol', S.boolean().required())
@@ -756,7 +723,7 @@ describe('ObjectSchema', () => {
         .prop('bar', S.number())
         .extend(base)
 
-      expect(extended.valueOf()).toEqual({
+      assert.deepStrictEqual(extended.valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         $id: 'extended',
         additionalProperties: false,
@@ -765,6 +732,7 @@ describe('ObjectSchema', () => {
             type: 'object',
             properties: {
               id: {
+                $id: undefined,
                 type: 'string',
                 format: 'uuid'
               }
@@ -796,12 +764,7 @@ describe('ObjectSchema', () => {
         .definition('def2', S.object().prop('somethingElse'))
         .prop(
           'foo',
-          S.object().prop(
-            'id',
-            S.string()
-              .format('uuid')
-              .required()
-          )
+          S.object().prop('id', S.string().format('uuid').required())
         )
         .prop('str', S.string().required())
         .prop('bol', S.boolean().required())
@@ -813,7 +776,7 @@ describe('ObjectSchema', () => {
         .prop('bar', S.number())
         .extend(base)
 
-      expect(extended.valueOf()).toEqual({
+      assert.deepStrictEqual(extended.valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         definitions: {
           def1: { type: 'object', properties: { some: {}, someExtended: {} } },
@@ -825,7 +788,9 @@ describe('ObjectSchema', () => {
         properties: {
           foo: {
             type: 'object',
-            properties: { id: { type: 'string', format: 'uuid' } },
+            properties: {
+              id: { $id: undefined, type: 'string', format: 'uuid' }
+            },
             required: ['id']
           },
           str: { type: 'string' },
@@ -844,7 +809,7 @@ describe('ObjectSchema', () => {
         .prop('reason', S.string().minLength(1))
         .extend(base)
 
-      expect(extended.valueOf()).toEqual({
+      assert.deepStrictEqual(extended.valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',
         properties: {
@@ -867,7 +832,7 @@ describe('ObjectSchema', () => {
         .extend(extended)
         .extend(S.object().prop('multiple'))
 
-      expect(extendedAgain.valueOf()).toEqual({
+      assert.deepStrictEqual(extendedAgain.valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',
         properties: {
@@ -880,29 +845,33 @@ describe('ObjectSchema', () => {
     })
 
     it('throws an error if a schema is not provided', () => {
-      expect(() => {
-        S.object().extend()
-      }).toThrow(
-        new S.FluentSchemaError("Schema can't be null or undefined")
+      assert.throws(
+        () => S.object().extend(),
+        (err) =>
+          err instanceof S.FluentSchemaError &&
+          err.message === "Schema can't be null or undefined"
       )
     })
 
     it('throws an error if a schema is invalid', () => {
-      expect(() => {
-        S.object().extend('boom!')
-      }).toThrow(new S.FluentSchemaError("Schema isn't FluentSchema type"))
+      assert.throws(
+        () => S.object().extend('boom!'),
+        (err) =>
+          err instanceof S.FluentSchemaError &&
+          err.message === "Schema isn't FluentSchema type"
+      )
     })
 
     it('throws an error if you append a new prop after extend', () => {
-      expect(() => {
-        const base = S.object()
-        S.object()
-          .extend(base)
-          .prop('foo')
-      }).toThrow(
-        new S.FluentSchemaError(
-          'S.object(...).extend(...).prop is not a function'
-        )
+      assert.throws(
+        () => {
+          const base = S.object()
+          S.object().extend(base).prop('foo')
+        },
+        (err) =>
+          // err instanceof S.FluentSchemaError &&
+          err instanceof TypeError &&
+          err.message === 'S.object(...).extend(...).prop is not a function'
       )
     })
   })
@@ -917,14 +886,12 @@ describe('ObjectSchema', () => {
         .prop('baz', S.string())
         .prop(
           'children',
-          S.object()
-            .prop('alpha', S.string())
-            .prop('beta', S.string())
+          S.object().prop('alpha', S.string()).prop('beta', S.string())
         )
 
       const only = base.only(['foo'])
 
-      expect(only.valueOf()).toEqual({
+      assert.deepStrictEqual(only.valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         title: 'base',
         properties: {
@@ -947,7 +914,7 @@ describe('ObjectSchema', () => {
 
       const only = base.only(['foo', 'bar'])
 
-      expect(only.valueOf()).toEqual({
+      assert.deepStrictEqual(only.valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         title: 'base',
         properties: {
@@ -974,14 +941,12 @@ describe('ObjectSchema', () => {
         .prop('baz', S.string())
         .prop(
           'children',
-          S.object()
-            .prop('alpha', S.string())
-            .prop('beta', S.string())
+          S.object().prop('alpha', S.string()).prop('beta', S.string())
         )
 
       const without = base.without(['foo', 'children'])
 
-      expect(without.valueOf()).toEqual({
+      assert.deepStrictEqual(without.valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         title: 'base',
         properties: {
@@ -1007,7 +972,7 @@ describe('ObjectSchema', () => {
 
       const without = base.without(['foo', 'bar'])
 
-      expect(without.valueOf()).toEqual({
+      assert.deepStrictEqual(without.valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         title: 'base',
         properties: {
@@ -1026,11 +991,9 @@ describe('ObjectSchema', () => {
 
   describe('raw', () => {
     it('allows to add a custom attribute', () => {
-      const schema = ObjectSchema()
-        .raw({ customKeyword: true })
-        .valueOf()
+      const schema = ObjectSchema().raw({ customKeyword: true }).valueOf()
 
-      expect(schema).toEqual({
+      assert.deepStrictEqual(schema, {
         type: 'object',
         customKeyword: true
       })
@@ -1040,7 +1003,7 @@ describe('ObjectSchema', () => {
       const schema = S.object()
         .prop('test', S.ref('foo').raw({ test: true }))
         .valueOf()
-      expect(schema).toEqual({
+      assert.deepStrictEqual(schema, {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',
         properties: { test: { $ref: 'foo', test: true } }
@@ -1052,7 +1015,7 @@ describe('ObjectSchema', () => {
         .prop('a', S.string())
         .prop('test', S.ref('foo').raw({ test: true }))
         .valueOf()
-      expect(schema).toEqual({
+      assert.deepStrictEqual(schema, {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'object',
         properties: { a: { type: 'string' }, test: { $ref: 'foo', test: true } }

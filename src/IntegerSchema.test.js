@@ -1,25 +1,32 @@
 'use strict'
+
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
+
 const { IntegerSchema } = require('./IntegerSchema')
 const S = require('./FluentJSONSchema')
 
 describe('IntegerSchema', () => {
   it('defined', () => {
-    expect(IntegerSchema).toBeDefined()
+    assert.notStrictEqual(IntegerSchema, undefined)
   })
 
   it('Expose symbol', () => {
-    expect(IntegerSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+    assert.notStrictEqual(
+      IntegerSchema()[Symbol.for('fluent-schema-object')],
+      undefined
+    )
   })
 
   describe('constructor', () => {
     it('without params', () => {
-      expect(IntegerSchema().valueOf()).toEqual({
+      assert.deepStrictEqual(IntegerSchema().valueOf(), {
         type: 'integer'
       })
     })
 
     it('from S', () => {
-      expect(S.integer().valueOf()).toEqual({
+      assert.deepStrictEqual(S.integer().valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'integer'
       })
@@ -30,88 +37,102 @@ describe('IntegerSchema', () => {
     describe('minimum', () => {
       it('valid', () => {
         const prop = 'prop'
-        expect(
-          S.object()
-            .prop(prop, S.integer().minimum(5))
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'integer',
-              minimum: 5
-            }
-          },
-          type: 'object'
-        })
+        assert.deepStrictEqual(
+          S.object().prop(prop, S.integer().minimum(5)).valueOf(),
+          {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              prop: {
+                type: 'integer',
+                minimum: 5
+              }
+            },
+            type: 'object'
+          }
+        )
       })
       it('invalid number', () => {
-        expect(() => S.integer().minimum('5.1')).toThrow(
-          new S.FluentSchemaError("'minimum' must be a Number")
+        assert.throws(
+          () => S.integer().minimum('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'minimum' must be a Number"
         )
       })
       it('invalid integer', () => {
-        expect(() => S.integer().minimum(5.1)).toThrow(
-          new S.FluentSchemaError("'minimum' must be an Integer")
+        assert.throws(
+          () => S.integer().minimum(5.1),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'minimum' must be an Integer"
         )
       })
     })
     describe('maximum', () => {
       it('valid', () => {
         const prop = 'prop'
-        expect(
-          S.object()
-            .prop(prop, S.integer().maximum(5))
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'integer',
-              maximum: 5
-            }
-          },
-          type: 'object'
-        })
+        assert.deepStrictEqual(
+          S.object().prop(prop, S.integer().maximum(5)).valueOf(),
+          {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              prop: {
+                type: 'integer',
+                maximum: 5
+              }
+            },
+            type: 'object'
+          }
+        )
       })
       it('invalid number', () => {
-        expect(() => S.integer().maximum('5.1')).toThrow(
-          new S.FluentSchemaError("'maximum' must be a Number")
+        assert.throws(
+          () => S.integer().maximum('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'maximum' must be a Number"
         )
       })
       it('invalid float', () => {
-        expect(() => S.integer().maximum(5.1)).toThrow(
-          new S.FluentSchemaError("'maximum' must be an Integer")
+        assert.throws(
+          () => S.integer().maximum(5.1),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'maximum' must be an Integer"
         )
       })
     })
     describe('multipleOf', () => {
       it('valid', () => {
         const prop = 'prop'
-        expect(
-          S.object()
-            .prop(prop, S.integer().multipleOf(5))
-
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'integer',
-              multipleOf: 5
-            }
-          },
-          type: 'object'
-        })
+        assert.deepStrictEqual(
+          S.object().prop(prop, S.integer().multipleOf(5)).valueOf(),
+          {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              prop: {
+                type: 'integer',
+                multipleOf: 5
+              }
+            },
+            type: 'object'
+          }
+        )
       })
       it('invalid value', () => {
-        expect(() => S.integer().multipleOf('5.1')).toThrow(
-          new S.FluentSchemaError("'multipleOf' must be a Number")
+        assert.throws(
+          () => S.integer().multipleOf('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'multipleOf' must be a Number"
         )
       })
       it('invalid integer', () => {
-        expect(() => S.integer().multipleOf(5.1)).toThrow(
-          new S.FluentSchemaError("'multipleOf' must be an Integer")
+        assert.throws(
+          () => S.integer().multipleOf(5.1),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'multipleOf' must be an Integer"
         )
       })
     })
@@ -119,60 +140,68 @@ describe('IntegerSchema', () => {
     describe('exclusiveMinimum', () => {
       it('valid', () => {
         const prop = 'prop'
-        expect(
-          S.object()
-            .prop(prop, S.integer().exclusiveMinimum(5))
-
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'integer',
-              exclusiveMinimum: 5
-            }
-          },
-          type: 'object'
-        })
+        assert.deepStrictEqual(
+          S.object().prop(prop, S.integer().exclusiveMinimum(5)).valueOf(),
+          {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              prop: {
+                type: 'integer',
+                exclusiveMinimum: 5
+              }
+            },
+            type: 'object'
+          }
+        )
       })
       it('invalid number', () => {
-        expect(() => S.integer().exclusiveMinimum('5.1')).toThrow(
-          new S.FluentSchemaError("'exclusiveMinimum' must be a Number")
+        assert.throws(
+          () => S.integer().exclusiveMinimum('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'exclusiveMinimum' must be a Number"
         )
       })
       it('invalid integer', () => {
-        expect(() => S.integer().exclusiveMinimum(5.1)).toThrow(
-          new S.FluentSchemaError("'exclusiveMinimum' must be an Integer")
+        assert.throws(
+          () => S.integer().exclusiveMinimum(5.1),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'exclusiveMinimum' must be an Integer"
         )
       })
     })
     describe('exclusiveMaximum', () => {
       it('valid', () => {
         const prop = 'prop'
-        expect(
-          S.object()
-            .prop(prop, S.integer().exclusiveMaximum(5))
-
-            .valueOf()
-        ).toEqual({
-          $schema: 'http://json-schema.org/draft-07/schema#',
-          properties: {
-            prop: {
-              type: 'integer',
-              exclusiveMaximum: 5
-            }
-          },
-          type: 'object'
-        })
+        assert.deepStrictEqual(
+          S.object().prop(prop, S.integer().exclusiveMaximum(5)).valueOf(),
+          {
+            $schema: 'http://json-schema.org/draft-07/schema#',
+            properties: {
+              prop: {
+                type: 'integer',
+                exclusiveMaximum: 5
+              }
+            },
+            type: 'object'
+          }
+        )
       })
       it('invalid number', () => {
-        expect(() => S.integer().exclusiveMaximum('5.1')).toThrow(
-          new S.FluentSchemaError("'exclusiveMaximum' must be a Number")
+        assert.throws(
+          () => S.integer().exclusiveMaximum('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'exclusiveMaximum' must be a Number"
         )
       })
       it('invalid integer', () => {
-        expect(() => S.integer().exclusiveMaximum(5.1)).toThrow(
-          new S.FluentSchemaError("'exclusiveMaximum' must be an Integer")
+        assert.throws(
+          () => S.integer().exclusiveMaximum(5.1),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'exclusiveMaximum' must be an Integer"
         )
       })
     })
@@ -180,11 +209,9 @@ describe('IntegerSchema', () => {
 
   describe('raw', () => {
     it('allows to add a custom attribute', () => {
-      const schema = IntegerSchema()
-        .raw({ customKeyword: true })
-        .valueOf()
+      const schema = IntegerSchema().raw({ customKeyword: true }).valueOf()
 
-      expect(schema).toEqual({
+      assert.deepStrictEqual(schema, {
         type: 'integer',
         customKeyword: true
       })
@@ -199,7 +226,7 @@ describe('IntegerSchema', () => {
       .prop('age', S.integer().maximum(10))
       .valueOf()
 
-    expect(schema).toEqual({
+    assert.deepStrictEqual(schema, {
       $id: 'http://foo.com/user',
       $schema: 'http://json-schema.org/draft-07/schema#',
       description: 'A User desc',

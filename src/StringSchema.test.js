@@ -1,25 +1,32 @@
 'use strict'
+
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
+
 const { StringSchema, FORMATS } = require('./StringSchema')
 const S = require('./FluentJSONSchema')
 
 describe('StringSchema', () => {
   it('defined', () => {
-    expect(StringSchema).toBeDefined()
+    assert.notStrictEqual(StringSchema, undefined)
   })
 
   it('Expose symbol', () => {
-    expect(StringSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+    assert.notStrictEqual(
+      StringSchema()[Symbol.for('fluent-schema-object')],
+      undefined
+    )
   })
 
   describe('constructor', () => {
     it('without params', () => {
-      expect(StringSchema().valueOf()).toEqual({
+      assert.deepStrictEqual(StringSchema().valueOf(), {
         type: 'string'
       })
     })
 
     it('from S', () => {
-      expect(S.string().valueOf()).toEqual({
+      assert.deepStrictEqual(S.string().valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'string'
       })
@@ -32,7 +39,7 @@ describe('StringSchema', () => {
         const schema = S.object()
           .prop('prop', StringSchema().minLength(5))
           .valueOf()
-        expect(schema).toEqual({
+        assert.deepStrictEqual(schema, {
           $schema: 'http://json-schema.org/draft-07/schema#',
           properties: {
             prop: {
@@ -44,139 +51,141 @@ describe('StringSchema', () => {
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().minLength('5.1')).toThrow(
-          new S.FluentSchemaError("'minLength' must be an Integer")
+        assert.throws(
+          () => StringSchema().minLength('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'minLength' must be an Integer"
         )
       })
     })
     describe('maxLength', () => {
       it('valid', () => {
-        const schema = StringSchema()
-          .maxLength(10)
-          .valueOf()
-        expect(schema).toEqual({
+        const schema = StringSchema().maxLength(10).valueOf()
+        assert.deepStrictEqual(schema, {
           type: 'string',
           maxLength: 10
         })
       })
       it('invalid', () => {
-        expect(() => StringSchema().maxLength('5.1')).toThrow(
-          new S.FluentSchemaError("'maxLength' must be an Integer")
+        assert.throws(
+          () => StringSchema().maxLength('5.1'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'maxLength' must be an Integer"
         )
       })
     })
     describe('format', () => {
       it('valid FORMATS.DATE', () => {
-        expect(
-          StringSchema()
-            .format(FORMATS.DATE)
-            .valueOf()
-        ).toEqual({
+        assert.deepStrictEqual(StringSchema().format(FORMATS.DATE).valueOf(), {
           type: 'string',
           format: FORMATS.DATE
         })
       })
       it('valid FORMATS.DATE_TIME', () => {
-        expect(
-          StringSchema()
-            .format(FORMATS.DATE_TIME)
-            .valueOf()
-        ).toEqual({
-          type: 'string',
-          format: 'date-time'
-        })
+        assert.deepStrictEqual(
+          StringSchema().format(FORMATS.DATE_TIME).valueOf(),
+          {
+            type: 'string',
+            format: 'date-time'
+          }
+        )
       })
       it('invalid', () => {
-        expect(() => StringSchema().format('invalid')).toThrow(
-          new S.FluentSchemaError(
-            "'format' must be one of relative-json-pointer, json-pointer, uuid, regex, ipv6, ipv4, hostname, email, url, uri-template, uri-reference, uri, time, date, date-time"
-          )
+        assert.throws(
+          () => StringSchema().format('invalid'),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message ===
+              "'format' must be one of relative-json-pointer, json-pointer, uuid, regex, ipv6, ipv4, hostname, email, url, uri-template, uri-reference, uri, time, date, date-time"
         )
       })
     })
     describe('pattern', () => {
       it('as a string', () => {
-        expect(
-          StringSchema()
-            .pattern('\\/.*\\/')
-            .valueOf()
-        ).toEqual({
+        assert.deepStrictEqual(StringSchema().pattern('\\/.*\\/').valueOf(), {
           type: 'string',
           pattern: '\\/.*\\/'
         })
       })
       it('as a regex without flags', () => {
-        expect(
+        assert.deepStrictEqual(
           StringSchema()
             .pattern(/\/.*\//)
-            .valueOf()
-        ).toEqual({
-          type: 'string',
-          pattern: '\\/.*\\/'
-        })
+            .valueOf(),
+          {
+            type: 'string',
+            pattern: '\\/.*\\/'
+          }
+        )
       })
 
       it('as a regex with flags', () => {
-        expect(
+        assert.deepStrictEqual(
           StringSchema()
             .pattern(/\/.*\//gi)
-            .valueOf()
-        ).toEqual({
-          type: 'string',
-          pattern: '\\/.*\\/'
-        })
+            .valueOf(),
+          {
+            type: 'string',
+            pattern: '\\/.*\\/'
+          }
+        )
       })
 
       it('invalid value', () => {
-        expect(() => StringSchema().pattern(1111)).toThrow(
-          new S.FluentSchemaError(
-            "'pattern' must be a string or a RegEx (e.g. /.*/)"
-          )
+        assert.throws(
+          () => StringSchema().pattern(1111),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'pattern' must be a string or a RegEx (e.g. /.*/)"
         )
       })
     })
     describe('contentEncoding', () => {
       it('valid', () => {
-        expect(
-          StringSchema()
-            .contentEncoding('base64')
-            .valueOf()
-        ).toEqual({
-          type: 'string',
-          contentEncoding: 'base64'
-        })
+        assert.deepStrictEqual(
+          StringSchema().contentEncoding('base64').valueOf(),
+          {
+            type: 'string',
+            contentEncoding: 'base64'
+          }
+        )
       })
       it('invalid', () => {
-        expect(() => StringSchema().contentEncoding(1000)).toThrow(
-          new S.FluentSchemaError("'contentEncoding' must be a string")
+        assert.throws(
+          () => StringSchema().contentEncoding(1000),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'contentEncoding' must be a string"
         )
       })
     })
     describe('contentMediaType', () => {
       it('valid', () => {
-        expect(
-          StringSchema()
-            .contentMediaType('image/png')
-            .valueOf()
-        ).toEqual({
-          type: 'string',
-          contentMediaType: 'image/png'
-        })
+        assert.deepStrictEqual(
+          StringSchema().contentMediaType('image/png').valueOf(),
+          {
+            type: 'string',
+            contentMediaType: 'image/png'
+          }
+        )
       })
       it('invalid', () => {
-        expect(() => StringSchema().contentMediaType(1000)).toThrow(
-          new S.FluentSchemaError("'contentMediaType' must be a string")
+        assert.throws(
+          () => StringSchema().contentMediaType(1000),
+          (err) =>
+            err instanceof S.FluentSchemaError &&
+            err.message === "'contentMediaType' must be a string"
         )
       })
     })
 
     describe('raw', () => {
       it('allows to add a custom attribute', () => {
-        const schema = StringSchema()
-          .raw({ customKeyword: true })
-          .valueOf()
+        const schema = StringSchema().raw({ customKeyword: true }).valueOf()
 
-        expect(schema).toEqual({
+        assert.deepStrictEqual(schema, {
           type: 'string',
           customKeyword: true
         })
@@ -187,7 +196,7 @@ describe('StringSchema', () => {
           .raw({ formatMaximum: '2020-01-01' })
           .valueOf()
 
-        expect(schema).toEqual({
+        assert.deepStrictEqual(schema, {
           type: 'string',
           formatMaximum: '2020-01-01',
           format: 'date'
@@ -212,7 +221,7 @@ describe('StringSchema', () => {
       )
       .valueOf()
 
-    expect(schema).toEqual({
+    assert.deepStrictEqual(schema, {
       $id: 'http://bar.com/object',
       $schema: 'http://json-schema.org/draft-07/schema#',
       description: 'A object desc',

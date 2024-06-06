@@ -1,24 +1,31 @@
 'use strict'
+
+const { describe, it } = require('node:test')
+const assert = require('node:assert/strict')
+
 const { NullSchema } = require('./NullSchema')
 const S = require('./FluentJSONSchema')
 
 describe('NullSchema', () => {
   it('defined', () => {
-    expect(NullSchema).toBeDefined()
+    assert.notStrictEqual(NullSchema, undefined)
   })
 
   it('Expose symbol', () => {
-    expect(NullSchema()[Symbol.for('fluent-schema-object')]).toBeDefined()
+    assert.notStrictEqual(
+      NullSchema()[Symbol.for('fluent-schema-object')],
+      undefined
+    )
   })
 
   describe('constructor', () => {
     it('without params', () => {
-      expect(NullSchema().valueOf()).toEqual({
+      assert.deepStrictEqual(NullSchema().valueOf(), {
         type: 'null'
       })
     })
     it('from S', () => {
-      expect(S.null().valueOf()).toEqual({
+      assert.deepStrictEqual(S.null().valueOf(), {
         $schema: 'http://json-schema.org/draft-07/schema#',
         type: 'null'
       })
@@ -26,20 +33,17 @@ describe('NullSchema', () => {
   })
 
   it('sets a null type to the prop', () => {
-    expect(
-      S.object()
-        .prop('prop', S.null())
-        .valueOf().properties.prop.type
-    ).toBe('null')
+    assert.strictEqual(
+      S.object().prop('prop', S.null()).valueOf().properties.prop.type,
+      'null'
+    )
   })
 
   describe('raw', () => {
     it('allows to add a custom attribute', () => {
-      const schema = NullSchema()
-        .raw({ customKeyword: true })
-        .valueOf()
+      const schema = NullSchema().raw({ customKeyword: true }).valueOf()
 
-      expect(schema).toEqual({
+      assert.deepStrictEqual(schema, {
         type: 'null',
         customKeyword: true
       })

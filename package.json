@@ -1,6 +1,6 @@
 {
   "name": "fluent-json-schema",
-  "version": "5.0.0-pre.fv5.1",
+  "version": "5.0.0",
   "description": "JSON Schema fluent API",
   "main": "src/FluentJSONSchema.js",
   "type": "commonjs",

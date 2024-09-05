@@ -844,6 +844,25 @@ describe('ObjectSchema', () => {
       })
     })
 
+    it('extends schemas in a chain supporting without after extend', () => {
+      const base = S.object()
+        .prop('foo')
+
+      const extended = S.object()
+        .prop('bar')
+        .prop('baz')
+        .extend(base)
+        .without(['foo'])
+      assert.deepStrictEqual(extended.valueOf(), {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          bar: {},
+          baz: {}
+        }
+      })
+    })
+
     it('throws an error if a schema is not provided', () => {
       assert.throws(
         () => S.object().extend(),
@@ -859,19 +878,6 @@ describe('ObjectSchema', () => {
         (err) =>
           err instanceof S.FluentSchemaError &&
           err.message === "Schema isn't FluentSchema type"
-      )
-    })
-
-    it('throws an error if you append a new prop after extend', () => {
-      assert.throws(
-        () => {
-          const base = S.object()
-          S.object().extend(base).prop('foo')
-        },
-        (err) =>
-          // err instanceof S.FluentSchemaError &&
-          err instanceof TypeError &&
-          err.message === 'S.object(...).extend(...).prop is not a function'
       )
     })
   })

@@ -1,8 +1,8 @@
 'use strict'
 const deepmerge = require('@fastify/deepmerge')
-const isFluentSchema = obj => obj && obj.isFluentSchema
+const isFluentSchema = (obj) => obj && obj.isFluentSchema
 
-const hasCombiningKeywords = attributes =>
+const hasCombiningKeywords = (attributes) =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
 
 class FluentSchemaError extends Error {
@@ -12,15 +12,16 @@ class FluentSchemaError extends Error {
   }
 }
 
-const last = array => {
+const last = (array) => {
   if (!array) return
   const [prop] = [...array].reverse()
   return prop
 }
 
-const isUniq = array => array.filter((v, i, a) => a.indexOf(v) === i).length === array.length
+const isUniq = (array) =>
+  array.filter((v, i, a) => a.indexOf(v) === i).length === array.length
 
-const isBoolean = value => typeof value === 'boolean'
+const isBoolean = (value) => typeof value === 'boolean'
 
 const omit = (obj, props) =>
   Object.entries(obj).reduce((memo, [key, value]) => {
@@ -31,7 +32,7 @@ const omit = (obj, props) =>
     }
   }, {})
 
-const flat = array =>
+const flat = (array) =>
   array.reduce((memo, prop) => {
     const { name, ...rest } = prop
     return {
@@ -41,21 +42,17 @@ const flat = array =>
   }, {})
 
 const combineArray = (options) => {
-  const {
-    clone,
-    isMergeableObject,
-    deepmerge
-  } = options
+  const { clone, isMergeableObject, deepmerge } = options
 
   return (target, source) => {
     const result = target.slice()
 
     source.forEach((item, index) => {
-      const prop = target.find(attr => attr.name === item.name)
+      const prop = target.find((attr) => attr.name === item.name)
       if (result[index] === undefined) {
         result[index] = clone(item)
       } else if (isMergeableObject(prop)) {
-        const propIndex = target.findIndex(prop => prop.name === item.name)
+        const propIndex = target.findIndex((prop) => prop.name === item.name)
         result[propIndex] = deepmerge(prop, item)
       } else if (target.indexOf(item) === -1) {
         result.push(item)
@@ -66,7 +63,7 @@ const combineArray = (options) => {
 }
 
 const combineDeepmerge = deepmerge({ mergeArray: combineArray })
-const toArray = obj =>
+const toArray = (obj) =>
   obj && Object.entries(obj).map(([key, value]) => ({ name: key, ...value }))
 
 const REQUIRED = Symbol('required')
@@ -87,6 +84,8 @@ const URI = 'uri'
 const TIME = 'time'
 const DATE = 'date'
 const DATE_TIME = 'date-time'
+const ISO_TIME = 'iso-time'
+const ISO_DATE_TIME = 'iso-date-time'
 
 const FORMATS = {
   RELATIVE_JSON_POINTER,
@@ -103,7 +102,9 @@ const FORMATS = {
   URI,
   TIME,
   DATE,
-  DATE_TIME
+  DATE_TIME,
+  ISO_TIME,
+  ISO_DATE_TIME
 }
 
 const STRING = 'string'
@@ -168,7 +169,9 @@ const appendRequired = ({
 
   const patchedRequired = [...schema.required, ...schemaRequired]
   if (!isUniq(patchedRequired)) {
-    throw new FluentSchemaError("'required' has repeated keys, check your calls to .required()")
+    throw new FluentSchemaError(
+      "'required' has repeated keys, check your calls to .required()"
+    )
   }
 
   const schemaPatched = {
@@ -208,13 +211,13 @@ const setRaw = ({ schema, ...options }, raw) => {
 }
 // TODO LS maybe we can just use setAttribute and remove this one
 const setComposeType = ({ prop, schemas, schema, options }) => {
-  if (!(Array.isArray(schemas) && schemas.every(v => isFluentSchema(v)))) {
+  if (!(Array.isArray(schemas) && schemas.every((v) => isFluentSchema(v)))) {
     throw new FluentSchemaError(
       `'${prop}' must be a an array of FluentSchema rather than a '${typeof schemas}'`
     )
   }
 
-  const values = schemas.map(schema => {
+  const values = schemas.map((schema) => {
     const { $schema, ...props } = schema.valueOf({ isRoot: false })
     return props
   })

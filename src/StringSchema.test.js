@@ -92,13 +92,22 @@ describe('StringSchema', () => {
           }
         )
       })
+      it('valid FORMATS.ISO_DATE_TIME', () => {
+        assert.deepStrictEqual(
+          StringSchema().format(FORMATS.ISO_DATE_TIME).valueOf(),
+          {
+            type: 'string',
+            format: 'iso-date-time'
+          }
+        )
+      })
       it('invalid', () => {
         assert.throws(
           () => StringSchema().format('invalid'),
           (err) =>
             err instanceof S.FluentSchemaError &&
             err.message ===
-              "'format' must be one of relative-json-pointer, json-pointer, uuid, regex, ipv6, ipv4, hostname, email, url, uri-template, uri-reference, uri, time, date, date-time"
+              "'format' must be one of relative-json-pointer, json-pointer, uuid, regex, ipv6, ipv4, hostname, email, url, uri-template, uri-reference, uri, time, date, date-time, iso-time, iso-date-time"
         )
       })
     })

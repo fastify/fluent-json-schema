@@ -337,7 +337,7 @@ The length of a string instance is defined as the number of its characters as de
 ## ArraySchema([options]) ⇒ [<code>ArraySchema</code>](#ArraySchema)
 Represents a ArraySchema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -355,11 +355,11 @@ Omitting this keyword has the same behavior as an empty schema.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.1)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| items | <code>FluentSchema</code> \| <code>Array.&lt;FluentSchema&gt;</code> | 
+| items | <code>FluentSchema</code> \| <code>Array.&lt;FluentSchema&gt;</code> |
 
 <a name="additionalItems"></a>
 
@@ -368,11 +368,11 @@ This keyword determines how child instances validate for arrays, and does not di
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.2)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| items | <code>FluentSchema</code> \| [<code>boolean</code>](#boolean) | 
+| items | <code>FluentSchema</code> \| [<code>boolean</code>](#boolean) |
 
 <a name="contains"></a>
 
@@ -381,11 +381,11 @@ An array instance is valid against "contains" if at least one of its elements is
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.6)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| value | <code>FluentSchema</code> | 
+| value | <code>FluentSchema</code> |
 
 <a name="uniqueItems"></a>
 
@@ -396,11 +396,11 @@ Omitting this keyword has the same behavior as a value of false.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.5)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| boolean | [<code>boolean</code>](#boolean) | 
+| boolean | [<code>boolean</code>](#boolean) |
 
 <a name="minItems"></a>
 
@@ -410,11 +410,11 @@ Omitting this keyword has the same behavior as a value of 0.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.4)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| min | [<code>number</code>](#number) | 
+| min | [<code>number</code>](#number) |
 
 <a name="maxItems"></a>
 
@@ -424,18 +424,18 @@ Omitting this keyword has the same behavior as a value of 0.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4.3)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| max | [<code>number</code>](#number) | 
+| max | [<code>number</code>](#number) |
 
 <a name="BaseSchema"></a>
 
 ## BaseSchema([options]) ⇒ [<code>BaseSchema</code>](#BaseSchema)
 Represents a BaseSchema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -450,7 +450,7 @@ It defines a URI for the schema, and the base URI that other URI references with
 
 [reference](https://tools.ietf.org/html/draft-handrews-json-schema-01#section-8.2)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -463,11 +463,11 @@ It can be used to decorate a user interface with information about the data prod
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.1)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| title | [<code>string</code>](#string) | 
+| title | [<code>string</code>](#string) |
 
 <a name="description"></a>
 
@@ -478,11 +478,11 @@ the purpose of the instance described by the schema.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.1)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| description | [<code>string</code>](#string) | 
+| description | [<code>string</code>](#string) |
 
 <a name="examples"></a>
 
@@ -492,22 +492,22 @@ There are no restrictions placed on the values within the array.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.4)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| examples | [<code>string</code>](#string) | 
+| examples | [<code>string</code>](#string) |
 
 <a name="ref"></a>
 
 ## ref(ref) ⇒ [<code>BaseSchema</code>](#BaseSchema)
 The value must be a valid id e.g. #properties/foo
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| ref | [<code>string</code>](#string) | 
+| ref | [<code>string</code>](#string) |
 
 <a name="enum"></a>
 
@@ -516,11 +516,11 @@ The value of this keyword MUST be an array. This array SHOULD have at least one 
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.1.2)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| values | [<code>array</code>](#array) | 
+| values | [<code>array</code>](#array) |
 
 <a name="const"></a>
 
@@ -529,11 +529,11 @@ The value of this keyword MAY be of any type, including null.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.1.3)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param |
 | --- |
-| value | 
+| value |
 
 <a name="default"></a>
 
@@ -542,11 +542,11 @@ There are no restrictions placed on the value of this keyword.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.2)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param |
 | --- |
-| defaults | 
+| defaults |
 
 <a name="readOnly"></a>
 
@@ -556,11 +556,11 @@ It takes an optional boolean which can be used to explicitly set readOnly true/f
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.3)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| isReadOnly | [<code>boolean</code>](#boolean) \| <code>undefined</code> | 
+| isReadOnly | [<code>boolean</code>](#boolean) \| <code>undefined</code> |
 
 <a name="writeOnly"></a>
 
@@ -570,11 +570,11 @@ It takes an optional boolean which can be used to explicitly set writeOnly true/
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.10.3)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| isWriteOnly | [<code>boolean</code>](#boolean) \| <code>undefined</code> | 
+| isWriteOnly | [<code>boolean</code>](#boolean) \| <code>undefined</code> |
 
 <a name="deprecated"></a>
 
@@ -584,11 +584,11 @@ It takes an optional boolean which can be used to explicitly set deprecated true
 
 [reference](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.9.3)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| isDeprecated | <code>Boolean</code> | 
+| isDeprecated | <code>Boolean</code> |
 
 <a name="required"></a>
 
@@ -601,7 +601,7 @@ Examples:
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.3)
 
-**Kind**: global function  
+**Kind**: global function
 <a name="not"></a>
 
 ## not(not) ⇒ [<code>BaseSchema</code>](#BaseSchema)
@@ -610,11 +610,11 @@ An instance is valid against this keyword if it fails to validate successfully a
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.7.4)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| not | <code>FluentSchema</code> | 
+| not | <code>FluentSchema</code> |
 
 <a name="anyOf"></a>
 
@@ -623,11 +623,11 @@ It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.7.2)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| schemas | [<code>array</code>](#array) | 
+| schemas | [<code>array</code>](#array) |
 
 <a name="allOf"></a>
 
@@ -636,11 +636,11 @@ It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.7.1)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| schemas | [<code>array</code>](#array) | 
+| schemas | [<code>array</code>](#array) |
 
 <a name="oneOf"></a>
 
@@ -649,11 +649,11 @@ It MUST be a non-empty array. Each item of the array MUST be a valid JSON Schema
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.7.3)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| schemas | [<code>array</code>](#array) | 
+| schemas | [<code>array</code>](#array) |
 
 <a name="ifThen"></a>
 
@@ -663,7 +663,7 @@ Rather, it controls which of the "then" or "else" keywords are evaluated.
 When "if" is present, and the instance successfully validates against its subschema, then
 validation succeeds against this keyword if the instance also successfully validates against this keyword's subschema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -676,7 +676,7 @@ validation succeeds against this keyword if the instance also successfully valid
 When "if" is present, and the instance fails to validate against its subschema,
 then validation succeeds against this keyword if the instance successfully validates against this keyword's subschema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -694,7 +694,7 @@ it can be handy to arbitrary modify the schema injecting a fragment
 - S.number().raw({ nullable:true })
 - S.string().format('date').raw({ formatMaximum: '2020-01-01' })
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -705,7 +705,7 @@ it can be handy to arbitrary modify the schema injecting a fragment
 ## valueOf([options]) ⇒ [<code>object</code>](#object)
 It returns all the schema values
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -717,7 +717,7 @@ It returns all the schema values
 ## BooleanSchema([options]) ⇒ [<code>StringSchema</code>](#StringSchema)
 Represents a BooleanSchema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -730,7 +730,7 @@ Represents a BooleanSchema.
 ## S([options]) ⇒ [<code>S</code>](#S)
 Represents a S.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -745,7 +745,7 @@ Set a property to type string
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3)
 
-**Kind**: global function  
+**Kind**: global function
 <a name="number"></a>
 
 ## number() ⇒ [<code>NumberSchema</code>](#NumberSchema)
@@ -753,7 +753,7 @@ Set a property to type number
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#numeric)
 
-**Kind**: global function  
+**Kind**: global function
 <a name="integer"></a>
 
 ## integer() ⇒ [<code>IntegerSchema</code>](#IntegerSchema)
@@ -761,7 +761,7 @@ Set a property to type integer
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#numeric)
 
-**Kind**: global function  
+**Kind**: global function
 <a name="boolean"></a>
 
 ## boolean() ⇒ [<code>BooleanSchema</code>](#BooleanSchema)
@@ -769,7 +769,7 @@ Set a property to type boolean
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.7)
 
-**Kind**: global function  
+**Kind**: global function
 <a name="array"></a>
 
 ## array() ⇒ [<code>ArraySchema</code>](#ArraySchema)
@@ -777,7 +777,7 @@ Set a property to type array
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.4)
 
-**Kind**: global function  
+**Kind**: global function
 <a name="object"></a>
 
 ## object() ⇒ [<code>ObjectSchema</code>](#ObjectSchema)
@@ -785,7 +785,7 @@ Set a property to type object
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5)
 
-**Kind**: global function  
+**Kind**: global function
 <a name="null"></a>
 
 ## null() ⇒ [<code>NullSchema</code>](#NullSchema)
@@ -793,17 +793,17 @@ Set a property to type null
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#general)
 
-**Kind**: global function  
+**Kind**: global function
 <a name="mixed"></a>
 
 ## mixed(types) ⇒ [<code>MixedSchema</code>](#MixedSchema)
 A mixed schema is the union of multiple types (e.g. ['string', 'integer']
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| types | [<code>Array.&lt;string&gt;</code>](#string) | 
+| types | [<code>Array.&lt;string&gt;</code>](#string) |
 
 <a name="raw"></a>
 
@@ -815,7 +815,7 @@ it can be handy to arbitrary modify the schema injecting a fragment
 - S.raw({ nullable:true, format: 'date', formatMaximum: '2020-01-01' })
 - S.string().format('date').raw({ formatMaximum: '2020-01-01' })
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -826,7 +826,7 @@ it can be handy to arbitrary modify the schema injecting a fragment
 ## IntegerSchema([options]) ⇒ [<code>NumberSchema</code>](#NumberSchema)
 Represents a NumberSchema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -839,7 +839,7 @@ Represents a NumberSchema.
 ## MixedSchema([options]) ⇒ [<code>StringSchema</code>](#StringSchema)
 Represents a MixedSchema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -852,7 +852,7 @@ Represents a MixedSchema.
 ## NullSchema([options]) ⇒ [<code>StringSchema</code>](#StringSchema)
 Represents a NullSchema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -867,13 +867,13 @@ Set a property to type null
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.1.1)
 
-**Kind**: global function  
+**Kind**: global function
 <a name="NumberSchema"></a>
 
 ## NumberSchema([options]) ⇒ [<code>NumberSchema</code>](#NumberSchema)
 Represents a NumberSchema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -888,11 +888,11 @@ It represents  an inclusive lower limit for a numeric instance.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.2.4)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| min | [<code>number</code>](#number) | 
+| min | [<code>number</code>](#number) |
 
 <a name="exclusiveMinimum"></a>
 
@@ -901,11 +901,11 @@ It represents an exclusive lower limit for a numeric instance.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.2.5)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| min | [<code>number</code>](#number) | 
+| min | [<code>number</code>](#number) |
 
 <a name="maximum"></a>
 
@@ -914,11 +914,11 @@ It represents  an inclusive upper limit for a numeric instance.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.2.2)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| max | [<code>number</code>](#number) | 
+| max | [<code>number</code>](#number) |
 
 <a name="exclusiveMaximum"></a>
 
@@ -927,11 +927,11 @@ It represents an exclusive upper limit for a numeric instance.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.2.3)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| max | [<code>number</code>](#number) | 
+| max | [<code>number</code>](#number) |
 
 <a name="multipleOf"></a>
 
@@ -940,18 +940,18 @@ It's strictly greater than 0.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.2.1)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| multiple | [<code>number</code>](#number) | 
+| multiple | [<code>number</code>](#number) |
 
 <a name="ObjectSchema"></a>
 
 ## ObjectSchema([options]) ⇒ [<code>StringSchema</code>](#StringSchema)
 Represents a ObjectSchema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -968,7 +968,7 @@ differs from other schema types.
 
 [reference](https://tools.ietf.org/html/draft-handrews-json-schema-01#section-8.2)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -985,11 +985,11 @@ Omitting this keyword has the same behavior as an empty schema.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.6)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| value | <code>FluentSchema</code> \| [<code>boolean</code>](#boolean) | 
+| value | <code>FluentSchema</code> \| [<code>boolean</code>](#boolean) |
 
 <a name="maxProperties"></a>
 
@@ -998,11 +998,11 @@ An object instance is valid against "maxProperties" if its number of properties 
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.1)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| max | [<code>number</code>](#number) | 
+| max | [<code>number</code>](#number) |
 
 <a name="minProperties"></a>
 
@@ -1011,11 +1011,11 @@ An object instance is valid against "minProperties" if its number of properties 
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.2)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| min | [<code>number</code>](#number) | 
+| min | [<code>number</code>](#number) |
 
 <a name="patternProperties"></a>
 
@@ -1028,11 +1028,11 @@ Validation succeeds if, for each instance name that matches any regular expressi
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.5)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| opts | [<code>object</code>](#object) | 
+| opts | [<code>object</code>](#object) |
 
 <a name="dependencies"></a>
 
@@ -1044,11 +1044,11 @@ If the dependency value is an array, each element in the array, if any, MUST be 
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.7)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| opts | [<code>object</code>](#object) | 
+| opts | [<code>object</code>](#object) |
 
 <a name="dependentRequired"></a>
 
@@ -1058,11 +1058,11 @@ Each element in the array MUST be a string and MUST be unique. If the dependency
 
 [reference](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.4)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| opts | [<code>object</code>](#object) | 
+| opts | [<code>object</code>](#object) |
 
 <a name="dependentSchemas"></a>
 
@@ -1072,11 +1072,11 @@ Each dependency key is a property in the instance and the entire instance must v
 
 [reference](https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.9.2.2.4)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| opts | [<code>object</code>](#object) | 
+| opts | [<code>object</code>](#object) |
 
 <a name="propertyNames"></a>
 
@@ -1086,11 +1086,11 @@ Note the property name that the schema is testing will always be a string.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.8)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| value | <code>FluentSchema</code> | 
+| value | <code>FluentSchema</code> |
 
 <a name="prop"></a>
 
@@ -1099,12 +1099,12 @@ The value of "properties" MUST be an object. Each value of this object MUST be a
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.5.4)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| name | [<code>string</code>](#string) | 
-| props | <code>FluentSchema</code> | 
+| name | [<code>string</code>](#string) |
+| props | <code>FluentSchema</code> |
 
 <a name="only"></a>
 
@@ -1112,7 +1112,7 @@ The value of "properties" MUST be an object. Each value of this object MUST be a
 Returns an object schema with only a subset of keys provided. If called on an ObjectSchema with an
 `$id`, it will be removed and the return value will be considered a new schema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Description |
 | --- | --- |
@@ -1124,7 +1124,7 @@ Returns an object schema with only a subset of keys provided. If called on an Ob
 Returns an object schema without a subset of keys provided. If called on an ObjectSchema with an
 `$id`, it will be removed and the return value will be considered a new schema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Description |
 | --- | --- |
@@ -1138,30 +1138,30 @@ There are no restrictions placed on the values within the array.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.9)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| name | [<code>string</code>](#string) | 
-| props | <code>FluentSchema</code> | 
+| name | [<code>string</code>](#string) |
+| props | <code>FluentSchema</code> |
 
 <a name="RawSchema"></a>
 
 ## RawSchema(schema) ⇒ <code>FluentSchema</code>
 Represents a raw JSON Schema that will be parsed
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| schema | <code>Object</code> | 
+| schema | <code>Object</code> |
 
 <a name="StringSchema"></a>
 
 ## StringSchema([options]) ⇒ [<code>StringSchema</code>](#StringSchema)
 Represents a StringSchema.
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -1177,11 +1177,11 @@ The length of a string instance is defined as the number of its characters as de
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3.2)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| min | [<code>number</code>](#number) | 
+| min | [<code>number</code>](#number) |
 
 <a name="maxLength"></a>
 
@@ -1191,11 +1191,11 @@ The length of a string instance is defined as the number of its characters as de
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3.1)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| max | [<code>number</code>](#number) | 
+| max | [<code>number</code>](#number) |
 
 <a name="format"></a>
 
@@ -1204,11 +1204,11 @@ A string value can be RELATIVE_JSON_POINTER, JSON_POINTER, UUID, REGEX, IPV6, IP
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.7.3)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| format | [<code>string</code>](#string) | 
+| format | [<code>string</code>](#string) |
 
 <a name="pattern"></a>
 
@@ -1218,11 +1218,11 @@ This string SHOULD be a valid regular expression, according to the ECMA 262 regu
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3.3)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| pattern | [<code>string</code>](#string) | 
+| pattern | [<code>string</code>](#string) |
 
 <a name="contentEncoding"></a>
 
@@ -1233,11 +1233,11 @@ If the instance value is a string, this property defines that the string SHOULD
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.8.3)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| encoding | [<code>string</code>](#string) | 
+| encoding | [<code>string</code>](#string) |
 
 <a name="contentMediaType"></a>
 
@@ -1247,9 +1247,9 @@ The value of this property must be a media type, as defined by RFC 2046 [RFC2046
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.8.4)
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type |
 | --- | --- |
-| mediaType | [<code>string</code>](#string) | 
+| mediaType | [<code>string</code>](#string) |
 

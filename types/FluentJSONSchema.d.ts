@@ -178,6 +178,7 @@ export interface S extends BaseSchema<S> {
   FORMATS: FORMATS
 }
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare, no-var
 export declare var S: S
 
 export default S

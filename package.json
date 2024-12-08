@@ -28,7 +28,8 @@
     "url": "git+https://github.com/fastify/fluent-json-schema.git"
   },
   "scripts": {
-    "lint": "standard | snazzy",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "test": "npm run test:unit && npm run test:typescript",
     "test:unit": "c8 --100 node --test",
     "test:typescript": "tsd",
@@ -41,8 +42,7 @@
     "c8": "^10.1.2",
     "jsdoc-to-markdown": "^9.0.0",
     "lodash.merge": "^4.6.2",
-    "snazzy": "^9.0.0",
-    "standard": "^17.1.0",
+    "neostandard": "^0.11.9",
     "tsd": "^0.31.0"
   },
   "dependencies": {

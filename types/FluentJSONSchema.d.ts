@@ -147,7 +147,6 @@ export type MixedSchema<T extends TYPE[]> =
     ? InferSchemaMap[First] & MixedSchema<Rest>
     : unknown
 
-
 interface PatternPropertiesOptions {
   [key: string]: JSONSchema
 }
@@ -162,9 +161,9 @@ type DependentSchemaOptions<T extends Partial<Record<string, JSONSchema>>> = Par
 
 type DependentRequiredOptions<T extends Partial<Record<string, string[]>>> = Partial<Record<keyof T, string[]>>
 
-export function withOptions<T>(options: SchemaOptions): T
+export function withOptions<T> (options: SchemaOptions): T
 
-type ObjectPlaceholder = Record<string | number | symbol, any>;
+type ObjectPlaceholder = Record<string | number | symbol, any>
 
 export interface S extends BaseSchema<S> {
   string: () => StringSchema

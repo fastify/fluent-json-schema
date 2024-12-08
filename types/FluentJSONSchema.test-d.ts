@@ -138,10 +138,10 @@ const dependentSchemas = S.object()
 
 console.log('dependentRequired:\n', JSON.stringify(dependentSchemas))
 
-const deprecatedSchema =  S.object()
-    .deprecated()
-    .prop('foo', S.string().deprecated())
-    .valueOf()
+const deprecatedSchema = S.object()
+  .deprecated()
+  .prop('foo', S.string().deprecated())
+  .valueOf()
 
 console.log('deprecatedSchema:\n', JSON.stringify(deprecatedSchema))
 
@@ -169,10 +169,10 @@ const dependentSchemasWithType = S.object<Foo>()
 
 console.log('dependentSchemasWithType:\n', JSON.stringify(dependentSchemasWithType))
 
-const deprecatedSchemaWithType =  S.object<Foo>()
-    .deprecated()
-    .prop('foo', S.string().deprecated())
-    .valueOf()
+const deprecatedSchemaWithType = S.object<Foo>()
+  .deprecated()
+  .prop('foo', S.string().deprecated())
+  .valueOf()
 
 console.log('deprecatedSchemaWithType:\n', JSON.stringify(deprecatedSchemaWithType))
 

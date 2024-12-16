@@ -40,6 +40,7 @@
     "ajv": "^8.12.0",
     "ajv-formats": "^3.0.1",
     "c8": "^10.1.2",
+    "eslint": "^9.17.0",
     "jsdoc-to-markdown": "^9.0.0",
     "lodash.merge": "^4.6.2",
     "neostandard": "^0.12.0",

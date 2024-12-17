@@ -340,14 +340,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       }
       const src = base._getState()
       const extended = combineDeepmerge(src, schema)
-      const {
-        valueOf,
-        isFluentSchema,
-        FLUENT_SCHEMA,
-        _getState,
-        extend
-      } = ObjectSchema({ schema: extended, ...options })
-      return { valueOf, isFluentSchema, FLUENT_SCHEMA, _getState, extend }
+      return ObjectSchema({ schema: extended, ...options })
     },
 
     /**

@@ -20,6 +20,16 @@
     "Matteo Collina <hello@matteocollina.com>"
   ],
   "homepage": "https://github.com/fastify/fluent-json-schema#readme",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/fastify"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/fastify"
+    }
+  ],
   "bugs": {
     "url": "https://github.com/fastify/fluent-json-schema/issues"
   },

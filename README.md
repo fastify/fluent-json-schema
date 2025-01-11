@@ -171,7 +171,7 @@ const schema = S.object()
 ## Validation
 
 Fluent schema **does not** validate a JSON schema. However, many libraries can do that for you.
-Below a few examples using [AJV](https://ajv.js.org/):
+Below are a few examples using [AJV](https://ajv.js.org/):
 
     npm i ajv
 
@@ -287,11 +287,11 @@ Output:
 
 ## Extend schema
 
-Normally inheritance with JSON Schema is achieved with `allOf`. However when `.additionalProperties(false)` is used the validator won't
+Normally inheritance with JSON Schema is achieved with `allOf`. However, when `.additionalProperties(false)` is used the validator won't
 understand which properties come from the base schema. `S.extend` creates a schema merging the base into the new one so
-that the validator knows all the properties because it is evaluating only a single schema.
+that the validator knows all the properties because it evaluates only a single schema.
 For example, in a CRUD API `POST /users` could use the `userBaseSchema` rather than `GET /users` or `PATCH /users` use the `userSchema`
-which contains the `id`, `createdAt` and `updatedAt` generated server side.
+which contains the `id`, `createdAt`, and `updatedAt` generated server side.
 
 ```js
 const S = require('fluent-json-schema')
@@ -344,7 +344,7 @@ const bodySchema = personSchema.without(['createdAt', 'updatedAt'])
 
 ### Detect Fluent Schema objects
 
-Every Fluent Schema object contains a boolean `isFluentSchema`. In this way, you can write your own utilities that understands the Fluent Schema API and improve the user experience of your tool.
+Every Fluent Schema object contains a boolean `isFluentSchema`. In this way, you can write your own utilities that understand the Fluent Schema API and improve the user experience of your tool.
 
 ```js
 const S = require('fluent-json-schema')
@@ -364,10 +364,10 @@ Thanks to [Matteo Collina](https://twitter.com/matteocollina) for pushing me to 
 ## Related projects
 
 - JSON Schema [Draft 7](http://json-schema.org/specification-links.html#draft-7)
-- [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/) (despite is referring to draft 6 the guide still good to grasp the main concepts)
+- [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/) (despite referring to draft 6 the guide is still good for grasping the main concepts)
 - [AJV](https://ajv.js.org/) JSON Schema validator
-- [jsonschema.net](https://www.jsonschema.net/) an online JSON Schema visual editor (it doesn't support advance features)
+- [jsonschema.net](https://www.jsonschema.net/) an online JSON Schema visual editor (it does not support advanced features)
 
-## Licence
+## License
 
 Licensed under [MIT](./LICENSE).

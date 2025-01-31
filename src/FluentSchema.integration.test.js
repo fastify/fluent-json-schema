@@ -8,7 +8,7 @@ const Ajv = require('ajv')
 const basic = require('./schemas/basic')
 const S = require('./FluentJSONSchema')
 
-// TODO pick some ideas from here:https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/master/tests/draft7
+// TODO pick some ideas from here:https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/main/tests/draft7
 
 describe('S', () => {
   it('compiles', () => {

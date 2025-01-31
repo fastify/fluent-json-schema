@@ -3,8 +3,8 @@
 A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framework agnostic.
 
 [![view on npm](https://img.shields.io/npm/v/fluent-json-schema.svg)](https://www.npmjs.org/package/fluent-json-schema)
-[![CI](https://github.com/fastify/fluent-json-schema/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fastify/fluent-json-schema/actions/workflows/ci.yml)
-[![Coverage Status](https://coveralls.io/repos/github/fastify/fluent-json-schema/badge.svg?branch=master)](https://coveralls.io/github/fastify/fluent-json-schema?branch=master)
+[![CI](https://github.com/fastify/fluent-json-schema/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fastify/fluent-json-schema/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/fastify/fluent-json-schema/badge.svg?branch=main)](https://coveralls.io/github/fastify/fluent-json-schema?branch=main)
 [![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
 ## Features

@@ -4,7 +4,6 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framew
 
 [![view on npm](https://img.shields.io/npm/v/fluent-json-schema.svg)](https://www.npmjs.org/package/fluent-json-schema)
 [![CI](https://github.com/fastify/fluent-json-schema/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fastify/fluent-json-schema/actions/workflows/ci.yml)
-[![Coverage Status](https://coveralls.io/repos/github/fastify/fluent-json-schema/badge.svg?branch=main)](https://coveralls.io/github/fastify/fluent-json-schema?branch=main)
 [![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
 ## Features
@@ -14,7 +13,7 @@ A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framew
 - Runtime errors for invalid options or keywords misuse
 - JavaScript constants can be used in the JSON schema (e.g. _enum_, _const_, _default_ ) avoiding discrepancies between model and schema
 - TypeScript definitions
-- Coverage 99%
+- Coverage 100%
 
 ## Install
 

@@ -1,6 +1,6 @@
 'use strict'
 const deepmerge = require('@fastify/deepmerge')
-const isFluentSchema = (obj) => obj && obj.isFluentSchema
+const isFluentSchema = (obj) => obj?.isFluentSchema
 
 const hasCombiningKeywords = (attributes) =>
   attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
@@ -25,20 +25,17 @@ const isBoolean = (value) => typeof value === 'boolean'
 
 const omit = (obj, props) =>
   Object.entries(obj).reduce((memo, [key, value]) => {
-    if (props.includes(key)) return memo
-    return {
-      ...memo,
-      [key]: value
+    if (!props.includes(key)) {
+      memo[key] = value
     }
+    return memo
   }, {})
 
 const flat = (array) =>
   array.reduce((memo, prop) => {
     const { name, ...rest } = prop
-    return {
-      ...memo,
-      [name]: rest
-    }
+    memo[name] = rest
+    return memo
   }, {})
 
 const combineArray = (options) => {
@@ -132,16 +129,14 @@ const patchIdsWithParentId = ({ schema, generateIds, parentId }) => {
     ...schema,
     properties: properties.reduce((memo, [key, props]) => {
       const $id = props.$id || (generateIds ? `#properties/${key}` : undefined)
-      return {
-        ...memo,
-        [key]: {
-          ...props,
-          $id:
-            generateIds && parentId
-              ? `${parentId}/${$id.replace('#', '')}`
-              : $id // e.g. #properties/foo/properties/bar
-        }
+      memo[key] = {
+        ...props,
+        $id:
+          generateIds && parentId
+            ? `${parentId}/${$id.replace('#', '')}`
+            : $id // e.g. #properties/foo/properties/bar
       }
+      return memo
     }, {})
   }
 }
@@ -152,17 +147,14 @@ const appendRequired = ({
 }) => {
   const { schemaRequired, attributeRequired } = (required || []).reduce(
     (memo, item) => {
-      return item === REQUIRED
-        ? {
-            ...memo,
-            // append prop name to the schema.required
-            schemaRequired: [...memo.schemaRequired, name]
-          }
-        : {
-            ...memo,
-            // propagate required attributes
-            attributeRequired: [...memo.attributeRequired, item]
-          }
+      if (item === REQUIRED) {
+        // Append prop name to the schema.required
+        memo.schemaRequired.push(name)
+      } else {
+        // Propagate required attributes
+        memo.attributeRequired.push(item)
+      }
+      return memo
     },
     { schemaRequired: [], attributeRequired: [] }
   )

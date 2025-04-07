@@ -139,10 +139,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
             "'patternProperties' invalid options. Provide a valid map e.g. { '^fo.*$': S.string() }"
           )
         }
-        return {
-          ...memo,
-          [pattern]: omit(schema.valueOf({ isRoot: false }), ['$schema'])
-        }
+        memo[pattern] = omit(schema.valueOf({ isRoot: false }), ['$schema'])
+        return memo
       }, {})
       return setAttribute({ schema, ...options }, [
         'patternProperties',
@@ -169,12 +167,10 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
             "'dependencies' invalid options. Provide a valid map e.g. { 'foo': ['bar'] } or { 'foo': S.string() }"
           )
         }
-        return {
-          ...memo,
-          [prop]: Array.isArray(schema)
-            ? schema
-            : omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions'])
-        }
+        memo[prop] = Array.isArray(schema)
+          ? schema
+          : omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions'])
+        return memo
       }, {})
       return setAttribute({ schema, ...options }, [
         'dependencies',
@@ -199,10 +195,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
             "'dependentRequired' invalid options. Provide a valid array e.g. { 'foo': ['bar'] }"
           )
         }
-        return {
-          ...memo,
-          [prop]: schema
-        }
+        memo[prop] = schema
+        return memo
       }, {})
 
       return setAttribute({ schema, ...options }, [
@@ -228,10 +222,8 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
           )
         }
 
-        return {
-          ...memo,
-          [prop]: omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions'])
-        }
+        memo[prop] = omit(schema.valueOf({ isRoot: false }), ['$schema', 'type', 'definitions'])
+        return memo
       }, {})
 
       return setAttribute({ schema, ...options }, [
@@ -309,12 +301,15 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
       // strip undefined values or empty arrays or internals
       attributes = Object.entries({ ...attributes, $id, type }).reduce(
         (memo, [key, value]) => {
-          return key === '$schema' ||
-            key === 'def' ||
-            value === undefined ||
-            (Array.isArray(value) && value.length === 0 && key !== 'default')
-            ? memo
-            : { ...memo, [key]: value }
+          if (
+            key !== '$schema' &&
+            key !== 'def' &&
+            value !== undefined &&
+            !(Array.isArray(value) && value.length === 0 && key !== 'default')
+          ) {
+            memo[key] = value
+          }
+          return memo
         },
         {}
       )

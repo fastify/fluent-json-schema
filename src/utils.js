@@ -2,9 +2,6 @@
 const deepmerge = require('@fastify/deepmerge')
 const isFluentSchema = (obj) => obj?.isFluentSchema
 
-const hasCombiningKeywords = (attributes) =>
-  attributes.allOf || attributes.anyOf || attributes.oneOf || attributes.not
-
 class FluentSchemaError extends Error {
   constructor (message) {
     super(message)
@@ -219,7 +216,6 @@ const setComposeType = ({ prop, schemas, schema, options }) => {
 
 module.exports = {
   isFluentSchema,
-  hasCombiningKeywords,
   FluentSchemaError,
   last,
   isUniq,

@@ -101,6 +101,15 @@ describe('StringSchema', () => {
           }
         )
       })
+      it('valid FORMATS.ISO_TIME', () => {
+        assert.deepStrictEqual(
+          StringSchema().format(FORMATS.ISO_TIME).valueOf(),
+          {
+            type: 'string',
+            format: 'iso-time'
+          }
+        )
+      })
       it('invalid', () => {
         assert.throws(
           () => StringSchema().format('invalid'),

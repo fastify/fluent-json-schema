@@ -197,3 +197,10 @@ const deepTestOnTypes = S.object<ReallyLongType>()
   .valueOf()
 
 console.log('deepTestOnTypes:\n', JSON.stringify(deepTestOnTypes))
+
+const tsIsoSchema = S.object()
+  .prop('createdAt', S.string().format('iso-time'))
+  .prop('updatedAt', S.string().format('iso-date-time'))
+  .valueOf()
+
+console.log('ISO schema OK:', JSON.stringify(tsIsoSchema))

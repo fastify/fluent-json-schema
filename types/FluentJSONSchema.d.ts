@@ -51,6 +51,8 @@ type FORMATS = {
   TIME: 'time'
   DATE: 'date'
   DATE_TIME: 'date-time'
+  ISO_TIME: 'iso-time'
+  ISO_DATE_TIME: 'iso-date-time'
 }
 
 export type JSONSchema =

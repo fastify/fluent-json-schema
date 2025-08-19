@@ -4,7 +4,6 @@ const {
   omit,
   setAttribute,
   isFluentSchema,
-  hasCombiningKeywords,
   patchIdsWithParentId,
   appendRequired,
   FluentSchemaError,
@@ -294,9 +293,7 @@ const ObjectSchema = ({ schema = initialState, ...options } = {}) => {
         attributes = attributesPatched
       }
 
-      const type = hasCombiningKeywords(attributes)
-        ? undefined
-        : attributes.type
+      const type = attributes.type
 
       // strip undefined values or empty arrays or internals
       attributes = Object.entries({ ...attributes, $id, type }).reduce(

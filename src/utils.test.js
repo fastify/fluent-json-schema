@@ -6,6 +6,7 @@ const assert = require('node:assert/strict')
 const { setRaw, combineDeepmerge } = require('./utils')
 const { StringSchema } = require('./StringSchema')
 const { ObjectSchema } = require('./ObjectSchema')
+const S = require('./FluentJSONSchema')
 
 describe('setRaw', () => {
   it('add an attribute to a prop using ObjectSchema', () => {
@@ -33,6 +34,41 @@ describe('setRaw', () => {
     assert.deepStrictEqual(schema.valueOf(), {
       nullable: true,
       type: 'string'
+    })
+  })
+
+  it('set type for combination', () => {
+    const factory = ObjectSchema
+    const anyOf = S.anyOf([S.string()]).valueOf()
+    assert.deepStrictEqual(anyOf.valueOf(), {
+      anyOf: [
+        {
+          type: 'string'
+        }
+      ]
+    })
+    const schema = setRaw(
+      {
+        schema: {
+          type: 'object',
+          properties: [{ name: 'foo', ...anyOf }]
+        },
+        factory
+      },
+      { type: 'object' }
+    )
+    assert.deepStrictEqual(schema.valueOf(), {
+      properties: {
+        foo: {
+          type: 'object',
+          anyOf: [
+            {
+              type: 'string'
+            }
+          ]
+        }
+      },
+      type: 'object'
     })
   })
 })

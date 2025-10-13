@@ -8,7 +8,7 @@ const Ajv = require('ajv')
 const basic = require('./schemas/basic')
 const S = require('./FluentJSONSchema')
 
-// TODO pick some ideas from here:https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/main/tests/draft7
+// TODO pick some ideas from here: https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/main/tests/draft7
 
 describe('S', () => {
   it('compiles', () => {
@@ -321,6 +321,661 @@ describe('S', () => {
     })
   })
 
+  describe('combining keywords', () => {
+    describe('allOf inside parent', () => {
+      const ajv = new Ajv()
+      const schema = S.object()
+        .prop('parent', S.object()
+          .prop('name', S.string().enum(['foo', 'bar']).required())
+          .prop('index', S.number().required())
+          .allOf([
+            S.ifThen(
+              S.object().prop('name', S.const('foo')),
+              S.object().prop('index', S.const(0))
+            ),
+            S.ifThen(
+              S.object().prop('name', S.const('bar')),
+              S.object().prop('index', S.const(1))
+            )
+          ])
+        ).required()
+        .valueOf()
+
+      const schemaObject = {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          parent: {
+            type: 'object',
+            allOf: [
+              {
+                if: {
+                  properties: {
+                    name: {
+                      $id: undefined,
+                      const: 'foo',
+                    }
+                  }
+                },
+                then: {
+                  properties: {
+                    index: {
+                      $id: undefined,
+                      const: 0,
+                    }
+                  }
+                }
+              },
+              {
+                if: {
+                  properties: {
+                    name: {
+                      $id: undefined,
+                      const: 'bar'
+                    }
+                  }
+                },
+                then: {
+                  properties: {
+                    index: {
+                      $id: undefined,
+                      const: 1,
+                    }
+                  }
+                }
+              }
+            ],
+            properties: {
+              index: { type: 'number', $id: undefined },
+              name: {
+                type: 'string',
+                enum: ['foo', 'bar'],
+                $id: undefined
+              }
+            },
+            required: ['name', 'index'],
+          }
+        },
+        required: ['parent'],
+      }
+
+      const validate = ajv.compile(schema)
+
+      it('has expected types', () => {
+        assert.strictEqual(schema.type, 'object')
+        assert.strictEqual(schema.properties.parent.type, 'object')
+        assert.strictEqual(schema.properties.parent.properties.index.type, 'number')
+        assert.strictEqual(schema.properties.parent.properties.name.type, 'string')
+      })
+
+      it('matches', () => {
+        assert.deepStrictEqual(schema, schemaObject)
+      })
+
+      it('creates matching with raw', () => {
+        const rawSchema = S.raw(schemaObject)
+        assert.deepStrictEqual(schema, rawSchema.valueOf())
+      })
+
+      it('valid foo', () => {
+        const valid = validate({
+          parent: { name: 'foo', index: 0 },
+        })
+        assert.strictEqual(validate.errors, null)
+        assert.ok(valid)
+      })
+
+      it('valid bar', () => {
+        const valid = validate({
+          parent: { name: 'bar', index: 1 },
+        })
+        assert.strictEqual(validate.errors, null)
+        assert.ok(valid)
+      })
+
+      it('invalid baz', () => {
+        const valid = validate({
+          parent: { name: 'baz', index: 2 },
+        })
+        assert.deepStrictEqual(validate.errors,
+          [
+            {
+              instancePath: '/parent/name',
+              keyword: 'enum',
+              message: 'must be equal to one of the allowed values',
+              params: {
+                allowedValues: [
+                  'foo',
+                  'bar'
+                ]
+              },
+              schemaPath: '#/properties/parent/properties/name/enum'
+            }
+          ]
+        )
+        assert.ok(!valid)
+      })
+    })
+
+    describe('anyOf fizzbuzz', () => {
+      const ajv = new Ajv({ strict: true })
+      const schema = S.object()
+        .prop('parent', S.object()
+          .prop('fizzbuzz',
+            S.allOf([
+              S.anyOf([
+                S.integer().multipleOf(3),
+                S.integer().multipleOf(5),
+                S.string().enum(['fizz', 'buzz'])
+              ]),
+              S.not(S.anyOf([
+                S.integer().multipleOf(15),
+                S.string().const('fizzbuzz')
+              ]))
+            ])
+          ).required()
+        ).required()
+        .valueOf()
+
+      const schemaObject = {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          parent: {
+            type: 'object',
+            properties: {
+              fizzbuzz: {
+                $id: undefined,
+                allOf: [
+                  {
+                    anyOf: [
+                      {
+                        type: 'integer',
+                        multipleOf: 3
+                      },
+                      {
+                        type: 'integer',
+                        multipleOf: 5
+                      },
+                      {
+                        type: 'string',
+                        enum: [
+                          'fizz',
+                          'buzz'
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    not: {
+                      anyOf: [
+                        {
+                          type: 'integer',
+                          multipleOf: 15
+                        },
+                        {
+                          type: 'string',
+                          const: 'fizzbuzz'
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            required: [
+              'fizzbuzz'
+            ]
+          }
+        },
+        required: [
+          'parent'
+        ]
+      }
+
+      const validate = ajv.compile(schema)
+
+      it('has expected types', () => {
+        assert.strictEqual(schema.type, 'object')
+        assert.strictEqual(schema.properties.parent.type, 'object')
+        assert.strictEqual(schema.properties.parent.properties.fizzbuzz.type, undefined)
+      })
+
+      it('matches', () => {
+        assert.deepStrictEqual(schema, schemaObject)
+      })
+
+      it('creates matching with raw', () => {
+        const rawSchema = S.raw(schemaObject)
+        assert.deepStrictEqual(schema, rawSchema.valueOf())
+      })
+
+      it('valid string', () => {
+        const validFizz = validate({
+          parent: { fizzbuzz: 'fizz' },
+        })
+        assert.strictEqual(validate.errors, null)
+        assert.ok(validFizz)
+
+        const validBuzz = validate({
+          parent: { fizzbuzz: 'buzz' },
+        })
+        assert.strictEqual(validate.errors, null)
+        assert.ok(validBuzz)
+      })
+
+      it('invalid string', () => {
+        const valid = validate({
+          parent: { fizzbuzz: 'fizzbuzz' },
+        })
+        assert.deepStrictEqual(validate.errors, [
+          {
+            instancePath: '/parent/fizzbuzz',
+            keyword: 'type',
+            message: 'must be integer',
+            params: {
+              type: 'integer'
+            },
+            schemaPath: '#/properties/parent/properties/fizzbuzz/allOf/0/anyOf/0/type'
+          },
+          {
+            instancePath: '/parent/fizzbuzz',
+            keyword: 'type',
+            message: 'must be integer',
+            params: {
+              type: 'integer'
+            },
+            schemaPath: '#/properties/parent/properties/fizzbuzz/allOf/0/anyOf/1/type'
+          },
+          {
+            instancePath: '/parent/fizzbuzz',
+            keyword: 'enum',
+            message: 'must be equal to one of the allowed values',
+            params: {
+              allowedValues: [
+                'fizz',
+                'buzz'
+              ]
+            },
+            schemaPath: '#/properties/parent/properties/fizzbuzz/allOf/0/anyOf/2/enum'
+          },
+          {
+            instancePath: '/parent/fizzbuzz',
+            keyword: 'anyOf',
+            message: 'must match a schema in anyOf',
+            params: {},
+            schemaPath: '#/properties/parent/properties/fizzbuzz/allOf/0/anyOf'
+          }
+        ])
+        assert.ok(!valid)
+      })
+
+      it('valid 3s', () => {
+        for (let num = 3; num <= 12; num += 3) {
+          const valid = validate({
+            parent: { fizzbuzz: num },
+          })
+          assert.strictEqual(validate.errors, null)
+          assert.ok(valid)
+        }
+      })
+
+      it('valid 5s', () => {
+        for (let num = 5; num <= 10; num += 5) {
+          const valid = validate({
+            parent: { fizzbuzz: num },
+          })
+          assert.strictEqual(validate.errors, null)
+          assert.ok(valid)
+        }
+      })
+
+      it('invalid 15', () => {
+        const valid = validate({
+          parent: { fizzbuzz: 15 },
+        })
+        assert.deepStrictEqual(validate.errors, [
+          {
+            instancePath: '/parent/fizzbuzz',
+            keyword: 'not',
+            message: 'must NOT be valid',
+            params: {},
+            schemaPath: '#/properties/parent/properties/fizzbuzz/allOf/1/not'
+          }
+        ])
+        assert.ok(!valid)
+      })
+    })
+
+    describe('allOf string type', () => {
+      const ajv = new Ajv()
+      const schema = S.object()
+        .prop('parent', S.object()
+          .prop('foo',
+            S.string()
+              .allOf([
+                S.string().minLength(3),
+                S.string().maxLength(5),
+                S.string().pattern(/^a|z$/)
+              ])
+          ))
+        .required()
+        .valueOf()
+
+      const schemaObject = {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          parent: {
+            type: 'object',
+            properties: {
+              foo: {
+                type: 'string',
+                allOf: [
+                  {
+                    type: 'string',
+                    minLength: 3
+                  },
+                  {
+                    type: 'string',
+                    maxLength: 5
+                  },
+                  {
+                    type: 'string',
+                    pattern: '^a|z$'
+                  }
+                ],
+                $id: undefined
+              }
+            }
+          }
+        },
+        required: [
+          'parent'
+        ]
+      }
+
+      const validate = ajv.compile(schema)
+
+      it('has expected types', () => {
+        assert.strictEqual(schema.type, 'object')
+        assert.strictEqual(schema.properties.parent.type, 'object')
+        assert.strictEqual(schema.properties.parent.properties.foo.type, 'string')
+      })
+
+      it('matches', () => {
+        assert.deepStrictEqual(schema, schemaObject)
+      })
+
+      it('creates matching with raw', () => {
+        const rawSchema = S.raw(schemaObject)
+        assert.deepStrictEqual(schema, rawSchema.valueOf())
+      })
+
+      it('valid', () => {
+        const valid = validate({ parent: { foo: 'abc' } })
+        assert.strictEqual(validate.errors, null)
+        assert.ok(valid)
+      })
+
+      it('invalid regex', () => {
+        const valid = validate({ parent: { foo: '123' } })
+        assert.deepStrictEqual(validate.errors, [
+          {
+            instancePath: '/parent/foo',
+            keyword: 'pattern',
+            message: 'must match pattern "^a|z$"',
+            params: { pattern: '^a|z$' },
+            schemaPath: '#/properties/parent/properties/foo/allOf/2/pattern'
+          }
+        ])
+        assert.ok(!valid)
+      })
+
+      it('invalid too short', () => {
+        const valid = validate({ parent: { foo: 'z' } })
+        assert.deepStrictEqual(validate.errors, [
+          {
+            instancePath: '/parent/foo',
+            keyword: 'minLength',
+            message: 'must NOT have fewer than 3 characters',
+            params: { limit: 3 },
+            schemaPath: '#/properties/parent/properties/foo/allOf/0/minLength'
+          }
+        ])
+        assert.ok(!valid)
+      })
+
+      it('invalid too long', () => {
+        const valid = validate({ parent: { foo: 'a12345' } })
+        assert.deepStrictEqual(validate.errors, [
+          {
+            instancePath: '/parent/foo',
+            keyword: 'maxLength',
+            message: 'must NOT have more than 5 characters',
+            params: { limit: 5 },
+            schemaPath: '#/properties/parent/properties/foo/allOf/1/maxLength'
+          }
+        ])
+        assert.ok(!valid)
+      })
+    })
+
+    describe('oneOf multiple types', () => {
+      const ajv = new Ajv()
+      const schema = S.object()
+        .prop(
+          'parent', S.object().prop('foo',
+            S
+              .oneOf([
+                S.integer().multipleOf(9),
+                S.number(),
+                S.anyOf([
+                  S.array().items(S.string()),
+                  S.enum(['a', 'b', 'c'])
+                ]),
+              ])).required()
+        ).required()
+        .valueOf()
+
+      const schemaObject = {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          parent: {
+            type: 'object',
+            properties: {
+              foo: {
+                oneOf: [
+                  {
+                    multipleOf: 9,
+                    type: 'integer'
+                  },
+                  {
+                    type: 'number',
+                  },
+                  {
+                    anyOf: [
+                      {
+                        type: 'array',
+                        items: {
+                          type: 'string'
+                        }
+                      },
+                      {
+                        enum: [
+                          'a',
+                          'b',
+                          'c'
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                $id: undefined
+              }
+            },
+            required: [
+              'foo'
+            ]
+          }
+        },
+        required: [
+          'parent'
+        ]
+      }
+
+      const validate = ajv.compile(schema)
+
+      it('has expected types', () => {
+        assert.strictEqual(schema.type, 'object')
+        assert.strictEqual(schema.properties.parent.type, 'object')
+        assert.strictEqual(schema.properties.parent.properties.foo.type, undefined)
+      })
+
+      it('matches', () => {
+        assert.deepStrictEqual(schema, schemaObject)
+      })
+
+      it('creates matching with raw', () => {
+        const rawSchema = S.raw(schemaObject)
+        assert.deepStrictEqual(schema, rawSchema.valueOf())
+      })
+
+      it('valid number', () => {
+        const valid = validate({ parent: { foo: 10 } })
+        assert.strictEqual(validate.errors, null)
+        assert.ok(valid)
+      })
+
+      it('valid string', () => {
+        const valid = validate({ parent: { foo: 'a' } })
+        assert.strictEqual(validate.errors, null)
+        assert.ok(valid)
+      })
+
+      it('valid array', () => {
+        const valid = validate({ parent: { foo: ['bar'] } })
+        assert.strictEqual(validate.errors, null)
+        assert.ok(valid)
+      })
+
+      it('invalid number', () => {
+        const valid = validate({ parent: { foo: 9 } })
+        assert.deepStrictEqual(validate.errors, [
+          {
+            instancePath: '/parent/foo',
+            keyword: 'oneOf',
+            message: 'must match exactly one schema in oneOf',
+            params: {
+              passingSchemas: [0, 1]
+            },
+            schemaPath: '#/properties/parent/properties/foo/oneOf'
+          }
+        ])
+        assert.ok(!valid)
+      })
+
+      it('invalid string', () => {
+        const valid = validate({ parent: { foo: 'bar' } })
+        assert.deepStrictEqual(validate.errors, [
+          {
+            instancePath: '/parent/foo',
+            keyword: 'type',
+            message: 'must be integer',
+            params: { type: 'integer' },
+            schemaPath: '#/properties/parent/properties/foo/oneOf/0/type'
+          },
+          {
+            instancePath: '/parent/foo',
+            keyword: 'type',
+            message: 'must be number',
+            params: { type: 'number' },
+            schemaPath: '#/properties/parent/properties/foo/oneOf/1/type'
+          },
+          {
+            instancePath: '/parent/foo',
+            keyword: 'type',
+            message: 'must be array',
+            params: { type: 'array' },
+            schemaPath: '#/properties/parent/properties/foo/oneOf/2/anyOf/0/type'
+          },
+          {
+            instancePath: '/parent/foo',
+            keyword: 'enum',
+            message: 'must be equal to one of the allowed values',
+            params: { allowedValues: ['a', 'b', 'c'] },
+            schemaPath: '#/properties/parent/properties/foo/oneOf/2/anyOf/1/enum'
+          },
+          {
+            instancePath: '/parent/foo',
+            keyword: 'anyOf',
+            message: 'must match a schema in anyOf',
+            params: {},
+            schemaPath: '#/properties/parent/properties/foo/oneOf/2/anyOf'
+          },
+          {
+            instancePath: '/parent/foo',
+            keyword: 'oneOf',
+            message: 'must match exactly one schema in oneOf',
+            params: { passingSchemas: null },
+            schemaPath: '#/properties/parent/properties/foo/oneOf'
+          }
+        ])
+        assert.ok(!valid)
+      })
+
+      it('invalid type', () => {
+        const valid = validate({ parent: { foo: {} } })
+        assert.deepStrictEqual(validate.errors, [
+          {
+            instancePath: '/parent/foo',
+            keyword: 'type',
+            message: 'must be integer',
+            params: { type: 'integer' },
+            schemaPath: '#/properties/parent/properties/foo/oneOf/0/type'
+          },
+          {
+            instancePath: '/parent/foo',
+            keyword: 'type',
+            message: 'must be number',
+            params: { type: 'number' },
+            schemaPath: '#/properties/parent/properties/foo/oneOf/1/type'
+          },
+          {
+            instancePath: '/parent/foo',
+            keyword: 'type',
+            message: 'must be array',
+            params: { type: 'array' },
+            schemaPath: '#/properties/parent/properties/foo/oneOf/2/anyOf/0/type'
+          },
+          {
+            instancePath: '/parent/foo',
+            keyword: 'enum',
+            message: 'must be equal to one of the allowed values',
+            params: { allowedValues: ['a', 'b', 'c'] },
+            schemaPath: '#/properties/parent/properties/foo/oneOf/2/anyOf/1/enum'
+          },
+          {
+            instancePath: '/parent/foo',
+            keyword: 'anyOf',
+            message: 'must match a schema in anyOf',
+            params: {},
+            schemaPath: '#/properties/parent/properties/foo/oneOf/2/anyOf'
+          },
+          {
+            instancePath: '/parent/foo',
+            keyword: 'oneOf',
+            message: 'must match exactly one schema in oneOf',
+            params: { passingSchemas: null },
+            schemaPath: '#/properties/parent/properties/foo/oneOf'
+          }
+        ])
+        assert.ok(!valid)
+      })
+    })
+  })
+
   describe('complex', () => {
     const ajv = new Ajv()
     const schema = S.object()
@@ -339,7 +994,6 @@ describe('S', () => {
       .required()
       .prop('password', S.string().required())
       .prop('address', S.object().ref('#address'))
-
       .required()
       .prop(
         'role',

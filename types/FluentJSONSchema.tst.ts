@@ -1,8 +1,11 @@
-// This file will be passed to the TypeScript CLI to verify our typings compile
+import { expect } from 'tstyche'
 
 import S, { FluentSchemaError } from '..'
 
-console.log('isFluentSchema:', S.object().isFluentJSONSchema)
+// isFluentJSONSchema and isFluentSchema properties
+expect(S.object().isFluentJSONSchema).type.toEqual<boolean>()
+expect(S.object().isFluentSchema).type.toEqual<boolean>()
+
 const schema = S.object()
   .id('http://foo.com/user')
   .title('A User')
@@ -48,9 +51,6 @@ const schema = S.object()
   .writeOnly(true)
   .valueOf()
 
-console.log('example:\n', JSON.stringify(schema))
-console.log('isFluentSchema:', S.object().isFluentSchema)
-
 const userBaseSchema = S.object()
   .additionalProperties(false)
   .prop('username', S.string())
@@ -62,8 +62,6 @@ const userSchema = S.object()
   .prop('updatedAt', S.string().format('time'))
   .extend(userBaseSchema)
 
-console.log('user:\n', JSON.stringify(userSchema.valueOf()))
-
 const largeUserSchema = S.object()
   .prop('id', S.string().format('uuid'))
   .prop('username', S.string())
@@ -72,8 +70,6 @@ const largeUserSchema = S.object()
   .prop('updatedAt', S.string().format('time'))
 
 const userSubsetSchema = largeUserSchema.only(['username', 'password'])
-
-console.log('user subset:', JSON.stringify(userSubsetSchema.valueOf()))
 
 const personSchema = S.object()
   .prop('name', S.string())
@@ -84,8 +80,6 @@ const personSchema = S.object()
 
 const bodySchema = personSchema.without(['createdAt', 'updatedAt'])
 
-console.log('person subset:', JSON.stringify(bodySchema.valueOf()))
-
 const personSchemaAllowsUnix = S.object()
   .prop('name', S.string())
   .prop('age', S.number())
@@ -93,31 +87,23 @@ const personSchemaAllowsUnix = S.object()
   .prop('createdAt', S.mixed(['string', 'integer']).format('time'))
   .prop('updatedAt', S.mixed(['string', 'integer']).minimum(0))
 
-console.log('person schema allows unix:', JSON.stringify(personSchemaAllowsUnix.valueOf()))
-
 try {
   S.object().prop('foo', 'boom!' as any)
 } catch (e) {
   if (e instanceof FluentSchemaError) {
-    console.log(e.message)
+    expect(e).type.toEqual<FluentSchemaError>()
   }
 }
 
 const arrayExtendedSchema = S.array().items(userSchema).valueOf()
 
-console.log('array of user\n', JSON.stringify(arrayExtendedSchema))
-
 const extendExtendedSchema = S.object().extend(userSchema)
-
-console.log('extend of user\n', JSON.stringify(extendExtendedSchema))
 
 const rawNullableSchema = S.object()
   .raw({ nullable: true })
   .required(['foo', 'hello'])
   .prop('foo', S.string())
   .prop('hello', S.string())
-
-console.log('raw schema with nullable props\n', JSON.stringify(rawNullableSchema))
 
 const dependentRequired = S.object()
   .dependentRequired({
@@ -127,8 +113,6 @@ const dependentRequired = S.object()
   .prop('bar')
   .valueOf()
 
-console.log('dependentRequired:\n', JSON.stringify(dependentRequired))
-
 const dependentSchemas = S.object()
   .dependentSchemas({
     foo: S.object().prop('bar'),
@@ -136,14 +120,10 @@ const dependentSchemas = S.object()
   .prop('bar', S.object().prop('bar'))
   .valueOf()
 
-console.log('dependentRequired:\n', JSON.stringify(dependentSchemas))
-
 const deprecatedSchema = S.object()
   .deprecated()
   .prop('foo', S.string().deprecated())
   .valueOf()
-
-console.log('deprecatedSchema:\n', JSON.stringify(deprecatedSchema))
 
 type Foo = {
   foo: string
@@ -158,8 +138,6 @@ const dependentRequiredWithType = S.object<Foo>()
   .prop('bar')
   .valueOf()
 
-console.log('dependentRequired:\n', JSON.stringify(dependentRequiredWithType))
-
 const dependentSchemasWithType = S.object<Foo>()
   .dependentSchemas({
     foo: S.object().prop('bar'),
@@ -167,14 +145,10 @@ const dependentSchemasWithType = S.object<Foo>()
   .prop('bar', S.object().prop('bar'))
   .valueOf()
 
-console.log('dependentSchemasWithType:\n', JSON.stringify(dependentSchemasWithType))
-
 const deprecatedSchemaWithType = S.object<Foo>()
   .deprecated()
   .prop('foo', S.string().deprecated())
   .valueOf()
-
-console.log('deprecatedSchemaWithType:\n', JSON.stringify(deprecatedSchemaWithType))
 
 type ReallyLongType = {
   foo: string
@@ -196,11 +170,7 @@ const deepTestOnTypes = S.object<ReallyLongType>()
   .definition('abcd', S.number())
   .valueOf()
 
-console.log('deepTestOnTypes:\n', JSON.stringify(deepTestOnTypes))
-
 const tsIsoSchema = S.object()
   .prop('createdAt', S.string().format('iso-time'))
   .prop('updatedAt', S.string().format('iso-date-time'))
   .valueOf()
-
-console.log('ISO schema OK:', JSON.stringify(tsIsoSchema))

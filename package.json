@@ -42,7 +42,7 @@
     "lint:fix": "eslint --fix",
     "test": "npm run test:unit && npm run test:typescript",
     "test:unit": "c8 --100 node --test",
-    "test:typescript": "tsd",
+    "test:typescript": "tstyche",
     "doc": "jsdoc2md ./src/*.js > docs/API.md"
   },
   "devDependencies": {
@@ -53,7 +53,7 @@
     "jsdoc-to-markdown": "^9.0.0",
     "lodash.merge": "^4.6.2",
     "neostandard": "^0.13.0",
-    "tsd": "^0.33.0"
+    "tstyche": "^1.0.0"
   },
   "dependencies": {
     "@fastify/deepmerge": "^3.0.0"

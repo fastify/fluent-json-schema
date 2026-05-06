@@ -5,8 +5,8 @@ import { expect } from 'tstyche'
 import S, { FluentSchemaError } from '..'
 
 // isFluentJSONSchema and isFluentSchema properties
-expect(S.object().isFluentJSONSchema).type.toEqual<boolean>()
-expect(S.object().isFluentSchema).type.toEqual<boolean>()
+expect(S.object().isFluentJSONSchema).type.toBe<boolean>()
+expect(S.object().isFluentSchema).type.toBe<boolean>()
 
 const schema = S.object()
   .id('http://foo.com/user')
@@ -134,7 +134,7 @@ try {
 } catch (e) {
   if (e instanceof FluentSchemaError) {
     console.log(e.message)
-    expect(e).type.toEqual<FluentSchemaError>()
+    expect(e).type.toBe<FluentSchemaError>()
   }
 }
 

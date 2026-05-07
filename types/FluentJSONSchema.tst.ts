@@ -1,5 +1,3 @@
-// This file will be passed to the TypeScript CLI to verify our typings compile
-
 import { expect } from 'tstyche'
 
 import S, { FluentSchemaError } from '..'

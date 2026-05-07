@@ -73,8 +73,8 @@ expect(S.string().minLength(6)).type.toHaveProperty('minLength')
 expect(S.string().maxLength(12)).type.toHaveProperty('maxLength')
 expect(S.string().default('123456')).type.toHaveProperty('default')
 
-console.log('example:\n', JSON.stringify(schema.valueOf()))
-console.log('isFluentSchema:', S.object().isFluentSchema)
+expect(schema.valueOf()).type.toBe<Object>()
+expect(S.object().isFluentSchema).type.toBe<boolean>()
 
 const userBaseSchema = S.object()
   .additionalProperties(false)
@@ -93,7 +93,7 @@ const userSchema = S.object()
 
 expect(userSchema).type.toHaveProperty('extend')
 
-console.log('user:\n', JSON.stringify(userSchema.valueOf()))
+expect(userSchema.valueOf()).type.toBe<Object>()
 
 const largeUserSchema = S.object()
   .prop('id', S.string().format('uuid'))
@@ -104,7 +104,7 @@ const largeUserSchema = S.object()
 
 const userSubsetSchema = largeUserSchema.only(['username', 'password'])
 
-console.log('user subset:', JSON.stringify(userSubsetSchema.valueOf()))
+expect(userSubsetSchema.valueOf()).type.toBe<Object>()
 expect(userSubsetSchema).type.toHaveProperty('only')
 
 const personSchema = S.object()
@@ -116,7 +116,7 @@ const personSchema = S.object()
 
 const bodySchema = personSchema.without(['createdAt', 'updatedAt'])
 
-console.log('person subset:', JSON.stringify(bodySchema.valueOf()))
+expect(bodySchema.valueOf()).type.toBe<Object>()
 expect(bodySchema).type.toHaveProperty('without')
 
 const personSchemaAllowsUnix = S.object()
@@ -126,26 +126,26 @@ const personSchemaAllowsUnix = S.object()
   .prop('createdAt', S.mixed(['string', 'integer']).format('time'))
   .prop('updatedAt', S.mixed(['string', 'integer']).minimum(0))
 
-console.log('person schema allows unix:', JSON.stringify(personSchemaAllowsUnix.valueOf()))
+expect(personSchemaAllowsUnix.valueOf()).type.toBe<Object>()
 expect(personSchemaAllowsUnix).type.toHaveProperty('prop')
 
 try {
   S.object().prop('foo', 'boom!' as any)
 } catch (e) {
   if (e instanceof FluentSchemaError) {
-    console.log(e.message)
+    expect(e.message).type.toBe<string>()
     expect(e).type.toBe<FluentSchemaError>()
   }
 }
 
 const arrayExtendedSchema = S.array().items(userSchema)
 
-console.log('array of user\n', JSON.stringify(arrayExtendedSchema.valueOf()))
+expect(arrayExtendedSchema.valueOf()).type.toBe<Object>()
 expect(arrayExtendedSchema).type.toHaveProperty('items')
 
 const extendExtendedSchema = S.object().extend(userSchema)
 
-console.log('extend of user\n', JSON.stringify(extendExtendedSchema.valueOf()))
+expect(extendExtendedSchema.valueOf()).type.toBe<Object>()
 expect(extendExtendedSchema).type.toHaveProperty('extend')
 
 const rawNullableSchema = S.object()
@@ -154,7 +154,7 @@ const rawNullableSchema = S.object()
   .prop('foo', S.string())
   .prop('hello', S.string())
 
-console.log('raw schema with nullable props\n', JSON.stringify(rawNullableSchema.valueOf()))
+expect(rawNullableSchema.valueOf()).type.toBe<Object>()
 expect(rawNullableSchema).type.toHaveProperty('raw')
 expect(rawNullableSchema).type.toHaveProperty('required')
 
@@ -165,7 +165,7 @@ const dependentRequired = S.object()
   .prop('foo')
   .prop('bar')
 
-console.log('dependentRequired:\n', JSON.stringify(dependentRequired.valueOf()))
+expect(dependentRequired.valueOf()).type.toBe<Object>()
 expect(dependentRequired).type.toHaveProperty('dependentRequired')
 
 const dependentSchemas = S.object()
@@ -174,14 +174,14 @@ const dependentSchemas = S.object()
   })
   .prop('bar', S.object().prop('bar'))
 
-console.log('dependentRequired:\n', JSON.stringify(dependentSchemas.valueOf()))
+expect(dependentSchemas.valueOf()).type.toBe<Object>()
 expect(dependentSchemas).type.toHaveProperty('dependentSchemas')
 
 const deprecatedSchema = S.object()
   .deprecated()
   .prop('foo', S.string().deprecated())
 
-console.log('deprecatedSchema:\n', JSON.stringify(deprecatedSchema.valueOf()))
+expect(deprecatedSchema.valueOf()).type.toBe<Object>()
 expect(deprecatedSchema).type.toHaveProperty('deprecated')
 
 type Foo = {
@@ -196,7 +196,7 @@ const dependentRequiredWithType = S.object<Foo>()
   .prop('foo')
   .prop('bar')
 
-console.log('dependentRequired:\n', JSON.stringify(dependentRequiredWithType.valueOf()))
+expect(dependentRequiredWithType.valueOf()).type.toBe<Object>()
 expect(dependentRequiredWithType).type.toHaveProperty('dependentRequired')
 expect(dependentRequiredWithType).type.toHaveProperty('prop')
 
@@ -206,14 +206,14 @@ const dependentSchemasWithType = S.object<Foo>()
   })
   .prop('bar', S.object().prop('bar'))
 
-console.log('dependentSchemasWithType:\n', JSON.stringify(dependentSchemasWithType.valueOf()))
+expect(dependentSchemasWithType.valueOf()).type.toBe<Object>()
 expect(dependentSchemasWithType).type.toHaveProperty('dependentSchemas')
 
 const deprecatedSchemaWithType = S.object<Foo>()
   .deprecated()
   .prop('foo', S.string().deprecated())
 
-console.log('deprecatedSchemaWithType:\n', JSON.stringify(deprecatedSchemaWithType.valueOf()))
+expect(deprecatedSchemaWithType.valueOf()).type.toBe<Object>()
 expect(deprecatedSchemaWithType).type.toHaveProperty('deprecated')
 
 type ReallyLongType = {
@@ -235,7 +235,7 @@ const deepTestOnTypes = S.object<ReallyLongType>()
   .prop('aaaa', S.anyOf([S.string()]))
   .definition('abcd', S.number())
 
-console.log('deepTestOnTypes:\n', JSON.stringify(deepTestOnTypes.valueOf()))
+expect(deepTestOnTypes.valueOf()).type.toBe<Object>()
 expect(deepTestOnTypes).type.toHaveProperty('prop')
 expect(deepTestOnTypes).type.toHaveProperty('definition')
 
@@ -243,7 +243,7 @@ const tsIsoSchema = S.object()
   .prop('createdAt', S.string().format('iso-time'))
   .prop('updatedAt', S.string().format('iso-date-time'))
 
-console.log('ISO schema OK:', JSON.stringify(tsIsoSchema.valueOf()))
+expect(tsIsoSchema.valueOf()).type.toBe<Object>()
 expect(tsIsoSchema).type.toHaveProperty('prop')
 expect(S.string().format('iso-time')).type.toHaveProperty('format')
 expect(S.string().format('iso-date-time')).type.toHaveProperty('format')

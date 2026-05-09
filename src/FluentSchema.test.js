@@ -208,6 +208,17 @@ describe('S', () => {
       })
     })
 
+    it('anyOf typed', () => {
+      const schema = S.object()
+        .prop('foo', S.string().anyOf([S.string()]))
+        .valueOf()
+      assert.deepStrictEqual(schema, {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        properties: { foo: { type: 'string', anyOf: [{ type: 'string' }] } },
+        type: 'object'
+      })
+    })
+
     it('oneOf', () => {
       const schema = S.object()
         .prop(
@@ -223,6 +234,103 @@ describe('S', () => {
             oneOf: [{ type: 'string' }, { minimum: 10, type: 'number' }]
           },
           notTypeKey: { not: { oneOf: [{ pattern: 'js$', type: 'string' }] } }
+        },
+        type: 'object'
+      })
+    })
+
+    it('oneOf typed', () => {
+      const schema = S.object()
+        .prop(
+          'foo',
+          S.number().oneOf([S.number().maximum(20), S.number().minimum(10)])
+        )
+        .prop('bar', S.string().not(S.oneOf([S.string().pattern('js$')])))
+        .valueOf()
+      assert.deepStrictEqual(schema, {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        properties: {
+          foo: {
+            type: 'number',
+            oneOf: [{ maximum: 20, type: 'number' }, { minimum: 10, type: 'number' }]
+          },
+          bar: { type: 'string', not: { oneOf: [{ pattern: 'js$', type: 'string' }] } }
+        },
+        type: 'object'
+      })
+    })
+
+    it('allOf', () => {
+      const schema = S.object()
+        .prop('foo', S.allOf([S.string().pattern('^b'), S.string().minLength(3), S.string().maxLength(3)]))
+        .valueOf()
+      assert.deepStrictEqual(schema, {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        properties: {
+          foo: {
+            allOf: [
+              { pattern: '^b', type: 'string' },
+              { minLength: 3, type: 'string' },
+              { maxLength: 3, type: 'string' }
+            ]
+          }
+        },
+        type: 'object'
+      })
+    })
+
+    it('allOf typed', () => {
+      const schema = S.object()
+        .prop('foo', S.string().allOf([S.string().pattern('^b'), S.string().minLength(3), S.string().maxLength(3)]))
+        .valueOf()
+      assert.deepStrictEqual(schema, {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        properties: {
+          foo: {
+            type: 'string',
+            allOf: [
+              { pattern: '^b', type: 'string' },
+              { minLength: 3, type: 'string' },
+              { maxLength: 3, type: 'string' }
+            ]
+          }
+        },
+        type: 'object'
+      })
+    })
+
+    it('not', () => {
+      const schema = S.object()
+        .prop('foo', S.not(S.integer().minimum(10)))
+        .valueOf()
+      assert.deepStrictEqual(schema, {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        properties: {
+          foo: {
+            not: {
+              type: 'integer',
+              minimum: 10
+            }
+          }
+        },
+        type: 'object'
+      })
+    })
+
+    it('not typed', () => {
+      const schema = S.object()
+        .prop('foo', S.integer().not(S.integer().minimum(10)))
+        .valueOf()
+      assert.deepStrictEqual(schema, {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        properties: {
+          foo: {
+            type: 'integer',
+            not: {
+              type: 'integer',
+              minimum: 10
+            }
+          }
         },
         type: 'object'
       })

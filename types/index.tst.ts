@@ -1,5 +1,4 @@
 import { expect } from 'tstyche'
-
 import S, { FluentSchemaError } from '..'
 
 // isFluentJSONSchema and isFluentSchema properties

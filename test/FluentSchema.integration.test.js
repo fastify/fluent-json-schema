@@ -5,8 +5,8 @@ const assert = require('node:assert/strict')
 
 const Ajv = require('ajv')
 
-const basic = require('./schemas/basic')
-const S = require('./FluentJSONSchema')
+const basic = require('../lib/schemas/basic')
+const S = require('..')
 
 // TODO pick some ideas from here:https://github.com/json-schema-org/JSON-Schema-Test-Suite/tree/main/tests/draft7
 

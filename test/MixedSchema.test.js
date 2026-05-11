@@ -3,8 +3,8 @@
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 
-const { MixedSchema } = require('./MixedSchema')
-const S = require('./FluentJSONSchema')
+const { MixedSchema } = require('../lib/MixedSchema')
+const S = require('..')
 
 describe('MixedSchema', () => {
   it('defined', () => {

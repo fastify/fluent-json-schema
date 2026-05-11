@@ -2,9 +2,9 @@
   "name": "fluent-json-schema",
   "version": "6.0.0",
   "description": "JSON Schema fluent API",
-  "main": "src/FluentJSONSchema.js",
+  "main": "index.js",
   "type": "commonjs",
-  "types": "types/FluentJSONSchema.d.ts",
+  "types": "types/index.d.ts",
   "keywords": [
     "JSON",
     "schema",

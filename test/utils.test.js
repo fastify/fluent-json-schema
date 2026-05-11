@@ -3,9 +3,9 @@
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 
-const { setRaw, combineDeepmerge } = require('./utils')
-const { StringSchema } = require('./StringSchema')
-const { ObjectSchema } = require('./ObjectSchema')
+const { setRaw, combineDeepmerge } = require('../lib/utils')
+const { StringSchema } = require('../lib/StringSchema')
+const { ObjectSchema } = require('../lib/ObjectSchema')
 
 describe('setRaw', () => {
   it('add an attribute to a prop using ObjectSchema', () => {

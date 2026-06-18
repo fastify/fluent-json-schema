@@ -1,17 +1,17 @@
 'use strict'
 
-const { FORMATS, TYPES, FluentSchemaError } = require('./utils')
+const { FORMATS, TYPES, FluentSchemaError } = require('./lib/utils')
 
-const { BaseSchema } = require('./BaseSchema')
-const { NullSchema } = require('./NullSchema')
-const { BooleanSchema } = require('./BooleanSchema')
-const { StringSchema } = require('./StringSchema')
-const { NumberSchema } = require('./NumberSchema')
-const { IntegerSchema } = require('./IntegerSchema')
-const { ObjectSchema } = require('./ObjectSchema')
-const { ArraySchema } = require('./ArraySchema')
-const { MixedSchema } = require('./MixedSchema')
-const { RawSchema } = require('./RawSchema')
+const { BaseSchema } = require('./lib/BaseSchema')
+const { NullSchema } = require('./lib/NullSchema')
+const { BooleanSchema } = require('./lib/BooleanSchema')
+const { StringSchema } = require('./lib/StringSchema')
+const { NumberSchema } = require('./lib/NumberSchema')
+const { IntegerSchema } = require('./lib/IntegerSchema')
+const { ObjectSchema } = require('./lib/ObjectSchema')
+const { ArraySchema } = require('./lib/ArraySchema')
+const { MixedSchema } = require('./lib/MixedSchema')
+const { RawSchema } = require('./lib/RawSchema')
 
 const initialState = {
   $schema: 'http://json-schema.org/draft-07/schema#',

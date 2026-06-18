@@ -3,8 +3,8 @@
 const { describe, it } = require('node:test')
 const assert = require('node:assert/strict')
 
-const { NullSchema } = require('./NullSchema')
-const S = require('./FluentJSONSchema')
+const { NullSchema } = require('../lib/NullSchema')
+const S = require('..')
 
 describe('NullSchema', () => {
   it('defined', () => {

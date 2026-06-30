@@ -2,7 +2,7 @@
 
 A fluent API to generate JSON schemas (draft-07) for Node.js and browser. Framework agnostic.
 
-[![view on npm](https://img.shields.io/npm/v/fluent-json-schema.svg)](https://www.npmjs.org/package/fluent-json-schema)
+[![view on npm](https://img.shields.io/npm/v/fluent-json-schema.svg)](https://www.npmjs.com/package/fluent-json-schema)
 [![CI](https://github.com/fastify/fluent-json-schema/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fastify/fluent-json-schema/actions/workflows/ci.yml)
 [![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
@@ -362,10 +362,9 @@ Thanks to [Matteo Collina](https://twitter.com/matteocollina) for pushing me to 
 
 ## Related projects
 
-- JSON Schema [Draft 7](http://json-schema.org/specification-links.html#draft-7)
-- [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/) (despite referring to draft 6 the guide is still good for grasping the main concepts)
+- JSON Schema [Draft 7](https://json-schema.org/specification-links#draft-7)
+- [Understanding JSON Schema](https://json-schema.org/understanding-json-schema/reference) (despite referring to draft 6 the guide is still good for grasping the main concepts)
 - [AJV](https://ajv.js.org/) JSON Schema validator
-- [jsonschema.net](https://www.jsonschema.net/) an online JSON Schema visual editor (it does not support advanced features)
 
 ## License
 

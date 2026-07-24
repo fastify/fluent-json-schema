@@ -862,17 +862,36 @@ describe('ObjectSchema', () => {
       )
     })
 
-    it('throws an error if you append a new prop after extend', () => {
-      assert.throws(
-        () => {
-          const base = S.object()
-          S.object().extend(base).prop('foo')
-        },
-        (err) =>
-          // err instanceof S.FluentSchemaError &&
-          err instanceof TypeError &&
-          err.message === 'S.object(...).extend(...).prop is not a function'
-      )
+    it('returns a chainable schema instance after extend', () => {
+      const base = S.object()
+        .prop('one', S.number())
+        .prop('two', S.number())
+
+      const extended = S.object()
+        .prop('three', S.number())
+        .prop('four', S.number())
+        .extend(base)
+        .prop('five', S.number())
+
+      assert.deepStrictEqual(extended.without(['one']).valueOf(), {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          two: { type: 'number' },
+          three: { type: 'number' },
+          four: { type: 'number' },
+          five: { type: 'number' }
+        }
+      })
+
+      assert.deepStrictEqual(extended.only(['three', 'five']).valueOf(), {
+        $schema: 'http://json-schema.org/draft-07/schema#',
+        type: 'object',
+        properties: {
+          three: { type: 'number' },
+          five: { type: 'number' }
+        }
+      })
     })
   })
 

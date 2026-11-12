@@ -77,7 +77,7 @@ export interface SchemaOptions {
 export interface StringSchema extends BaseSchema<StringSchema> {
   minLength: (min: number) => StringSchema
   maxLength: (min: number) => StringSchema
-  format: (format: FORMATS[keyof FORMATS]) => StringSchema
+  format: (format: string) => StringSchema
   pattern: (pattern: string | RegExp) => StringSchema
   contentEncoding: (encoding: string) => StringSchema
   contentMediaType: (mediaType: string) => StringSchema

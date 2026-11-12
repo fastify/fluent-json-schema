@@ -110,13 +110,18 @@ describe('StringSchema', () => {
           }
         )
       })
-      it('invalid', () => {
+      it('keeps a custom format name for the validator', () => {
+        assert.deepStrictEqual(StringSchema().format('myformat').valueOf(), {
+          type: 'string',
+          format: 'myformat'
+        })
+      })
+      it('rejects a non-string format', () => {
         assert.throws(
-          () => StringSchema().format('invalid'),
+          () => StringSchema().format(1),
           (err) =>
             err instanceof S.FluentSchemaError &&
-            err.message ===
-              "'format' must be one of relative-json-pointer, json-pointer, uuid, regex, ipv6, ipv4, hostname, email, url, uri-template, uri-reference, uri, time, date, date-time, iso-time, iso-date-time"
+            err.message === "'format' must be a string"
         )
       })
     })

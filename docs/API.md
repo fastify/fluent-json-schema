@@ -311,7 +311,7 @@ The length of a string instance is defined as the number of its characters as de
 <p><a href="https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.6.3.1">reference</a></p>
 </dd>
 <dt><a href="#format">format(format)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
-<dd><p>A string value can be RELATIVE_JSON_POINTER, JSON_POINTER, UUID, REGEX, IPV6, IPV4, HOSTNAME, EMAIL, URL, URI_TEMPLATE, URI_REFERENCE, URI, TIME, DATE, DATE_TIME, ISO_TIME, ISO_DATE_TIME.</p>
+<dd><p>Annotates the string with a JSON Schema format name. <code>FORMATS</code> lists the well-known names. Any other string is kept as a custom format for the validator (for example an AJV format). This builder does not check that a validator knows the name.</p>
 <p><a href="https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.7.3">reference</a></p>
 </dd>
 <dt><a href="#pattern">pattern(pattern)</a> ⇒ <code><a href="#StringSchema">StringSchema</a></code></dt>
@@ -1200,7 +1200,7 @@ The length of a string instance is defined as the number of its characters as de
 <a name="format"></a>
 
 ## format(format) ⇒ [<code>StringSchema</code>](#StringSchema)
-A string value can be RELATIVE_JSON_POINTER, JSON_POINTER, UUID, REGEX, IPV6, IPV4, HOSTNAME, EMAIL, URL, URI_TEMPLATE, URI_REFERENCE, URI, TIME, DATE, DATE_TIME, ISO_TIME, ISO_DATE_TIME.
+Annotates the string with a JSON Schema format name. `FORMATS` lists the well-known names. Any other string is kept as a custom format for the validator (for example an AJV format). This builder does not check that a validator knows the name.
 
 [reference](https://tools.ietf.org/id/draft-handrews-json-schema-validation-01.html#rfc.section.7.3)
 

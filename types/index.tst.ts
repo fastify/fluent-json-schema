@@ -63,6 +63,7 @@ expect(schema).type.toHaveProperty('writeOnly')
 // String method chain assertions
 expect(S.string().pattern(/[a-z]*/g)).type.toHaveProperty('pattern')
 expect(S.string().format('email')).type.toHaveProperty('format')
+expect(S.string().format('myformat')).type.toHaveProperty('format')
 expect(S.string().format(S.FORMATS.EMAIL)).type.toHaveProperty('format')
 expect(S.string().contentEncoding('base64')).type.toHaveProperty('contentEncoding')
 expect(S.string().contentMediaType('image/png')).type.toHaveProperty('contentMediaType')

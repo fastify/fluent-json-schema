@@ -1023,3 +1023,24 @@ describe('ObjectSchema', () => {
     })
   })
 })
+
+describe('ObjectSchema with combining keywords', () => {
+  it('keeps the object type when a property uses oneOf and raw', () => {
+    const schema = S.object()
+      .prop(
+        'content',
+        S.object()
+          .raw({ type: 'object', discriminator: { propertyName: 'type' } })
+          .oneOf([
+            S.object().prop('a', S.string()),
+            S.object().prop('b', S.string())
+          ])
+      )
+      .valueOf()
+
+    assert.strictEqual(schema.properties.content.type, 'object')
+    assert.deepStrictEqual(schema.properties.content.discriminator, {
+      propertyName: 'type'
+    })
+  })
+})
